@@ -4,8 +4,8 @@
 Photos, files, notes, calendar, timers, maps, contacts, calls and data on Linux, in sync with your phone and tablet, with nothing uploaded anywhere.</p>
 
 <p align="center">
-  <a href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.7.0-beta.1/Tetra-0.7.0-beta.1.AppImage"><img src="Assets/buttons/download-appimage.png" alt="Download the AppImage" width="420"></a>
-  <a href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.7.0-beta.1/local-drive-desktop_0.7.0-beta.1_amd64.deb"><img src="Assets/buttons/download-deb.png" alt="Download the .deb" width="420"></a>
+  <a href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.1/Tetra-0.8.0-beta.1.AppImage"><img src="Assets/buttons/download-appimage.png" alt="Download the AppImage" width="420"></a>
+  <a href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.1/local-drive-desktop_0.8.0-beta.1_amd64.deb"><img src="Assets/buttons/download-deb.png" alt="Download the .deb" width="420"></a>
 </p>
 <p align="center">
   <a href="https://github.com/kalotrapezis/Tetra-mobile"><img src="Assets/buttons/get-android.png" alt="Tetra for Android" width="420"></a>
@@ -17,7 +17,7 @@ The computer half of [Tetra for Android](https://github.com/kalotrapezis/Tetra-m
 Calendar, Timer, Maps, Contacts, Phone, Data and Mail on Linux, in sync with your phone and tablet over your own Wi-Fi.
 Faces, documents and search labels are analysed on this computer.
 
-**0.7.0 Beta 1** ([what's new](https://github.com/kalotrapezis/Tetra/releases/tag/desktop-v0.7.0-beta.1)). A beta: keep
+**0.8.0 Beta 1** ([what's new](https://github.com/kalotrapezis/Tetra/releases/tag/desktop-v0.8.0-beta.1)). A beta: keep
 your own backups. Screenshots use invented sample data.
 
 ## What Tetra does for you
@@ -84,6 +84,19 @@ already quick (2–160 ms). Two froze the window, and no longer do:
 | Photos (opened again) | 741 ms, the window busy 599 ms | 71 ms, never busy | a period's photos are made only within two screens of the view, so any size of library opens the same |
 | Phone | 510–545 ms, busy 288–293 ms | 47–76 ms, never busy | sixty recent calls at first, more as the list's end nears |
 
+Mail and AI Assist, measured on a copy of the user's own mail (7 836 mails in the Inbox, 5.1 GB) on 1 Nov 2026
+([details](desktop/PERF_MAIL_AI.md)):
+
+| Moment | before | now |
+|---|---|---|
+| Tetra's window on screen | 496 ms | 97 ms |
+| Mail's list | 238 ms | 113 ms |
+| The window busy while mail arrives (10 s) | 161 ms | 0 ms |
+| A mail opened | 258 ms | 211 ms |
+| AI Assist's History | 79 ms | 11 ms |
+
+AI Assist itself takes 15–90 ms; the wait for an answer is Mistral's (1–9 s).
+
 On the phone, the same week, Contacts went from 3.3 s to 0.19 s and the Phone from 2.3–2.8 s to 0.25 s: see
 [Tetra for Android](https://github.com/kalotrapezis/Tetra-mobile#fast).
 
@@ -97,10 +110,10 @@ address, so it is found again after a network change. Every rule and its reason 
 On Debian, Ubuntu or Mint:
 
 ```bash
-sudo apt install ./local-drive-desktop_0.7.0-beta.1_amd64.deb
+sudo apt install ./local-drive-desktop_0.8.0-beta.1_amd64.deb
 ```
 
-Or make the AppImage executable and run it (`chmod +x Tetra-0.7.0-beta.1.AppImage`); it needs nothing else,
+Or make the AppImage executable and run it (`chmod +x Tetra-0.8.0-beta.1.AppImage`); it needs nothing else,
 not even `libfuse2`. Tetra keeps running in the tray when its window is closed, so phones can sync at any time.
 
 Then install [Tetra for Android](https://github.com/kalotrapezis/Tetra-mobile) on your phone or tablet and pair it
