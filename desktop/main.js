@@ -553,7 +553,6 @@ app.whenReady().then(() => {
   mail.on('failed', (r, e) => notify(t('mail.notSent'), `${r.draft?.subject || t('common.noTitle')}: ${e.reason && e.reason !== 'other' ? t(`mail.err_${e.reason}`) : e.message}`))
   mail.picked = new Set() // files chosen here to attach: nothing else on this computer can be sent from the window
   mail.filesRoot = files.root // where a filter saves attachments ("save to a Files folder", MAIL_PLAN §6)
-  if (!process.env.DRIVE_HIDDEN) mail.startAll() // a hidden QA copy fetches nothing
   // sync's old copies of timers that are over (timer.js clean; the phone clears its own the same way)
   try { const n = timers.clean(); if (n) console.log(`Timer: cleared ${n} old copies`) } catch {}
   // Maps: deleting a place goes to Files' Trash, so the deletion reaches the phone (as the Calendar's)
@@ -1661,6 +1660,11 @@ app.whenReady().then(() => {
   if (process.env.VITE_DEV_URL) win.loadURL(process.env.VITE_DEV_URL)
   else win.loadFile(path.join(__dirname, 'dist', 'index.html'))
   // started as `tetra --assistant` (or --talk, --live): once the window listens
+  // Mail's index (tens of MB) is read once the window has its first page, not before it: 0.3–0.8 s sooner on screen
+  win.webContents.once('did-finish-load', () => setTimeout(() => {
+    mail.index; mail.foreign // the getters read them
+    if (!process.env.DRIVE_HIDDEN) mail.startAll() // a hidden QA copy fetches nothing
+  }, 1500))
   if (argCommand(process.argv)) win.webContents.once('did-finish-load', () => setTimeout(() => assistantCommand(argCommand(process.argv)), 1500))
   if (argMailto(process.argv)) win.webContents.once('did-finish-load', () => setTimeout(() => openMailto(argMailto(process.argv)), 1500))
   if (!process.env.DRIVE_HIDDEN) {

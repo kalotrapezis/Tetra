@@ -252,19 +252,20 @@ class Mail extends EventEmitter {
   constructor(root, { secret, token = null, connect = client, smtp = o => require('nodemailer').createTransport(o) }) {
     super()
     this.root = root; this.secret = secret; this.token = token; this.connect = connect; this.smtp = smtp
-    this.index = new Index(path.join(root, 'index.jsonl'))
     this.live = new Map()  // account id → its loop: { acc, stop, client, wake }
     this.state = {}        // account id → { busy, error }
     this.nudge = null
     this.queue = {}        // account id → its actions, one after another
-    this.loadForeign()
   }
+  // read at first use, not at construction: the window does not wait for them (main warms them once it has loaded)
+  get index() { return this._index ??= new Index(path.join(this.root, 'index.jsonl')) }
+  get foreign() { if (!this._foreign) this.loadForeign(); return this._foreign }
 
   // ── What the phones fetch themselves (Tetra-mobile's MAIL_PLAN §11): their own files, read here, never written
 
   /** index.<device>.jsonl: the phones' lines, by id; a later line without a file does not hide the file an earlier one had. */
   loadForeign() {
-    this.foreign = new Map()
+    this._foreign = new Map()
     let names = []
     try { names = fs.readdirSync(this.root).filter(n => /^index\..+\.jsonl$/.test(n)).sort() } catch {}
     for (const n of names) {
@@ -392,7 +393,7 @@ class Mail extends EventEmitter {
     this.live.delete(id); run.stop = true; run.wake?.('stop')
     run.client?.logout().catch(() => run.client?.close())
   }
-  stopAll() { for (const id of [...this.live.keys()]) this.stop(id); for (const w of this.watchers ?? []) w.close(); clearInterval(this.retry); clearTimeout(this.settling); this.index.flush() }
+  stopAll() { for (const id of [...this.live.keys()]) this.stop(id); for (const w of this.watchers ?? []) w.close(); clearInterval(this.retry); clearTimeout(this.settling); this._index?.flush() }
   /** archiveBy (year, month, none) and the like, kept in accounts.json. */
   setAccount(id, changes) {
     const list = this.accounts(), a = list.find(x => x.id === id)
