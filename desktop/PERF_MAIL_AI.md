@@ -69,3 +69,43 @@ spends 2–6 ms before the request leaves and 22 ms between a round of tools and
 after 1.1–8.7 s (the user's connection is weak, and every request carries AI Assist's instructions and 38 tools,
 about 20 KB). Opening the connection beforehand would save 0.1–0.4 s of the first question only, less than the
 network's own swing, so it was left out.
+
+Left as it is: opening the 25.8 MB mail takes 290–320 ms in main, nearly all of it mailparser decoding an attachment
+that is already on disk beside the mail; a worker thread would keep the rest of Tetra answering meanwhile.
+
+## Phone
+
+**Device.** The user's phone, Xiaomi 15 (24129PN74G, `208c8192`), Android 16, with its own data: 7 977 mails from
+99 658 index lines (the computer's index and the phones'), no kept AI chats. Tetra 0.7.0-beta.1, a debug build that is
+not debuggable (as installed since 25 Oct: a debuggable one runs Compose several times slower).
+
+**Method.** `Tetra-mobile/tools/measure-mail-ai.sh`: Tetra stopped, then opened by adb on Mail (cold), Mail again
+from Tetra's Home, Tetra opened on Home and Mail tapped 6 s later, AI Assist from cold and its History. Each screen
+writes its own line to writer.log (OpenTiming, the applets' round of 25 Oct): until its first content is drawn, when
+taps are answered again (the last frame over 100 ms), and the longest frame. Medians of 3–5 runs.
+
+### Round 1: Mail's index read ahead, on half the cores
+
+The phone read all 99 658 index lines on one core when Mail opened (about 2.5 s), the screen frozen until the list came.
+Now Tetra reads them 1 s after Home's first frame, at a background priority, in pieces on half the cores (on all of
+them, a first try, the frames went up to 0.5 s and AI Assist's taps waited 1.9 s). Conversations' grouping by subject runs
+only with conversations on, and the list's day is worked out with the time zone looked up once, not for each mail.
+
+| Moment | before | after |
+|---|---|---|
+| Tetra opened, Mail tapped 6 s later | ~2.5 s (the index read then) | 129 ms, taps answered at once |
+| Reading the index | ~2.5 s, one core | 1.0–1.2 s |
+| Mail opened straight from cold | 2 554 ms (2 170–2 822) | 2 805 ms (2 373–2 962): Tetra starting with it, no change |
+| Mail again from Home | 154 ms | 152 ms |
+| AI Assist from cold | 70 ms | 89 ms (62–114 across all runs), taps answered at once |
+| AI Assist's History | 9 ms | 9 ms |
+
+Next, if Mail straight from its launcher icon matters: keep the read index in the app's cache between starts (as the
+Calendar does), so a cold start reads it only when an index file changed.
+
+## For the page
+
+- Tetra on the computer opens its window in 0.1 s instead of 0.5 s.
+- Mail on the computer: the list is on screen in 0.11 s instead of 0.24 s, and the window no longer stalls while mail arrives.
+- Mail on the phone: from Tetra's Home in 0.13 s instead of 2.5 s.
+- AI Assist was already quick (its page in 15–90 ms); an answer's wait is Mistral's, 1–9 s on a weak line.

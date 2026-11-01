@@ -18,8 +18,10 @@ site shows it, in every language.
       fix straightens every new page. Merged 1 Nov.
 
 ## Numbers
-- [ ] **Speed of Mail and AI Assist**, before → after, from the optimization rounds (not started yet: the user said it comes after these changes; its results
-      file will be `desktop/PERF_MAIL_AI.md`).
+- [ ] **Speed of Mail and AI Assist** (1 Nov, `desktop/PERF_MAIL_AI.md`): the computer's window 496 → 97 ms; Mail's list
+      238 → 113 ms, the window no longer busy while mail arrives (161 → 0 ms in 10 s), a mail opened 258 → 211 ms; AI Assist's
+      History 79 → 11 ms. The phone: Mail from Home after Tetra starts ~2.5 s → 129 ms. AI Assist was already quick (15–90 ms);
+      an answer's wait is Mistral's (1–9 s). Add them beside the README's speed table.
 
 ## Downloads
 - [ ] Bump the download buttons, labels and QR code to the next release once it is out (now 0.7.0 beta 1).
