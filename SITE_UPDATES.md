@@ -24,6 +24,11 @@ site shows it, in every language.
       and an expert, examples and recaps, what the text does not say taken out), «Ζωντανή συζήτηση» (Live about the
       document), «Διάβασέ το μου». The MP3 (64 kbps, chapters) is made in the background with a notification, played in the
       chat, saved in Files or downloaded; ≈ €0.93 an hour of audio, the estimate asked first. The phone makes its own, as M4A.
+- [ ] **AI Assist: usage and cost**: every paid call counted, per device and month, in `.System` (kept through updates);
+      a dashboard in Settings, opened from the € chip in the header, with totals for all devices and a monthly budget.
+- [ ] **AI Assist (phone): result cards**: contact (photo, numbers, last calls; Open, Call, Message), files, web sources,
+      an email to check before sending, event, note, timer. «Βρες» only shows; «Πάρε τον Χ» calls after 3 s unless cancelled.
+      The mini window shows the screen behind it, dimmed.
 
 ## Numbers
 - [ ] **Speed of Mail and AI Assist** (1 Nov, `desktop/PERF_MAIL_AI.md`): the computer's window 496 → 97 ms; Mail's list
