@@ -2392,5 +2392,9 @@
  "chip.timer": "Sæt en timer på 10 minutter",
  "assistant.memory": "Personlige oplysninger",
  "assistant.memoryHow": "Hvad AI Assist husker om dig: sig «husk at…» i en chat, eller skriv det her. Det bruges i hver chat og planlagt handling på alle enheder.",
- "assistant.memoryHint": "f.eks. Jeg underviser på 3. folkeskole"
+ "assistant.memoryHint": "f.eks. Jeg underviser på 3. folkeskole",
+ "assist.tabHistory": "Historik",
+ "assist.noChats": "Ingen chats endnu.",
+ "sched.asked": "Bedt om: din computer kører den, så snart den synkroniserer.",
+ "sched.howPhone": "Din computer kører dem, og svaret kommer her som en notifikation. Tryk på Ny for en ny, eller sig det i chatten."
 }

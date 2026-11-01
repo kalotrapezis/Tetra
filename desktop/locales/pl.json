@@ -2570,5 +2570,9 @@
  "chip.timer": "Ustaw minutnik na 10 minut",
  "assistant.memory": "Dane osobiste",
  "assistant.memoryHow": "Co AI Assist pamięta o tobie: powiedz w czacie „zapamiętaj, że…” albo wpisz to tutaj. Jest używane w każdym czacie i zaplanowanej akcji, na wszystkich urządzeniach.",
- "assistant.memoryHint": "np. Uczę w Szkole Podstawowej nr 3"
+ "assistant.memoryHint": "np. Uczę w Szkole Podstawowej nr 3",
+ "assist.tabHistory": "Historia",
+ "assist.noChats": "Jeszcze brak czatów.",
+ "sched.asked": "Poproszono: komputer uruchomi to, gdy tylko się zsynchronizuje.",
+ "sched.howPhone": "Uruchamia je twój komputer, a odpowiedź przychodzi tu jako powiadomienie. Aby dodać nowe, stuknij Nowe lub powiedz to w czacie."
 }

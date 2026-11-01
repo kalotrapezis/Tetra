@@ -1238,7 +1238,10 @@ app.whenReady().then(() => {
   ipcMain.handle('memory:list', () => memory.list())
   ipcMain.handle('memory:add', (_, text) => { memory.add(text); return memory.list() })
   ipcMain.handle('memory:change', (_, id, text) => memory.change(String(id), text))
-  const schedules = new schedule.Schedules(path.join(system.dir('Assistant', 'Data', files.system), 'schedules.json'))
+  // in Shared since 1 Nov 2026, so the phone sees and changes them; the first day's file from Data moved there once
+  const schedulesFile = path.join(system.dir('Assistant', 'Shared', files.system), 'schedules.json')
+  try { const old = path.join(system.dir('Assistant', 'Data', files.system), 'schedules.json'); if (fs.existsSync(old) && !fs.existsSync(schedulesFile)) { fs.mkdirSync(path.dirname(schedulesFile), { recursive: true }); fs.renameSync(old, schedulesFile) } } catch (e) { console.warn('[schedule] move', e.message) }
+  const schedules = new schedule.Schedules(schedulesFile)
   // one Tools for the window's chat, a new one for each scheduled run (its own numbered lists)
   const makeTools = () => new assistant.Tools({ calendar, timers, notes, files, contacts, maps, mail, schedules, memory, allowed: app => aiSwitch.allows(app),
     // the Calendar's, Timer's and Contacts' folders are watched (shown, the devices told); Notes' is not
@@ -1276,6 +1279,11 @@ app.whenReady().then(() => {
   function planSchedules() {
     clearTimeout(scheduleTimer)
     const now = Date.now(), list = schedules.list(), ready = aiSwitch.on() && !!assistKey() // no key or AI off: nothing runs
+    if (!schedules.runs(require('node:os').hostname())) return // another computer runs them
+    for (const s of list.filter(s => s.runNow)) { // Run now, asked on the phone
+      schedules.change(s.id, { runNow: false })
+      if (ready) runSchedule(s, true).catch(e => console.warn('[schedule]', e.message))
+    }
     for (const s of list) {
       const at = schedule.due(s)
       if (!ready || at == null || at > now) continue
@@ -1309,6 +1317,12 @@ app.whenReady().then(() => {
     } catch (e) { notify(title, t('brief.failed', { error: e.message })); throw e } finally { scheduleRunning.delete(s.id) }
   }
   setTimeout(planSchedules, 15_000) // after the start's own work
+  // changed on the phone (sync writes the file): the plan and the window follow
+  try {
+    let settle = null
+    fs.mkdirSync(path.dirname(schedulesFile), { recursive: true })
+    fs.watch(path.dirname(schedulesFile), (_, name) => { if (name !== 'schedules.json') return; clearTimeout(settle); settle = setTimeout(() => { planSchedules(); win?.webContents.send('schedules-changed') }, 500) })
+  } catch (e) { console.warn('[schedule] cannot watch', e.message) }
   powerMonitor.on('resume', () => setTimeout(planSchedules, 15_000)) // the network back first
   ipcMain.handle('schedules:list', () => { const o = schedules.read(); return { list: o.list.map(s => ({ ...s, next: schedule.due(s) })), brief: o.brief, ready: aiSwitch.on() && !!assistKey() } })
   ipcMain.handle('schedules:change', (_, id, x) => { schedules.change(String(id), x ?? {}); planSchedules() })

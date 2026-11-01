@@ -2570,5 +2570,9 @@
  "chip.timer": "Nustatyk 10 minučių laikmatį",
  "assistant.memory": "Asmeniniai duomenys",
  "assistant.memoryHow": "Ką AI Assist prisimena apie jus: pokalbyje sakykite „įsimink, kad…“ arba parašykite čia. Tai naudojama kiekviename pokalbyje ir suplanuotame veiksme, visuose įrenginiuose.",
- "assistant.memoryHint": "pvz. Mokau 3-ioje pradinėje mokykloje"
+ "assistant.memoryHint": "pvz. Mokau 3-ioje pradinėje mokykloje",
+ "assist.tabHistory": "Istorija",
+ "assist.noChats": "Pokalbių dar nėra.",
+ "sched.asked": "Paprašyta: kompiuteris tai įvykdys, kai tik susisinchronizuos.",
+ "sched.howPhone": "Juos vykdo jūsų kompiuteris, o atsakymas ateina čia pranešimu. Naujam bakstelėkite Naujas arba pasakykite pokalbyje."
 }

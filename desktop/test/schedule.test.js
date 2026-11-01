@@ -61,6 +61,8 @@ test('schedule: the store makes the brief first, checks what it is given, and co
     assert.equal(local(due(s.list()[1])), '2026-11-09 07:00', 'resumed: nothing gone by runs at once')
     s.setBrief({ sections: { weather: false }, place: { name: 'Αθήνα', lat: 37.98, lon: 23.73 } })
     assert.deepEqual(s.read().brief.sections, { weather: false })
+    assert.equal(s.runs('pc-1'), true, 'the first computer to ask runs them'); assert.equal(s.runs('pc-2'), false)
+    s.change(s.list()[0].id, { runNow: true }); assert.equal(s.list()[0].runNow, true); assert.equal(s.read().runner, 'pc-1', 'kept through a change')
     s.remove(a.id); assert.equal(s.list().length, 1)
   } finally { fs.rmSync(dir, { recursive: true, force: true }) }
 })

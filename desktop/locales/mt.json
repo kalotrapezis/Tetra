@@ -2570,5 +2570,9 @@
  "chip.timer": "Issettja timer ta’ 10 minuti",
  "assistant.memory": "Dettalji personali",
  "assistant.memoryHow": "Dak li AI Assist jiftakar dwarek: għid «ftakar li…» f’chat, jew iktbu hawn. Jintuża f’kull chat u azzjoni skedata, fuq kull apparat.",
- "assistant.memoryHint": "eż. Ngħallem fit-3 skola primarja"
+ "assistant.memoryHint": "eż. Ngħallem fit-3 skola primarja",
+ "assist.tabHistory": "Storja",
+ "assist.noChats": "Għad m’hemm l-ebda chat.",
+ "sched.asked": "Mitlub: il-kompjuter tiegħek iħaddmu malli jissinkronizza.",
+ "sched.howPhone": "Il-kompjuter tiegħek iħaddimhom u t-tweġiba tasal hawn bħala notifika. Għal waħda ġdida, agħfas Ġdid jew għidha fiċ-chat."
 }

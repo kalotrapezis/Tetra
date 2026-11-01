@@ -2570,5 +2570,9 @@
  "chip.timer": "Nastavi časovnik na 10 minut",
  "assistant.memory": "Osebni podatki",
  "assistant.memoryHow": "Kar si AI Assist zapomni o vas: v pogovoru recite »zapomni si, da…« ali to napišite sem. Uporablja se v vsakem pogovoru in načrtovanem dejanju, na vseh napravah.",
- "assistant.memoryHint": "npr. Poučujem na 3. osnovni šoli"
+ "assistant.memoryHint": "npr. Poučujem na 3. osnovni šoli",
+ "assist.tabHistory": "Zgodovina",
+ "assist.noChats": "Še ni klepetov.",
+ "sched.asked": "Zahtevano: računalnik ga bo zagnal takoj, ko se sinhronizira.",
+ "sched.howPhone": "Izvaja jih vaš računalnik, odgovor pa pride sem kot obvestilo. Za novo tapnite Novo ali ga povejte v klepetu."
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import type { AssistCall, AssistChoice, AssistGo, AssistSend, AssistSettings } from './drive'
 import { Icon } from './Icon'
 import { t } from './i18n'
@@ -18,8 +18,10 @@ const ORANGE = '#FD6A04'
 const LIVE_MAX_MS = 5 * 60_000
 const LIVE_SILENCE_MS = 20_000
 // the bubbles over the input (the user, 1 Nov: "a bubble… click on it and give me a ready prompt that I can edit, change or send")
-const SUGGEST: [IconName, string][] = [['calendar', 'brief'], ['fileImage', 'image'], ['search', 'research'], ['history', 'repeat']]
-const EXAMPLES = ['chip.calendar', 'chip.mail', 'chip.notes', 'chip.timer']
+// each in the colour of the applet it is about (the user: "a green for images, a pink for a reminder, an orange for deep research")
+const APP = { photos: '#95DF6B', calendar: '#F41879', mail: '#FD0DA4', notes: '#FED00A', timer: '#04D5CC', assistant: ORANGE }
+const SUGGEST: [IconName, string, string][] = [['calendar', 'brief', APP.calendar], ['fileImage', 'image', APP.photos], ['search', 'research', APP.assistant], ['history', 'repeat', APP.mail]]
+const EXAMPLES: [string, string][] = [['chip.calendar', APP.calendar], ['chip.mail', APP.mail], ['chip.notes', APP.notes], ['chip.timer', APP.timer]]
 
 // kept while the page is away (another page, the window closed to the tray): the conversation itself is main's
 let kept: Bubble[] = []
@@ -305,14 +307,14 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
           <div className="reset-actions"><button className="filled-button" disabled={!keyText.trim()} onClick={saveKey}>{t('common.save')}</button></div>
         </section>}
         {s?.hasKey && !bubbles.length && <div className="assist-hello muted">{t('assistant.hello')}
-          <div className="assist-examples">{EXAMPLES.map(k => <button key={k} className="chip" onClick={() => offer(t(k))}>{t(k)}</button>)}</div></div>}
+          <div className="assist-examples">{EXAMPLES.map(([k, color]) => <button key={k} className="chip app-chip" style={{ '--app': color } as CSSProperties} onClick={() => offer(t(k))}>{t(k)}</button>)}</div></div>}
         {bubbles.map((b, i) => <BubbleView key={i} b={b} pending={i === bubbles.length - 1 ? pending : null} choose={choose} call={call} cancel={cancelCall}
           mail={i === bubbles.length - 1 ? pendingMail : null} sendMail={sendMail} keepMail={keepMail} />)}
         {draft != null && <div className="assist-bubble">{draft || '…'}</div>}
       </div>
       {status && <p className="assist-status">{status}</p>}
-      {s?.hasKey && !typed && <div className="assist-suggest">{SUGGEST.map(([icon, k]) =>
-        <button key={k} className="chip" onClick={() => offer(t(`chip.${k}Prompt`))}><Icon name={icon} size={16} />{t(`chip.${k}`)}</button>)}</div>}
+      {s?.hasKey && !typed && <div className="assist-suggest">{SUGGEST.map(([icon, k, color]) =>
+        <button key={k} className="chip app-chip" style={{ '--app': color } as CSSProperties} onClick={() => offer(t(`chip.${k}Prompt`))}><Icon name={icon} size={16} />{t(`chip.${k}`)}</button>)}</div>}
       <div className="assist-bar">
         <textarea ref={input} className="field assist-input" rows={1} placeholder={t('assistant.hint')} value={typed} disabled={!s?.hasKey}
           onChange={e => setTyped(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (phase === 'idle') sendTyped() } }} />

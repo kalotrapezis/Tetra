@@ -2451,5 +2451,9 @@
  "chip.timer": "Pon un temporizador de 10 minutos",
  "assistant.memory": "Datos personales",
  "assistant.memoryHow": "Lo que AI Assist recuerda de ti: di «recuerda que…» en un chat o escríbelo aquí. Se usa en cada chat y acción programada, en todos los dispositivos.",
- "assistant.memoryHint": "p. ej. Doy clase en la 3.ª escuela primaria"
+ "assistant.memoryHint": "p. ej. Doy clase en la 3.ª escuela primaria",
+ "assist.tabHistory": "Historial",
+ "assist.noChats": "Aún no hay chats.",
+ "sched.asked": "Pedido: tu ordenador lo ejecutará en cuanto sincronice.",
+ "sched.howPhone": "Tu ordenador las ejecuta y la respuesta llega aquí como notificación. Para una nueva, toca Nueva o dilo en el chat."
 }

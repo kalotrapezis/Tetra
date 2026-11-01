@@ -2481,5 +2481,9 @@
  "chip.timer": "Imposta un timer di 10 minuti",
  "assistant.memory": "Dati personali",
  "assistant.memoryHow": "Ciò che AI Assist ricorda di te: di’ «ricorda che…» in una chat o scrivilo qui. Viene usato in ogni chat e azione programmata, su tutti i dispositivi.",
- "assistant.memoryHint": "es. Insegno alla 3ª scuola primaria"
+ "assistant.memoryHint": "es. Insegno alla 3ª scuola primaria",
+ "assist.tabHistory": "Cronologia",
+ "assist.noChats": "Ancora nessuna chat.",
+ "sched.asked": "Richiesto: il computer lo eseguirà appena si sincronizza.",
+ "sched.howPhone": "Le esegue il tuo computer e la risposta arriva qui come notifica. Per una nuova, tocca Nuova o dilla nella chat."
 }

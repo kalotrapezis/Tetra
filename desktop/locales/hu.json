@@ -2392,5 +2392,9 @@
  "chip.timer": "Állíts be egy 10 perces időzítőt",
  "assistant.memory": "Személyes adatok",
  "assistant.memoryHow": "Amit az AI Assist megjegyez rólad: mondd a csevegésben, hogy „jegyezd meg, hogy…”, vagy írd ide. Minden csevegésben és ütemezett műveletben használja, minden eszközön.",
- "assistant.memoryHint": "pl. A 3. számú általános iskolában tanítok"
+ "assistant.memoryHint": "pl. A 3. számú általános iskolában tanítok",
+ "assist.tabHistory": "Előzmények",
+ "assist.noChats": "Még nincs csevegés.",
+ "sched.asked": "Kérve: a számítógép lefuttatja, amint szinkronizál.",
+ "sched.howPhone": "A számítógéped futtatja őket, a válasz értesítésként érkezik ide. Újhoz koppints az Új gombra, vagy mondd el a csevegésben."
 }

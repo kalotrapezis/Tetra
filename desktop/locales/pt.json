@@ -2481,5 +2481,9 @@
  "chip.timer": "Põe um temporizador de 10 minutos",
  "assistant.memory": "Dados pessoais",
  "assistant.memoryHow": "O que o AI Assist guarda sobre si: diga «lembra-te de que…» numa conversa ou escreva aqui. É usado em cada conversa e ação agendada, em todos os dispositivos.",
- "assistant.memoryHint": "p. ex. Dou aulas na 3.ª escola primária"
+ "assistant.memoryHint": "p. ex. Dou aulas na 3.ª escola primária",
+ "assist.tabHistory": "Histórico",
+ "assist.noChats": "Ainda sem conversas.",
+ "sched.asked": "Pedido: o computador executa-a assim que sincronizar.",
+ "sched.howPhone": "O teu computador executa-as e a resposta chega aqui como notificação. Para uma nova, toca em Nova ou di-lo na conversa."
 }

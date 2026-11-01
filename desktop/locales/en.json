@@ -2392,5 +2392,9 @@
  "chip.timer": "Set a timer for 10 minutes",
  "assistant.memory": "Personal details",
  "assistant.memoryHow": "What AI Assist keeps about you: say «remember that…» in a chat, or write it here. It is used in every chat and scheduled action, on every device.",
- "assistant.memoryHint": "e.g. I teach at the 3rd Primary School of Kavala"
+ "assistant.memoryHint": "e.g. I teach at the 3rd Primary School of Kavala",
+ "assist.tabHistory": "History",
+ "assist.noChats": "No chats yet.",
+ "sched.asked": "Asked: your computer runs it as soon as it syncs.",
+ "sched.howPhone": "Your computer runs them and the answer comes here as a notification. For a new one, tap New or say it in the chat."
 }

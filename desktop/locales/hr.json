@@ -2480,5 +2480,9 @@
  "chip.timer": "Postavi mjerač na 10 minuta",
  "assistant.memory": "Osobni podaci",
  "assistant.memoryHow": "Što AI Assist pamti o vama: recite „zapamti da…” u razgovoru ili to napišite ovdje. Koristi se u svakom razgovoru i zakazanoj radnji, na svim uređajima.",
- "assistant.memoryHint": "npr. Predajem u 3. osnovnoj školi"
+ "assistant.memoryHint": "npr. Predajem u 3. osnovnoj školi",
+ "assist.tabHistory": "Povijest",
+ "assist.noChats": "Još nema razgovora.",
+ "sched.asked": "Zatraženo: računalo će ga pokrenuti čim se sinkronizira.",
+ "sched.howPhone": "Pokreće ih vaše računalo, a odgovor stiže ovdje kao obavijest. Za novu dodirnite Novo ili je recite u razgovoru."
 }

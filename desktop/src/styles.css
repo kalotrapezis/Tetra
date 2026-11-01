@@ -1167,6 +1167,9 @@ button.link.risk { color: #d8663f; font-weight: 600; }
 .assist-schedules { flex: 1; overflow-y: auto; padding: 12px 4px 16px; }
 .assist-suggest { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 0; }
 .assist-suggest .chip { display: inline-flex; align-items: center; gap: 6px; }
+.app-chip { background: color-mix(in srgb, var(--app) 18%, var(--island)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--app) 45%, transparent); }
+.app-chip:hover { background: color-mix(in srgb, var(--app) 30%, var(--island)); }
+.app-chip svg { color: color-mix(in srgb, var(--app) 75%, var(--text)); }
 .assist-examples { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 14px; }
 .clean-size { color: var(--muted); font-variant-numeric: tabular-nums; max-width: 7em; text-align: right; }
 .clean-row .text-button:disabled { opacity: .4; cursor: default; }

@@ -2481,5 +2481,9 @@
  "chip.timer": "Pune un cronometru de 10 minute",
  "assistant.memory": "Date personale",
  "assistant.memoryHow": "Ce reține AI Assist despre tine: spune „ține minte că…” într-o conversație sau scrie aici. Se folosește în fiecare conversație și acțiune programată, pe toate dispozitivele.",
- "assistant.memoryHint": "ex. Predau la Școala Primară nr. 3"
+ "assistant.memoryHint": "ex. Predau la Școala Primară nr. 3",
+ "assist.tabHistory": "Istoric",
+ "assist.noChats": "Încă nicio conversație.",
+ "sched.asked": "Cerut: computerul îl va rula imediat ce se sincronizează.",
+ "sched.howPhone": "Computerul tău le rulează, iar răspunsul vine aici ca notificare. Pentru una nouă, atinge Nou sau spune-o în chat."
 }

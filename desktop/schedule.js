@@ -1,13 +1,15 @@
 'use strict'
 /**
  * Scheduled AI actions (the user, 1 Nov 2026: "once a week, once a year… a notification like the calendar's"): a prompt, a
- * time and a repetition, run here through AI Assist's own chat and tools. This computer runs them; the phone only shows
- * the result (Briefs/latest.json). Kept on this computer alone, never synced, so two computers do not both run one:
+ * time and a repetition, run here through AI Assist's own chat and tools. One computer runs them (the "runner", the first
+ * to see the file); the phone and the tablet see, change and add to the same synced file, and ask the runner to run one
+ * now ("runNow"); the result reaches them as a page (Briefs/latest.json):
  *
- *   ~/Tetra/.System/Assistant/Data/schedules.json
+ *   ~/Tetra/.System/Assistant/Shared/schedules.json   (synced as "AI Assist/schedules.json")
  *   { "list": [ { id, title, prompt, kind: "prompt" | "brief", time: "HH:MM", repeat: "once" | "daily" | "weekly" | "monthly" | "yearly",
  *                 days: [0-6] (weekly, 0 = Sunday), date: "YYYY-MM-DD" (once: the day; monthly: its day; yearly: its day and month),
- *                 paused, created, last } ],
+ *                 paused, created, last, runNow } ],
+ *     "runner": the computer that runs them (its host name),
  *     "brief": { sections: { calendar: bool, … }, place: { name, lat, lon } } }
  */
 const fs = require('node:fs')
@@ -60,7 +62,8 @@ class Schedules {
   read() {
     let o = null
     try { o = JSON.parse(fs.readFileSync(this.file, 'utf8')) } catch {}
-    return { list: Array.isArray(o?.list) ? o.list : [{ ...BRIEF, created: this.now() }], brief: { sections: {}, place: null, ...o?.brief } }
+    // other keys (the runner, a newer version's) are kept as they are
+    return { ...o, list: Array.isArray(o?.list) ? o.list : [{ ...BRIEF, created: this.now() }], brief: { sections: {}, place: null, ...o?.brief } }
   }
   write(o) {
     fs.mkdirSync(path.dirname(this.file), { recursive: true })
@@ -78,6 +81,7 @@ class Schedules {
     if (x.days != null) s.days = [...new Set((Array.isArray(x.days) ? x.days : [x.days]).map(Number).filter(n => Number.isInteger(n) && n >= 0 && n <= 6))].sort()
     if (x.date !== undefined) { if (x.date && !/^\d{4}-\d{2}-\d{2}$/.test(x.date)) throw new Error(`Not a date: ${x.date}`); s.date = x.date || null }
     if (x.paused != null) s.paused = !!x.paused
+    if (x.runNow != null) s.runNow = !!x.runNow
     if (s.repeat === 'weekly' && !s.days?.length) throw new Error('Say on which weekdays.')
     if (s.repeat === 'once' && !s.date) s.date = dayKey(new Date(this.now()))
     return s
@@ -101,6 +105,8 @@ class Schedules {
   }
   remove(id) { const o = this.read(); o.list = o.list.filter(s => s.id !== id); this.write(o) }
   ran(id, at) { const o = this.read(), s = o.list.find(s => s.id === id); if (s) { s.last = at; this.write(o) } }
+  /** Whether [me] runs them: the runner named in the file, or the first computer to ask, which becomes it. */
+  runs(me) { const o = this.read(); if (!o.runner) { o.runner = me; this.write(o) } return o.runner === me }
   setBrief(x) { const o = this.read(); o.brief = { ...o.brief, ...x, sections: { ...o.brief.sections, ...x.sections } }; this.write(o); return o.brief }
 }
 

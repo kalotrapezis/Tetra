@@ -2392,5 +2392,9 @@
  "chip.timer": "Laita ajastin 10 minuutiksi",
  "assistant.memory": "Henkilötiedot",
  "assistant.memoryHow": "Mitä AI Assist muistaa sinusta: sano keskustelussa ”muista, että…” tai kirjoita se tähän. Sitä käytetään jokaisessa keskustelussa ja ajastetussa toiminnossa kaikilla laitteilla.",
- "assistant.memoryHint": "esim. Opetan 3. alakoulussa"
+ "assistant.memoryHint": "esim. Opetan 3. alakoulussa",
+ "assist.tabHistory": "Historia",
+ "assist.noChats": "Ei vielä keskusteluja.",
+ "sched.asked": "Pyydetty: tietokone suorittaa sen heti synkronoituaan.",
+ "sched.howPhone": "Tietokoneesi suorittaa ne, ja vastaus tulee tänne ilmoituksena. Lisää uusi napauttamalla Uusi tai sano se keskustelussa."
 }

@@ -48,7 +48,7 @@ A new app or kind is added to `system.js` and to this file first.
 | `Notes/Shared` | one `<id>.json` per note, `history/`, `deletions.json` | `Files/.notes` |
 | `Assistant/Shared` | `ai.json`, the AI switch (ai.js): on/off and which apps AI Assist may use; synced as `AI Assist/…` (not `Assistant`: Files/Assistant is the user's pictures) | new, 31 Oct 2026 |
 | `Assistant/Shared/Briefs` | The pages the scheduled AI actions make (schedule.js, brief.js): `YYYY-MM-DD.html` the daily brief, `YYYY-MM-DD-<id>.html` another action's answer, `latest.json` the last one, for the phone's notification | new, 1 Nov 2026 |
-| `Assistant/Data` | `schedules.json`: the scheduled AI actions and the brief's settings; this computer's only, never synced, so two computers never both run one | new, 1 Nov 2026 |
+| `Assistant/Shared/schedules.json` | The scheduled AI actions and the brief's settings (schedule.js), synced so the phone sees and changes them; `runner` names the one computer that runs them | new, 1 Nov 2026 |
 | `Mail/Shared` | the mail archive (mail.js): `accounts.json` (no passwords), `index.jsonl`, `<address>/<Inbox, Sent…>/<yyyy>/… .eml` with each mail's attachments in `<same name>.files/`, `requests/` (the phones' actions, done and removed by the desktop); synced as `Mail/…` (MAIL_PLAN §11) | new, 31 Oct 2026 |
 | `Office/Data` | (phone and tablet) the Office templates, `.potx`/`.dotx` themes | `Tetra/.templates` |
 

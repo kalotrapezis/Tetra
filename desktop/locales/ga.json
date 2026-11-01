@@ -2659,5 +2659,9 @@
  "chip.timer": "Socraigh amadóir 10 nóiméad",
  "assistant.memory": "Sonraí pearsanta",
  "assistant.memoryHow": "An méid a choinníonn AI Assist fút: abair «cuimhnigh go…» i gcomhrá, nó scríobh anseo é. Úsáidtear é i ngach comhrá agus gníomh sceidealta, ar gach gléas.",
- "assistant.memoryHint": "m.sh. Múinim i mbunscoil 3"
+ "assistant.memoryHint": "m.sh. Múinim i mbunscoil 3",
+ "assist.tabHistory": "Stair",
+ "assist.noChats": "Níl aon chomhrá fós.",
+ "sched.asked": "Iarrtha: ritheann do ríomhaire é a luaithe a shioncronaíonn sé.",
+ "sched.howPhone": "Ritheann do ríomhaire iad agus tagann an freagra anseo mar fhógra. Le haghaidh ceann nua, tapáil Nua nó abair sa chomhrá é."
 }

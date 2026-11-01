@@ -2392,5 +2392,9 @@
  "chip.timer": "Pane taimer 10 minutiks",
  "assistant.memory": "Isikuandmed",
  "assistant.memoryHow": "Mida AI Assist sinu kohta mäletab: ütle vestluses „pea meeles, et…“ või kirjuta see siia. Seda kasutatakse igas vestluses ja ajastatud toimingus, kõigis seadmetes.",
- "assistant.memoryHint": "nt Õpetan 3. põhikoolis"
+ "assistant.memoryHint": "nt Õpetan 3. põhikoolis",
+ "assist.tabHistory": "Ajalugu",
+ "assist.noChats": "Vestlusi veel pole.",
+ "sched.asked": "Palutud: arvuti käivitab selle kohe, kui sünkroonib.",
+ "sched.howPhone": "Need käivitab sinu arvuti ja vastus tuleb siia teavitusena. Uue jaoks puuduta Uus või ütle see vestluses."
 }

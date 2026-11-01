@@ -2481,5 +2481,9 @@
  "chip.timer": "Iestati taimeri uz 10 minūtēm",
  "assistant.memory": "Personas dati",
  "assistant.memoryHow": "Ko AI Assist par jums atceras: sarunā sakiet “atceries, ka…” vai ierakstiet to šeit. Tas tiek izmantots katrā sarunā un plānotajā darbībā visās ierīcēs.",
- "assistant.memoryHint": "piem. Es mācu 3. pamatskolā"
+ "assistant.memoryHint": "piem. Es mācu 3. pamatskolā",
+ "assist.tabHistory": "Vēsture",
+ "assist.noChats": "Vēl nav tērzēšanu.",
+ "sched.asked": "Pieprasīts: dators to izpildīs, tiklīdz sinhronizēsies.",
+ "sched.howPhone": "Tās izpilda jūsu dators, un atbilde atnāk šeit paziņojumā. Jaunai pieskarieties Jauns vai pasakiet to tērzēšanā."
 }

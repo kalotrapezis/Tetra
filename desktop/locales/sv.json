@@ -2392,5 +2392,9 @@
  "chip.timer": "Sätt en timer på 10 minuter",
  "assistant.memory": "Personliga uppgifter",
  "assistant.memoryHow": "Det AI Assist minns om dig: säg ”kom ihåg att…” i en chatt, eller skriv det här. Det används i varje chatt och schemalagd åtgärd, på alla enheter.",
- "assistant.memoryHint": "t.ex. Jag undervisar på 3:e grundskolan"
+ "assistant.memoryHint": "t.ex. Jag undervisar på 3:e grundskolan",
+ "assist.tabHistory": "Historik",
+ "assist.noChats": "Inga chattar ännu.",
+ "sched.asked": "Begärt: datorn kör den så snart den synkar.",
+ "sched.howPhone": "Din dator kör dem och svaret kommer hit som en avisering. Tryck på Ny för en ny, eller säg det i chatten."
 }

@@ -2392,5 +2392,9 @@
  "chip.timer": "Stell einen Timer auf 10 Minuten",
  "assistant.memory": "Persönliche Angaben",
  "assistant.memoryHow": "Was AI Assist über Sie behält: Sagen Sie im Chat „merk dir, dass…“ oder schreiben Sie es hier. Es gilt in jedem Chat und jeder geplanten Aktion, auf allen Geräten.",
- "assistant.memoryHint": "z. B. Ich unterrichte an der 3. Grundschule"
+ "assistant.memoryHint": "z. B. Ich unterrichte an der 3. Grundschule",
+ "assist.tabHistory": "Verlauf",
+ "assist.noChats": "Noch keine Chats.",
+ "sched.asked": "Angefragt: Ihr Computer führt es aus, sobald er synchronisiert.",
+ "sched.howPhone": "Ihr Computer führt sie aus, die Antwort kommt hier als Benachrichtigung. Für eine neue tippen Sie auf Neu oder sagen es im Chat."
 }

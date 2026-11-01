@@ -2570,5 +2570,9 @@
  "chip.timer": "Nastav časovač na 10 minut",
  "assistant.memory": "Osobní údaje",
  "assistant.memoryHow": "Co si AI Assist o vás pamatuje: řekněte v chatu „zapamatuj si, že…“ nebo to napište sem. Používá se v každém chatu a naplánované akci na všech zařízeních.",
- "assistant.memoryHint": "např. Učím na 3. základní škole"
+ "assistant.memoryHint": "např. Učím na 3. základní škole",
+ "assist.tabHistory": "Historie",
+ "assist.noChats": "Zatím žádné chaty.",
+ "sched.asked": "Požádáno: počítač to spustí, jakmile se synchronizuje.",
+ "sched.howPhone": "Spouští je váš počítač a odpověď přijde sem jako oznámení. Novou přidáte klepnutím na Nové nebo ji řekněte v chatu."
 }

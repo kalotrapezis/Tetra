@@ -2481,5 +2481,9 @@
  "chip.timer": "Mets un minuteur de 10 minutes",
  "assistant.memory": "Informations personnelles",
  "assistant.memoryHow": "Ce que AI Assist retient de vous : dites « souviens-toi que… » dans une discussion, ou écrivez-le ici. C’est utilisé dans chaque discussion et action planifiée, sur tous les appareils.",
- "assistant.memoryHint": "p. ex. J’enseigne à la 3e école primaire"
+ "assistant.memoryHint": "p. ex. J’enseigne à la 3e école primaire",
+ "assist.tabHistory": "Historique",
+ "assist.noChats": "Aucune discussion pour l’instant.",
+ "sched.asked": "Demandé : votre ordinateur l’exécutera dès qu’il se synchronise.",
+ "sched.howPhone": "Votre ordinateur les exécute et la réponse arrive ici en notification. Pour en ajouter une, touchez Nouvelle ou dites-la dans la discussion."
 }

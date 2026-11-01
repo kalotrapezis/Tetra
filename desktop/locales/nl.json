@@ -2392,5 +2392,9 @@
  "chip.timer": "Zet een timer van 10 minuten",
  "assistant.memory": "Persoonlijke gegevens",
  "assistant.memoryHow": "Wat AI Assist over je onthoudt: zeg „onthoud dat…” in een chat, of schrijf het hier. Het wordt gebruikt in elke chat en geplande actie, op al je apparaten.",
- "assistant.memoryHint": "bijv. Ik geef les op de 3e basisschool"
+ "assistant.memoryHint": "bijv. Ik geef les op de 3e basisschool",
+ "assist.tabHistory": "Geschiedenis",
+ "assist.noChats": "Nog geen chats.",
+ "sched.asked": "Gevraagd: je computer voert het uit zodra hij synchroniseert.",
+ "sched.howPhone": "Je computer voert ze uit en het antwoord komt hier als melding. Tik voor een nieuwe op Nieuw of zeg het in de chat."
 }
