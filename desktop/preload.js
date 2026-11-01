@@ -230,6 +230,19 @@ contextBridge.exposeInMainWorld('drive', {
     set: changes => ipcRenderer.invoke('ai:set', changes),
     onChange: fn => { const l = () => fn(); ipcRenderer.on('ai-changed', l); return () => ipcRenderer.off('ai-changed', l) },
   },
+  // Scheduled AI actions and the daily brief (schedule.js, brief.js), run by main
+  schedules: {
+    list: () => ipcRenderer.invoke('schedules:list'),
+    change: (id, x) => ipcRenderer.invoke('schedules:change', id, x),
+    add: x => ipcRenderer.invoke('schedules:add', x),
+    results: () => ipcRenderer.invoke('schedules:results'),
+    remove: id => ipcRenderer.invoke('schedules:remove', id),
+    run: id => ipcRenderer.invoke('schedules:run', id),
+    open: file => ipcRenderer.invoke('schedules:open', file),
+    setBrief: x => ipcRenderer.invoke('schedules:setBrief', x),
+    place: name => ipcRenderer.invoke('schedules:place', name),
+    onChange: fn => { const l = () => fn(); ipcRenderer.on('schedules-changed', l); return () => ipcRenderer.off('schedules-changed', l) },
+  },
   // Mail (mail.js), read-only: the passwords never come here, the window only hands a new one over once
   mail: {
     accounts: () => ipcRenderer.invoke('mail:accounts'),

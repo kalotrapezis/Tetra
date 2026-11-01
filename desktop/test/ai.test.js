@@ -24,7 +24,8 @@ test('ai: no choice yet is off, or on where a key is already set; the file is sh
     s.set({ enabled: false })
     assert.equal(s.allows('notes'), false, 'off: no app')
     assert.ok(Object.values(TOOL_APP).every(a => APPS.includes(a)), 'every tool belongs to an app the switch knows')
-    assert.ok(SCHEMA.every(f => TOOL_APP[f.function.name]), 'and every tool has its app')
+    // scheduled actions are AI Assist's own: the main switch alone holds them, and each run asks the apps' switches again
+    assert.ok(SCHEMA.every(f => TOOL_APP[f.function.name] || f.function.name.startsWith('schedule_')), 'and every tool has its app')
     assert.equal(system.SHARED['AI Assist'], 'Assistant', 'synced as "AI Assist/ai.json"')
   } finally { fs.rmSync(dir, { recursive: true, force: true }) }
 })

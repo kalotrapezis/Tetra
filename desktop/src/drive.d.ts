@@ -46,6 +46,10 @@ export type AssistGo = { note?: string; maps?: string; youtube?: string }
 export interface AssistSend { draft: MailDraft; to: string; subject: string; preview: string }
 export interface AssistReply { text: string; choices: AssistChoice[]; call: AssistCall | null; send: AssistSend | null; images: string[]; open: string | null; go: AssistGo | null; spent: number }
 export interface AssistShortcuts { toggle: string; talk: string; live: string }
+export type Repeat = 'once' | 'daily' | 'weekly' | 'monthly' | 'yearly'
+export interface Schedule { id: string; kind: 'prompt' | 'brief'; title: string; prompt: string; time: string; repeat: Repeat; days: number[]; date: string | null; paused: boolean; last?: number; next: number | null }
+export interface Place { name: string; lat: number; lon: number }
+export interface BriefSettings { sections: Record<string, boolean>; place: Place | null }
 export interface AssistSettings {
   hasKey: boolean; keyring: boolean; words: string; contactWords: boolean; voice: string; voiceName: string; pause: number; aloud: boolean; cassette: boolean
   meter: { total: number; trip: number; since: number; past: { from: number; to: number; usd: number }[] }; spent: number; perMinute: number
@@ -321,6 +325,18 @@ declare global {
         openLink(url: string): Promise<void>
         appPasswords(): Promise<void>
         pasteAppPassword(): Promise<string | null>
+        onChange(fn: () => void): () => void
+      }
+      schedules: {
+        list(): Promise<{ list: Schedule[]; brief: BriefSettings; ready: boolean }>
+        change(id: string, x: Partial<Omit<Schedule, 'id' | 'kind' | 'next'>>): Promise<void>
+        add(x: Pick<Schedule, 'title' | 'prompt' | 'time' | 'repeat' | 'days' | 'date'>): Promise<Schedule>
+        results(): Promise<{ file: string; title: string; at: number }[]>
+        remove(id: string): Promise<void>
+        run(id: string): Promise<string | null>
+        open(file: string): Promise<void>
+        setBrief(x: Partial<BriefSettings>): Promise<BriefSettings>
+        place(name: string): Promise<Place | null>
         onChange(fn: () => void): () => void
       }
       assistant: {

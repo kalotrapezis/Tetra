@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { AiSettings, AppNotification, AssistSettings, AssistShortcuts, CleanItem } from './drive'
+import { ScheduleList } from './Schedules'
 import { accelerator, money } from './assist'
 import { Icon, type IconName } from './Icon'
 import { locale, t } from './i18n'
@@ -95,7 +96,7 @@ export function SettingsPage({ onGuide, start }: { onGuide: () => void; start?: 
           {tab === 'mail' && <MailSettings />}
           {tab === 'maps' && <><MapsCard /><LocationCard /></>}
           {tab === 'phone' && <CallsCard />}
-          {tab === 'assistant' && <><AiCard /><AssistCard /></>}
+          {tab === 'assistant' && <><AiCard /><section className="settings-card"><ScheduleList /></section><AssistCard /></>}
         </div>
       </div>
     </div>

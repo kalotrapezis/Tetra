@@ -32,6 +32,8 @@ const { MapBuilder } = require('./mapbuild')
 const { Thumbs } = require('./thumbs')
 const importer = require('./importer')
 const assistant = require('./assistant')
+const schedule = require('./schedule')
+const brief = require('./brief')
 const { Mail, MICROSOFT, detect: detectMail, check: checkMail, parseMailto } = require('./mail')
 const msauth = require('./msauth')
 let mail = null
@@ -1231,9 +1233,14 @@ app.whenReady().then(() => {
     setSetting('assistantVoice', first.id); setSetting('assistantVoiceName', first.name)
     return first.id
   }
-  const assistTools = new assistant.Tools({ calendar, timers, notes, files, contacts, maps, mail, allowed: app => aiSwitch.allows(app),
+  const schedules = new schedule.Schedules(path.join(system.dir('Assistant', 'Data', files.system), 'schedules.json'))
+  // one Tools for the window's chat, a new one for each scheduled run (its own numbered lists)
+  const makeTools = () => new assistant.Tools({ calendar, timers, notes, files, contacts, maps, mail, schedules, allowed: app => aiSwitch.allows(app),
     // the Calendar's, Timer's and Contacts' folders are watched (shown, the devices told); Notes' is not
-    changed: what => { if (what === 'notes') { win?.webContents.send('notes-changed'); sync?.nudge().catch(() => {}) } },
+    changed: what => {
+      if (what === 'notes') { win?.webContents.send('notes-changed'); sync?.nudge().catch(() => {}) }
+      if (what === 'schedules') { planSchedules(); win?.webContents.send('schedules-changed') }
+    },
     search: async q => { const r = await api.conversation(q, 'web_search', 'Search the web and answer briefly with the facts found.'); return r.text + (r.sources.length ? '\nSources: ' + r.sources.slice(0, 3).join('; ') : '') },
     // pictures go to Files › Assistant, a folder like any other, so they reach the phone
     image: async prompt => {
@@ -1243,9 +1250,88 @@ app.whenReady().then(() => {
       fs.mkdirSync(path.dirname(full), { recursive: true }); fs.writeFileSync(full, await api.download(id))
       return { name: path.basename(full), full }
     },
+    // a research report (report_save) is the user's, like a picture: Files › Assistant, so it reaches the phone
+    report: (title, text) => {
+      const name = `${String(title).replace(/[\\/:*?"<>|\n]+/g, ' ').trim().slice(0, 80) || 'Report'} ${brief.dayKey(new Date())}.html`
+      const full = path.join(FILES_ROOT, 'Assistant', name)
+      fs.mkdirSync(path.dirname(full), { recursive: true }); fs.writeFileSync(full, brief.answer(String(title), Date.now(), text))
+      return { name, rel: path.join('Assistant', name) }
+    },
     // shortcut: which card is the user's is kept on this computer only (Contacts has no "me" mark yet); into the card once the devices need it
     me: () => setting('assistantMe') || null, setMe: uid => setSetting('assistantMe', uid) })
+  const assistTools = makeTools()
   const chat = new assistant.Chat(api, assistTools)
+
+  // Scheduled actions (schedule.js, brief.js): one timer for the next, made again when they change, the AI switch changes, the
+  // computer wakes or Tetra starts. One due while Tetra was closed or asleep runs once, if it is less than a day late. The
+  // page goes to .System/Assistant/Shared/Briefs, which syncs, so the phone shows it too (latest.json says which).
+  const BRIEFS = path.join(system.dir('Assistant', 'Shared', files.system), 'Briefs')
+  const scheduleRunning = new Set()
+  let scheduleTimer = null
+  function planSchedules() {
+    clearTimeout(scheduleTimer)
+    const now = Date.now(), list = schedules.list(), ready = aiSwitch.on() && !!assistKey() // no key or AI off: nothing runs
+    for (const s of list) {
+      const at = schedule.due(s)
+      if (!ready || at == null || at > now) continue
+      if (now - at > 86_400_000) schedules.ran(s.id, now) // missed by more than a day: let go
+      else runSchedule(s).catch(e => console.warn('[schedule]', e.message))
+    }
+    const next = Math.min(...list.map(schedule.due).filter(x => x != null && x > now))
+    scheduleTimer = setTimeout(planSchedules, Math.max(1000, Math.min(next - now, 6 * HOURS)))
+  }
+  /** Runs [s] now; [byHand] (Run now) leaves its next time as it was. */
+  async function runSchedule(s, byHand = false) {
+    if (scheduleRunning.has(s.id)) return null
+    scheduleRunning.add(s.id)
+    if (!byHand) schedules.ran(s.id, Date.now()) // first, so a slow run is not started twice
+    const title = s.kind === 'brief' ? t('brief.title') : s.title
+    try {
+      const now = Date.now(), c = new assistant.Chat(api, makeTools())
+      const ask = async prompt => (await c.ask(prompt)).text
+      let html, line
+      if (s.kind === 'brief') {
+        const b = schedules.read().brief
+        ;({ html, line } = await brief.make({ now, calendar, notes, ask, fetch: globalThis.fetch, place: b.place, switches: b.sections, allowed: app => aiSwitch.allows(app) }, title))
+      } else { line = await ask(`${s.prompt}\n\n(This runs by itself on a schedule and the answer is shown as a page: it may be longer than usual, in short paragraphs.)`); html = brief.answer(title, now, line) }
+      const name = `${brief.dayKey(new Date(now))}${s.kind === 'brief' ? '' : '-' + s.id.slice(0, 8)}.html`, file = path.join(BRIEFS, name)
+      fs.mkdirSync(BRIEFS, { recursive: true })
+      fs.writeFileSync(file, html)
+      fs.writeFileSync(path.join(BRIEFS, 'latest.json'), JSON.stringify({ at: now, title, text: String(line).slice(0, 300), file: name }))
+      notify(title, String(line).slice(0, 200) || t('brief.tapToOpen'), () => shell.openPath(file))
+      sync?.nudge().catch(() => {})
+      return file
+    } catch (e) { notify(title, t('brief.failed', { error: e.message })); throw e } finally { scheduleRunning.delete(s.id) }
+  }
+  setTimeout(planSchedules, 15_000) // after the start's own work
+  powerMonitor.on('resume', () => setTimeout(planSchedules, 15_000)) // the network back first
+  ipcMain.handle('schedules:list', () => { const o = schedules.read(); return { list: o.list.map(s => ({ ...s, next: schedule.due(s) })), brief: o.brief, ready: aiSwitch.on() && !!assistKey() } })
+  ipcMain.handle('schedules:change', (_, id, x) => { schedules.change(String(id), x ?? {}); planSchedules() })
+  ipcMain.handle('schedules:add', (_, x) => { const s = schedules.add(x ?? {}); planSchedules(); return s })
+  // the pages the schedules made, newest first: their title from the page itself
+  ipcMain.handle('schedules:results', () => {
+    let names = []
+    try { names = fs.readdirSync(BRIEFS).filter(n => n.endsWith('.html')) } catch {}
+    return names.map(file => { const full = path.join(BRIEFS, file), head = fs.readFileSync(full, 'utf8').slice(0, 2000)
+      return { file, at: fs.statSync(full).mtimeMs, title: (/<title>([^<]*)<\/title>/.exec(head)?.[1] ?? file).replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"') }
+    }).sort((a, b) => b.at - a.at).slice(0, 30)
+  })
+  ipcMain.handle('schedules:remove', (_, id) => { schedules.remove(String(id)); planSchedules() })
+  ipcMain.handle('schedules:setBrief', (_, x) => schedules.setBrief({ ...(x?.sections ? { sections: x.sections } : {}), ...(x?.place !== undefined ? { place: x.place } : {}) }))
+  ipcMain.handle('schedules:run', async (_, id) => {
+    const s = schedules.list().find(x => x.id === id)
+    if (!s) return null
+    if (!aiSwitch.on()) throw new Error(t('assistant.aiOff'))
+    if (!assistKey()) throw new Error(t('assistant.noKey'))
+    return runSchedule(s, true)
+  })
+  ipcMain.handle('schedules:open', (_, file) => { const f = path.resolve(BRIEFS, path.basename(String(file))); if (fs.existsSync(f)) shell.openPath(f) })
+  // the weather's place, by name, from Open-Meteo's free geocoding (no key)
+  ipcMain.handle('schedules:place', async (_, name) => {
+    const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?count=1&language=${encodeURIComponent(i18n.locale('en'))}&name=${encodeURIComponent(String(name).slice(0, 100))}`)
+    const p = r.ok ? (await r.json()).results?.[0] : null
+    return p ? { name: [p.name, p.country].filter(Boolean).join(', '), lat: p.latitude, lon: p.longitude } : null
+  })
   let voiceStop = null // the answer being read aloud
   /** This computer's own voice, the free one: speech-dispatcher (Chromium's speechSynthesis finds no voices in Electron here). */
   const spdSay = (text, signal) => new Promise(resolve => {
@@ -1278,7 +1364,7 @@ app.whenReady().then(() => {
   })
   ipcMain.handle('assistant:transcribe', async (_, pcm) => ({ text: await api.transcribe(Int16Array.from(pcm), assistBias()), spent: chat.bill.usd }))
   ipcMain.handle('assistant:hush', () => hush())
-  ipcMain.handle('assistant:clear', () => { hush(); chat.clear(); assistTools.lists = { contacts: [], files: [], notes: [], timers: [], mail: [] } })
+  ipcMain.handle('assistant:clear', () => { hush(); chat.clear(); assistTools.lists = { contacts: [], files: [], notes: [], timers: [], mail: [], schedules: [] } })
   ipcMain.handle('assistant:youtube', (_, q) => shell.openExternal('https://www.youtube.com/results?search_query=' + encodeURIComponent(String(q).slice(0, 200))))
   ipcMain.handle('assistant:hide', () => { win?.hide(); vault?.lock() })
   // Live (the waveform button): the window's microphone to Voxtral realtime, its turns back to the window, which asks as above
@@ -1314,12 +1400,12 @@ app.whenReady().then(() => {
   }
   registerShortcuts()
   ipcMain.handle('ai:get', () => aiSwitch.read())
-  ipcMain.handle('ai:set', (_, changes) => { const r = aiSwitch.set(changes ?? {}); if (!r.enabled) { hush(); live?.end(); live = null } registerShortcuts(); win?.webContents.send('ai-changed'); return r })
+  ipcMain.handle('ai:set', (_, changes) => { const r = aiSwitch.set(changes ?? {}); if (!r.enabled) { hush(); live?.end(); live = null } registerShortcuts(); planSchedules(); win?.webContents.send('ai-changed'); return r })
   // changed on the phone or the tablet: sync writes the file, the window and the shortcuts follow
   try {
     let settle = null
     fs.mkdirSync(path.dirname(aiSwitch.file), { recursive: true })
-    fs.watch(path.dirname(aiSwitch.file), (_, name) => { if (name !== 'ai.json') return; clearTimeout(settle); settle = setTimeout(() => { registerShortcuts(); win?.webContents.send('ai-changed') }, 300) })
+    fs.watch(path.dirname(aiSwitch.file), (_, name) => { if (name !== 'ai.json') return; clearTimeout(settle); settle = setTimeout(() => { registerShortcuts(); planSchedules(); win?.webContents.send('ai-changed') }, 300) })
   } catch (e) { console.warn('[ai] cannot watch', e.message) }
   const meterNow = () => { const m = assistant.Meter.of(setting('assistantMeter')); return { total: m.total, trip: m.trip, since: m.since, past: m.past } }
   // Mail, read-only (mail.js). The password is checked against the server before it is kept, encrypted, in settings.
@@ -1472,6 +1558,7 @@ app.whenReady().then(() => {
     if (!k) { db.prepare('DELETE FROM settings WHERE key = ?').run('assistantKey'); return false }
     if (!safeStorage.isEncryptionAvailable()) throw new Error(t('assistant.noKeyring'))
     setSetting('assistantKey', safeStorage.encryptString(k).toString('base64'))
+    planSchedules()
     return true
   })
   ipcMain.handle('assistant:set', (_, changes) => {

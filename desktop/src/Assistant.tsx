@@ -4,6 +4,8 @@ import { Icon } from './Icon'
 import { t } from './i18n'
 import { errorText } from './Dialogs'
 import { FRAME, RATE, Vad, clock, money, yesNo } from './assist'
+import { ScheduleList } from './Schedules'
+import type { IconName } from './Icon'
 
 // AI Assist (the phone's AssistantScreen.kt, ported; assistant.js has the why): the chat, walkie-talkie on the mic button,
 // live on the waveform one. Mistral and Tetra's tools run in main; the microphone, the voice and the record here.
@@ -15,6 +17,9 @@ const TURN: Record<LivePhase, number> = { connecting: 20, listening: 40, thinkin
 const ORANGE = '#FD6A04'
 const LIVE_MAX_MS = 5 * 60_000
 const LIVE_SILENCE_MS = 20_000
+// the bubbles over the input (the user, 1 Nov: "a bubble… click on it and give me a ready prompt that I can edit, change or send")
+const SUGGEST: [IconName, string][] = [['calendar', 'brief'], ['fileImage', 'image'], ['search', 'research'], ['history', 'repeat']]
+const EXAMPLES = ['chip.calendar', 'chip.mail', 'chip.notes', 'chip.timer']
 
 // kept while the page is away (another page, the window closed to the tray): the conversation itself is main's
 let kept: Bubble[] = []
@@ -95,6 +100,8 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
   const [spent, setSpent] = useState(0)
   const [typed, setTyped] = useState('')
   const [keyText, setKeyText] = useState('')
+  const [tab, setTab] = useState<'chat' | 'schedules'>('chat')
+  const input = useRef<HTMLTextAreaElement>(null)
   const stopNow = useRef(false)
   // live
   const [liveShown, setLiveShown] = useState(false)
@@ -270,6 +277,10 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
     try { await window.drive.assistant.setKey(keyText); setKeyText(''); load() } catch (e) { say(errorText(e), true) }
   }
   const sendTyped = () => { const x = typed.trim(); setTyped(''); send(x) }
+  /** A ready prompt in the input, to edit before sending: never sent by the click itself. */
+  const offer = (text: string) => { setTab('chat'); setTyped(text); setTimeout(() => { const el = input.current; if (el) { el.focus(); el.setSelectionRange(text.length, text.length) } }) }
+  /** What is said, written out (the Scheduled tab's mic). */
+  const dictate = async () => { const pcm = await listen(8000, s?.pause ?? 2500, false, { current: false }, () => {}); return pcm ? (await window.drive.assistant.transcribe(pcm)).text : null }
   const lastChoices = bubbles.at(-1)?.choices ?? []
 
   return (
@@ -281,6 +292,11 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
         <button className="round flat" title={t('assistant.readAloud')} onClick={() => setAloud(!s?.aloud)}><Icon name={s?.aloud ? 'volumeUp' : 'volumeOff'} /></button>
         <button className="round flat" title={t('assistant.newChat')} onClick={newChat}><Icon name="add" /></button>
       </header>
+      <div className="assist-tabs">
+        <button className={`chip${tab === 'chat' ? ' on' : ''}`} onClick={() => setTab('chat')}>{t('assist.tabChat')}</button>
+        <button className={`chip${tab === 'schedules' ? ' on' : ''}`} onClick={() => setTab('schedules')}>{t('assist.tabSchedules')}</button>
+      </div>
+      {tab === 'schedules' ? <div className="assist-schedules"><ScheduleList dictate={dictate} past /></div> : <>
       <div className="assist-list" ref={list}>
         {s && !s.hasKey && <section className="settings-card island">
           <h3><Icon name="key" size={20} />{t('assistant.key')}</h3>
@@ -288,14 +304,17 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
           <input className="field" type="password" placeholder={t('assistant.keyHint')} value={keyText} onChange={e => setKeyText(e.target.value)} onKeyDown={e => e.key === 'Enter' && saveKey()} />
           <div className="reset-actions"><button className="filled-button" disabled={!keyText.trim()} onClick={saveKey}>{t('common.save')}</button></div>
         </section>}
-        {s?.hasKey && !bubbles.length && <div className="assist-hello muted">{t('assistant.hello')}</div>}
+        {s?.hasKey && !bubbles.length && <div className="assist-hello muted">{t('assistant.hello')}
+          <div className="assist-examples">{EXAMPLES.map(k => <button key={k} className="chip" onClick={() => offer(t(k))}>{t(k)}</button>)}</div></div>}
         {bubbles.map((b, i) => <BubbleView key={i} b={b} pending={i === bubbles.length - 1 ? pending : null} choose={choose} call={call} cancel={cancelCall}
           mail={i === bubbles.length - 1 ? pendingMail : null} sendMail={sendMail} keepMail={keepMail} />)}
         {draft != null && <div className="assist-bubble">{draft || '…'}</div>}
       </div>
       {status && <p className="assist-status">{status}</p>}
+      {s?.hasKey && !typed && <div className="assist-suggest">{SUGGEST.map(([icon, k]) =>
+        <button key={k} className="chip" onClick={() => offer(t(`chip.${k}Prompt`))}><Icon name={icon} size={16} />{t(`chip.${k}`)}</button>)}</div>}
       <div className="assist-bar">
-        <textarea className="field assist-input" rows={1} placeholder={t('assistant.hint')} value={typed} disabled={!s?.hasKey}
+        <textarea ref={input} className="field assist-input" rows={1} placeholder={t('assistant.hint')} value={typed} disabled={!s?.hasKey}
           onChange={e => setTyped(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (phase === 'idle') sendTyped() } }} />
         {typed.trim() ? <button className="round assist-go" disabled={phase !== 'idle'} title={t('common.send')} onClick={sendTyped}><Icon name="arrowUp" /></button> : <>
           <button className={`round assist-mic ${phase === 'listening' ? (hearing ? 'hearing' : 'on') : ''}`} disabled={!s?.hasKey || phase === 'thinking'}
@@ -305,6 +324,7 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
           <button className="round assist-live" disabled={!s?.hasKey || phase !== 'idle'} title={t('assistant.live')} onClick={startLive}><Icon name="graphicEq" /></button>
         </>}
       </div>
+      </>}
       {liveShown && <div className="assist-livescreen">
         <h2>{t('app.assistant')}</h2>
         <LivePlayer phase={livePhase} level={() => live.current?.level ?? 0} cassette={!!s?.cassette}

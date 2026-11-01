@@ -91,6 +91,8 @@
       "skills/**",
       "importer.js",
       "assistant.js",
+      "schedule.js",
+      "brief.js",
       "mail.js",
       "ai.js",
       "mailclean.js",

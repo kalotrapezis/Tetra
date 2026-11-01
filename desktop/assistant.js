@@ -199,6 +199,10 @@ const STRINGS = description => ({ type: 'array', items: { type: 'string' }, desc
 const RELATION = 'Spouse, Partner, Mother, Father, Parent, Brother, Sister, Child, Friend, Assistant or Manager in English; any other in the user\'s own word (κουμπάρος).'
 const RELATIONS = ['Spouse', 'Partner', 'Mother', 'Father', 'Parent', 'Brother', 'Sister', 'Child', 'Friend', 'Assistant', 'Manager']
 const ONLY_ONE = new Set(['Spouse', 'Partner', 'Mother', 'Father', 'Assistant', 'Manager'])
+const SCHEDULE = { prompt: p('string', 'What to do then, as a request to AI Assist in the user\'s words ("πες μου τι έχω την εβδομάδα").'), title: p('string', 'A short name for it.'),
+  time: p('string', 'Local time, HH:MM.'), repeat: { type: 'string', enum: ['once', 'daily', 'weekly', 'monthly', 'yearly'], description: 'How often.' },
+  days: { type: 'array', items: { type: 'integer' }, description: 'For weekly: the weekdays, 0 = Sunday, 1 = Monday … 6 = Saturday.' },
+  date: p('string', 'YYYY-MM-DD: for once, the day; for monthly, a day of the month it runs on; for yearly, its day and month. Leave out for today.') }
 const NO_ME = 'Tetra does not know which contact is the user. Ask the user for their own name as saved in Contacts, then call my_card, then try again.'
 
 /** What the model may call, in Mistral's function-calling form. */
@@ -248,6 +252,13 @@ const SCHEMA = [
   fn('mail_status', 'Each mail account: unread mail in the Inbox, mail not yet saved on this computer, and whether syncing works.', []),
   fn('web_search', 'Search the web for current facts, news, opening hours, prices.', ['query'], { query: p('string', 'What to search for.') }),
   fn('make_image', 'Draw a picture from a description.', ['prompt'], { prompt: p('string', 'What the picture shows, in detail.') }),
+  fn('report_save', 'Save a long research report as a page in Files › Assistant and open it: for «έρευνα σε βάθος», «αναφορά για…». First web_search several times (different angles), then call this with the whole report; then say in one sentence that it is saved.', ['title', 'text'],
+    { title: p('string', 'The report\'s title.'), text: p('string', 'The whole report in the user\'s language: a short summary first, then sections (a heading on its own line, short paragraphs), then "Πηγές" with each source\'s title and link.') }),
+  fn('schedule_add', 'Schedule something for AI Assist to do by itself at a time, once or again and again ("κάθε Δευτέρα στις 8 πες μου τι έχω την εβδομάδα"). At that time Tetra runs the prompt with these same tools and shows the answer in a notification.', ['prompt', 'time', 'repeat'], SCHEDULE),
+  fn('schedule_list', 'The scheduled actions (the daily brief among them), each with its next run; a numbered list.', []),
+  fn('schedule_change', 'Change, pause or resume a scheduled action from the last schedule_list; give only what changes.', ['choice'], { ...CHOICE, ...SCHEDULE, paused: p('boolean', 'true to pause, false to resume.'),
+    sections: { type: 'object', properties: Object.fromEntries(['calendar', 'mail', 'weather', 'notes'].map(k => [k, { type: 'boolean' }])), description: 'Only for the daily brief: which sections it has (calendar, mail, weather, notes = open checklists); give only those that change.' } }),
+  fn('schedule_delete', 'Delete a scheduled action from the last schedule_list.', ['choice'], CHOICE),
 ]
 
 /** Which of the user's apps each tool reads or changes (ai.js APPS): a tool of an app switched off is not even offered. */
@@ -255,7 +266,7 @@ const TOOL_APP = {
   calendar_add: 'calendar', calendar_list: 'calendar', calendar_free: 'calendar', timer_start: 'timer', timer_list: 'timer', timer_stop: 'timer',
   notes_search: 'notes', note_open: 'notes', note_new: 'notes', shopping_list: 'notes', files_find: 'files', file_open: 'files',
   contacts_find: 'contacts', relation_remember: 'contacts', relation_forget: 'contacts', my_card: 'contacts', contact_call: 'phone',
-  navigate: 'maps', youtube: 'web', web_search: 'web', make_image: 'web',
+  navigate: 'maps', youtube: 'web', report_save: 'files', web_search: 'web', make_image: 'web',
   mail_new: 'mail', mail_important: 'mail', mail_search: 'mail', mail_read: 'mail', mail_needs_answer: 'mail', mail_send: 'mail', mail_status: 'mail', mail_find_local: 'mail', mail_export: 'mail',
 }
 
@@ -280,9 +291,9 @@ const addDays = (date, n) => dayKey(new Date(localMs(date) + n * 86400000 + 3 * 
  */
 class Tools {
   /** [allowed](app): the user's switch for each app (ai.js); an app switched off is neither read nor changed. */
-  constructor({ calendar, timers, notes, files, contacts, maps, mail = null, now = () => Date.now(), changed = () => {}, search, image, me = () => null, setMe = () => {}, allowed = () => true }) {
-    Object.assign(this, { calendar, timers, notes, files, contacts, maps, mail, now, changed, search, image, me, setMe, allowed })
-    this.lists = { contacts: [], files: [], notes: [], timers: [], mail: [] }
+  constructor({ calendar, timers, notes, files, contacts, maps, mail = null, schedules = null, now = () => Date.now(), changed = () => {}, search, image, report, me = () => null, setMe = () => {}, allowed = () => true }) {
+    Object.assign(this, { calendar, timers, notes, files, contacts, maps, mail, schedules, now, changed, search, image, report, me, setMe, allowed })
+    this.lists = { contacts: [], files: [], notes: [], timers: [], mail: [], schedules: [] }
   }
 
   async run(name, args = {}) {
@@ -640,6 +651,51 @@ class Tools {
   }
   youtube(a) { const q = String(a.query || '').trim(); return { forModel: `YouTube is open on a search for "${q}".`, go: { youtube: q } } }
 
+  // ---- Scheduled actions (schedule.js): run by this computer at their time, the answer in a notification ----
+  scheduleLine(s, i) {
+    const { due } = require('./schedule'), next = due(s)
+    const how = s.repeat === 'weekly' ? `weekly on ${s.days.map(d => WEEKDAY[d]).join(', ')}` : s.repeat === 'once' ? `once on ${s.date}` : ['monthly', 'yearly'].includes(s.repeat) && s.date ? `${s.repeat} (from ${s.date})` : s.repeat
+    return `${i + 1}. ${s.title} — ${how} at ${s.time}${s.paused ? ', paused' : next ? `, next ${shown(next)}` : ', done'}${s.kind === 'brief' ? ' (the daily brief)' : `: "${s.prompt}"`}`
+  }
+  schedule_add(a) {
+    if (!this.schedules) return { forModel: 'Scheduled actions run only on the computer.' }
+    const s = this.schedules.add(a)
+    this.changed('schedules')
+    return { forModel: `Scheduled: ${this.scheduleLine(s, 0).slice(3)}.` }
+  }
+  schedule_list() {
+    if (!this.schedules) return { forModel: 'Scheduled actions run only on the computer.' }
+    const list = this.lists.schedules = this.schedules.list()
+    return { forModel: list.length ? list.map((s, i) => this.scheduleLine(s, i)).join('\n') : 'Nothing is scheduled.' }
+  }
+  schedule_change(a) {
+    return this.pick(this.lists.schedules, a, s => {
+      const { choice, ...x } = a
+      if (s.kind === 'brief') delete x.prompt
+      if (x.sections && s.kind === 'brief') this.schedules.setBrief({ sections: Object.fromEntries(Object.entries(x.sections).filter(([, v]) => typeof v === 'boolean')) })
+      delete x.sections
+      const c = this.schedules.change(s.id, x)
+      this.changed('schedules')
+      return { forModel: `Changed: ${this.scheduleLine(c, 0).slice(3)}.` }
+    })
+  }
+  schedule_delete(a) {
+    return this.pick(this.lists.schedules, a, s => {
+      if (s.kind === 'brief') return { forModel: 'The daily brief cannot be deleted; pause it instead (schedule_change with paused).' }
+      this.schedules.remove(s.id)
+      this.lists.schedules = this.lists.schedules.filter(x => x !== s)
+      this.changed('schedules')
+      return { forModel: `Deleted "${s.title}".` }
+    })
+  }
+
+  report_save(a) {
+    const title = String(a.title || '').trim(), text = String(a.text || '').trim()
+    if (!text) return { forModel: 'Write the report first.' }
+    const f = this.report(title || text.slice(0, 60), text)
+    return { forModel: `Saved as ${f.name} in Files › Assistant, and opened.`, open: f.rel }
+  }
+
   async web_search(a) { return { forModel: await this.search(String(a.query || '')) } }
   async make_image(a) { const f = await this.image(String(a.prompt || '')); return { forModel: `The picture is on the screen, saved as ${f.name} in Files › Assistant.`, image: f } }
 }
@@ -660,9 +716,12 @@ Mail kept on this computer, deleted mail too ("βρες το email που έσβ
 Mail: "νέα μηνύματα;" mail_new. "Τι σημαντικό έχω", "τι θέλει απάντηση ή κάποια ενέργεια": mail_important, then mail_read the ones that matter and say in a few words what each wants.
 "Βρες το μέιλ από τη Μαρία": mail_search with contact; "βρες το τιμολόγιο": mail_search with query. To read or summarise one: mail_read.
 "Στείλε μέιλ στον Νίκο ότι…": mail_send. Read back who, subject and text in one or two sentences; it goes only after the user's yes, which Tetra hears itself. Never say it was sent. You never move or delete mail.
-Work out dates yourself from today's date ("αύριο", "την Πέμπτη").`
+Work out dates yourself from today's date ("αύριο", "την Πέμπτη").
+"Κάθε Δευτέρα στις 8 πες μου…", "κάθε μέρα", "μία φορά τον χρόνο", "την Παρασκευή στις 6 θύμισέ μου…": schedule_add, the prompt in the user's words; then say when it runs. To change, pause or delete one: schedule_list first.
+The daily brief («πρωινή αναφορά», «ενημέρωση της ημέρας») is built in: never schedule_add it; schedule_list, then schedule_change it (time, paused: false, sections).
+«Έρευνα σε βάθος», a report on a subject: web_search several times, then report_save the whole report. A picture: make_image.`
 
-const ROUNDS = 5 // tool rounds in one turn at most: find, then act, with room to spare
+const ROUNDS = 8 // tool rounds in one turn at most: find, then act, with room to spare (a deep research searches several times)
 
 /** One conversation: the messages so far, until New chat. */
 class Chat {
