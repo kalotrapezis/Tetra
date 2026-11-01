@@ -1391,11 +1391,23 @@ app.whenReady().then(() => {
     const all = fs.readdirSync(CHATS).filter(n => n.endsWith('.json')).map(n => ({ n, at: fs.statSync(path.join(CHATS, n)).mtimeMs })).sort((x, y) => y.at - x.at)
     for (const { n } of all.slice(100)) fs.rmSync(path.join(CHATS, n), { force: true })
   })
-  ipcMain.handle('assistant:chats', () => {
+  // each kept chat's title, read again only when its file changed: History read all 100 whole at every look (79 ms)
+  const chatHeads = new Map()
+  const chatList = () => {
     let names = []
     try { names = fs.readdirSync(CHATS).filter(n => n.endsWith('.json')) } catch {}
-    return names.map(n => { try { const o = JSON.parse(fs.readFileSync(path.join(CHATS, n), 'utf8')); return { id: o.id, at: o.at, title: o.title } } catch { return null } }).filter(Boolean).sort((x, y) => y.at - x.at)
-  })
+    for (const n of chatHeads.keys()) if (!names.includes(n)) chatHeads.delete(n)
+    return names.map(n => {
+      try {
+        const full = path.join(CHATS, n), at = fs.statSync(full).mtimeMs, was = chatHeads.get(n)
+        if (was?.mtime === at) return was.head
+        const o = JSON.parse(fs.readFileSync(full, 'utf8')), head = { id: o.id, at: o.at, title: o.title }
+        chatHeads.set(n, { mtime: at, head })
+        return head
+      } catch { return null }
+    }).filter(Boolean).sort((x, y) => y.at - x.at)
+  }
+  ipcMain.handle('assistant:chats', () => chatList())
   /** Takes a kept chat back, to go on with it: the model gets its turns again; the window, its bubbles. */
   ipcMain.handle('assistant:openChat', (_, id) => {
     const o = JSON.parse(fs.readFileSync(chatFile(id), 'utf8'))
@@ -1666,6 +1678,7 @@ app.whenReady().then(() => {
   // Mail's index (tens of MB) is read once the window has its first page, not before it: 0.3–0.8 s sooner on screen
   win.webContents.once('did-finish-load', () => setTimeout(() => {
     mail.index; mail.foreign // the getters read them
+    chatList() // AI Assist's History, ready before it is asked for
     if (!process.env.DRIVE_HIDDEN) mail.startAll() // a hidden QA copy fetches nothing
   }, 1500))
   if (argCommand(process.argv)) win.webContents.once('did-finish-load', () => setTimeout(() => assistantCommand(argCommand(process.argv)), 1500))

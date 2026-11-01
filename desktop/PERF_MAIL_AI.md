@@ -51,3 +51,21 @@ rows out of view are not laid out or painted (`content-visibility`, as in Contac
 | 300 more rows (scrolled to the end, third time) | 96 ms, busy 124 ms | 95 ms, busy 95 ms |
 | While mail arrives (10 s) | window busy 161 ms in all | 0 ms |
 | Search ("σχολ") | 42 ms, never busy | 48 ms, never busy |
+
+### Round 3: AI Assist's History
+
+AI Assist itself was already quick on the computer: its page is on screen in 15–25 ms with the word cloud and the
+sidebar, Scheduled and Memory in 3 ms. History read all its kept chats whole (up to 100, with every turn of each)
+whenever it was opened. Now each title is read once and again only when that chat changes, and they are read in the
+background after Tetra starts.
+
+| Moment | before | after |
+|---|---|---|
+| History (100 chats) | 79 ms | 11 ms |
+| AI Assist opened (word cloud and sidebar) | 17–25 ms | 15 ms |
+
+**The first word of an answer** is Mistral's and the line's, not Tetra's. Measured with a short question, Tetra
+spends 2–6 ms before the request leaves and 22 ms between a round of tools and the next; Mistral's first bytes came
+after 1.1–8.7 s (the user's connection is weak, and every request carries AI Assist's instructions and 38 tools,
+about 20 KB). Opening the connection beforehand would save 0.1–0.4 s of the first question only, less than the
+network's own swing, so it was left out.
