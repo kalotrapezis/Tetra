@@ -156,5 +156,5 @@ test('the money counter: a trip meter that resets, a total that never does, past
   const back = Meter.of(m.json())
   assert.deepEqual([back.total, back.trip, back.since, back.past], [0.75, 0.25, 200, [{ from: 100, to: 200, usd: 0.5 }]])
   assert.deepEqual(terms('Καλοτραπέζης, Tetra,, Tetra', ['Στέλλα']), ['Καλοτραπέζης', 'Tetra', 'Στέλλα'])
-  assert.equal(Bill.text(0.01234), '$0.0123')
+  assert.equal(Bill.text(0.01234), '€0.0123')
 })
