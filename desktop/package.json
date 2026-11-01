@@ -95,6 +95,7 @@
       "brief.js",
       "mail.js",
       "ai.js",
+      "memory.js",
       "mailclean.js",
       "msauth.js",
       "models/*.onnx",

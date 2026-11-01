@@ -230,6 +230,12 @@ contextBridge.exposeInMainWorld('drive', {
     set: changes => ipcRenderer.invoke('ai:set', changes),
     onChange: fn => { const l = () => fn(); ipcRenderer.on('ai-changed', l); return () => ipcRenderer.off('ai-changed', l) },
   },
+  // AI Assist's personal details (memory.js), the same on every device
+  memory: {
+    list: () => ipcRenderer.invoke('memory:list'),
+    add: text => ipcRenderer.invoke('memory:add', text),
+    change: (id, text) => ipcRenderer.invoke('memory:change', id, text),
+  },
   // Scheduled AI actions and the daily brief (schedule.js, brief.js), run by main
   schedules: {
     list: () => ipcRenderer.invoke('schedules:list'),

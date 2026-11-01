@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { AiSettings, AppNotification, AssistSettings, AssistShortcuts, CleanItem } from './drive'
+import type { AiSettings, MemoryFact, AppNotification, AssistSettings, AssistShortcuts, CleanItem } from './drive'
 import { ScheduleList } from './Schedules'
 import { accelerator, money } from './assist'
 import { Icon, type IconName } from './Icon'
@@ -96,7 +96,7 @@ export function SettingsPage({ onGuide, start }: { onGuide: () => void; start?: 
           {tab === 'mail' && <MailSettings />}
           {tab === 'maps' && <><MapsCard /><LocationCard /></>}
           {tab === 'phone' && <CallsCard />}
-          {tab === 'assistant' && <><AiCard /><section className="settings-card"><ScheduleList /></section><AssistCard /></>}
+          {tab === 'assistant' && <><AiCard /><MemoryCard /><section className="settings-card"><ScheduleList /></section><AssistCard /></>}
         </div>
       </div>
     </div>
@@ -286,6 +286,31 @@ function AiCard() {
         <div className="ai-apps">{apps.map(([id, key]) =>
           <label key={id} className="cal-switch"><input type="checkbox" checked={a.apps[id] !== false} onChange={e => set({ apps: { [id]: e.target.checked } })} /><span>{t(key)}</span></label>)}</div>
       </>}
+    </section>
+  )
+}
+
+/** Personal details (memory.js): what AI Assist was told to remember, each fact editable; the same on every device. */
+function MemoryCard() {
+  const [facts, setFacts] = useState<MemoryFact[]>([])
+  const [text, setText] = useState('')
+  const [said, setSaid] = useState('')
+  useEffect(() => { window.drive.memory.list().then(setFacts) }, [])
+  const add = () => text.trim() && window.drive.memory.add(text).then(f => { setFacts(f); setText(''); setSaid('') }, e => setSaid(errorText(e)))
+  const change = (id: string, to: string) => window.drive.memory.change(id, to).then(setFacts)
+  return (
+    <section className="settings-card island">
+      <h3>{t('assistant.memory')}</h3>
+      <p className="muted">{t('assistant.memoryHow')}</p>
+      {facts.map(f => <div key={f.id} className="reset-actions">
+        <input className="field" defaultValue={f.text} aria-label={t('assistant.memory')} onBlur={e => e.target.value.trim() !== f.text && change(f.id, e.target.value)} />
+        <button className="text-button" title={t('common.remove')} onClick={() => change(f.id, '')}><Icon name="close" size={18} /></button>
+      </div>)}
+      <div className="reset-actions">
+        <input className="field" placeholder={t('assistant.memoryHint')} value={text} onChange={e => setText(e.target.value)} onKeyDown={e => e.key === 'Enter' && add()} />
+        <button className="filled-button" disabled={!text.trim()} onClick={add}>{t('common.add')}</button>
+      </div>
+      {said && <p className="muted">{said}</p>}
     </section>
   )
 }

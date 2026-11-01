@@ -2567,5 +2567,8 @@
  "chip.calendar": "Kaj imam jutri?",
  "chip.mail": "Kakšno pomembno pošto imam?",
  "chip.notes": "Naredi nakupovalni seznam: mleko, kruh, sadje",
- "chip.timer": "Nastavi časovnik na 10 minut"
+ "chip.timer": "Nastavi časovnik na 10 minut",
+ "assistant.memory": "Osebni podatki",
+ "assistant.memoryHow": "Kar si AI Assist zapomni o vas: v pogovoru recite »zapomni si, da…« ali to napišite sem. Uporablja se v vsakem pogovoru in načrtovanem dejanju, na vseh napravah.",
+ "assistant.memoryHint": "npr. Poučujem na 3. osnovni šoli"
 }

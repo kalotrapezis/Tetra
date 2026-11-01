@@ -1233,9 +1233,14 @@ app.whenReady().then(() => {
     setSetting('assistantVoice', first.id); setSetting('assistantVoiceName', first.name)
     return first.id
   }
+  // Personal details (memory.js): synced like ai.json, so the phone's chats know them too
+  const memory = new (require('./memory').Memory)(path.join(system.dir('Assistant', 'Shared', files.system), 'memory.json'))
+  ipcMain.handle('memory:list', () => memory.list())
+  ipcMain.handle('memory:add', (_, text) => { memory.add(text); return memory.list() })
+  ipcMain.handle('memory:change', (_, id, text) => memory.change(String(id), text))
   const schedules = new schedule.Schedules(path.join(system.dir('Assistant', 'Data', files.system), 'schedules.json'))
   // one Tools for the window's chat, a new one for each scheduled run (its own numbered lists)
-  const makeTools = () => new assistant.Tools({ calendar, timers, notes, files, contacts, maps, mail, schedules, allowed: app => aiSwitch.allows(app),
+  const makeTools = () => new assistant.Tools({ calendar, timers, notes, files, contacts, maps, mail, schedules, memory, allowed: app => aiSwitch.allows(app),
     // the Calendar's, Timer's and Contacts' folders are watched (shown, the devices told); Notes' is not
     changed: what => {
       if (what === 'notes') { win?.webContents.send('notes-changed'); sync?.nudge().catch(() => {}) }
@@ -1364,7 +1369,7 @@ app.whenReady().then(() => {
   })
   ipcMain.handle('assistant:transcribe', async (_, pcm) => ({ text: await api.transcribe(Int16Array.from(pcm), assistBias()), spent: chat.bill.usd }))
   ipcMain.handle('assistant:hush', () => hush())
-  ipcMain.handle('assistant:clear', () => { hush(); chat.clear(); assistTools.lists = { contacts: [], files: [], notes: [], timers: [], mail: [], schedules: [] } })
+  ipcMain.handle('assistant:clear', () => { hush(); chat.clear(); assistTools.lists = { contacts: [], files: [], notes: [], timers: [], mail: [], schedules: [], memory: [] } })
   ipcMain.handle('assistant:youtube', (_, q) => shell.openExternal('https://www.youtube.com/results?search_query=' + encodeURIComponent(String(q).slice(0, 200))))
   ipcMain.handle('assistant:hide', () => { win?.hide(); vault?.lock() })
   // Live (the waveform button): the window's microphone to Voxtral realtime, its turns back to the window, which asks as above

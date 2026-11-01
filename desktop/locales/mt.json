@@ -2567,5 +2567,8 @@
  "chip.calendar": "X’għandi għada?",
  "chip.mail": "X’posta importanti għandi?",
  "chip.notes": "Agħmel lista tax-xiri: ħalib, ħobż, frott",
- "chip.timer": "Issettja timer ta’ 10 minuti"
+ "chip.timer": "Issettja timer ta’ 10 minuti",
+ "assistant.memory": "Dettalji personali",
+ "assistant.memoryHow": "Dak li AI Assist jiftakar dwarek: għid «ftakar li…» f’chat, jew iktbu hawn. Jintuża f’kull chat u azzjoni skedata, fuq kull apparat.",
+ "assistant.memoryHint": "eż. Ngħallem fit-3 skola primarja"
 }

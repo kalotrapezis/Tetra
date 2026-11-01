@@ -2477,5 +2477,8 @@
  "chip.calendar": "Što imam sutra?",
  "chip.mail": "Koju važnu poštu imam?",
  "chip.notes": "Napravi popis za kupnju: mlijeko, kruh, voće",
- "chip.timer": "Postavi mjerač na 10 minuta"
+ "chip.timer": "Postavi mjerač na 10 minuta",
+ "assistant.memory": "Osobni podaci",
+ "assistant.memoryHow": "Što AI Assist pamti o vama: recite „zapamti da…” u razgovoru ili to napišite ovdje. Koristi se u svakom razgovoru i zakazanoj radnji, na svim uređajima.",
+ "assistant.memoryHint": "npr. Predajem u 3. osnovnoj školi"
 }

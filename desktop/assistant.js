@@ -259,6 +259,10 @@ const SCHEMA = [
   fn('schedule_change', 'Change, pause or resume a scheduled action from the last schedule_list; give only what changes.', ['choice'], { ...CHOICE, ...SCHEDULE, paused: p('boolean', 'true to pause, false to resume.'),
     sections: { type: 'object', properties: Object.fromEntries(['calendar', 'mail', 'weather', 'notes'].map(k => [k, { type: 'boolean' }])), description: 'Only for the daily brief: which sections it has (calendar, mail, weather, notes = open checklists); give only those that change.' } }),
   fn('schedule_delete', 'Delete a scheduled action from the last schedule_list.', ['choice'], CHOICE),
+  fn('memory_add', 'Keep a lasting fact about the user that they asked you to remember («θυμήσου ότι…»): it is given to you in every later chat, on every device.', ['text'],
+    { text: p('string', 'The fact, short, in the user\'s language and in the third person ("Διδάσκει στο 3ο Δημοτικό Καβάλας").') }),
+  fn('memory_list', 'The facts kept about the user, a numbered list.', []),
+  fn('memory_forget', 'Forget a fact from the last memory_list.', ['choice'], CHOICE),
 ]
 
 /** Which of the user's apps each tool reads or changes (ai.js APPS): a tool of an app switched off is not even offered. */
@@ -291,9 +295,9 @@ const addDays = (date, n) => dayKey(new Date(localMs(date) + n * 86400000 + 3 * 
  */
 class Tools {
   /** [allowed](app): the user's switch for each app (ai.js); an app switched off is neither read nor changed. */
-  constructor({ calendar, timers, notes, files, contacts, maps, mail = null, schedules = null, now = () => Date.now(), changed = () => {}, search, image, report, me = () => null, setMe = () => {}, allowed = () => true }) {
-    Object.assign(this, { calendar, timers, notes, files, contacts, maps, mail, schedules, now, changed, search, image, report, me, setMe, allowed })
-    this.lists = { contacts: [], files: [], notes: [], timers: [], mail: [], schedules: [] }
+  constructor({ calendar, timers, notes, files, contacts, maps, mail = null, schedules = null, memory = null, now = () => Date.now(), changed = () => {}, search, image, report, me = () => null, setMe = () => {}, allowed = () => true }) {
+    Object.assign(this, { calendar, timers, notes, files, contacts, maps, mail, schedules, memory, now, changed, search, image, report, me, setMe, allowed })
+    this.lists = { contacts: [], files: [], notes: [], timers: [], mail: [], schedules: [], memory: [] }
   }
 
   async run(name, args = {}) {
@@ -689,6 +693,26 @@ class Tools {
     })
   }
 
+  // ---- Personal details (memory.js): facts the user asked to keep, in every chat's instructions ----
+  memory_add(a) {
+    if (!this.memory) return { forModel: 'Nothing can be kept here.' }
+    const f = this.memory.add(a.text)
+    this.changed('memory')
+    return { forModel: `Kept: "${f.text}". Settings › AI Assist › Personal details shows it.` }
+  }
+  memory_list() {
+    const list = this.lists.memory = this.memory?.list() ?? []
+    return { forModel: list.length ? list.map((f, i) => `${i + 1}. ${f.text}`).join('\n') : 'Nothing is kept.' }
+  }
+  memory_forget(a) {
+    return this.pick(this.lists.memory, a, f => {
+      this.memory.forget(f.id)
+      this.lists.memory = this.lists.memory.filter(x => x !== f)
+      this.changed('memory')
+      return { forModel: `Forgot "${f.text}".` }
+    })
+  }
+
   report_save(a) {
     const title = String(a.title || '').trim(), text = String(a.text || '').trim()
     if (!text) return { forModel: 'Write the report first.' }
@@ -700,7 +724,7 @@ class Tools {
   async make_image(a) { const f = await this.image(String(a.prompt || '')); return { forModel: `The picture is on the screen, saved as ${f.name} in Files › Assistant.`, image: f } }
 }
 
-const system = (now = new Date()) => `You are Tetra's AI Assist, on the user's Linux computer, inside the app Tetra (calendar, timers, notes, files, contacts, maps; the user's phone is paired with it).
+const system = (now = new Date(), facts = []) => `You are Tetra's AI Assist, on the user's Linux computer, inside the app Tetra (calendar, timers, notes, files, contacts, maps; the user's phone is paired with it).
 Now: ${now.toLocaleString('en-GB', { weekday: 'long', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })} (${Intl.DateTimeFormat().resolvedOptions().timeZone}).
 Answer in the user's language (usually Greek), in one or two short plain sentences: answers are often read aloud. No markdown.
 Use the tools for anything about the user's own calendar, timers, notes, files or contacts; never invent what they hold.
@@ -719,7 +743,10 @@ Mail: "νέα μηνύματα;" mail_new. "Τι σημαντικό έχω", "τ
 Work out dates yourself from today's date ("αύριο", "την Πέμπτη").
 "Κάθε Δευτέρα στις 8 πες μου…", "κάθε μέρα", "μία φορά τον χρόνο", "την Παρασκευή στις 6 θύμισέ μου…": schedule_add, the prompt in the user's words; then say when it runs. To change, pause or delete one: schedule_list first.
 The daily brief («πρωινή αναφορά», «ενημέρωση της ημέρας») is built in: never schedule_add it; schedule_list, then schedule_change it (time, paused: false, sections).
-«Έρευνα σε βάθος», a report on a subject: web_search several times, then report_save the whole report. A picture: make_image.`
+«Έρευνα σε βάθος», a report on a subject: web_search several times, then report_save the whole report. A picture: make_image.
+«Θυμήσου ότι…», a lasting fact about the user or what they like: memory_add, then say it is kept. «Ξέχασε ότι…»: memory_list, then memory_forget.${facts.length ? `
+What the user asked you to remember about them (use it when it helps; never read it out unasked):
+${facts.map(f => `- ${f.text}`).join('\n')}` : ''}`
 
 const ROUNDS = 8 // tool rounds in one turn at most: find, then act, with room to spare (a deep research searches several times)
 
@@ -733,7 +760,7 @@ class Chat {
     this.messages.push({ role: 'user', content: text })
     const out = { text: '', choices: [], call: null, send: null, images: [], open: null, go: null }
     for (let round = 0; round < ROUNDS; round++) {
-      const m = await this.api.chat([{ role: 'system', content: system(this.now()) }, ...this.messages], this.tools.offered?.() ?? SCHEMA, onText)
+      const m = await this.api.chat([{ role: 'system', content: system(this.now(), this.tools.memory?.list() ?? []) }, ...this.messages], this.tools.offered?.() ?? SCHEMA, onText)
       const calls = m.tool_calls ?? []
       this.messages.push({ role: 'assistant', content: m.content ?? '', ...(calls.length ? { tool_calls: calls } : {}) })
       if (!calls.length) return { ...out, text: words(m).trim() }

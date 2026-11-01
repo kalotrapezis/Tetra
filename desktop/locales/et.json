@@ -2389,5 +2389,8 @@
  "chip.calendar": "Mis mul homme on?",
  "chip.mail": "Milliseid olulisi kirju mul on?",
  "chip.notes": "Tee ostunimekiri: piim, leib, puuvili",
- "chip.timer": "Pane taimer 10 minutiks"
+ "chip.timer": "Pane taimer 10 minutiks",
+ "assistant.memory": "Isikuandmed",
+ "assistant.memoryHow": "Mida AI Assist sinu kohta mäletab: ütle vestluses „pea meeles, et…“ või kirjuta see siia. Seda kasutatakse igas vestluses ja ajastatud toimingus, kõigis seadmetes.",
+ "assistant.memoryHint": "nt Õpetan 3. põhikoolis"
 }

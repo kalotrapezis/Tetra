@@ -2,6 +2,7 @@
 import type { Media } from './timeline'
 
 /** The AI switch (ai.js): on or off, and per app; shared by every device. */
+export interface MemoryFact { id: string; text: string; at: number }
 export interface AiSettings { enabled: boolean; apps: Record<string, boolean>; chosen: boolean }
 /** Mail (mail.js): accounts.json, a line of index.jsonl, the unified folders' counts, an opened mail. */
 /** «Αποθήκη»: where each account's mail is kept, how much it takes and how many mails (mail.storage) */
@@ -274,6 +275,11 @@ declare global {
         get(): Promise<AiSettings>
         set(changes: { enabled?: boolean; apps?: Record<string, boolean> }): Promise<AiSettings>
         onChange(fn: () => void): () => void
+      }
+      memory: {
+        list(): Promise<MemoryFact[]>
+        add(text: string): Promise<MemoryFact[]>
+        change(id: string, text: string): Promise<MemoryFact[]>
       }
       mail: {
         accounts(): Promise<{ accounts: MailAccount[]; folders: MailFolder[]; status: Record<string, MailState> }>

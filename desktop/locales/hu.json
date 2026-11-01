@@ -2389,5 +2389,8 @@
  "chip.calendar": "Mi lesz holnap?",
  "chip.mail": "Milyen fontos leveleim vannak?",
  "chip.notes": "Készíts bevásárlólistát: tej, kenyér, gyümölcs",
- "chip.timer": "Állíts be egy 10 perces időzítőt"
+ "chip.timer": "Állíts be egy 10 perces időzítőt",
+ "assistant.memory": "Személyes adatok",
+ "assistant.memoryHow": "Amit az AI Assist megjegyez rólad: mondd a csevegésben, hogy „jegyezd meg, hogy…”, vagy írd ide. Minden csevegésben és ütemezett műveletben használja, minden eszközön.",
+ "assistant.memoryHint": "pl. A 3. számú általános iskolában tanítok"
 }

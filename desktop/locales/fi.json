@@ -2389,5 +2389,8 @@
  "chip.calendar": "Mitä minulla on huomenna?",
  "chip.mail": "Mitä tärkeää postia minulla on?",
  "chip.notes": "Tee ostoslista: maito, leipä, hedelmät",
- "chip.timer": "Laita ajastin 10 minuutiksi"
+ "chip.timer": "Laita ajastin 10 minuutiksi",
+ "assistant.memory": "Henkilötiedot",
+ "assistant.memoryHow": "Mitä AI Assist muistaa sinusta: sano keskustelussa ”muista, että…” tai kirjoita se tähän. Sitä käytetään jokaisessa keskustelussa ja ajastetussa toiminnossa kaikilla laitteilla.",
+ "assistant.memoryHint": "esim. Opetan 3. alakoulussa"
 }

@@ -2389,5 +2389,8 @@
  "chip.calendar": "What do I have tomorrow?",
  "chip.mail": "What important mail do I have?",
  "chip.notes": "Make a shopping list: milk, bread, fruit",
- "chip.timer": "Set a timer for 10 minutes"
+ "chip.timer": "Set a timer for 10 minutes",
+ "assistant.memory": "Personal details",
+ "assistant.memoryHow": "What AI Assist keeps about you: say «remember that…» in a chat, or write it here. It is used in every chat and scheduled action, on every device.",
+ "assistant.memoryHint": "e.g. I teach at the 3rd Primary School of Kavala"
 }

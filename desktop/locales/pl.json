@@ -2567,5 +2567,8 @@
  "chip.calendar": "Co mam jutro?",
  "chip.mail": "Jaką ważną pocztę mam?",
  "chip.notes": "Zrób listę zakupów: mleko, chleb, owoce",
- "chip.timer": "Ustaw minutnik na 10 minut"
+ "chip.timer": "Ustaw minutnik na 10 minut",
+ "assistant.memory": "Dane osobiste",
+ "assistant.memoryHow": "Co AI Assist pamięta o tobie: powiedz w czacie „zapamiętaj, że…” albo wpisz to tutaj. Jest używane w każdym czacie i zaplanowanej akcji, na wszystkich urządzeniach.",
+ "assistant.memoryHint": "np. Uczę w Szkole Podstawowej nr 3"
 }

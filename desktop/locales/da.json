@@ -2389,5 +2389,8 @@
  "chip.calendar": "Hvad har jeg i morgen?",
  "chip.mail": "Hvilken vigtig post har jeg?",
  "chip.notes": "Lav en indkøbsliste: mælk, brød, frugt",
- "chip.timer": "Sæt en timer på 10 minutter"
+ "chip.timer": "Sæt en timer på 10 minutter",
+ "assistant.memory": "Personlige oplysninger",
+ "assistant.memoryHow": "Hvad AI Assist husker om dig: sig «husk at…» i en chat, eller skriv det her. Det bruges i hver chat og planlagt handling på alle enheder.",
+ "assistant.memoryHint": "f.eks. Jeg underviser på 3. folkeskole"
 }

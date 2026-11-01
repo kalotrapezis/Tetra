@@ -2478,5 +2478,8 @@
  "chip.calendar": "Ce am mâine?",
  "chip.mail": "Ce mailuri importante am?",
  "chip.notes": "Fă o listă de cumpărături: lapte, pâine, fructe",
- "chip.timer": "Pune un cronometru de 10 minute"
+ "chip.timer": "Pune un cronometru de 10 minute",
+ "assistant.memory": "Date personale",
+ "assistant.memoryHow": "Ce reține AI Assist despre tine: spune „ține minte că…” într-o conversație sau scrie aici. Se folosește în fiecare conversație și acțiune programată, pe toate dispozitivele.",
+ "assistant.memoryHint": "ex. Predau la Școala Primară nr. 3"
 }

@@ -2567,5 +2567,8 @@
  "chip.calendar": "Co mám zítra?",
  "chip.mail": "Jakou důležitou poštu mám?",
  "chip.notes": "Udělej nákupní seznam: mléko, chléb, ovoce",
- "chip.timer": "Nastav časovač na 10 minut"
+ "chip.timer": "Nastav časovač na 10 minut",
+ "assistant.memory": "Osobní údaje",
+ "assistant.memoryHow": "Co si AI Assist o vás pamatuje: řekněte v chatu „zapamatuj si, že…“ nebo to napište sem. Používá se v každém chatu a naplánované akci na všech zařízeních.",
+ "assistant.memoryHint": "např. Učím na 3. základní škole"
 }

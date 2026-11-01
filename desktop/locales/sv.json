@@ -2389,5 +2389,8 @@
  "chip.calendar": "Vad har jag i morgon?",
  "chip.mail": "Vilken viktig post har jag?",
  "chip.notes": "Gör en inköpslista: mjölk, bröd, frukt",
- "chip.timer": "Sätt en timer på 10 minuter"
+ "chip.timer": "Sätt en timer på 10 minuter",
+ "assistant.memory": "Personliga uppgifter",
+ "assistant.memoryHow": "Det AI Assist minns om dig: säg ”kom ihåg att…” i en chatt, eller skriv det här. Det används i varje chatt och schemalagd åtgärd, på alla enheter.",
+ "assistant.memoryHint": "t.ex. Jag undervisar på 3:e grundskolan"
 }

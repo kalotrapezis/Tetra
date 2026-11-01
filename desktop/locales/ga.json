@@ -2656,5 +2656,8 @@
  "chip.calendar": "Cad atá agam amárach?",
  "chip.mail": "Cén ríomhphost tábhachtach atá agam?",
  "chip.notes": "Déan liosta siopadóireachta: bainne, arán, torthaí",
- "chip.timer": "Socraigh amadóir 10 nóiméad"
+ "chip.timer": "Socraigh amadóir 10 nóiméad",
+ "assistant.memory": "Sonraí pearsanta",
+ "assistant.memoryHow": "An méid a choinníonn AI Assist fút: abair «cuimhnigh go…» i gcomhrá, nó scríobh anseo é. Úsáidtear é i ngach comhrá agus gníomh sceidealta, ar gach gléas.",
+ "assistant.memoryHint": "m.sh. Múinim i mbunscoil 3"
 }

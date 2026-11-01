@@ -2478,5 +2478,8 @@
  "chip.calendar": "Cosa ho domani?",
  "chip.mail": "Che posta importante ho?",
  "chip.notes": "Fai una lista della spesa: latte, pane, frutta",
- "chip.timer": "Imposta un timer di 10 minuti"
+ "chip.timer": "Imposta un timer di 10 minuti",
+ "assistant.memory": "Dati personali",
+ "assistant.memoryHow": "Ciò che AI Assist ricorda di te: di’ «ricorda che…» in una chat o scrivilo qui. Viene usato in ogni chat e azione programmata, su tutti i dispositivi.",
+ "assistant.memoryHint": "es. Insegno alla 3ª scuola primaria"
 }

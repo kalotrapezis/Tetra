@@ -2389,5 +2389,8 @@
  "chip.calendar": "Wat heb ik morgen?",
  "chip.mail": "Welke belangrijke mail heb ik?",
  "chip.notes": "Maak een boodschappenlijst: melk, brood, fruit",
- "chip.timer": "Zet een timer van 10 minuten"
+ "chip.timer": "Zet een timer van 10 minuten",
+ "assistant.memory": "Persoonlijke gegevens",
+ "assistant.memoryHow": "Wat AI Assist over je onthoudt: zeg „onthoud dat…” in een chat, of schrijf het hier. Het wordt gebruikt in elke chat en geplande actie, op al je apparaten.",
+ "assistant.memoryHint": "bijv. Ik geef les op de 3e basisschool"
 }

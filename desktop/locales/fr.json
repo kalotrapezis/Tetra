@@ -2478,5 +2478,8 @@
  "chip.calendar": "Qu’est-ce que j’ai demain ?",
  "chip.mail": "Quels mails importants ai-je ?",
  "chip.notes": "Fais une liste de courses : lait, pain, fruits",
- "chip.timer": "Mets un minuteur de 10 minutes"
+ "chip.timer": "Mets un minuteur de 10 minutes",
+ "assistant.memory": "Informations personnelles",
+ "assistant.memoryHow": "Ce que AI Assist retient de vous : dites « souviens-toi que… » dans une discussion, ou écrivez-le ici. C’est utilisé dans chaque discussion et action planifiée, sur tous les appareils.",
+ "assistant.memoryHint": "p. ex. J’enseigne à la 3e école primaire"
 }

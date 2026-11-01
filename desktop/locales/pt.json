@@ -2478,5 +2478,8 @@
  "chip.calendar": "O que tenho amanhã?",
  "chip.mail": "Que correio importante tenho?",
  "chip.notes": "Faz uma lista de compras: leite, pão, fruta",
- "chip.timer": "Põe um temporizador de 10 minutos"
+ "chip.timer": "Põe um temporizador de 10 minutos",
+ "assistant.memory": "Dados pessoais",
+ "assistant.memoryHow": "O que o AI Assist guarda sobre si: diga «lembra-te de que…» numa conversa ou escreva aqui. É usado em cada conversa e ação agendada, em todos os dispositivos.",
+ "assistant.memoryHint": "p. ex. Dou aulas na 3.ª escola primária"
 }

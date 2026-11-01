@@ -2567,5 +2567,8 @@
  "chip.calendar": "Ką turiu rytoj?",
  "chip.mail": "Kokių svarbių laiškų turiu?",
  "chip.notes": "Sudaryk pirkinių sąrašą: pienas, duona, vaisiai",
- "chip.timer": "Nustatyk 10 minučių laikmatį"
+ "chip.timer": "Nustatyk 10 minučių laikmatį",
+ "assistant.memory": "Asmeniniai duomenys",
+ "assistant.memoryHow": "Ką AI Assist prisimena apie jus: pokalbyje sakykite „įsimink, kad…“ arba parašykite čia. Tai naudojama kiekviename pokalbyje ir suplanuotame veiksme, visuose įrenginiuose.",
+ "assistant.memoryHint": "pvz. Mokau 3-ioje pradinėje mokykloje"
 }

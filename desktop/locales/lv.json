@@ -2478,5 +2478,8 @@
  "chip.calendar": "Kas man ir rīt?",
  "chip.mail": "Kāds svarīgs pasts man ir?",
  "chip.notes": "Izveido iepirkumu sarakstu: piens, maize, augļi",
- "chip.timer": "Iestati taimeri uz 10 minūtēm"
+ "chip.timer": "Iestati taimeri uz 10 minūtēm",
+ "assistant.memory": "Personas dati",
+ "assistant.memoryHow": "Ko AI Assist par jums atceras: sarunā sakiet “atceries, ka…” vai ierakstiet to šeit. Tas tiek izmantots katrā sarunā un plānotajā darbībā visās ierīcēs.",
+ "assistant.memoryHint": "piem. Es mācu 3. pamatskolā"
 }
