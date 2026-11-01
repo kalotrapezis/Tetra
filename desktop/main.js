@@ -1381,6 +1381,29 @@ app.whenReady().then(() => {
     if (read) { read.say(cut.rest()); await read.done() }
     return { ...r, images: r.images.map(f => 'data:image/png;base64,' + fs.readFileSync(f.full).toString('base64')), spent: chat.bill.usd }
   })
+  // History (the user, 1 Nov: "where is the history, the chats"): each chat on this computer only, never synced, the newest 100
+  const CHATS = path.join(system.dir('Assistant', 'Data', files.system), 'chats')
+  const chatFile = id => path.join(CHATS, `${String(id).replace(/[^\w-]/g, '').slice(0, 64) || 'x'}.json`)
+  ipcMain.handle('assistant:keep', (_, id, bubbles) => {
+    const said = (Array.isArray(bubbles) ? bubbles : []).map(b => ({ mine: !!b?.mine, text: String(b?.text ?? '').slice(0, 20000), error: !!b?.error }))
+    if (!said.some(b => b.mine)) return
+    fs.mkdirSync(CHATS, { recursive: true })
+    fs.writeFileSync(chatFile(id), JSON.stringify({ id, at: Date.now(), title: said.find(b => b.mine).text.replace(/\s+/g, ' ').slice(0, 80), bubbles: said, messages: chat.messages }))
+    const all = fs.readdirSync(CHATS).filter(n => n.endsWith('.json')).map(n => ({ n, at: fs.statSync(path.join(CHATS, n)).mtimeMs })).sort((x, y) => y.at - x.at)
+    for (const { n } of all.slice(100)) fs.rmSync(path.join(CHATS, n), { force: true })
+  })
+  ipcMain.handle('assistant:chats', () => {
+    let names = []
+    try { names = fs.readdirSync(CHATS).filter(n => n.endsWith('.json')) } catch {}
+    return names.map(n => { try { const o = JSON.parse(fs.readFileSync(path.join(CHATS, n), 'utf8')); return { id: o.id, at: o.at, title: o.title } } catch { return null } }).filter(Boolean).sort((x, y) => y.at - x.at)
+  })
+  /** Takes a kept chat back, to go on with it: the model gets its turns again; the window, its bubbles. */
+  ipcMain.handle('assistant:openChat', (_, id) => {
+    const o = JSON.parse(fs.readFileSync(chatFile(id), 'utf8'))
+    hush(); chat.clear(); chat.messages = Array.isArray(o.messages) ? o.messages : []
+    return o.bubbles ?? []
+  })
+  ipcMain.handle('assistant:deleteChat', (_, id) => fs.rmSync(chatFile(id), { force: true }))
   ipcMain.handle('assistant:transcribe', async (_, pcm) => ({ text: await api.transcribe(Int16Array.from(pcm), assistBias()), spent: chat.bill.usd }))
   ipcMain.handle('assistant:hush', () => hush())
   ipcMain.handle('assistant:clear', () => { hush(); chat.clear(); assistTools.lists = { contacts: [], files: [], notes: [], timers: [], mail: [], schedules: [], memory: [] } })

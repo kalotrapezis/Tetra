@@ -4,8 +4,7 @@ import { Icon } from './Icon'
 import { t } from './i18n'
 import { errorText } from './Dialogs'
 import { FRAME, RATE, Vad, clock, money, yesNo } from './assist'
-import { ScheduleList } from './Schedules'
-import type { IconName } from './Icon'
+import { SectionBar, SectionView, WordCloud, type Section } from './AssistSide'
 
 // AI Assist (the phone's AssistantScreen.kt, ported; assistant.js has the why): the chat, walkie-talkie on the mic button,
 // live on the waveform one. Mistral and Tetra's tools run in main; the microphone, the voice and the record here.
@@ -18,10 +17,6 @@ const ORANGE = '#FD6A04'
 const LIVE_MAX_MS = 5 * 60_000
 const LIVE_SILENCE_MS = 20_000
 // the bubbles over the input (the user, 1 Nov: "a bubble… click on it and give me a ready prompt that I can edit, change or send")
-// each in the colour of the applet it is about (the user: "a green for images, a pink for a reminder, an orange for deep research")
-const APP = { photos: '#95DF6B', calendar: '#F41879', mail: '#FD0DA4', notes: '#FED00A', timer: '#04D5CC', assistant: ORANGE }
-const SUGGEST: [IconName, string, string][] = [['calendar', 'brief', APP.calendar], ['fileImage', 'image', APP.photos], ['search', 'research', APP.assistant], ['history', 'repeat', APP.mail]]
-const EXAMPLES: [string, string][] = [['chip.calendar', APP.calendar], ['chip.mail', APP.mail], ['chip.notes', APP.notes], ['chip.timer', APP.timer]]
 
 // kept while the page is away (another page, the window closed to the tray): the conversation itself is main's
 let kept: Bubble[] = []
@@ -102,7 +97,11 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
   const [spent, setSpent] = useState(0)
   const [typed, setTyped] = useState('')
   const [keyText, setKeyText] = useState('')
-  const [tab, setTab] = useState<'chat' | 'schedules'>('chat')
+  const [section, setSection] = useState<Section>('skills')
+  const [open, setOpen] = useState(false) // the island opened by its handle, in a narrow window
+  const [narrow, setNarrow] = useState(false)
+  const [chatId, setChatId] = useState<string>(() => crypto.randomUUID())
+  const page = useRef<HTMLDivElement>(null)
   const input = useRef<HTMLTextAreaElement>(null)
   const stopNow = useRef(false)
   // live
@@ -274,18 +273,34 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
 
   const status = phase === 'listening' ? t(hearing ? 'assistant.hearing' : 'assistant.listening') : phase === 'thinking' ? t('assistant.thinking') : null
   const setAloud = (on: boolean) => { if (!s) return; setS({ ...s, aloud: on }); window.drive.assistant.set({ aloud: on }); if (!on) hush() }
-  const newChat = () => { hush(); window.drive.assistant.clear(); setBubbles(() => []); setPendingCall(null); setSpent(0) }
+  const newChat = () => { hush(); window.drive.assistant.clear(); setBubbles(() => []); setPendingCall(null); setSpent(0); setChatId(crypto.randomUUID()) }
+  // a wide window has the sidebar; a narrow one (the user: "if it becomes too narrow, the phone's layout") the island's handle
+  useEffect(() => {
+    const el = page.current
+    if (!el) return
+    const o = new ResizeObserver(([e]) => setNarrow(e.contentRect.width < 900))
+    o.observe(el)
+    return () => o.disconnect()
+  }, [])
+  // each answered turn kept in History, this computer only
+  useEffect(() => { if (phase === 'idle' && bubbles.some(b => b.mine)) window.drive.assistant.keep(chatId, bubbles.map(b => ({ mine: b.mine, text: b.text, error: b.error }))) }, [phase, bubbles.length]) // eslint-disable-line react-hooks/exhaustive-deps
+  const openChat = (id: string) => window.drive.assistant.openChat(id).then(b => { setBubbles(() => b.map(x => ({ mine: x.mine, text: x.text, error: x.error }))); setChatId(id); setPendingCall(null); setOpen(false) })
   const saveKey = async () => {
     try { await window.drive.assistant.setKey(keyText); setKeyText(''); load() } catch (e) { say(errorText(e), true) }
   }
   const sendTyped = () => { const x = typed.trim(); setTyped(''); send(x) }
   /** A ready prompt in the input, to edit before sending: never sent by the click itself. */
-  const offer = (text: string) => { setTab('chat'); setTyped(text); setTimeout(() => { const el = input.current; if (el) { el.focus(); el.setSelectionRange(text.length, text.length) } }) }
+  const offer = (text: string) => { setOpen(false); setTyped(text); setTimeout(() => { const el = input.current; if (el) { el.focus(); el.setSelectionRange(text.length, text.length) } }) }
   /** What is said, written out (the Scheduled tab's mic). */
   const dictate = async () => { const pcm = await listen(8000, s?.pause ?? 2500, false, { current: false }, () => {}); return pcm ? (await window.drive.assistant.transcribe(pcm)).text : null }
   const lastChoices = bubbles.at(-1)?.choices ?? []
 
   return (
+    <div className={`assist-page${narrow ? ' narrow' : ''}`} ref={page}>
+      {!narrow && <aside className="assist-side">
+        <SectionBar section={section} pick={setSection} />
+        <SectionView section={section} offer={offer} dictate={dictate} openChat={openChat} chatId={chatId} />
+      </aside>}
     <div className="assist">
       <header className="page-head assist-head">
         <img className="assist-art" src="./assistant.png" alt="" />
@@ -294,11 +309,6 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
         <button className="round flat" title={t('assistant.readAloud')} onClick={() => setAloud(!s?.aloud)}><Icon name={s?.aloud ? 'volumeUp' : 'volumeOff'} /></button>
         <button className="round flat" title={t('assistant.newChat')} onClick={newChat}><Icon name="add" /></button>
       </header>
-      <div className="assist-tabs">
-        <button className={`chip${tab === 'chat' ? ' on' : ''}`} onClick={() => setTab('chat')}>{t('assist.tabChat')}</button>
-        <button className={`chip${tab === 'schedules' ? ' on' : ''}`} onClick={() => setTab('schedules')}>{t('assist.tabSchedules')}</button>
-      </div>
-      {tab === 'schedules' ? <div className="assist-schedules"><ScheduleList dictate={dictate} past /></div> : <>
       <div className="assist-list" ref={list}>
         {s && !s.hasKey && <section className="settings-card island">
           <h3><Icon name="key" size={20} />{t('assistant.key')}</h3>
@@ -307,14 +317,18 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
           <div className="reset-actions"><button className="filled-button" disabled={!keyText.trim()} onClick={saveKey}>{t('common.save')}</button></div>
         </section>}
         {s?.hasKey && !bubbles.length && <div className="assist-hello muted">{t('assistant.hello')}
-          <div className="assist-examples">{EXAMPLES.map(([k, color]) => <button key={k} className="chip app-chip" style={{ '--app': color } as CSSProperties} onClick={() => offer(t(k))}>{t(k)}</button>)}</div></div>}
+          <WordCloud offer={offer} hidden={!!typed} /></div>}
         {bubbles.map((b, i) => <BubbleView key={i} b={b} pending={i === bubbles.length - 1 ? pending : null} choose={choose} call={call} cancel={cancelCall}
           mail={i === bubbles.length - 1 ? pendingMail : null} sendMail={sendMail} keepMail={keepMail} />)}
         {draft != null && <div className="assist-bubble">{draft || '…'}</div>}
       </div>
       {status && <p className="assist-status">{status}</p>}
-      {s?.hasKey && !typed && <div className="assist-suggest">{SUGGEST.map(([icon, k, color]) =>
-        <button key={k} className="chip app-chip" style={{ '--app': color } as CSSProperties} onClick={() => offer(t(`chip.${k}Prompt`))}><Icon name={icon} size={16} />{t(`chip.${k}`)}</button>)}</div>}
+      <div className="assist-island">
+        {narrow && <button className="assist-handle" aria-expanded={open} title={t('assist.skills')} onClick={() => setOpen(!open)}><span /></button>}
+        {narrow && open && <>
+          <SectionBar section={section} pick={setSection} />
+          <div className="assist-island-pane"><SectionView section={section} offer={offer} dictate={dictate} openChat={openChat} chatId={chatId} /></div>
+        </>}
       <div className="assist-bar">
         <textarea ref={input} className="field assist-input" rows={1} placeholder={t('assistant.hint')} value={typed} disabled={!s?.hasKey}
           onChange={e => setTyped(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (phase === 'idle') sendTyped() } }} />
@@ -326,7 +340,7 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
           <button className="round assist-live" disabled={!s?.hasKey || phase !== 'idle'} title={t('assistant.live')} onClick={startLive}><Icon name="graphicEq" /></button>
         </>}
       </div>
-      </>}
+      </div>
       {liveShown && <div className="assist-livescreen">
         <h2>{t('app.assistant')}</h2>
         <LivePlayer phase={livePhase} level={() => live.current?.level ?? 0} cassette={!!s?.cassette}
@@ -349,6 +363,7 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
           <span className="assist-livecost">{money(spent + (s?.perMinute ?? 0) * Math.max(0, now - (live.current?.start ?? now)) / 60_000)} / {clock(now - (live.current?.start ?? now))}</span>
         </div>
       </div>}
+    </div>
     </div>
   )
 }

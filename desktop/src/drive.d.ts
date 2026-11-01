@@ -349,6 +349,10 @@ declare global {
         ask(text: string, aloud: boolean): Promise<AssistReply>
         transcribe(pcm: Int16Array): Promise<{ text: string; spent: number }>
         hush(): Promise<void>
+        keep(id: string, bubbles: { mine: boolean; text: string; error?: boolean }[]): Promise<void>
+        chats(): Promise<{ id: string; at: number; title: string }[]>
+        openChat(id: string): Promise<{ mine: boolean; text: string; error?: boolean }[]>
+        deleteChat(id: string): Promise<void>
         clear(): Promise<void>
         youtube(q: string): Promise<void>
         hide(): Promise<void>

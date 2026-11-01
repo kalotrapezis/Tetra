@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import type { BriefSettings, Repeat, Schedule } from './drive'
 import { Icon } from './Icon'
 import { locale, t } from './i18n'
@@ -14,7 +14,7 @@ const BRIEF_SECTIONS: [string, string][] = [['calendar', 'app.calendar'], ['mail
 type Draft = Pick<Schedule, 'title' | 'prompt' | 'time' | 'repeat' | 'days' | 'date'> & { id?: string; kind?: Schedule['kind'] }
 const fresh = (): Draft => ({ title: '', prompt: '', time: '08:00', repeat: 'daily', days: [1], date: null })
 
-export function ScheduleList({ dictate, past = false }: { dictate?: () => Promise<string | null>; past?: boolean }) {
+export function ScheduleList({ dictate, past = false, offer }: { dictate?: () => Promise<string | null>; past?: boolean; offer?: (prompt: string) => void }) {
   const [o, setO] = useState<{ list: Schedule[]; brief: BriefSettings; ready: boolean } | null>(null)
   const [results, setResults] = useState<{ file: string; title: string; at: number }[]>([])
   const [editing, setEditing] = useState<Draft | null>(null)
@@ -79,6 +79,9 @@ export function ScheduleList({ dictate, past = false }: { dictate?: () => Promis
       <button className="outline-button" onClick={() => { setSaid(null); setEditing(editing && !editing.id ? null : fresh()) }}><Icon name="add" size={18} />{t('sched.new')}</button>
     </div>
     <p className="muted">{t('sched.how')}</p>
+    {/* one tap to a ready prompt in the chat: the list helps make the first one, not only says there is none */}
+    {offer && <div className="assist-chips">{([['sched.ex1', 'chip.briefPrompt', '#F41879'], ['sched.ex2', 'sched.ex2Prompt', '#F41879'], ['sched.ex3', 'chip.repeatPrompt', '#FD0DA4']] as const).map(([l, p, c]) =>
+      <button key={l} className="chip app-chip" style={{ '--app': c } as CSSProperties} onClick={() => offer(t(p))}>{t(l)}</button>)}</div>}
     {!o.ready && <p><strong>{t('sched.noAi')}</strong></p>}
     {editing && !editing.id && editor(editing)}
     {o.list.map(s => <div key={s.id}>

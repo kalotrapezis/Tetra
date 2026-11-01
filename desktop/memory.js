@@ -13,7 +13,7 @@ const fs = require('node:fs')
 const path = require('node:path')
 const crypto = require('node:crypto')
 
-const MAX = 50, LONG = 300 // they go into every request: a short list of short facts
+const MAX = 20, LONG = 300 // they go into every request: a short list of short facts
 
 class Memory {
   constructor(file, by = 'desktop') { this.file = file; this.by = by }
@@ -45,4 +45,4 @@ class Memory {
   forget(id) { return this.change(id, '') }
 }
 
-module.exports = { Memory }
+module.exports = { Memory, MAX }
