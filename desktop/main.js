@@ -1547,39 +1547,6 @@ app.whenReady().then(() => {
     fs.copyFileSync(r.file, s.filePath)
     return s.filePath
   })
-  // the phone's asks (it has no MP3 encoder): a job file in .System/Assistant/Shared/AudioJobs with the text it read; the MP3
-  // made here goes beside it, so it syncs back. The computer that runs the schedules runs these too.
-  const PHONE_JOBS = path.join(system.dir('Assistant', 'Shared', files.system), 'AudioJobs')
-  const phoneBusy = new Set()
-  function phoneJobs() {
-    if (!aiSwitch.on() || !assistKey() || !schedules.runs(os.hostname())) return
-    let names = []
-    try { names = fs.readdirSync(PHONE_JOBS).filter(n => n.endsWith('.json')) } catch { return }
-    for (const n of names) {
-      const file = path.join(PHONE_JOBS, n)
-      let job
-      try { job = JSON.parse(fs.readFileSync(file, 'utf8')) } catch { continue }
-      if (Date.now() - (job.asked ?? 0) > 14 * 86_400_000) { fs.rmSync(file, { force: true }); fs.rmSync(file.replace(/\.json$/, '.mp3'), { force: true }); continue }
-      if (job.state !== 'asked' || phoneBusy.has(n)) continue
-      phoneBusy.add(n)
-      const write = x => { Object.assign(job, x); fs.writeFileSync(file, JSON.stringify(job)); sync?.nudge().catch(() => {}) }
-      const text = String(job.text ?? '').slice(0, require('./attach').MAX_CHARS)
-      const doc = { name: String(job.name ?? 'file'), path: '', pages: 1, pageTexts: text.split('\f'), text: text.replace(/\f/g, '\n\n'), headings: [], kind: 'text' }
-      let last = 0
-      write({ state: 'running', stage: 'script', done: 0, total: 1 })
-      const dir = path.join(AUDIO, 'phone-' + String(job.id).replace(/[^\w-]/g, ''))
-      runAudio(job, doc, dir, p => { if (Date.now() - last > 5000) { last = Date.now(); write(p) } }, String(job.id)).then(r => {
-        fs.copyFileSync(r.file, file.replace(/\.json$/, '.mp3'))
-        write({ state: 'done', title: r.title, seconds: r.seconds, chapters: r.chapters, mp3: n.replace(/\.json$/, '.mp3') })
-      }, e => write({ state: 'failed', error: e.message })).finally(() => phoneBusy.delete(n))
-    }
-  }
-  try {
-    fs.mkdirSync(PHONE_JOBS, { recursive: true })
-    let settle = null
-    fs.watch(PHONE_JOBS, (_, name) => { if (!String(name).endsWith('.json')) return; clearTimeout(settle); settle = setTimeout(phoneJobs, 1000) })
-    setTimeout(phoneJobs, 20_000)
-  } catch (e) { console.warn('[audio] cannot watch', e.message) }
   ipcMain.handle('assistant:liveEnd', () => {
     if (live) { live.end(); if (live.ready) chat.bill.for('live').minutes(assistant.REALTIME, (Date.now() - live.started) / 1000); live = null } // a refused connection costs nothing
     return chat.bill.usd

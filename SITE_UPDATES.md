@@ -23,7 +23,7 @@ site shows it, in every language.
       computer) for PDF, Word, PowerPoint, ODT, text and scans; three pills once a file is in: «Ραδιοφωνική εκπομπή» (a host
       and an expert, examples and recaps, what the text does not say taken out), «Ζωντανή συζήτηση» (Live about the
       document), «Διάβασέ το μου». The MP3 (64 kbps, chapters) is made in the background with a notification, played in the
-      chat, saved in Files or downloaded; ≈ €0.93 an hour of audio, the estimate asked first. The phone's are made by the computer.
+      chat, saved in Files or downloaded; ≈ €0.93 an hour of audio, the estimate asked first. The phone makes its own, as M4A.
 
 ## Numbers
 - [ ] **Speed of Mail and AI Assist** (1 Nov, `desktop/PERF_MAIL_AI.md`): the computer's window 496 → 97 ms; Mail's list
