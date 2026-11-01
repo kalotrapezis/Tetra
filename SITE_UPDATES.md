@@ -11,13 +11,14 @@ site shows it, in every language.
 - [ ] **Personal details (memory)**: a few short facts AI Assist keeps, in every chat and scheduled action.
 - [ ] **Place reminders**: arriving at a supermarket rings the open «Ψώνια» list (Android, off by default).
 - [ ] **Mail «Read when shown»** (desktop and tablet).
-- [ ] **Open beside, in split screen** (tablet, Android 12L+), also from AI Assist. Branch
-      `claude/jovial-noether-00d351`, not merged yet.
-- [ ] **PDF ↔ scanner**: open a PDF in the scanner, import files as pages, perspective, fine tilt / auto straighten,
-      maybe curved-page flattening. In progress (session «Tetra: PDF ↔ scanner pages»).
+- [ ] **Open beside, in split screen** (tablet, Android 12L+), from Files' ⋮ and from AI Assist.
+      Merged 1 Nov (Tetra-mobile 5423f812).
+- [ ] **PDF ↔ scanner**: open a PDF in the scanner, import files as pages, Files ⋮ › Open in scanner, scanner tile
+      «From file» (PDF pages, JPG/PNG/HEIC), Perspective for every page, Tilt ±45° with Auto straighten, Flatten curve; auto
+      fix straightens every new page. Merged 1 Nov.
 
 ## Numbers
-- [ ] **Speed of Mail and AI Assist**, before → after, from the optimization rounds (not started yet; its results
+- [ ] **Speed of Mail and AI Assist**, before → after, from the optimization rounds (not started yet: the user said it comes after these changes; its results
       file will be `desktop/PERF_MAIL_AI.md`).
 
 ## Downloads
