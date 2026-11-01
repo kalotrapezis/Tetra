@@ -13,6 +13,10 @@ globalThis.fetch = async (url, o) => {
   const r = { url: String(url), start: Date.now() }; net.push(r)
   const res = await realFetch(url, o); r.headers = Date.now(); return res
 }
+// the copy holds the user's real accounts and keys: opening an unread row would mark it read on the server. Never here.
+const { Mail } = require('../mail.js')
+Mail.prototype.withClient = () => Promise.reject(new Error('measuring: no mail server'))
+Mail.prototype.send = () => Promise.reject(new Error('measuring: no mail server'))
 const started = Date.now()
 let readyAt, madeAt, loadedAt
 app.once('ready', () => { readyAt = Date.now() })

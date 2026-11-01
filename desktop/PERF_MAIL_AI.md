@@ -34,3 +34,20 @@ read 1.5 s after the window's first page, in the background, and at once if some
 | Tetra started → window made | 496 ms | 97 ms |
 | Tetra started → first page loaded | 797 ms | 387 ms |
 | Mail opened (first rows) | 238 ms | 227 ms |
+
+### Round 2: the list sends and draws only what is seen
+
+Each reload sent the whole folder over to the window with every field of the index (the Inbox: 6.5 MB, again every
+2 s while mail arrived), and the window laid out all the rows it had made. Now a row carries only what it shows, the
+rows out of view are not laid out or painted (`content-visibility`, as in Contacts), and a group of mails grows in place
+(it was copied whole for each mail added, which grew with the square of a group's size).
+
+| Moment | before | after |
+|---|---|---|
+| Mail opened (first rows) | 238 ms, window busy 138 ms | 113 ms, never busy |
+| Inbox again from another folder | 182 ms, busy 74 ms | 93 ms, never busy |
+| Sent (78 mails) from the Inbox | 246 ms, busy 81 ms | 161 ms, busy 92 ms |
+| A mail opened | 258 ms on screen, settled 399 ms, busy 156 ms | 211 ms, settled 266 ms, busy 96 ms |
+| 300 more rows (scrolled to the end, third time) | 96 ms, busy 124 ms | 95 ms, busy 95 ms |
+| While mail arrives (10 s) | window busy 161 ms in all | 0 ms |
+| Search ("σχολ") | 42 ms, never busy | 48 ms, never busy |

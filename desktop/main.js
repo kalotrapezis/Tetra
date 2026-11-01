@@ -1452,7 +1452,10 @@ app.whenReady().then(() => {
   // Mail, read-only (mail.js). The password is checked against the server before it is kept, encrypted, in settings.
   const isAddress = a => typeof a === 'string' && a.length < 255 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(a)
   ipcMain.handle('mail:accounts', () => ({ accounts: mail.allAccounts(), folders: mail.folders(), status: mail.status() })) // with the phones' own accounts (shadow)
-  ipcMain.handle('mail:list', (_, role, account, local) => mail.list(String(role), account ? String(account) : null, { local: !!local }))
+  // only what a row shows: the Inbox went over whole (to, messageId, file, box…), 6.5 MB at each reload while mail arrives
+  const row = ({ id, account, folder, date, from, fromAddress, subject, seen, flagged, size, attachments, snippet, saved, gone }) =>
+    ({ id, account, folder, date, from, fromAddress, subject, seen, flagged, size, attachments, snippet, saved, gone })
+  ipcMain.handle('mail:list', (_, role, account, local) => mail.list(String(role), account ? String(account) : null, { local: !!local }).map(row))
   // «Αποθήκη» in Mail: the archive on this computer, and copies out of it (the user, 31 Oct)
   ipcMain.handle('mail:localFolders', () => mail.localFolders())
   ipcMain.handle('mail:export', (_, id, attachment) => mailCall(() => mail.exportTo(mail.documents(), String(id), attachment ?? null)))

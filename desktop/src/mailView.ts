@@ -29,6 +29,6 @@ export function arrange(mails: MailEntry[], v: MailView, query = ''): { key: str
     || (v.attachmentsFirst ? +(b.attachments > 0) - +(a.attachments > 0) : 0) || order(key(a), key(b)) * (v.descending ? -1 : 1) || b.date - a.date)
   const group = { day: (m: MailEntry) => dayKey(m.date), from: (m: MailEntry) => m.from || m.fromAddress, account: (m: MailEntry) => m.account, none: () => '' }[v.group]
   const groups = new Map<string, MailEntry[]>()
-  for (const m of kept) { const k = group(m); groups.set(k, [...(groups.get(k) ?? []), m]) }
+  for (const m of kept) { const k = group(m), g = groups.get(k); if (g) g.push(m); else groups.set(k, [m]) }
   return [...groups].map(([key, mails]) => ({ key, mails }))
 }

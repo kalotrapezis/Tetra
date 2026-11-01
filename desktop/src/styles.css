@@ -1342,6 +1342,8 @@ button.link.risk { color: #d8663f; font-weight: 600; }
 .mail-list { padding: 4px 8px 16px; }
 .mail-group { margin: 14px 10px 6px; font-size: 13px; font-weight: 600; color: var(--muted); text-transform: capitalize; }
 .mail-row { position: relative; display: flex; flex-direction: column; gap: 2px; width: 100%; padding: 10px 40px 10px 14px; border-radius: 14px; border-left: 4px solid transparent; text-align: left; }
+/* rows out of view are not laid out or painted until they come near: a long folder costs what one screen does */
+.mail-row { content-visibility: auto; contain-intrinsic-size: auto 74px; }
 .mail-row:hover { background: var(--hover); }
 .mail-row.on { background: var(--island-2); }
 .mail-row-top { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 12px; }
