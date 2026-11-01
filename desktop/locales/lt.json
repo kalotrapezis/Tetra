@@ -2409,6 +2409,8 @@
  "assistant.aiWeb": "Internetas (paieška, YouTube, paveikslėliai)",
  "mail.moreActions": "Daugiau",
  "mail.checkTitle": "Naujų laiškų tikrinimas",
+ "mail.readShown": "Perskaityta, kai rodoma",
+ "mail.readShownHow": "Kitas laiškas, atsidarantis pats po archyvavimo, ištrynimo ar perkėlimo, laikomas perskaitytu be spustelėjimo",
  "mail.checkPush": "Iš karto",
  "mail.checkManual": "Rankiniu būdu",
  "mail.checkMinutes": "{n} min.",

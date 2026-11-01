@@ -2498,6 +2498,8 @@
  "assistant.aiWeb": "An gréasán (cuardach, YouTube, pictiúir)",
  "mail.moreActions": "Tuilleadh",
  "mail.checkTitle": "Seiceáil ar ríomhphost nua",
+ "mail.readShown": "Léite nuair a thaispeántar é",
+ "mail.readShownHow": "Áirítear an chéad ríomhphost eile, a osclaíonn leis féin tar éis Cartlannú, Scriosadh nó Bogadh, mar léite gan chliceáil",
  "mail.checkPush": "Láithreach",
  "mail.checkManual": "De láimh",
  "mail.checkMinutes": "{n} nóiméad",

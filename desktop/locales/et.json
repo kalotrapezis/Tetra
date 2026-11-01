@@ -2231,6 +2231,8 @@
  "assistant.aiWeb": "Veeb (otsing, YouTube, pildid)",
  "mail.moreActions": "Veel",
  "mail.checkTitle": "Uue posti kontroll",
+ "mail.readShown": "Loetud, kui kuvatakse",
+ "mail.readShownHow": "Järgmine kiri, mis avaneb ise pärast arhiveerimist, kustutamist või teisaldamist, loetakse loetuks ka ilma klõpsuta",
  "mail.checkPush": "Kohe",
  "mail.checkManual": "Käsitsi",
  "mail.checkMinutes": "{n} minutit",

@@ -2231,6 +2231,8 @@
  "assistant.aiWeb": "Nettet (søgning, YouTube, billeder)",
  "mail.moreActions": "Mere",
  "mail.checkTitle": "Tjek for ny mail",
+ "mail.readShown": "Læst, når den vises",
+ "mail.readShownHow": "Den næste mail, der åbner af sig selv efter Arkivér, Slet eller Flyt, tæller som læst uden et klik",
  "mail.checkPush": "Med det samme",
  "mail.checkManual": "Manuelt",
  "mail.checkMinutes": "{n} minutter",

@@ -2231,6 +2231,8 @@
  "assistant.aiWeb": "Verkko (haku, YouTube, kuvat)",
  "mail.moreActions": "Lisää",
  "mail.checkTitle": "Uuden postin tarkistus",
+ "mail.readShown": "Luettu, kun näytetään",
+ "mail.readShownHow": "Seuraava viesti, joka avautuu itsestään arkistoinnin, poiston tai siirron jälkeen, merkitään luetuksi ilman napsautusta",
  "mail.checkPush": "Heti",
  "mail.checkManual": "Käsin",
  "mail.checkMinutes": "{n} minuuttia",

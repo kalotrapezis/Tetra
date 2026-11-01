@@ -2409,6 +2409,8 @@
  "assistant.aiWeb": "Splet (iskanje, YouTube, slike)",
  "mail.moreActions": "Več",
  "mail.checkTitle": "Preverjanje nove pošte",
+ "mail.readShown": "Prebrano ob prikazu",
+ "mail.readShownHow": "Naslednje sporočilo, ki se samo odpre po arhiviranju, brisanju ali premiku, šteje kot prebrano brez klika",
  "mail.checkPush": "Takoj",
  "mail.checkManual": "Ročno",
  "mail.checkMinutes": "{n} min",

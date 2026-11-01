@@ -2231,6 +2231,8 @@
  "assistant.aiWeb": "Интернет (търсене, YouTube, снимки)",
  "mail.moreActions": "Още",
  "mail.checkTitle": "Проверка за нова поща",
+ "mail.readShown": "Прочетено при показване",
+ "mail.readShownHow": "Следващото писмо, отворено само след Архивиране, Изтриване или Преместване, се брои за прочетено без щракване",
  "mail.checkPush": "Веднага",
  "mail.checkManual": "Ръчно",
  "mail.checkMinutes": "{n} минути",

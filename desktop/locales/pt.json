@@ -2320,6 +2320,8 @@
  "assistant.aiWeb": "A web (pesquisa, YouTube, imagens)",
  "mail.moreActions": "Mais",
  "mail.checkTitle": "Verificar correio novo",
+ "mail.readShown": "Lido ao ser mostrado",
+ "mail.readShownHow": "O e-mail seguinte, aberto sozinho depois de Arquivar, Eliminar ou Mover, conta como lido sem clicar",
  "mail.checkPush": "De imediato",
  "mail.checkManual": "Manualmente",
  "mail.checkMinutes": "{n} minutos",

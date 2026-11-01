@@ -16,6 +16,7 @@ const ROLE_ICON: Record<MailRole, IconName> = { Inbox: 'mail', Drafts: 'edit', S
 const PAGE = 300 // rows drawn at a time; "Περισσότερα" draws the next
 const stored = (key: string) => { try { return localStorage.getItem(key) } catch { return null } }
 const store = (key: string, value: string) => { try { localStorage.setItem(key, value) } catch {} }
+const READ_SHOWN = 'mail.readShown' // the mail that opens by itself counts as read too
 const sizeText = (n: number) => n >= 1e6 ? `${(n / 1e6).toFixed(1)} MB` : `${Math.max(1, Math.round(n / 1e3))} KB`
 const sum = (f: MailFolder, k: 'unread' | 'total' | 'orange') => f.accounts.reduce((n, a) => n + a[k], 0)
 
@@ -126,7 +127,9 @@ export function MailPage({ setDialog, say, compose }: { setDialog: (d: ReactNode
   const away = async (op: MailOp, to?: MailRole) => {
     if (!current) return
     const i = flat.indexOf(current), next = flat[i + 1] ?? flat[i - 1]
-    if (await act(op, [current.id], to)) setOpenId(next?.id ?? null)
+    if (!await act(op, [current.id], to)) return
+    setOpenId(next?.id ?? null)
+    if (next && !next.seen && !where.local && stored(READ_SHOWN) === '1') act('read', [next.id]) // «Read when shown» (the user, 1 Nov)
   }
   const write = (id: string | null, kind: MailDraftKind) => window.drive.mail.draftFor(id, kind, where.account ?? undefined)
     .then(d => { setDraft(null); setTimeout(() => { setOpenId(null); setDraft(d) }) }, e => say(errorText(e))) // a fresh Compose, the old one saved as it goes
@@ -798,7 +801,18 @@ export function CleanCheck({ accounts, onClose }: { accounts: MailAccount[]; onC
 
 /** Settings › Αλληλογραφία: signatures, archive and clean-up, filters, spam, privacy (MAIL_PLAN §9c). */
 export function MailSettings() {
-  return <><CheckCard /><DefaultAppCard /><MailSignatures /><CleanCard /><FiltersCard /><SpamCard /><PrivacyCard /><MicrosoftCard /></>
+  return <><CheckCard /><ReadShownCard /><DefaultAppCard /><MailSignatures /><CleanCard /><FiltersCard /><SpamCard /><PrivacyCard /><MicrosoftCard /></>
+}
+
+/** «Read when shown»: after Archive, Delete or Move the next mail opens by itself; on, it counts as read as a clicked one does. */
+function ReadShownCard() {
+  const [on, setOn] = useState(stored(READ_SHOWN) === '1')
+  return (
+    <section className="settings-card island">
+      <h3><Icon name="visibility" size={20} />{t('mail.readShown')}</h3>
+      <label className="cal-switch"><input type="checkbox" checked={on} onChange={e => { setOn(e.target.checked); store(READ_SHOWN, e.target.checked ? '1' : '0') }} /><span>{t('mail.readShownHow')}</span></label>
+    </section>
+  )
 }
 
 /** «Προεπιλεγμένη εφαρμογή email» (the user, 31 Oct: "can I set it as the default email client?"): mailto: links open in Tetra. */

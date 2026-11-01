@@ -2231,6 +2231,8 @@
  "assistant.aiWeb": "Το διαδίκτυο (αναζήτηση, YouTube, εικόνες)",
  "mail.moreActions": "Περισσότερα",
  "mail.checkTitle": "Έλεγχος για νέα",
+ "mail.readShown": "Αναγνωσμένο όταν εμφανίζεται",
+ "mail.readShownHow": "Το επόμενο μήνυμα, που ανοίγει μόνο του μετά από Αρχειοθέτηση, Διαγραφή ή Μετακίνηση, μετράει ως αναγνωσμένο χωρίς κλικ",
  "mail.checkPush": "Αμέσως",
  "mail.checkManual": "Χειροκίνητα",
  "mail.checkMinutes": "{n} λεπτά",

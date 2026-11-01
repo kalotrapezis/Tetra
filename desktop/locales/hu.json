@@ -2231,6 +2231,8 @@
  "assistant.aiWeb": "A web (keresés, YouTube, képek)",
  "mail.moreActions": "Több",
  "mail.checkTitle": "Új levelek ellenőrzése",
+ "mail.readShown": "Olvasott, ha megjelenik",
+ "mail.readShownHow": "A következő levél, amely archiválás, törlés vagy áthelyezés után magától nyílik meg, kattintás nélkül is olvasottnak számít",
  "mail.checkPush": "Azonnal",
  "mail.checkManual": "Kézzel",
  "mail.checkMinutes": "{n} perc",

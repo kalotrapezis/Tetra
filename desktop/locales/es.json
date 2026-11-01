@@ -2290,6 +2290,8 @@
  "assistant.aiWeb": "La web (búsqueda, YouTube, imágenes)",
  "mail.moreActions": "Más",
  "mail.checkTitle": "Buscar correo nuevo",
+ "mail.readShown": "Leído al mostrarse",
+ "mail.readShownHow": "El siguiente correo, que se abre solo tras Archivar, Eliminar o Mover, cuenta como leído sin hacer clic",
  "mail.checkPush": "Al instante",
  "mail.checkManual": "A mano",
  "mail.checkMinutes": "{n} minutos",

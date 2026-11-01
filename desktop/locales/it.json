@@ -2320,6 +2320,8 @@
  "assistant.aiWeb": "Il web (ricerca, YouTube, immagini)",
  "mail.moreActions": "Altro",
  "mail.checkTitle": "Controllo nuova posta",
+ "mail.readShown": "Letta quando è mostrata",
+ "mail.readShownHow": "La mail successiva, aperta da sola dopo Archivia, Elimina o Sposta, conta come letta senza clic",
  "mail.checkPush": "Subito",
  "mail.checkManual": "A mano",
  "mail.checkMinutes": "{n} minuti",

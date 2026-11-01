@@ -2409,6 +2409,8 @@
  "assistant.aiWeb": "Web (hľadanie, YouTube, obrázky)",
  "mail.moreActions": "Viac",
  "mail.checkTitle": "Kontrola novej pošty",
+ "mail.readShown": "Prečítané pri zobrazení",
+ "mail.readShownHow": "Ďalšia správa, ktorá sa sama otvorí po archivácii, odstránení alebo presune, sa počíta ako prečítaná bez kliknutia",
  "mail.checkPush": "Okamžite",
  "mail.checkManual": "Ručne",
  "mail.checkMinutes": "{n} min",

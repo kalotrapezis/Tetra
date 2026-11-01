@@ -2409,6 +2409,8 @@
  "assistant.aiWeb": "L-internet (tfittxija, YouTube, stampi)",
  "mail.moreActions": "Iktar",
  "mail.checkTitle": "Iċċekkja għal posta ġdida",
+ "mail.readShown": "Moqri meta jidher",
+ "mail.readShownHow": "Il-messaġġ li jmiss, li jinfetaħ waħdu wara Arkivja, Ħassar jew Mexxi, jgħodd bħala moqri mingħajr klikk",
  "mail.checkPush": "Mill-ewwel",
  "mail.checkManual": "Manwalment",
  "mail.checkMinutes": "{n} min",

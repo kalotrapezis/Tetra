@@ -2231,6 +2231,8 @@
  "assistant.aiWeb": "Das Web (Suche, YouTube, Bilder)",
  "mail.moreActions": "Mehr",
  "mail.checkTitle": "Auf neue E-Mails prüfen",
+ "mail.readShown": "Beim Anzeigen gelesen",
+ "mail.readShownHow": "Die nächste Mail, die sich nach Archivieren, Löschen oder Verschieben von selbst öffnet, gilt ohne Klick als gelesen",
  "mail.checkPush": "Sofort",
  "mail.checkManual": "Von Hand",
  "mail.checkMinutes": "{n} Minuten",

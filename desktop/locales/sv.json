@@ -2231,6 +2231,8 @@
  "assistant.aiWeb": "Webben (sökning, YouTube, bilder)",
  "mail.moreActions": "Mer",
  "mail.checkTitle": "Kontrollera nya mejl",
+ "mail.readShown": "Läst när det visas",
+ "mail.readShownHow": "Nästa mejl, som öppnas av sig självt efter Arkivera, Radera eller Flytta, räknas som läst utan klick",
  "mail.checkPush": "Direkt",
  "mail.checkManual": "För hand",
  "mail.checkMinutes": "{n} minuter",

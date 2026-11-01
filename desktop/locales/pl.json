@@ -2409,6 +2409,8 @@
  "assistant.aiWeb": "Internet (wyszukiwanie, YouTube, obrazy)",
  "mail.moreActions": "Więcej",
  "mail.checkTitle": "Sprawdzanie nowej poczty",
+ "mail.readShown": "Przeczytana po wyświetleniu",
+ "mail.readShownHow": "Następna wiadomość, otwierana sama po archiwizacji, usunięciu lub przeniesieniu, liczy się jako przeczytana bez kliknięcia",
  "mail.checkPush": "Od razu",
  "mail.checkManual": "Ręcznie",
  "mail.checkMinutes": "{n} min",

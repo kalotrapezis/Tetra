@@ -2231,6 +2231,8 @@
  "assistant.aiWeb": "Het web (zoeken, YouTube, afbeeldingen)",
  "mail.moreActions": "Meer",
  "mail.checkTitle": "Controleren op nieuwe mail",
+ "mail.readShown": "Gelezen bij tonen",
+ "mail.readShownHow": "De volgende mail, die vanzelf opent na Archiveren, Verwijderen of Verplaatsen, telt als gelezen zonder klik",
  "mail.checkPush": "Meteen",
  "mail.checkManual": "Handmatig",
  "mail.checkMinutes": "{n} minuten",

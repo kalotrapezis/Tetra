@@ -2231,6 +2231,8 @@
  "assistant.aiWeb": "The web (search, YouTube, pictures)",
  "mail.moreActions": "More",
  "mail.checkTitle": "Check for new mail",
+ "mail.readShown": "Read when shown",
+ "mail.readShownHow": "The next mail, opened by itself after Archive, Delete or Move, counts as read without a click",
  "mail.checkPush": "At once",
  "mail.checkManual": "By hand",
  "mail.checkMinutes": "{n} minutes",

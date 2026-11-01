@@ -2320,6 +2320,8 @@
  "assistant.aiWeb": "Tīmeklis (meklēšana, YouTube, attēli)",
  "mail.moreActions": "Vairāk",
  "mail.checkTitle": "Jaunā pasta pārbaude",
+ "mail.readShown": "Izlasīts, kad parādīts",
+ "mail.readShownHow": "Nākamā vēstule, kas atveras pati pēc arhivēšanas, dzēšanas vai pārvietošanas, skaitās izlasīta bez klikšķa",
  "mail.checkPush": "Uzreiz",
  "mail.checkManual": "Manuāli",
  "mail.checkMinutes": "{n} min",

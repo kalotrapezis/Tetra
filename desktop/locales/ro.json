@@ -2320,6 +2320,8 @@
  "assistant.aiWeb": "Internetul (căutare, YouTube, imagini)",
  "mail.moreActions": "Mai multe",
  "mail.checkTitle": "Verificarea poștei noi",
+ "mail.readShown": "Citit când este afișat",
+ "mail.readShownHow": "Următorul mesaj, deschis singur după Arhivare, Ștergere sau Mutare, contează ca citit fără clic",
  "mail.checkPush": "Imediat",
  "mail.checkManual": "Manual",
  "mail.checkMinutes": "{n} min",

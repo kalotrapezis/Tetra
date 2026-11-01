@@ -2319,6 +2319,8 @@
  "assistant.aiWeb": "Web (pretraživanje, YouTube, slike)",
  "mail.moreActions": "Više",
  "mail.checkTitle": "Provjera nove pošte",
+ "mail.readShown": "Pročitano kad se prikaže",
+ "mail.readShownHow": "Sljedeća poruka, koja se sama otvori nakon arhiviranja, brisanja ili premještanja, računa se pročitanom bez klika",
  "mail.checkPush": "Odmah",
  "mail.checkManual": "Ručno",
  "mail.checkMinutes": "{n} min",
