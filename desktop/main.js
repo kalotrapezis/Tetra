@@ -1234,7 +1234,13 @@ app.whenReady().then(() => {
   const assistPause = () => Math.min(6000, Math.max(1000, Number(setting('assistantPause')) || 2500))
   // the AI switch: asked before anything is sent to Mistral; no choice yet, on only where a key is already set
   aiSwitch = new (require('./ai').AiSwitch)(path.join(system.dir('Assistant', 'Shared', files.system), 'ai.json'), { hasKey: () => !!assistKey() })
-  const api = new assistant.Mistral({ key: assistKey, bill: new assistant.Bill(meterAdd), allowed: () => aiSwitch.on() })
+  // every paid call, in .System/Assistant/Shared/usage (usage.js): synced, kept through updates and reinstalls
+  const usage = new (require('./usage').Usage)(path.join(system.dir('Assistant', 'Shared', files.system), 'usage'), os.hostname())
+  const recordUse = line => {
+    usage.add(line)
+    if (usage.warnNow()) { const b = usage.budget(); notify(t('usage.warnTitle'), t('usage.warnBody', { spent: assistant.Bill.text(usage.month()), budget: assistant.Bill.text(b.monthly) }), () => win?.webContents.send('open-settings', 'assistant')) }
+  }
+  const api = new assistant.Mistral({ key: assistKey, bill: new assistant.Bill(meterAdd, recordUse), allowed: () => aiSwitch.on() })
   /** The voice that reads: 'system' (this computer's own, free) or a Mistral voice's id, Mistral's first when none was picked. */
   const assistVoice = async () => {
     const v = setting('assistantVoice')
@@ -1260,10 +1266,10 @@ app.whenReady().then(() => {
       if (what === 'notes') { win?.webContents.send('notes-changed'); sync?.nudge().catch(() => {}) }
       if (what === 'schedules') { planSchedules(); win?.webContents.send('schedules-changed') }
     },
-    search: async q => { const r = await api.conversation(q, 'web_search', 'Search the web and answer briefly with the facts found.'); return r.text + (r.sources.length ? '\nSources: ' + r.sources.slice(0, 3).join('; ') : '') },
+    search: async q => { const r = await api.as('web').conversation(q, 'web_search', 'Search the web and answer briefly with the facts found.'); return r.text + (r.sources.length ? '\nSources: ' + r.sources.slice(0, 3).join('; ') : '') },
     // pictures go to Files › Assistant, a folder like any other, so they reach the phone
     image: async prompt => {
-      const id = (await api.conversation(prompt, 'image_generation', 'Draw the picture asked for.')).files[0]
+      const id = (await api.as('image').conversation(prompt, 'image_generation', 'Draw the picture asked for.')).files[0]
       if (!id) throw new Error('No picture came back.')
       const full = path.join(FILES_ROOT, 'Assistant', `image-${Date.now()}.png`)
       fs.mkdirSync(path.dirname(full), { recursive: true }); fs.writeFileSync(full, await api.download(id))
@@ -1283,7 +1289,7 @@ app.whenReady().then(() => {
   const attached = new Map() // path → its text, while the chat may ask again
   async function readAttachment(full) {
     if (attached.has(full)) return attached.get(full)
-    const d = await require('./attach').extract(full, { ocr: (b, mime) => api.ocr(b, mime), t })
+    const d = await require('./attach').extract(full, { ocr: (b, mime) => api.as('ocr', { file: path.basename(full) }).ocr(b, mime), t })
     if (attached.size > 8) attached.delete(attached.keys().next().value)
     attached.set(full, d)
     return d
@@ -1317,11 +1323,13 @@ app.whenReady().then(() => {
   /** Runs [s] now; [byHand] (Run now) leaves its next time as it was. */
   async function runSchedule(s, byHand = false) {
     if (scheduleRunning.has(s.id)) return null
+    // past the month's budget nothing runs by itself, and it says so
+    if (usage.capped()) { if (!byHand) schedules.ran(s.id, Date.now()); notify(s.kind === 'brief' ? t('brief.title') : s.title, t('usage.capped')); return null }
     scheduleRunning.add(s.id)
     if (!byHand) schedules.ran(s.id, Date.now()) // first, so a slow run is not started twice
     const title = s.kind === 'brief' ? t('brief.title') : s.title
     try {
-      const now = Date.now(), c = new assistant.Chat(api, makeTools())
+      const now = Date.now(), c = new assistant.Chat(api.as(s.kind === 'brief' ? 'brief' : 'schedule'), makeTools())
       const ask = async prompt => (await c.ask(prompt)).text
       let html, line
       if (s.kind === 'brief') {
@@ -1389,7 +1397,7 @@ app.whenReady().then(() => {
     const say = s => {
       if (!s || stop.signal.aborted) return
       queue = queue.then(() => stop.signal.aborted ? null : voice === 'system' ? (send('assistant-say', s), spdSay(s, stop.signal))
-        : api.speech(voice, s, pcm => send('assistant-audio', pcm), stop.signal))
+        : api.as('voice').speech(voice, s, pcm => send('assistant-audio', pcm), stop.signal))
         .catch(e => { if (e.name !== 'AbortError') { console.warn('[assistant] voice', e.message); stop.abort() } })
     }
     return { say, done: () => queue }
@@ -1462,7 +1470,7 @@ app.whenReady().then(() => {
     return o.bubbles ?? []
   })
   ipcMain.handle('assistant:deleteChat', (_, id) => fs.rmSync(chatFile(id), { force: true }))
-  ipcMain.handle('assistant:transcribe', async (_, pcm) => ({ text: await api.transcribe(Int16Array.from(pcm), assistBias()), spent: chat.bill.usd }))
+  ipcMain.handle('assistant:transcribe', async (_, pcm) => ({ text: await api.as('dictation').transcribe(Int16Array.from(pcm), assistBias()), spent: chat.bill.usd }))
   ipcMain.handle('assistant:hush', () => hush())
   ipcMain.handle('assistant:clear', () => { hush(); chat.clear(); assistTools.lists = { contacts: [], files: [], notes: [], timers: [], mail: [], schedules: [], memory: [] } })
   ipcMain.handle('assistant:youtube', (_, q) => shell.openExternal('https://www.youtube.com/results?search_query=' + encodeURIComponent(String(q).slice(0, 200))))
@@ -1492,16 +1500,22 @@ app.whenReady().then(() => {
     const host = mine && mine !== 'system' ? mine : all[0]?.id
     return [host, all.find(v => v.id !== host)?.id ?? host]
   }
-  async function runAudio(spec, doc, dir, progress) {
-    return require('./audio').make({ api, doc, mode: spec.mode, minutes: spec.minutes, focus: spec.focus, style: spec.style, perSection: !!spec.perSection,
+  /** One MP3 job; its costs recorded as its file's, and one "mp3" line with what it made and cost in all. */
+  async function runAudio(spec, doc, dir, progress, job) {
+    if (usage.capped()) throw new Error(t('usage.capped'))
+    const jobApi = api.as('audio', { file: doc.name, job })
+    const r = await require('./audio').make({ api: jobApi, doc, mode: spec.mode, minutes: spec.minutes, focus: spec.focus, style: spec.style, perSection: !!spec.perSection,
       voices: await showVoices(), dir, cache: path.join(AUDIO, 'cache'), progress })
+    usage.add({ f: 'mp3', file: doc.name, title: r.title, s: Math.round(r.seconds), job, cost: jobApi.bill.usd, mode: spec.mode })
+    return r
   }
   ipcMain.handle('assistant:audioStart', async (_, spec) => {
     if (!aiSwitch.on()) throw new Error(t('assistant.aiOff'))
+    if (usage.capped()) throw new Error(t('usage.capped'))
     const id = crypto.randomUUID(), doc = await readAttachment(String(spec.path))
     const j = { id, title: `${doc.name} — ${t(spec.mode === 'show' ? 'attach.show' : 'attach.read')}`, state: 'running', stage: 'script', done: 0, total: 1 }
     audioJobs.set(id, j); jobSend(j)
-    runAudio(spec, doc, path.join(AUDIO, id), p => { Object.assign(j, p); jobSend(j) }).then(r => {
+    runAudio(spec, doc, path.join(AUDIO, id), p => { Object.assign(j, p); jobSend(j) }, id).then(r => {
       Object.assign(j, { state: 'done', result: r }); jobSend(j)
       notify(t('attach.readyTitle'), t('attach.readyBody', { name: r.title, min: Math.round(r.seconds / 60) }), () => assistantCommand('open'))
     }, e => {
@@ -1554,7 +1568,7 @@ app.whenReady().then(() => {
       let last = 0
       write({ state: 'running', stage: 'script', done: 0, total: 1 })
       const dir = path.join(AUDIO, 'phone-' + String(job.id).replace(/[^\w-]/g, ''))
-      runAudio(job, doc, dir, p => { if (Date.now() - last > 5000) { last = Date.now(); write(p) } }).then(r => {
+      runAudio(job, doc, dir, p => { if (Date.now() - last > 5000) { last = Date.now(); write(p) } }, String(job.id)).then(r => {
         fs.copyFileSync(r.file, file.replace(/\.json$/, '.mp3'))
         write({ state: 'done', title: r.title, seconds: r.seconds, chapters: r.chapters, mp3: n.replace(/\.json$/, '.mp3') })
       }, e => write({ state: 'failed', error: e.message })).finally(() => phoneBusy.delete(n))
@@ -1567,7 +1581,7 @@ app.whenReady().then(() => {
     setTimeout(phoneJobs, 20_000)
   } catch (e) { console.warn('[audio] cannot watch', e.message) }
   ipcMain.handle('assistant:liveEnd', () => {
-    if (live) { live.end(); if (live.ready) chat.bill.minutes(assistant.REALTIME, (Date.now() - live.started) / 1000); live = null } // a refused connection costs nothing
+    if (live) { live.end(); if (live.ready) chat.bill.for('live').minutes(assistant.REALTIME, (Date.now() - live.started) / 1000); live = null } // a refused connection costs nothing
     return chat.bill.usd
   })
   // Settings › AI Assist
@@ -1771,6 +1785,8 @@ app.whenReady().then(() => {
     read.say(t('assistant.voiceSample'))
     await read.done()
   })
+  ipcMain.handle('usage:summary', () => ({ ...usage.summary(), prices: assistant.PRICES, meter: assistant.Meter.of(setting('assistantMeter')).total }))
+  ipcMain.handle('usage:setBudget', (_, eur) => usage.setBudget(eur))
   ipcMain.handle('assistant:resetMeter', () => { const m = assistant.Meter.of(setting('assistantMeter')); m.reset(); setSetting('assistantMeter', m.json()); return meterNow() })
 
   if (!process.env.DRIVE_HIDDEN && HOME.root.endsWith('Tetra')) home.markFolder(HOME.root, path.join(__dirname, 'public', 'icon.png'), DATA_DIR)

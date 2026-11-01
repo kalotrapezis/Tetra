@@ -29,14 +29,24 @@ const PER_CALL = { web_search: 0.03, image_generation: 0.10 }
 const PER_CHAR = 0.016 / 1000 // voxtral-mini-tts-3: $0.016 a thousand characters
 const PER_PAGE = 0.001 // mistral-ocr: $1 a thousand pages
 
-/** What a conversation has cost so far, in US dollars by Mistral's list prices; [counted] gets each cost too (the meter). */
+/**
+ * What a conversation has cost so far, by Mistral's list prices; [counted] gets each cost too (the meter), [record] each call's
+ * line for the usage record (usage.js), tagged with what it was for ([tag].f: chat, live, ocr, tts…). for() makes a bill for
+ * one part of the work: its costs are also its owner's.
+ */
 class Bill {
-  constructor(counted = () => {}) { this.usd = 0; this.counted = counted }
-  add(x) { if (!(x > 0)) return; this.usd += x; this.counted(x) }
+  constructor(counted = () => {}, record = null, tag = { f: 'chat' }, owner = null) { Object.assign(this, { usd: 0, counted, record, tag, owner }) }
+  add(x, line = {}) {
+    if (!(x > 0)) return
+    for (let b = this; b; b = b.owner) b.usd += x
+    this.counted(x)
+    this.record?.({ ...this.tag, ...line, usd: x })
+  }
   reset() { this.usd = 0 }
-  tokens(model, usage) { const p = TOKENS[model]; if (p && usage) this.add(((usage.prompt_tokens || 0) * p[0] + (usage.completion_tokens || 0) * p[1]) / 1e6) }
-  minutes(model, seconds) { this.add((PER_MINUTE[model] || 0) * seconds / 60) }
-  chars(text) { this.add(String(text).length * PER_CHAR) }
+  for(f, more = {}) { return new Bill(this.counted, this.record, { ...this.tag, ...more, f }, this) }
+  tokens(model, usage) { const p = TOKENS[model]; if (p && usage) this.add(((usage.prompt_tokens || 0) * p[0] + (usage.completion_tokens || 0) * p[1]) / 1e6, { m: model, i: usage.prompt_tokens || 0, o: usage.completion_tokens || 0 }) }
+  minutes(model, seconds) { this.add((PER_MINUTE[model] || 0) * seconds / 60, { m: model, s: Math.round(seconds * 10) / 10 }) }
+  chars(text) { this.add(String(text).length * PER_CHAR, { m: TTS, c: String(text).length }) }
   /** "$0.0123": a cent's fractions while it is small. */
   static text(usd) { return usd < 1 ? `€${usd.toFixed(4)}` : `€${usd.toFixed(2)}` }
 }
@@ -75,6 +85,8 @@ const aiOff = () => Object.assign(new Error(t('assistant.aiOff')), { aiOff: true
  */
 class Mistral {
   constructor({ key, bill = new Bill(), fetch = globalThis.fetch, allowed = () => true }) { Object.assign(this, { key, bill, fetch, allowed }) }
+  /** The same API, its costs recorded as [feature] (and [more]: the file, the job). */
+  as(feature, more = {}) { const m = Object.create(this); m.bill = this.bill.for(feature, more); return m }
 
   async request(path, { body, type = 'application/json', signal } = {}) {
     if (!this.allowed()) throw aiOff()
@@ -141,7 +153,7 @@ class Mistral {
   /** One stateless turn of the Conversations API with one of Mistral's own tools (web_search, image_generation). */
   async conversation(inputs, tool, instructions) {
     const r = await this.post('/conversations', { model: BUILT_IN, inputs, instructions, store: false, tools: [{ type: tool }] })
-    this.bill.tokens(BUILT_IN, r.usage); this.bill.add(PER_CALL[tool] || 0)
+    this.bill.tokens(BUILT_IN, r.usage); this.bill.add(PER_CALL[tool] || 0, { m: tool })
     return output(r.outputs ?? [])
   }
 
@@ -181,7 +193,7 @@ class Mistral {
     const url = `data:${mime};base64,${Buffer.from(buf).toString('base64')}`
     const r = await this.post('/ocr', { model: OCR, document: mime === 'application/pdf' ? { type: 'document_url', document_url: url } : { type: 'image_url', image_url: url } })
     const pages = (r.pages ?? []).sort((a, b) => a.index - b.index).map(p => String(p.markdown ?? '').replace(/!\[[^\]]*\]\([^)]*\)/g, '').trim())
-    this.bill.add(PER_PAGE * (r.usage_info?.pages_processed ?? pages.length))
+    this.bill.add(PER_PAGE * (r.usage_info?.pages_processed ?? pages.length), { m: OCR, p: r.usage_info?.pages_processed ?? pages.length })
     return pages
   }
 
@@ -910,4 +922,12 @@ Read (mail_read) the ones that look important: from people, the school, the univ
 Then say, briefly and in Greek: what came that matters, what needs an answer (who and about what), any deadline or date found in a mail,
 and any account that cannot sync or has mail not yet saved on this computer. No markdown; it may be read aloud.`
 
-module.exports = { MAIL_REPORT, TOOL_APP, Bill, Meter, Mistral, Tools, Chat, Sentences, Live, SCHEMA, system, terms, wav, output, words, RATE, REALTIME, TTS, PER_MINUTE, PER_CHAR }
+/** The prices the costs are worked out with, for the dashboard: when they were last checked, and each one. */
+const PRICES = { checked: '2026-10-31', list: [
+  ...Object.entries(TOKENS).map(([m, [i, o]]) => ({ model: m, price: `€${i} / €${o}`, per: 'tokens' })),
+  ...Object.entries(PER_MINUTE).map(([m, x]) => ({ model: m, price: `€${x}`, per: 'minute' })),
+  { model: TTS, price: `€${PER_CHAR * 1000}`, per: 'chars' }, { model: OCR, price: `€${PER_PAGE}`, per: 'page' },
+  ...Object.entries(PER_CALL).map(([m, x]) => ({ model: m, price: `€${x}`, per: 'call' })),
+] }
+
+module.exports = { MAIL_REPORT, PRICES, TOOL_APP, Bill, Meter, Mistral, Tools, Chat, Sentences, Live, SCHEMA, system, terms, wav, output, words, RATE, REALTIME, TTS, PER_MINUTE, PER_CHAR }

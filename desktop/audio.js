@@ -23,8 +23,8 @@ const TTS_CHAR = 0.016 / 1000
 /** How long, how much, how soon: said to the user before anything is spent. */
 function estimate({ chars, mode, minutes }) {
   const show = mode === 'show'
-  // a show is at most three times the reading of its source: two pages do not make fifteen minutes
-  const min = show ? Math.max(3, Math.min(60, Math.round(chars / 300), Math.round(Number(minutes) || Math.min(20, Math.max(8, chars / 2500))))) : Math.max(1, Math.round(chars / CHARS_A_MINUTE))
+  // a show runs about as long as one and a half readings of its source (tried: two pages made 2 minutes, not the 6 asked)
+  const min = show ? Math.max(3, Math.min(60, Math.round(chars / 600), Math.round(Number(minutes) || Math.min(20, Math.max(8, chars / 2500))))) : Math.max(1, Math.round(chars / CHARS_A_MINUTE))
   const spoken = min * CHARS_A_MINUTE
   const tok = (model, inChars, outChars) => (inChars / TOKEN * PRICE[model][0] + outChars / TOKEN * PRICE[model][1]) / 1e6
   const usd = spoken * TTS_CHAR + (show ? tok(SHOW_MODEL, chars, spoken) + tok(SMALL, chars + spoken, 200) : tok(SMALL, chars, chars))
@@ -65,6 +65,9 @@ Output only JSON lines, one per paragraph: {"speaker":"host","text":"…","secti
 const CHECK = `You check a radio script against its source. Give back {"unsupported":[numbers]}: the numbers of the lines that state a fact, figure, name or claim that the source does not support.
 Not these: greetings, questions, transitions, recaps of what the source says, and lines starting «Δικό μας παράδειγμα».`
 
+/** [api] with its costs recorded as [f] (Mistral.as), where it can. */
+const as = (api, f) => api.as?.(f) ?? api
+
 /** [n] at a time, in order. */
 async function pool(items, n, each) {
   const out = new Array(items.length)
@@ -84,10 +87,10 @@ async function script(api, doc, { mode, minutes, focus, style, signal, progress 
   let done = 0
   const scripts = await pool(groups, mode === 'show' ? 2 : PARALLEL, async (text, i) => {
     const sys = mode === 'show' ? showPrompt({ name: doc.name, words: Math.round(minutes * WORDS_A_MINUTE / groups.length), first: i === 0, last: i === groups.length - 1, focus, style }) : NARRATE
-    let lines = parseScript(await api.complete([{ role: 'system', content: sys }, { role: 'user', content: text }], { model: mode === 'show' ? SHOW_MODEL : SMALL, signal }))
+    let lines = parseScript(await as(api, 'script').complete([{ role: 'system', content: sys }, { role: 'user', content: text }], { model: mode === 'show' ? SHOW_MODEL : SMALL, signal }))
     let dropped = 0
     if (mode === 'show' && lines.length) {
-      const said = await api.complete([{ role: 'system', content: CHECK }, { role: 'user', content: `Source:\n<<<\n${text}\n>>>\nScript:\n${lines.map((l, n) => `${n + 1}. ${l.text}`).join('\n')}` }], { json: true, signal }).catch(() => '{}')
+      const said = await as(api, 'verify').complete([{ role: 'system', content: CHECK }, { role: 'user', content: `Source:\n<<<\n${text}\n>>>\nScript:\n${lines.map((l, n) => `${n + 1}. ${l.text}`).join('\n')}` }], { json: true, signal }).catch(() => '{}')
       let bad = []
       try { bad = JSON.parse(said).unsupported ?? [] } catch {}
       const drop = new Set(bad.map(Number).filter(n => n > 1)) // never the opening line
@@ -209,9 +212,10 @@ async function make({ api, doc, mode = 'narration', minutes, focus, style, perSe
   const { lines, dropped } = await script(api, doc, { mode, minutes: est.minutes, focus, style, signal, progress })
   if (!lines.length) throw new Error('No script came back.')
   let done = 0
+  const tts = as(api, 'tts')
   await pool(lines, PARALLEL, async l => {
     if (signal?.aborted) throw Object.assign(new Error('aborted'), { name: 'AbortError' })
-    l.pcm = await speak(api, l.speaker === 'expert' ? voices[1] ?? voices[0] : voices[0], l.text, cache, signal)
+    l.pcm = await speak(tts, l.speaker === 'expert' ? voices[1] ?? voices[0] : voices[0], l.text, cache, signal)
     progress({ stage: 'voice', done: ++done, total: lines.length })
   })
   progress({ stage: 'mix', done: 0, total: 1 })

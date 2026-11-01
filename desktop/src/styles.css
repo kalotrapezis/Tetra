@@ -1581,3 +1581,33 @@ button.link.risk { color: #d8663f; font-weight: 600; }
 .assist-job small { color: var(--muted); }
 .assist-job progress, .assist-job audio { width: 100%; }
 .assist-job.error { color: var(--danger, #c62828); }
+/* Settings › AI Assist › Usage and cost (Usage.tsx) */
+.usage-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 4px 0 12px; }
+.usage-tiles div { padding: 10px 12px; border-radius: 14px; background: var(--island-2); display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.usage-tiles small { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.usage-tiles strong { font-size: 20px; font-variant-numeric: tabular-nums; }
+.usage-days { margin: 8px 0; }
+.usage-days figcaption { color: var(--muted); font-size: 13px; margin-bottom: 4px; }
+.usage-days svg { width: 100%; height: auto; display: block; overflow: visible; }
+.usage-axis { stroke: var(--muted); stroke-opacity: .4; stroke-width: 1; }
+.usage-label { fill: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.usage h4 { margin: 14px 0 6px; }
+.usage-rows { display: flex; flex-direction: column; gap: 6px; }
+.usage-row { display: grid; grid-template-columns: minmax(0, 11em) 1fr 6em; align-items: center; gap: 10px; }
+.usage-row > span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.usage-row strong { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.usage-bar { height: 8px; border-radius: 4px; background: var(--hover); overflow: hidden; }
+.usage-bar span { display: block; height: 100%; border-radius: 4px; }
+.usage-budget { margin: 8px 0; }
+.usage-budget small { color: var(--muted); }
+.usage-track { height: 8px; border-radius: 4px; background: var(--hover); overflow: hidden; margin-top: 4px; }
+.usage-track span { display: block; height: 100%; border-radius: 4px; background: var(--muted); }
+.usage-track span.near { background: #E8A100; }
+.usage-track span.over { background: #D32F2F; }
+.usage-budget-field { display: flex; align-items: center; gap: 8px; flex: 1; }
+.usage-budget-field .field { max-width: 9em; }
+.usage-prices { margin-top: 12px; }
+.usage-prices summary { cursor: pointer; color: var(--muted); }
+.usage-prices table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 13px; }
+.usage-prices td { padding: 4px 6px; border-bottom: 1px solid var(--hover); }
+button.assist-cost { cursor: pointer; border: 0; font: inherit; color: inherit; }

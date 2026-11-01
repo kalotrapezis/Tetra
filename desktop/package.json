@@ -96,6 +96,7 @@
       "assistant.js",
       "attach.js",
       "audio.js",
+      "usage.js",
       "schedule.js",
       "brief.js",
       "mail.js",

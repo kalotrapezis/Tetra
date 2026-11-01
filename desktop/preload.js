@@ -302,6 +302,8 @@ contextBridge.exposeInMainWorld('drive', {
     pasteAppPassword: () => ipcRenderer.invoke('mail:pasteAppPassword'),
     onChange: fn => { const l = () => fn(); ipcRenderer.on('mail-changed', l); return () => ipcRenderer.off('mail-changed', l) },
   },
+  // AI Assist's usage and cost (usage.js)
+  usage: { summary: () => ipcRenderer.invoke('usage:summary'), setBudget: eur => ipcRenderer.invoke('usage:setBudget', eur) },
   // AI Assist (assistant.js): Mistral and the tools in main, the key never here
   assistant: {
     ask: (text, aloud, file) => ipcRenderer.invoke('assistant:ask', text, aloud, file),

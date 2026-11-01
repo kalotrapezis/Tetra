@@ -42,7 +42,7 @@ export type MailAddResult = { account: MailAccount; roles: MailRole[]; error?: u
 /** AI Assist (assistant.js): an answer, and what its tools left for the screen. */
 export interface AssistCall { name: string; number: string }
 export interface AssistChoice { label: string; call?: AssistCall; open?: string; go?: AssistGo }
-export type AssistGo = { note?: string; maps?: string; youtube?: string }
+export type AssistGo = { note?: string; maps?: string; youtube?: string; usage?: true }
 /** A mail AI Assist wrote: kept as a draft, sent only by the user's Send or spoken yes. */
 export interface AssistSend { draft: MailDraft; to: string; subject: string; preview: string }
 /** A file attached to a message (attach.js): read in place, its text in main only. */
@@ -52,6 +52,11 @@ export interface AssistAudio { path: string; name: string; mode: 'narration' | '
 /** An MP3 being made in the background (audio.js), and what it made. */
 export interface AssistJob { id: string; title: string; state: 'running' | 'done' | 'failed'; stage: 'script' | 'voice' | 'mix'; done: number; total: number; error?: string
   result?: { file: string; files: string[]; title: string; seconds: number; chapters: { title: string; start: number }[]; dropped: number } }
+/** Settings › AI Assist › Usage and cost (usage.js summary()). */
+export interface UsageSummary { today: number; month: number; all: number; since: number; meter: number; days: { day: string; usd: number }[]
+  byFeature: { key: string; usd: number; n: number }[]; byModel: { key: string; usd: number; n: number }[]; byDevice: { key: string; usd: number; n: number }[]
+  files: { key: string; usd: number; n: number }[]; mp3s: { title: string; seconds: number; usd: number; at: number; device: string }[]
+  budget: { monthly: number | null; warned: string }; prices: { checked: string; list: { model: string; price: string; per: string }[] } }
 export interface AssistReply { text: string; choices: AssistChoice[]; call: AssistCall | null; send: AssistSend | null; images: string[]; open: string | null; go: AssistGo | null; audio: AssistAudio | null; spent: number }
 export interface AssistShortcuts { toggle: string; talk: string; live: string }
 export type Repeat = 'once' | 'daily' | 'weekly' | 'monthly' | 'yearly'
@@ -352,6 +357,7 @@ declare global {
         place(name: string): Promise<Place | null>
         onChange(fn: () => void): () => void
       }
+      usage: { summary(): Promise<UsageSummary>; setBudget(eur: number): Promise<UsageSummary['budget']> }
       assistant: {
         ask(text: string, aloud: boolean, file?: string): Promise<AssistReply>
         attach(from: 'files' | 'device' | string): Promise<(AssistFile & { spent: number }) | null>

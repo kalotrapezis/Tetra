@@ -338,7 +338,7 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
       <header className="page-head assist-head">
         <img className="assist-art" src="./assistant.png" alt="" />
         <h1>{t('app.assistant')}</h1>
-        <span className="assist-cost" title={t('assistant.costNote')}>{money(spent)}</span>
+        <button className="assist-cost" title={t('usage.open')} onClick={() => go({ usage: true })}>{money(spent)}</button>
         <button className="round flat" title={t('assistant.readAloud')} onClick={() => setAloud(!s?.aloud)}><Icon name={s?.aloud ? 'volumeUp' : 'volumeOff'} /></button>
         <button className="round flat" title={t('assistant.newChat')} onClick={newChat}><Icon name="add" /></button>
       </header>

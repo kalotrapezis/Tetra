@@ -326,7 +326,7 @@ export function App() {
   else if (page.kind === 'sync') content = <SyncPage setDialog={setDialog} />
   else if (page.kind === 'notes') content = <NotesPage key={page.open} openId={page.open} setDialog={setDialog} say={say} />
   else if (page.kind === 'assistant') content = <AssistantPage command={assistCommand}
-    go={g => setPage(g.note ? { kind: 'notes', open: g.note } : { kind: 'maps', query: g.maps, at: Date.now() })} />
+    go={g => setPage(g.usage ? { kind: 'settings', start: 'assistant', at: Date.now() } : g.note ? { kind: 'notes', open: g.note } : { kind: 'maps', query: g.maps, at: Date.now() })} />
   else if (page.kind === 'calendar') content = <CalendarPage setDialog={setDialog} say={say} />
   else if (page.kind === 'mail') content = <MailPage setDialog={setDialog} say={say} compose={compose} />
   else if (page.kind === 'timer') content = <TimerPage say={say} />
