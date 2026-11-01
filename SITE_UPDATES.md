@@ -17,6 +17,9 @@ site shows it, in every language.
       «From file» (PDF pages, JPG/PNG/HEIC), Perspective for every page, Tilt ±45° with Auto straighten, Flatten curve; auto
       fix straightens every new page. Merged 1 Nov.
 
+- [ ] **Text editor**: Markdown view (as in Notes), line numbers, Stripes theme for following lines (Android). Merged 1 Nov.
+- [ ] **Timer notifications**: icon-only × and zzz (snooze 10 min) / ‖ buttons, in the island too. Merged 1 Nov.
+
 ## Numbers
 - [ ] **Speed of Mail and AI Assist** (1 Nov, `desktop/PERF_MAIL_AI.md`): the computer's window 496 → 97 ms; Mail's list
       238 → 113 ms, the window no longer busy while mail arrives (161 → 0 ms in 10 s), a mail opened 258 → 211 ms; AI Assist's
