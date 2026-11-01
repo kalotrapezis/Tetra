@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
-import type { AssistCall, AssistChoice, AssistGo, AssistSend, AssistSettings } from './drive'
+import type { AssistAudio, AssistCall, AssistChoice, AssistFile, AssistGo, AssistJob, AssistSend, AssistSettings } from './drive'
 import { Icon } from './Icon'
 import { t } from './i18n'
 import { errorText } from './Dialogs'
 import { FRAME, RATE, Vad, clock, money, yesNo } from './assist'
-import { SectionBar, SectionView, WordCloud, type Section } from './AssistSide'
+import { APP, SectionBar, SectionView, WordCloud, type Section } from './AssistSide'
 
 // AI Assist (the phone's AssistantScreen.kt, ported; assistant.js has the why): the chat, walkie-talkie on the mic button,
 // live on the waveform one. Mistral and Tetra's tools run in main; the microphone, the voice and the record here.
 
-type Bubble = { mine: boolean; text: string; choices?: AssistChoice[]; call?: AssistCall | null; send?: AssistSend | null; images?: string[]; error?: boolean }
+type Bubble = { mine: boolean; text: string; choices?: AssistChoice[]; call?: AssistCall | null; send?: AssistSend | null; images?: string[]; error?: boolean; files?: AssistFile[]; audio?: AssistAudio | null; job?: string }
 type Phase = 'idle' | 'listening' | 'thinking'
 type LivePhase = 'connecting' | 'listening' | 'thinking' | 'speaking' | 'stopping'
 const TURN: Record<LivePhase, number> = { connecting: 20, listening: 40, thinking: 90, speaking: 200, stopping: 0 } // the record's degrees a second
@@ -20,6 +20,7 @@ const LIVE_SILENCE_MS = 20_000
 
 // kept while the page is away (another page, the window closed to the tray): the conversation itself is main's
 let kept: Bubble[] = []
+let keptFile: AssistFile | null = null
 
 /** The microphone at 16 kHz, in 30 ms frames to [each]; answers how to close it. */
 async function openMic(each: (f: Int16Array) => void): Promise<() => void> {
@@ -94,6 +95,12 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
   const [hearing, setHearing] = useState(false)
   const [pending, setPending] = useState<AssistCall | null>(null)
   const [pendingMail, setPendingMail] = useState<AssistSend | null>(null) // a mail written, waiting for the user's Send
+  const [pendingAudio, setPendingAudio] = useState<AssistAudio | null>(null) // audio_make's estimate, waiting for the user's yes
+  const [file, setFileState] = useState<AssistFile | null>(keptFile) // attached, goes with the next message
+  const setFile = (f: AssistFile | null) => setFileState(keptFile = f)
+  const [attaching, setAttaching] = useState(false)
+  const [clip, setClip] = useState(false) // the paperclip's two choices
+  const [jobs, setJobs] = useState<Record<string, AssistJob>>({})
   const [spent, setSpent] = useState(0)
   const [typed, setTyped] = useState('')
   const [keyText, setKeyText] = useState('')
@@ -117,6 +124,7 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
 
   const load = () => window.drive.assistant.settings().then(x => { setS(x); setSpent(x.spent) })
   useEffect(() => { load() }, [])
+  useEffect(() => { window.drive.assistant.jobs().then(js => setJobs(Object.fromEntries(js.map(j => [j.id, j])))); return window.drive.assistant.onJob(j => setJobs(js => ({ ...js, [j.id]: j }))) }, [])
   useEffect(() => { list.current?.scrollTo({ top: list.current.scrollHeight, behavior: 'smooth' }) }, [bubbles.length, draft])
   useEffect(() => () => { if (live.current) fns.current.endLive() }, [])
 
@@ -136,6 +144,17 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
     say(error ?? t('assistant.mailSent', { to: m.to }), !!error)
   }
   function keepMail() { setPendingMail(null); say(t('assistant.mailKept')) }
+  async function startAudio(a: AssistAudio) {
+    setPendingAudio(null)
+    try { const j = await window.drive.assistant.audioStart(a); setJobs(js => ({ ...js, [j.id]: j })); setBubbles(b => [...b, { mine: false, text: t('attach.started'), job: j.id }]) }
+    catch (e) { say(errorText(e), true) }
+  }
+  function skipAudio() { setPendingAudio(null); say(t('attach.skipped')) }
+  async function attachFrom(from: string) {
+    setClip(false); setAttaching(true)
+    try { const r = await window.drive.assistant.attach(from); if (r) { setFile(r); setSpent(r.spent) } } catch (e) { say(errorText(e), true) }
+    finally { setAttaching(false) }
+  }
   function choose(c: AssistChoice) {
     if (c.call) call(c.call)
     if (c.open) window.drive.files.open(c.open).catch(() => say(t('assistant.cannotOpen'), true))
@@ -145,7 +164,9 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
 
   async function send(text: string) {
     if (!text.trim() || !s) return
-    setBubbles(b => [...b, { mine: true, text }])
+    const f = file
+    setFile(null)
+    setBubbles(b => [...b, { mine: true, text, ...(f ? { files: [f] } : {}) }])
     const inLive = !!live.current
     if (inLive) { setLiveYou(text); setLiveAi('') }
     // a yes or no to a waiting call is heard by Tetra, never decided by the model
@@ -153,16 +174,19 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
     // and to a mail waiting to be sent, the same way
     // (a short yes only: "ναι, αλλά άλλαξε το θέμα" goes to the model, which writes it again)
     if (pendingMail) { const yes = text.trim().split(/\s+/).length <= 3 ? yesNo(text) : null; if (yes != null) { if (yes) sendMail(pendingMail); else keepMail(); if (inLive) listenAgain(); return } }
+    // and to an MP3's estimate: nothing is spent before it
+    if (pendingAudio) { const yes = text.trim().split(/\s+/).length <= 3 ? yesNo(text) : null; if (yes != null) { if (yes) startAudio(pendingAudio); else skipAudio(); if (inLive) listenAgain(); return } }
     setPhase('thinking')
     if (inLive) { live.current!.muted = true; window.drive.assistant.liveMute(true); setLivePhase('thinking') }
     hush()
     setDraft('')
     const offWords = window.drive.assistant.onWords(w => { setDraft(d => (d ?? '') + w); if (inLive) setLiveAi(a => a + w) })
     try {
-      const r = await window.drive.assistant.ask(text, s.aloud || inLive)
-      setBubbles(b => [...b, { mine: false, text: r.text, choices: r.choices, call: r.call, send: r.send, images: r.images }])
+      const r = await window.drive.assistant.ask(text, s.aloud || inLive, f?.path)
+      setBubbles(b => [...b, { mine: false, text: r.text, choices: r.choices, call: r.call, send: r.send, images: r.images, audio: r.audio }])
       setPendingCall(r.call)
       setPendingMail(r.send)
+      setPendingAudio(r.audio)
       if (inLive && r.text) setLiveAi(r.text)
       setSpent(r.spent)
       if (r.open) window.drive.files.open(r.open).catch(() => say(t('assistant.cannotOpen'), true))
@@ -194,7 +218,8 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
   }
   const mic = () => { if (phase === 'idle') hear(10_000); else if (phase === 'listening') stopNow.current = true }
 
-  async function startLive() {
+  /** [opening]: said for the user as soon as it listens (a talk about the attached file starts with the AI). */
+  async function startLive(opening?: string) {
     if (!s?.hasKey || live.current || phase !== 'idle') return
     hush()
     setLiveYou(''); setLiveAi(''); setLivePhase('connecting'); setLiveShown(true)
@@ -214,7 +239,7 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
         window.drive.assistant.liveAudio(new Uint8Array(all.buffer))
       })
       if (live.current !== l) l.close()
-      else setLivePhase(p => p === 'connecting' ? 'listening' : p)
+      else { setLivePhase(p => p === 'connecting' ? 'listening' : p); if (opening) fns.current.send(opening) }
     } catch (e) { say(e instanceof DOMException ? t('assistant.micNeeded') : errorText(e), true); endLive() }
   }
   function endLive(why?: string) {
@@ -273,7 +298,7 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
 
   const status = phase === 'listening' ? t(hearing ? 'assistant.hearing' : 'assistant.listening') : phase === 'thinking' ? t('assistant.thinking') : null
   const setAloud = (on: boolean) => { if (!s) return; setS({ ...s, aloud: on }); window.drive.assistant.set({ aloud: on }); if (!on) hush() }
-  const newChat = () => { hush(); window.drive.assistant.clear(); setBubbles(() => []); setPendingCall(null); setSpent(0); setChatId(crypto.randomUUID()) }
+  const newChat = () => { hush(); window.drive.assistant.clear(); setBubbles(() => []); setPendingCall(null); setPendingAudio(null); setFile(null); setSpent(0); setChatId(crypto.randomUUID()) }
   // a wide window has the sidebar; a narrow one (the user: "if it becomes too narrow, the phone's layout") the island's handle
   useEffect(() => {
     const el = page.current
@@ -283,8 +308,8 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
     return () => o.disconnect()
   }, [])
   // each answered turn kept in History, this computer only
-  useEffect(() => { if (phase === 'idle' && bubbles.some(b => b.mine)) window.drive.assistant.keep(chatId, bubbles.map(b => ({ mine: b.mine, text: b.text, error: b.error }))) }, [phase, bubbles.length]) // eslint-disable-line react-hooks/exhaustive-deps
-  const openChat = (id: string) => window.drive.assistant.openChat(id).then(b => { setBubbles(() => b.map(x => ({ mine: x.mine, text: x.text, error: x.error }))); setChatId(id); setPendingCall(null); setOpen(false) })
+  useEffect(() => { if (phase === 'idle' && bubbles.some(b => b.mine)) window.drive.assistant.keep(chatId, bubbles.map(b => ({ mine: b.mine, text: b.text, error: b.error, files: b.files, job: b.job }))) }, [phase, bubbles.length]) // eslint-disable-line react-hooks/exhaustive-deps
+  const openChat = (id: string) => window.drive.assistant.openChat(id).then(b => { setBubbles(() => b.map(x => ({ mine: x.mine, text: x.text, error: x.error, files: x.files, job: x.job }))); setChatId(id); setPendingCall(null); setOpen(false) })
   const saveKey = async () => {
     try { await window.drive.assistant.setKey(keyText); setKeyText(''); load() } catch (e) { say(errorText(e), true) }
   }
@@ -294,6 +319,14 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
   /** What is said, written out (the Scheduled tab's mic). */
   const dictate = async () => { const pcm = await listen(8000, s?.pause ?? 2500, false, { current: false }, () => {}); return pcm ? (await window.drive.assistant.transcribe(pcm)).text : null }
   const lastChoices = bubbles.at(-1)?.choices ?? []
+  // what can be done with a file, as soon as it is attached and nothing is typed (the user: "so users know what they can do with the file")
+  const quoted = file ? file.name.replace(/\.[^.]+$/, '').replace(/_+/g, ' ') : ''
+  const filePills: [string, string, () => void][] = file ? [
+    ['attach.pillShow', APP.assistant, () => offer(t('attach.showPrompt', { name: quoted }))],
+    ['attach.pillLive', APP.maps, () => startLive(t('attach.livePrompt', { name: quoted }))],
+    ['attach.pillRead', APP.timer, () => offer(t('attach.readPrompt', { name: quoted }))],
+  ] : []
+  const drop = (e: { preventDefault(): void; dataTransfer: DataTransfer }) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f && s?.hasKey) attachFrom(window.drive.assistant.dropped(f)) }
 
   return (
     <div className={`assist-page${narrow ? ' narrow' : ''}`} ref={page}>
@@ -301,7 +334,7 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
         <SectionBar section={section} pick={setSection} />
         <SectionView section={section} offer={offer} dictate={dictate} openChat={openChat} chatId={chatId} />
       </aside>}
-    <div className="assist">
+    <div className="assist" onDragOver={e => { if (e.dataTransfer.types.includes('Files')) e.preventDefault() }} onDrop={drop}>
       <header className="page-head assist-head">
         <img className="assist-art" src="./assistant.png" alt="" />
         <h1>{t('app.assistant')}</h1>
@@ -317,19 +350,34 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
           <div className="reset-actions"><button className="filled-button" disabled={!keyText.trim()} onClick={saveKey}>{t('common.save')}</button></div>
         </section>}
         {s?.hasKey && !bubbles.length && <div className="assist-hello muted">{t('assistant.hello')}
-          <WordCloud offer={offer} hidden={!!typed} /></div>}
+          <WordCloud offer={offer} hidden={!!typed || !!file} /></div>}
         {bubbles.map((b, i) => <BubbleView key={i} b={b} pending={i === bubbles.length - 1 ? pending : null} choose={choose} call={call} cancel={cancelCall}
-          mail={i === bubbles.length - 1 ? pendingMail : null} sendMail={sendMail} keepMail={keepMail} />)}
+          mail={i === bubbles.length - 1 ? pendingMail : null} sendMail={sendMail} keepMail={keepMail}
+          audio={i === bubbles.length - 1 ? pendingAudio : null} startAudio={startAudio} skipAudio={skipAudio} job={b.job ? jobs[b.job] ?? null : null} />)}
         {draft != null && <div className="assist-bubble">{draft || '…'}</div>}
       </div>
       {status && <p className="assist-status">{status}</p>}
+      {file && !typed.trim() && phase === 'idle' && <div className="assist-filepills">{filePills.map(([k, color, go]) =>
+        <button key={k} className="chip app-chip" style={{ '--app': color } as CSSProperties} onClick={go}>{t(k)}</button>)}</div>}
       <div className="assist-island">
         {narrow && <button className="assist-handle" aria-expanded={open} title={t('assist.skills')} onClick={() => setOpen(!open)}><span /></button>}
         {narrow && open && <>
           <SectionBar section={section} pick={setSection} />
           <div className="assist-island-pane"><SectionView section={section} offer={offer} dictate={dictate} openChat={openChat} chatId={chatId} /></div>
         </>}
+      {(file || attaching) && <div className="assist-attached">
+        <Icon name={file?.kind === 'pdf' ? 'filePdf' : file?.kind === 'image' ? 'fileImage' : 'fileDoc'} size={18} />
+        {file ? <><span>{file.name}</span><small>{file.pages > 1 ? t('attach.pages', { count: file.pages }) : ''}{file.cut ? ` · ${t('attach.cut')}` : ''}</small>
+          <button className="text-button" title={t('common.remove')} onClick={() => setFile(null)}><Icon name="close" size={16} /></button></> : <><span className="spinner" /><span>{t('attach.reading')}</span></>}
+      </div>}
       <div className="assist-bar">
+        <div className="assist-clip">
+          <button className="round flat" disabled={!s?.hasKey || attaching} title={t('attach.button')} aria-expanded={clip} onClick={() => setClip(!clip)}><Icon name="attach" /></button>
+          {clip && <div className="assist-clipmenu island">
+            <button className="text-button" onClick={() => attachFrom('files')}><Icon name="folder" size={18} /> {t('attach.fromFiles')}</button>
+            <button className="text-button" onClick={() => attachFrom('device')}><Icon name="computer" size={18} /> {t('attach.fromDevice')}</button>
+          </div>}
+        </div>
         <textarea ref={input} className="field assist-input" rows={1} placeholder={t('assistant.hint')} value={typed} disabled={!s?.hasKey}
           onChange={e => setTyped(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (phase === 'idle') sendTyped() } }} />
         {typed.trim() ? <button className="round assist-go" disabled={phase !== 'idle'} title={t('common.send')} onClick={sendTyped}><Icon name="arrowUp" /></button> : <>
@@ -337,7 +385,7 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
             title={phase === 'listening' ? t('common.stop') : t('assistant.tapToTalk')} onClick={mic}>
             {phase === 'thinking' ? <span className="spinner" /> : <Icon name="mic" />}
           </button>
-          <button className="round assist-live" disabled={!s?.hasKey || phase !== 'idle'} title={t('assistant.live')} onClick={startLive}><Icon name="graphicEq" /></button>
+          <button className="round assist-live" disabled={!s?.hasKey || phase !== 'idle'} title={t('assistant.live')} onClick={() => startLive()}><Icon name="graphicEq" /></button>
         </>}
       </div>
       </div>
@@ -357,6 +405,10 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
             <button className="filled-button" onClick={() => sendMail(pendingMail)}>{t('assistant.mailSend', { to: pendingMail.to })}</button>
             <button className="text-button" onClick={keepMail}>{t('common.cancel')}</button>
           </div>}
+          {pendingAudio && <div className="reset-actions">
+            <button className="filled-button" onClick={() => startAudio(pendingAudio)}>{t('attach.start')}</button>
+            <button className="text-button" onClick={skipAudio}>{t('common.cancel')}</button>
+          </div>}
         </div>
         <div className="assist-livebar">
           <button className="round assist-end" disabled={livePhase === 'stopping'} title={t('assistant.liveEnd')} onClick={() => endLive()}><Icon name="close" size={28} /></button>
@@ -368,11 +420,21 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
   )
 }
 
-function BubbleView({ b, pending, choose, call, cancel, mail, sendMail, keepMail }: { b: Bubble; pending: AssistCall | null; choose: (c: AssistChoice) => void; call: (c: AssistCall) => void; cancel: () => void
-  mail: AssistSend | null; sendMail: (m: AssistSend) => void; keepMail: () => void }) {
+function BubbleView({ b, pending, choose, call, cancel, mail, sendMail, keepMail, audio, startAudio, skipAudio, job }: { b: Bubble; pending: AssistCall | null; choose: (c: AssistChoice) => void; call: (c: AssistCall) => void; cancel: () => void
+  mail: AssistSend | null; sendMail: (m: AssistSend) => void; keepMail: () => void; audio: AssistAudio | null; startAudio: (a: AssistAudio) => void; skipAudio: () => void; job: AssistJob | null }) {
   return (
     <div className={`assist-bubble ${b.mine ? 'mine' : ''} ${b.error ? 'error' : ''}`}>
+      {b.files?.map((f, i) => <div key={i} className="assist-file"><Icon name={/\.pdf$/i.test(f.name) ? 'filePdf' : 'fileDoc'} size={22} /><span>{f.name}</span>{f.pages > 1 && <small>{t('attach.pages', { count: f.pages })}</small>}</div>)}
       {b.text && <p>{b.text}</p>}
+      {audio && <div className="assist-mail">
+        <small>{t(audio.mode === 'show' ? 'attach.show' : 'attach.read')} · {audio.name}</small>
+        <p>{t('attach.estimate', { min: audio.estimate.minutes, usd: audio.estimate.usd.toFixed(2), ready: audio.estimate.ready })}</p>
+        <div className="reset-actions">
+          <button className="filled-button" onClick={() => startAudio(audio)}><Icon name="play" size={18} /> {t('attach.start')}</button>
+          <button className="text-button" onClick={skipAudio}>{t('common.cancel')}</button>
+        </div>
+      </div>}
+      {b.job && <JobCard job={job} />}
       {b.images?.map((src, i) => <img key={i} src={src} alt="" />)}
       {!!b.choices?.length && <div className="assist-choices">{b.choices.map((c, i) => <button key={i} className="chip" onClick={() => choose(c)}>{i + 1}. {c.label}</button>)}</div>}
       {pending && <div className="reset-actions">
@@ -389,6 +451,30 @@ function BubbleView({ b, pending, choose, call, cancel, mail, sendMail, keepMail
       </div>}
     </div>
   )
+}
+
+/** An MP3 being made, then played here, its chapters a click away, saved in Files or downloaded. */
+function JobCard({ job }: { job: AssistJob | null }) {
+  const player = useRef<HTMLAudioElement>(null)
+  const [saved, setSaved] = useState<string | null>(null)
+  if (!job) return <div className="assist-job muted">{t('attach.jobGone')}</div>
+  const r = job.result
+  if (job.state === 'failed') return <div className="assist-job error">{job.error}</div>
+  if (job.state === 'running' || !r) {
+    const share = job.stage === 'script' ? 0.1 * job.done / Math.max(1, job.total) : job.stage === 'voice' ? 0.1 + 0.85 * job.done / Math.max(1, job.total) : 0.97
+    return <div className="assist-job"><strong>{job.title}</strong><small>{t(`attach.stage.${job.stage}`)} · {Math.round(share * 100)}%</small><progress value={share} max={1} /></div>
+  }
+  const min = (x: number) => `${Math.floor(x / 60)}:${String(Math.floor(x % 60)).padStart(2, '0')}`
+  return <div className="assist-job">
+    <strong>{r.title}</strong><small>{min(r.seconds)}{r.dropped ? ` · ${t('attach.dropped', { count: r.dropped })}` : ''}</small>
+    <audio ref={player} controls preload="metadata" src={`media://audio/${encodeURIComponent(job.id)}/${encodeURIComponent(r.file)}`} />
+    {r.chapters.length > 1 && <div className="assist-choices">{r.chapters.map((c, i) => <button key={i} className="chip" onClick={() => { const a = player.current; if (a) { a.currentTime = c.start; a.play() } }}>{min(c.start)} {c.title}</button>)}</div>}
+    <div className="reset-actions">
+      <button className="filled-button" onClick={() => window.drive.assistant.audioSave(job.id).then(x => x && setSaved(t('attach.savedIn', { where: x[0] })))}><Icon name="save" size={18} /> {t('attach.save')}</button>
+      <button className="text-button" onClick={() => window.drive.assistant.audioExport(job.id)}><Icon name="external" size={18} /> {t('attach.download')}</button>
+    </div>
+    {saved && <small>{saved}</small>}
+  </div>
 }
 
 const label = new Image()

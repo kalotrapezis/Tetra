@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require('electron')
+const { contextBridge, ipcRenderer, webUtils } = require('electron')
 
 contextBridge.exposeInMainWorld('drive', {
   info: () => ipcRenderer.invoke('library:info'),
@@ -304,7 +304,14 @@ contextBridge.exposeInMainWorld('drive', {
   },
   // AI Assist (assistant.js): Mistral and the tools in main, the key never here
   assistant: {
-    ask: (text, aloud) => ipcRenderer.invoke('assistant:ask', text, aloud),
+    ask: (text, aloud, file) => ipcRenderer.invoke('assistant:ask', text, aloud, file),
+    attach: from => ipcRenderer.invoke('assistant:attach', from),
+    dropped: file => webUtils.getPathForFile(file),
+    audioStart: spec => ipcRenderer.invoke('assistant:audioStart', spec),
+    jobs: () => ipcRenderer.invoke('assistant:jobs'),
+    audioSave: id => ipcRenderer.invoke('assistant:audioSave', id),
+    audioExport: id => ipcRenderer.invoke('assistant:audioExport', id),
+    onJob: fn => { const l = (_, j) => fn(j); ipcRenderer.on('assistant-job', l); return () => ipcRenderer.off('assistant-job', l) },
     transcribe: pcm => ipcRenderer.invoke('assistant:transcribe', pcm),
     hush: () => ipcRenderer.invoke('assistant:hush'),
     clear: () => ipcRenderer.invoke('assistant:clear'),

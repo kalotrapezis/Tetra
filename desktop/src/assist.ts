@@ -55,8 +55,8 @@ export function yesNo(said: string): boolean | null {
   return first == null ? null : YES.has(first) ? true : NO.has(first) ? false : null
 }
 
-/** "$0.0123": a cent's fractions while it is small (assistant.js Bill.text). */
-export const money = (usd: number) => usd < 1 ? `$${usd.toFixed(4)}` : `$${usd.toFixed(2)}`
+/** "€0.0123" (the user pays Mistral in euros, the same figures as its dollar list): a cent's fractions while it is small (assistant.js Bill.text). */
+export const money = (usd: number) => usd < 1 ? `€${usd.toFixed(4)}` : `€${usd.toFixed(2)}`
 /** 0:01:05 */
 export const clock = (ms: number) => { const s = Math.floor(Math.max(0, ms) / 1000); return `${Math.floor(s / 3600)}:${String(Math.floor(s / 60) % 60).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}` }
 

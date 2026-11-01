@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, protocol, net, shell, Tray, Menu, Notificat
 const fs = require('node:fs')
 const path = require('node:path')
 const os = require('node:os')
+const crypto = require('node:crypto')
 const { pathToFileURL } = require('node:url')
 const { AsYouType } = require('libphonenumber-js')
 const library = require('./library')
@@ -657,6 +658,17 @@ app.whenReady().then(() => {
       return video ? new Response(video, { headers: { 'content-type': 'video/mp4', 'cache-control': 'no-store' } }) : new Response('Not found', { status: 404 })
     }
     if (url.host === 'maps') return mapsResponse(key)
+    // media://audio/<job>/<name>.mp3: an MP3 AI Assist made (audio.js), to play in the chat
+    // (with its length and ranges, so the player knows how long it is and can skip to a chapter)
+    if (url.host === 'audio' && /^[\w-]+\/[^/\\]+\.mp3$/.test(key) && !key.includes('..')) {
+      const f = path.join(system.dir('Assistant', 'Data', files.system), 'Audio', key)
+      if (!fs.existsSync(f)) return new Response('Not found', { status: 404 })
+      const size = fs.statSync(f).size, m = /bytes=(\d*)-(\d*)/.exec(request.headers.get('range') ?? '')
+      const from = m?.[1] ? +m[1] : 0, to = m?.[2] ? Math.min(+m[2], size - 1) : size - 1
+      const body = Buffer.alloc(to - from + 1), fd = fs.openSync(f, 'r')
+      try { fs.readSync(fd, body, 0, body.length, from) } finally { fs.closeSync(fd) }
+      return new Response(body, { status: m ? 206 : 200, headers: { 'content-type': 'audio/mpeg', 'content-length': String(body.length), 'accept-ranges': 'bytes', ...(m ? { 'content-range': `bytes ${from}-${to}/${size}` } : {}) } })
+    }
     // media://filethumb/<Files-relative path>?v=<mtime>: a file's thumbnail in Files (thumbs.js), made on first asking
     if (url.host === 'filethumb') file = await (thumbs ??= new Thumbs(DATA_DIR)).get(files.resolve(key)).catch(() => null)
     if (url.host === 'face' && /^[0-9a-f-]{36}$/.test(key)) file = await people.crop(key, PHOTOS_ROOT).catch(() => null)
@@ -1265,7 +1277,17 @@ app.whenReady().then(() => {
       return { name, rel: path.join('Assistant', name) }
     },
     // shortcut: which card is the user's is kept on this computer only (Contacts has no "me" mark yet); into the card once the devices need it
-    me: () => setting('assistantMe') || null, setMe: uid => setSetting('assistantMe', uid) })
+    me: () => setting('assistantMe') || null, setMe: uid => setSetting('assistantMe', uid), extract: readAttachment })
+  // Attachments (attach.js): read in place; one picked from outside Files is copied to .System, never into the user's Files
+  const ATTACHMENTS = path.join(system.dir('Assistant', 'Data', files.system), 'Attachments')
+  const attached = new Map() // path → its text, while the chat may ask again
+  async function readAttachment(full) {
+    if (attached.has(full)) return attached.get(full)
+    const d = await require('./attach').extract(full, { ocr: (b, mime) => api.ocr(b, mime), t })
+    if (attached.size > 8) attached.delete(attached.keys().next().value)
+    attached.set(full, d)
+    return d
+  }
   const assistTools = makeTools()
   const chat = new assistant.Chat(api, assistTools)
 
@@ -1372,11 +1394,31 @@ app.whenReady().then(() => {
     }
     return { say, done: () => queue }
   }
-  ipcMain.handle('assistant:ask', async (e, text, aloud) => {
+  /** [from]: 'files' (a dialog in ~/Tetra/Files), 'device' (anywhere), or a dropped file's path. */
+  ipcMain.handle('assistant:attach', async (_, from) => {
+    let full = from !== 'files' && from !== 'device' ? String(from) : null
+    if (!full) {
+      const r = await dialog.showOpenDialog(win, { title: t('attach.pick'), defaultPath: from === 'files' ? FILES_ROOT : os.homedir(), properties: ['openFile'],
+        filters: [{ name: t('attach.kinds'), extensions: ['pdf', 'docx', 'pptx', 'odt', 'odp', 'txt', 'md', 'csv', 'png', 'jpg', 'jpeg', 'webp'] }] })
+      full = r.filePaths[0]
+      if (!full) return null
+    }
+    if (!require('./attach').kindOf(full)) throw new Error(t('attach.unknown'))
+    const inFiles = path.resolve(full).startsWith(path.resolve(FILES_ROOT) + path.sep) || path.resolve(full).startsWith(path.resolve(ATTACHMENTS) + path.sep)
+    if (!inFiles) {
+      if (fs.statSync(full).size > require('./attach').MAX_BYTES) throw new Error(t('attach.tooBig', { mb: require('./attach').MAX_BYTES >> 20 }))
+      const to = path.join(ATTACHMENTS, new Date().toISOString().replace(/[:.]/g, '-'), path.basename(full))
+      fs.mkdirSync(path.dirname(to), { recursive: true }); fs.copyFileSync(full, to); full = to
+    }
+    const d = await readAttachment(full)
+    return { name: d.name, path: d.path, pages: d.pages, chars: d.text.length, cut: d.cut, kind: d.kind, spent: chat.bill.usd }
+  })
+  ipcMain.handle('assistant:ask', async (e, text, aloud, file) => {
     hush()
+    const doc = file ? await readAttachment(String(file)) : null
     const voice = aloud ? await assistVoice().catch(() => 'system') : null
     const read = voice && reader(e.sender, voice), cut = new assistant.Sentences()
-    const r = await chat.ask(String(text), w => { if (!e.sender.isDestroyed()) e.sender.send('assistant-words', w); if (read) cut.push(w).forEach(read.say) })
+    const r = await chat.ask(String(text), w => { if (!e.sender.isDestroyed()) e.sender.send('assistant-words', w); if (read) cut.push(w).forEach(read.say) }, doc)
     if (read) { read.say(cut.rest()); await read.done() }
     return { ...r, images: r.images.map(f => 'data:image/png;base64,' + fs.readFileSync(f.full).toString('base64')), spent: chat.bill.usd }
   })
@@ -1384,7 +1426,9 @@ app.whenReady().then(() => {
   const CHATS = path.join(system.dir('Assistant', 'Data', files.system), 'chats')
   const chatFile = id => path.join(CHATS, `${String(id).replace(/[^\w-]/g, '').slice(0, 64) || 'x'}.json`)
   ipcMain.handle('assistant:keep', (_, id, bubbles) => {
-    const said = (Array.isArray(bubbles) ? bubbles : []).map(b => ({ mine: !!b?.mine, text: String(b?.text ?? '').slice(0, 20000), error: !!b?.error }))
+    const said = (Array.isArray(bubbles) ? bubbles : []).map(b => ({ mine: !!b?.mine, text: String(b?.text ?? '').slice(0, 20000), error: !!b?.error,
+      ...(Array.isArray(b?.files) ? { files: b.files.map(f => ({ name: String(f.name), path: String(f.path), pages: Number(f.pages) || 0 })) } : {}),
+      ...(b?.job ? { job: String(b.job) } : {}) }))
     if (!said.some(b => b.mine)) return
     fs.mkdirSync(CHATS, { recursive: true })
     fs.writeFileSync(chatFile(id), JSON.stringify({ id, at: Date.now(), title: said.find(b => b.mine).text.replace(/\s+/g, ' ').slice(0, 80), bubbles: said, messages: chat.messages }))
@@ -1412,6 +1456,9 @@ app.whenReady().then(() => {
   ipcMain.handle('assistant:openChat', (_, id) => {
     const o = JSON.parse(fs.readFileSync(chatFile(id), 'utf8'))
     hush(); chat.clear(); chat.messages = Array.isArray(o.messages) ? o.messages : []
+    // its file is read again only if the chat asks for it
+    const f = (o.bubbles ?? []).flatMap(b => b.files ?? []).at(-1)
+    if (f && fs.existsSync(f.path)) assistTools.doc = { name: f.name, path: f.path }
     return o.bubbles ?? []
   })
   ipcMain.handle('assistant:deleteChat', (_, id) => fs.rmSync(chatFile(id), { force: true }))
@@ -1434,6 +1481,91 @@ app.whenReady().then(() => {
   ipcMain.on('assistant:liveAudio', (_, bytes) => live?.audio(bytes))
   ipcMain.handle('assistant:liveMute', (_, on) => live?.mute(on))
   // paid by the minute: billed when it ends
+  // An MP3 of a file (audio.js), in the background: a card in the chat follows it, a notification says when it is ready
+  const AUDIO = path.join(system.dir('Assistant', 'Data', files.system), 'Audio')
+  const audioJobs = new Map()
+  const jobView = j => ({ id: j.id, title: j.title, state: j.state, stage: j.stage, done: j.done, total: j.total, error: j.error, result: j.result && { ...j.result, file: path.basename(j.result.file), files: j.result.files.map(f => path.basename(f)) } })
+  const jobSend = j => win?.webContents.send('assistant-job', jobView(j))
+  /** The host is the user's voice; the expert another of Mistral's presets. */
+  async function showVoices() {
+    const all = await api.voices(), mine = setting('assistantVoice')
+    const host = mine && mine !== 'system' ? mine : all[0]?.id
+    return [host, all.find(v => v.id !== host)?.id ?? host]
+  }
+  async function runAudio(spec, doc, dir, progress) {
+    return require('./audio').make({ api, doc, mode: spec.mode, minutes: spec.minutes, focus: spec.focus, style: spec.style, perSection: !!spec.perSection,
+      voices: await showVoices(), dir, cache: path.join(AUDIO, 'cache'), progress })
+  }
+  ipcMain.handle('assistant:audioStart', async (_, spec) => {
+    if (!aiSwitch.on()) throw new Error(t('assistant.aiOff'))
+    const id = crypto.randomUUID(), doc = await readAttachment(String(spec.path))
+    const j = { id, title: `${doc.name} — ${t(spec.mode === 'show' ? 'attach.show' : 'attach.read')}`, state: 'running', stage: 'script', done: 0, total: 1 }
+    audioJobs.set(id, j); jobSend(j)
+    runAudio(spec, doc, path.join(AUDIO, id), p => { Object.assign(j, p); jobSend(j) }).then(r => {
+      Object.assign(j, { state: 'done', result: r }); jobSend(j)
+      notify(t('attach.readyTitle'), t('attach.readyBody', { name: r.title, min: Math.round(r.seconds / 60) }), () => assistantCommand('open'))
+    }, e => {
+      Object.assign(j, { state: 'failed', error: e.message }); jobSend(j)
+      notify(t('attach.failedTitle'), e.message)
+    })
+    return jobView(j)
+  })
+  ipcMain.handle('assistant:jobs', () => [...audioJobs.values()].map(jobView))
+  /** Into Files › Assistant (it reaches the phone), never over a file already there. */
+  ipcMain.handle('assistant:audioSave', (_, id) => {
+    const r = audioJobs.get(id)?.result
+    if (!r) return null
+    const into = path.join(FILES_ROOT, 'Assistant'), out = []
+    fs.mkdirSync(into, { recursive: true })
+    for (const f of r.files) {
+      const ext = path.extname(f), base = path.basename(f, ext)
+      let to = path.join(into, base + ext)
+      for (let n = 2; fs.existsSync(to); n++) to = path.join(into, `${base} (${n})${ext}`)
+      fs.copyFileSync(f, to); out.push(path.relative(FILES_ROOT, to))
+    }
+    return out
+  })
+  ipcMain.handle('assistant:audioExport', async (_, id) => {
+    const r = audioJobs.get(id)?.result
+    if (!r) return null
+    const s = await dialog.showSaveDialog(win, { title: t('attach.download'), defaultPath: path.join(app.getPath('downloads'), path.basename(r.file)), filters: [{ name: 'MP3', extensions: ['mp3'] }] })
+    if (s.canceled || !s.filePath) return null
+    fs.copyFileSync(r.file, s.filePath)
+    return s.filePath
+  })
+  // the phone's asks (it has no MP3 encoder): a job file in .System/Assistant/Shared/AudioJobs with the text it read; the MP3
+  // made here goes beside it, so it syncs back. The computer that runs the schedules runs these too.
+  const PHONE_JOBS = path.join(system.dir('Assistant', 'Shared', files.system), 'AudioJobs')
+  const phoneBusy = new Set()
+  function phoneJobs() {
+    if (!aiSwitch.on() || !assistKey() || !schedules.runs(os.hostname())) return
+    let names = []
+    try { names = fs.readdirSync(PHONE_JOBS).filter(n => n.endsWith('.json')) } catch { return }
+    for (const n of names) {
+      const file = path.join(PHONE_JOBS, n)
+      let job
+      try { job = JSON.parse(fs.readFileSync(file, 'utf8')) } catch { continue }
+      if (Date.now() - (job.asked ?? 0) > 14 * 86_400_000) { fs.rmSync(file, { force: true }); fs.rmSync(file.replace(/\.json$/, '.mp3'), { force: true }); continue }
+      if (job.state !== 'asked' || phoneBusy.has(n)) continue
+      phoneBusy.add(n)
+      const write = x => { Object.assign(job, x); fs.writeFileSync(file, JSON.stringify(job)); sync?.nudge().catch(() => {}) }
+      const text = String(job.text ?? '').slice(0, require('./attach').MAX_CHARS)
+      const doc = { name: String(job.name ?? 'file'), path: '', pages: 1, pageTexts: text.split('\f'), text: text.replace(/\f/g, '\n\n'), headings: [], kind: 'text' }
+      let last = 0
+      write({ state: 'running', stage: 'script', done: 0, total: 1 })
+      const dir = path.join(AUDIO, 'phone-' + String(job.id).replace(/[^\w-]/g, ''))
+      runAudio(job, doc, dir, p => { if (Date.now() - last > 5000) { last = Date.now(); write(p) } }).then(r => {
+        fs.copyFileSync(r.file, file.replace(/\.json$/, '.mp3'))
+        write({ state: 'done', title: r.title, seconds: r.seconds, chapters: r.chapters, mp3: n.replace(/\.json$/, '.mp3') })
+      }, e => write({ state: 'failed', error: e.message })).finally(() => phoneBusy.delete(n))
+    }
+  }
+  try {
+    fs.mkdirSync(PHONE_JOBS, { recursive: true })
+    let settle = null
+    fs.watch(PHONE_JOBS, (_, name) => { if (!String(name).endsWith('.json')) return; clearTimeout(settle); settle = setTimeout(phoneJobs, 1000) })
+    setTimeout(phoneJobs, 20_000)
+  } catch (e) { console.warn('[audio] cannot watch', e.message) }
   ipcMain.handle('assistant:liveEnd', () => {
     if (live) { live.end(); if (live.ready) chat.bill.minutes(assistant.REALTIME, (Date.now() - live.started) / 1000); live = null } // a refused connection costs nothing
     return chat.bill.usd

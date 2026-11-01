@@ -32,6 +32,7 @@ const CAPS: [string, string, string, string | null][] = [
   ['chip.research', 'chip.researchPrompt', APP.assistant, 'web'], ['chip.brief', 'chip.briefPrompt', APP.calendar, null], ['chip.repeat', 'chip.repeatPrompt', APP.mail, null],
   ['chip.mail', 'chip.mail', APP.mail, 'mail'], ['chip.calendar', 'chip.calendar', APP.calendar, 'calendar'], ['cap.file', 'cap.filePrompt', APP.files, 'files'],
   ['cap.go', 'cap.goPrompt', APP.maps, 'maps'], ['cap.remember', 'cap.rememberPrompt', APP.assistant, null],
+  ['cap.fileShow', 'cap.fileShowPrompt', APP.assistant, null],
 ]
 function useCaps() {
   const [apps, setApps] = useState<Record<string, boolean>>({})

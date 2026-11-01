@@ -10,6 +10,8 @@
 const crypto = require('node:crypto')
 const { t } = require('./i18n')
 const { plain, nameOf } = require('./contacts')
+const attach = require('./attach')
+const { estimate } = require('./audio')
 
 const API = 'https://api.mistral.ai/v1'
 const CHAT = 'mistral-small-latest'
@@ -17,6 +19,7 @@ const BUILT_IN = 'mistral-medium-latest' // the model Mistral's web search and i
 const TRANSCRIBE = 'voxtral-small-transcribe-3'
 const REALTIME = 'voxtral-mini-transcribe-realtime-3'
 const TTS = 'voxtral-mini-tts-3'
+const OCR = 'mistral-ocr-latest'
 const RATE = 16000
 
 // shortcut: Mistral's list prices in $ as published Oct 2026 (tools' from price tables, not Mistral's page); update when they change
@@ -24,6 +27,7 @@ const TOKENS = { [CHAT]: [0.1, 0.3], [BUILT_IN]: [0.4, 2.0] }
 const PER_MINUTE = { [TRANSCRIBE]: 0.004, [REALTIME]: 0.006 }
 const PER_CALL = { web_search: 0.03, image_generation: 0.10 }
 const PER_CHAR = 0.016 / 1000 // voxtral-mini-tts-3: $0.016 a thousand characters
+const PER_PAGE = 0.001 // mistral-ocr: $1 a thousand pages
 
 /** What a conversation has cost so far, in US dollars by Mistral's list prices; [counted] gets each cost too (the meter). */
 class Bill {
@@ -34,7 +38,7 @@ class Bill {
   minutes(model, seconds) { this.add((PER_MINUTE[model] || 0) * seconds / 60) }
   chars(text) { this.add(String(text).length * PER_CHAR) }
   /** "$0.0123": a cent's fractions while it is small. */
-  static text(usd) { return usd < 1 ? `$${usd.toFixed(4)}` : `$${usd.toFixed(2)}` }
+  static text(usd) { return usd < 1 ? `€${usd.toFixed(4)}` : `€${usd.toFixed(2)}` }
 }
 
 /** Every AI Assist cost, like a car's odometer and trip meter: total never goes back; reset starts a new trip and keeps the old in past. */
@@ -80,7 +84,7 @@ class Mistral {
     const go = () => this.fetch(API + path, { method: body == null ? 'GET' : 'POST', signal,
       headers: { Authorization: `Bearer ${k}`, ...(type && body != null ? { 'Content-Type': type } : {}) }, body })
     // once more when the connection drops: Mistral closes a kept-alive one after a refusal, and the next request found it shut
-    try { r = await go().catch(e => { if (e.name === 'AbortError') throw e; return go() }) } catch (e) { if (e.name === 'AbortError') throw e; throw problem(null) }
+    try { r = await go().catch(e => { if (e.name === 'AbortError') throw e; return go() }) } catch (e) { if (e.name === 'AbortError') throw e; console.warn(`[assistant] ${path} did not go:`, e.message, e.cause?.message ?? ''); throw problem(null) }
     if (!r.ok) { console.warn(`[assistant] Mistral ${path} answered ${r.status}`, (await r.text().catch(() => '')).slice(0, 300)); throw problem(r.status) }
     return r
   }
@@ -101,8 +105,8 @@ class Mistral {
   }
 
   /** One chat turn; with [onText] its words come as they are made, so the voice can start on the first sentence. */
-  async chat(messages, tools, onText = null) {
-    const body = { model: CHAT, messages, tools, tool_choice: 'auto', temperature: 0.2 }
+  async chat(messages, tools, onText = null, choice = 'auto') {
+    const body = { model: CHAT, messages, tools, tool_choice: choice, temperature: 0.2 }
     if (!onText) { const r = await this.post('/chat/completions', body); this.bill.tokens(CHAT, r.usage); return r.choices[0].message }
     let text = ''
     const calls = new Map()
@@ -125,6 +129,13 @@ class Mistral {
       }
     })
     return { role: 'assistant', content: text, ...(calls.size ? { tool_calls: [...calls.entries()].sort((a, b) => a[0] - b[0]).map(e => e[1]) } : {}) }
+  }
+
+  /** A plain completion without tools ([json]: one JSON object back); [model] mistral-small unless said. */
+  async complete(messages, { json = false, model = CHAT, signal } = {}) {
+    const r = await (await this.request('/chat/completions', { body: JSON.stringify({ model, messages, temperature: 0.4, ...(json ? { response_format: { type: 'json_object' } } : {}) }), signal })).json()
+    this.bill.tokens(model, r.usage)
+    return words(r.choices?.[0]?.message)
   }
 
   /** One stateless turn of the Conversations API with one of Mistral's own tools (web_search, image_generation). */
@@ -163,6 +174,15 @@ class Mistral {
       out.push(...items.map(v => ({ id: v.id, name: (v.name || v.id) + (v.languages?.length ? ` (${v.languages.join(', ')})` : '') })))
       if (items.length < 100) return out
     }
+  }
+
+  /** A scan or a picture read by Mistral OCR: its pages' text (markdown), in order. */
+  async ocr(buf, mime) {
+    const url = `data:${mime};base64,${Buffer.from(buf).toString('base64')}`
+    const r = await this.post('/ocr', { model: OCR, document: mime === 'application/pdf' ? { type: 'document_url', document_url: url } : { type: 'image_url', image_url: url } })
+    const pages = (r.pages ?? []).sort((a, b) => a.index - b.index).map(p => String(p.markdown ?? '').replace(/!\[[^\]]*\]\([^)]*\)/g, '').trim())
+    this.bill.add(PER_PAGE * (r.usage_info?.pages_processed ?? pages.length))
+    return pages
   }
 
   async download(fileId) { return Buffer.from(await (await this.request(`/files/${encodeURIComponent(fileId)}/content`)).arrayBuffer()) }
@@ -263,6 +283,12 @@ const SCHEMA = [
     { text: p('string', 'The fact, short, in the user\'s language and in the third person ("Διδάσκει στο 3ο Δημοτικό Καβάλας").') }),
   fn('memory_list', 'The facts kept about the user, a numbered list.', []),
   fn('memory_forget', 'Forget a fact from the last memory_list.', ['choice'], CHOICE),
+  fn('attachment_read', 'Read more of the file attached in this chat: one part by its number, or the passages about something.', [],
+    { part: p('integer', 'The part\'s number (1 = the start).'), query: p('string', 'What to look for in it, in its language.') }),
+  fn('audio_make', 'Make an MP3 of the attached file (or of a file from the last files_find list): "narration" reads it whole with one voice; "show" is a radio show, a host and an expert talking it through with examples and recaps. It answers an estimate (minutes, cost, when ready): say it in one sentence and ask whether to start. It starts only on the user\'s yes, which Tetra hears; never say it has started or is done.', ['mode'],
+    { mode: { type: 'string', enum: ['narration', 'show'], description: '"narration": read it to me; "show": a radio show.' }, minutes: p('integer', 'For a show: how long, if the user said.'),
+      focus: p('string', 'For a show: what to dwell on, if said.'), style: p('string', 'For a show: the tone, if said (e.g. "για εξετάσεις", "χαλαρό").'),
+      per_section: p('boolean', 'Also one MP3 a section, if asked.'), choice: p('integer', 'A file from the last files_find list instead of the attached one.') }),
 ]
 
 /** Which of the user's apps each tool reads or changes (ai.js APPS): a tool of an app switched off is not even offered. */
@@ -270,7 +296,7 @@ const TOOL_APP = {
   calendar_add: 'calendar', calendar_list: 'calendar', calendar_free: 'calendar', timer_start: 'timer', timer_list: 'timer', timer_stop: 'timer',
   notes_search: 'notes', note_open: 'notes', note_new: 'notes', shopping_list: 'notes', files_find: 'files', file_open: 'files',
   contacts_find: 'contacts', relation_remember: 'contacts', relation_forget: 'contacts', my_card: 'contacts', contact_call: 'phone',
-  navigate: 'maps', youtube: 'web', report_save: 'files', web_search: 'web', make_image: 'web',
+  navigate: 'maps', youtube: 'web', report_save: 'files', web_search: 'web', make_image: 'web', attachment_read: 'files', audio_make: 'files',
   mail_new: 'mail', mail_important: 'mail', mail_search: 'mail', mail_read: 'mail', mail_needs_answer: 'mail', mail_send: 'mail', mail_status: 'mail', mail_find_local: 'mail', mail_export: 'mail',
 }
 
@@ -295,8 +321,9 @@ const addDays = (date, n) => dayKey(new Date(localMs(date) + n * 86400000 + 3 * 
  */
 class Tools {
   /** [allowed](app): the user's switch for each app (ai.js); an app switched off is neither read nor changed. */
-  constructor({ calendar, timers, notes, files, contacts, maps, mail = null, schedules = null, memory = null, now = () => Date.now(), changed = () => {}, search, image, report, me = () => null, setMe = () => {}, allowed = () => true }) {
-    Object.assign(this, { calendar, timers, notes, files, contacts, maps, mail, schedules, memory, now, changed, search, image, report, me, setMe, allowed })
+  constructor({ calendar, timers, notes, files, contacts, maps, mail = null, schedules = null, memory = null, now = () => Date.now(), changed = () => {}, search, image, report, me = () => null, setMe = () => {}, allowed = () => true, extract = null }) {
+    Object.assign(this, { calendar, timers, notes, files, contacts, maps, mail, schedules, memory, now, changed, search, image, report, me, setMe, allowed, extract })
+    this.doc = null // the file attached in this chat (attach.js), or { path, name } until it is read again
     this.lists = { contacts: [], files: [], notes: [], timers: [], mail: [], schedules: [], memory: [] }
   }
 
@@ -713,6 +740,29 @@ class Tools {
     })
   }
 
+  // ---- The attached file (attach.js) ----
+  async attached() {
+    if (this.doc && !this.doc.text && this.extract) this.doc = await this.extract(this.doc.path)
+    return this.doc?.text ? this.doc : null
+  }
+  async attachment_read(a) {
+    const d = await this.attached()
+    return { forModel: d ? attach.read(d, a) : 'No file is attached in this chat.' }
+  }
+  /** An estimate and a card that waits for the user's yes: nothing is spent until then. */
+  async audio_make(a) {
+    let d
+    if (a.choice) {
+      const f = this.lists.files[Number(a.choice) - 1]
+      if (!f) return { forModel: `No choice ${a.choice}: the last files list had ${this.lists.files.length}.` }
+      d = await this.extract(this.files.resolve(f.path))
+    } else d = await this.attached()
+    if (!d) return { forModel: 'No file: the user attaches one (the paperclip), or files_find one first.' }
+    const mode = a.mode === 'show' ? 'show' : 'narration', est = estimate({ chars: d.text.length, mode, minutes: a.minutes })
+    return { forModel: `Estimate: ≈ ${est.minutes} minutes of audio, ≈ €${est.usd.toFixed(2)}, ready in ~${est.ready} minutes; it runs in the background and a notification says when it is ready. Say this in one sentence in the user's language and ask whether to start.`,
+      audio: { path: d.path, name: d.name, mode, minutes: est.minutes, focus: String(a.focus ?? ''), style: String(a.style ?? ''), perSection: !!a.per_section, estimate: est } }
+  }
+
   report_save(a) {
     const title = String(a.title || '').trim(), text = String(a.text || '').trim()
     if (!text) return { forModel: 'Write the report first.' }
@@ -744,6 +794,7 @@ Work out dates yourself from today's date ("αύριο", "την Πέμπτη").
 "Κάθε Δευτέρα στις 8 πες μου…", "κάθε μέρα", "μία φορά τον χρόνο", "την Παρασκευή στις 6 θύμισέ μου…": schedule_add, the prompt in the user's words; then say when it runs. To change, pause or delete one: schedule_list first.
 The daily brief («πρωινή αναφορά», «ενημέρωση της ημέρας») is built in: never schedule_add it; schedule_list, then schedule_change it (time, paused: false, sections).
 «Έρευνα σε βάθος», a report on a subject: web_search several times, then report_save the whole report. A picture: make_image.
+A file attached to the user's message: answer from it; attachment_read the parts not given, never guess them. «Κάνε το ραδιοφωνική εκπομπή», «διάβασέ το μου», an MP3 of it: call audio_make at once, before saying anything; never make up minutes, cost or time yourself.
 «Θυμήσου ότι…», a lasting fact about the user or what they like: memory_add, then say it is kept. «Ξέχασε ότι…»: memory_list, then memory_forget.${facts.length ? `
 What the user asked you to remember about them (use it when it helps; never read it out unasked):
 ${facts.map(f => `- ${f.text}`).join('\n')}` : ''}`
@@ -756,11 +807,23 @@ class Chat {
   get bill() { return this.api.bill }
 
   /** The user's [text] answered, the tools run on the way; [onText] gets the answer's words as they come. */
-  async ask(text, onText = null) {
-    this.messages.push({ role: 'user', content: text })
-    const out = { text: '', choices: [], call: null, send: null, images: [], open: null, go: null }
+  async ask(text, onText = null, file = null) {
+    if (file) this.tools.doc = file
+    const from = this.messages.length
+    this.messages.push({ role: 'user', content: file ? `${text}\n\n${attach.forModel(file)}` : text })
+    // an MP3 of the file asked for: mistral-small sometimes makes up the estimate instead of asking audio_make, so it is made to
+    const must = this.tools.doc && /\bmp3\b|εκπομπ|radio show|διάβασ[εέ] (?:το|μου)|read it to me/i.test(text) ? 'audio_make' : null
+    try { return await this.turn(onText, must) } finally {
+      // the file's text goes once: after the turn only its name stays, for the next request and the kept chat
+      if (file) this.messages[from].content = `${text}\n\n${attach.kept(file)}`
+      for (const m of this.messages.slice(from)) if (m.role === 'tool' && m.name === 'attachment_read') m.content = `[read from ${this.tools.doc?.name ?? 'the file'}; read it again if needed]`
+    }
+  }
+  async turn(onText, must = null) {
+    const out = { text: '', choices: [], call: null, send: null, images: [], open: null, go: null, audio: null }
     for (let round = 0; round < ROUNDS; round++) {
-      const m = await this.api.chat([{ role: 'system', content: system(this.now(), this.tools.memory?.list() ?? []) }, ...this.messages], this.tools.offered?.() ?? SCHEMA, onText)
+      const forced = must && !round, offered = this.tools.offered?.() ?? SCHEMA // forced: only that tool, and a call is a must ("any")
+      const m = await this.api.chat([{ role: 'system', content: system(this.now(), this.tools.memory?.list() ?? []) }, ...this.messages], forced ? offered.filter(s => s.function.name === must) : offered, onText, forced ? 'any' : 'auto')
       const calls = m.tool_calls ?? []
       this.messages.push({ role: 'assistant', content: m.content ?? '', ...(calls.length ? { tool_calls: calls } : {}) })
       if (!calls.length) return { ...out, text: words(m).trim() }
@@ -774,12 +837,13 @@ class Chat {
         if (r.image) out.images.push(r.image)
         if (r.open) out.open = r.open
         if (r.go) out.go = r.go
+        if (r.audio) out.audio = r.audio
         this.messages.push({ role: 'tool', name: c.function.name, tool_call_id: c.id ?? '', content: r.forModel })
       }
     }
     return out
   }
-  clear() { this.messages = []; this.bill.reset() }
+  clear() { this.messages = []; this.bill.reset(); this.tools.doc = null }
 }
 
 /**

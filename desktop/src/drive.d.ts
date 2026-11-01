@@ -45,7 +45,14 @@ export interface AssistChoice { label: string; call?: AssistCall; open?: string;
 export type AssistGo = { note?: string; maps?: string; youtube?: string }
 /** A mail AI Assist wrote: kept as a draft, sent only by the user's Send or spoken yes. */
 export interface AssistSend { draft: MailDraft; to: string; subject: string; preview: string }
-export interface AssistReply { text: string; choices: AssistChoice[]; call: AssistCall | null; send: AssistSend | null; images: string[]; open: string | null; go: AssistGo | null; spent: number }
+/** A file attached to a message (attach.js): read in place, its text in main only. */
+export interface AssistFile { name: string; path: string; pages: number; chars?: number; cut?: boolean; kind?: string }
+/** audio_make's ask: the estimate, waiting for the user's yes. */
+export interface AssistAudio { path: string; name: string; mode: 'narration' | 'show'; minutes: number; focus: string; style: string; perSection: boolean; estimate: { minutes: number; usd: number; ready: number } }
+/** An MP3 being made in the background (audio.js), and what it made. */
+export interface AssistJob { id: string; title: string; state: 'running' | 'done' | 'failed'; stage: 'script' | 'voice' | 'mix'; done: number; total: number; error?: string
+  result?: { file: string; files: string[]; title: string; seconds: number; chapters: { title: string; start: number }[]; dropped: number } }
+export interface AssistReply { text: string; choices: AssistChoice[]; call: AssistCall | null; send: AssistSend | null; images: string[]; open: string | null; go: AssistGo | null; audio: AssistAudio | null; spent: number }
 export interface AssistShortcuts { toggle: string; talk: string; live: string }
 export type Repeat = 'once' | 'daily' | 'weekly' | 'monthly' | 'yearly'
 export interface Schedule { id: string; kind: 'prompt' | 'brief'; title: string; prompt: string; time: string; repeat: Repeat; days: number[]; date: string | null; paused: boolean; last?: number; next: number | null }
@@ -346,12 +353,19 @@ declare global {
         onChange(fn: () => void): () => void
       }
       assistant: {
-        ask(text: string, aloud: boolean): Promise<AssistReply>
+        ask(text: string, aloud: boolean, file?: string): Promise<AssistReply>
+        attach(from: 'files' | 'device' | string): Promise<(AssistFile & { spent: number }) | null>
+        dropped(file: File): string
+        audioStart(spec: AssistAudio): Promise<AssistJob>
+        jobs(): Promise<AssistJob[]>
+        audioSave(id: string): Promise<string[] | null>
+        audioExport(id: string): Promise<string | null>
+        onJob(fn: (j: AssistJob) => void): () => void
         transcribe(pcm: Int16Array): Promise<{ text: string; spent: number }>
         hush(): Promise<void>
-        keep(id: string, bubbles: { mine: boolean; text: string; error?: boolean }[]): Promise<void>
+        keep(id: string, bubbles: { mine: boolean; text: string; error?: boolean; files?: AssistFile[]; job?: string }[]): Promise<void>
         chats(): Promise<{ id: string; at: number; title: string }[]>
-        openChat(id: string): Promise<{ mine: boolean; text: string; error?: boolean }[]>
+        openChat(id: string): Promise<{ mine: boolean; text: string; error?: boolean; files?: AssistFile[]; job?: string }[]>
         deleteChat(id: string): Promise<void>
         clear(): Promise<void>
         youtube(q: string): Promise<void>
