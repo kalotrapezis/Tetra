@@ -100,6 +100,9 @@ NEW = {
     'devices': ('#2E9D4F', [('d-devices.png', 860, 'pc', 660, 130)]),
     'ai': ('#FD6A04', [('d-ai-settings.png', 800, 'pc', 640, 110), ('p-ai-settings.png', 250, 'phone', 1300, 230)]),
     'ai-chat': ('#FD6A04', [('d-ai-chat.png', 900, 'pc', 650, 140)]),
+    'ai-cloud': ('#FD6A04', [('d-ai-cloud.png', 800, 'pc', 640, 110), ('p-ai-skills.png', 250, 'phone', 1300, 230)]),
+    'ai-scheduled': ('#FD6A04', [('d-ai-scheduled.png', 800, 'pc', 640, 110), ('p-ai-scheduled.png', 250, 'phone', 1300, 230)]),
+    'ai-brief': ('#FD6A04', [('d-brief-dark.png', 470, 'tablet', 690, 130), ('d-brief-light.png', 470, 'tablet', 1090, 170)]),
 }
 
 def make_new(shots):
