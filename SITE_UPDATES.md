@@ -30,6 +30,12 @@ site shows it, in every language.
       an email to check before sending, event, note, timer. «Βρες» only shows; «Πάρε τον Χ» calls after 3 s unless cancelled.
       The mini window shows the screen behind it, dimmed.
 
+- [x] **Browser** (Android): a browser that forgets (logins, addresses and cards with Android's encryption; history for
+      the session, a day or always; Private; ad blocking; tabs and groups; Firefox import; pages dark in the dark look).
+- [x] **Music behind the map**: Player mode for any page, background play, radio favourites in folders for ‹ ›, Maps' 🎧.
+- [x] **Messages**: SMS as chats on the phone, side by side on a tablet and on the computer; Tetra as the default SMS app.
+- [x] **Alarms and the stopwatch** synced with the computer's Clock.
+
 ## Numbers
 - [x] **Speed of Mail and AI Assist** (1 Nov, `desktop/PERF_MAIL_AI.md`): the computer's window 496 → 97 ms; Mail's list
       238 → 113 ms, the window no longer busy while mail arrives (161 → 0 ms in 10 s), a mail opened 258 → 211 ms; AI Assist's
@@ -37,4 +43,4 @@ site shows it, in every language.
       an answer's wait is Mistral's (1–9 s). Add them beside the README's speed table.
 
 ## Downloads
-- [x] Bump the download buttons, labels and QR code to the next release once it is out (now 0.8.0 beta 1).
+- [x] Bump the download buttons, labels and QR code to the next release once it is out (now 0.8.0 beta 3).
