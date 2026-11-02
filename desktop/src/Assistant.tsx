@@ -104,7 +104,7 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
   const [spent, setSpent] = useState(0)
   const [typed, setTyped] = useState('')
   const [keyText, setKeyText] = useState('')
-  const [section, setSection] = useState<Section>('skills')
+  const [section, setSection] = useState<Section>('history') // History first (the user, 2 Nov)
   const [open, setOpen] = useState(false) // the island opened by its handle, in a narrow window
   const [narrow, setNarrow] = useState(false)
   const [chatId, setChatId] = useState<string>(() => crypto.randomUUID())

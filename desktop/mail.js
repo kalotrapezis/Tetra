@@ -655,15 +655,19 @@ class Mail extends EventEmitter {
     const found = [...html.matchAll(/<img\b[^>]*?\ssrc\s*=\s*["']?(https?:\/\/[^"'\s>]+)[^>]*>/gi)]
     return [...new Set(found.filter(m => !/\s(width|height)\s*=\s*["']?[01]["'\s>/]/i.test(m[0])).map(m => m[1]))].slice(0, 40)
   }
-  async inlineImages(html) {
-    for (const u of this.remoteImages(html)) try {
-      const r = await fetch(u.replace(/&amp;/g, '&'), { signal: AbortSignal.timeout(8000) })
+  /**
+   * One of the open mail's pictures as a data: URL, or null. The mail shows at once and each picture fills in as it
+   * comes (the user, 2 Nov: waiting for all of them made a mail slow to open); only the pictures open() allowed.
+   */
+  async image(url) {
+    if (!this.shownImages?.has(url)) return null
+    try {
+      const r = await fetch(url.replace(/&amp;/g, '&'), { signal: AbortSignal.timeout(8000) })
       const type = (r.headers.get('content-type') ?? '').split(';')[0]
-      if (!r.ok || !type.startsWith('image/')) continue
+      if (!r.ok || !type.startsWith('image/')) return null
       const b = Buffer.from(await r.arrayBuffer())
-      if (b.length <= 3e6) html = html.split(u).join(`data:${type};base64,${b.toString('base64')}`)
-    } catch {}
-    return html
+      return b.length <= 3e6 ? `data:${type};base64,${b.toString('base64')}` : null
+    } catch { return null }
   }
 
   /** How this account signs in here: its password, or a Microsoft access token. Throws, with a reason, when it cannot. */
@@ -1161,12 +1165,12 @@ class Mail extends EventEmitter {
     let html = this.htmlOf(p)
     const priv = this.privacy(), from = String(e.fromAddress).toLowerCase()
     const allowed = priv.images === 'always' || priv.senders.includes(from) || priv.senders.includes('@' + from.split('@')[1])
-    const remote = this.remoteImages(html).length > 0
-    if (remote && (images || allowed)) html = await this.inlineImages(html)
+    const urls = this.remoteImages(html), remote = urls.length > 0, load = remote && (images || allowed)
+    this.shownImages = new Set(load ? urls : [])
     const dir = file.slice(0, -4) + '.files'
     let attachments = []
     try { attachments = fs.readdirSync(dir).map(n => ({ name: n, size: fs.statSync(path.join(dir, n)).size, file: `${e.file.slice(0, -4)}.files/${n}` })) } catch {}
-    return { ...e, to: p.to?.text ?? e.to.join(', '), cc: p.cc?.text ?? '', html, attachments, remote: remote && !images && !allowed }
+    return { ...e, to: p.to?.text ?? e.to.join(', '), cc: p.cc?.text ?? '', html, attachments, remote: remote && !images && !allowed, images: load ? urls : [] }
   }
 
   /** A path inside the archive, or null for anything that would leave it. */

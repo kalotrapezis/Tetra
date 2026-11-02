@@ -258,6 +258,7 @@ contextBridge.exposeInMainWorld('drive', {
     saveAs: (id, attachment) => ipcRenderer.invoke('mail:saveAs', id, attachment),
     showFile: full => ipcRenderer.invoke('mail:showFile', full),
     open: (id, images) => ipcRenderer.invoke('mail:open', id, images),
+    image: url => ipcRenderer.invoke('mail:image', url),
     detect: address => ipcRenderer.invoke('mail:detect', address),
     add: (address, server, pass) => ipcRenderer.invoke('mail:add', address, server, pass),
     addMicrosoft: address => ipcRenderer.invoke('mail:addMicrosoft', address),

@@ -203,7 +203,7 @@ function NoteEditor({ initial, setDialog, say, onClose }: {
   const trashed = !!initial.trashedAt
   const close = () => setDialog(null)
 
-  // Saved as you type (a short pause), the whole note each time.
+  // Saved when typing stops for half a second (asked 2026-11-02), the whole note each time.
   const saving = useRef<ReturnType<typeof setTimeout>>(undefined)
   const flush = useRef<() => Promise<unknown>>(() => Promise.resolve())
   const snapped = useRef(false)
@@ -218,7 +218,7 @@ function NoteEditor({ initial, setDialog, say, onClose }: {
     }
     clearTimeout(saving.current)
     setSaveState('saving')
-    saving.current = setTimeout(() => flush.current().then(() => { setSaveState('saved'); setSavedAt(Date.now()) }), 400)
+    saving.current = setTimeout(() => flush.current().then(() => { setSaveState('saved'); setSavedAt(Date.now()) }), 500)
   }, [title, content, items])
   const edit = (next: Partial<Snap>, step = false, wordDone = false) => {
     const snap = { title, content, items, ...next }

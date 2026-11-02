@@ -114,6 +114,7 @@ test('mail: a sync writes <account>/<Folder>/<yyyy>/… .eml with its attachment
     assert.deepEqual(opened.attachments.map(a => a.name), ['Guide.pdf'])
     assert.ok(mail.inside(opened.attachments[0].file))
     assert.equal(mail.inside('../../etc/passwd'), null)
+    assert.equal(await mail.image('https://example.com/x.png'), null, 'only the open mail\'s allowed pictures are fetched')
     assert.equal(mail.index.get('a@nup.ac.cy/Inbox/7/6').flagged, true)
 
     delete boxes.INBOX[6]

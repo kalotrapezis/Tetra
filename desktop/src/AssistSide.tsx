@@ -63,17 +63,20 @@ export function Skills({ offer }: { offer: (s: string) => void }) {
   return <div className="assist-chips">{caps.map(([l, p, c]) => <AppChip key={l} label={t(l)} color={c} go={() => offer(t(p))} />)}</div>
 }
 
+/** Every past conversation, typed or scheduled (the user, 2 Nov: "everything past, scheduled or not"), newest first. */
 export function History({ offer, open, current }: { offer: (s: string) => void; open: (id: string) => void; current: string }) {
-  const [chats, setChats] = useState<{ id: string; at: number; title: string }[] | null>(null)
-  const load = () => window.drive.assistant.chats().then(setChats)
+  const [chats, setChats] = useState<{ id: string; at: number; title: string; page?: string }[] | null>(null)
+  const load = () => Promise.all([window.drive.assistant.chats(), window.drive.schedules.results()])
+    .then(([c, r]) => setChats([...c, ...r.map(x => ({ id: x.file, at: x.at, title: x.title, page: x.file }))].sort((a, b) => b.at - a.at)))
   useEffect(() => { load() }, [current])
   if (!chats) return null
   if (!chats.length) return <><p className="muted">{t('assist.historyHint')}</p>
     <div className="assist-chips">{(['chip.calendar', 'chip.mail'] as const).map(k => <AppChip key={k} label={t(k)} color={k === 'chip.calendar' ? APP.calendar : APP.mail} go={() => offer(t(k))} />)}</div></>
   const when = (ms: number) => new Intl.DateTimeFormat(locale(), { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(ms)
   return <div className="assist-rows">{chats.map(c => <div key={c.id} className={`assist-row${c.id === current ? ' on' : ''}`}>
-    <button className="assist-row-main" onClick={() => open(c.id)}><strong>{c.title}</strong><small>{when(c.at)}</small></button>
-    <button className="text-button" title={t('common.delete')} onClick={() => window.drive.assistant.deleteChat(c.id).then(load)}><Icon name="close" size={18} /></button>
+    <button className="assist-row-main" onClick={() => c.page ? window.drive.schedules.open(c.page) : open(c.id)}>
+      <strong>{c.page && <><Icon name="timer" size={16} /> </>}{c.title}</strong><small>{when(c.at)}</small></button>
+    {!c.page && <button className="text-button" title={t('common.delete')} onClick={() => window.drive.assistant.deleteChat(c.id).then(load)}><Icon name="close" size={18} /></button>}
   </div>)}</div>
 }
 

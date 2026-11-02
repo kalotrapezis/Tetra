@@ -36,7 +36,7 @@ export interface MailEntry { id: string; account: string; folder: MailRole; uid:
   subject: string; seen: boolean; flagged: boolean; size: number; attachments: number; snippet: string; saved: boolean; file?: string; gone?: boolean } // gone: deleted from the server, kept here (Αποθήκευση)
 export interface MailFolder { role: MailRole; accounts: { id: string; unread: number; total: number; orange: number }[] }
 export interface MailState { busy?: boolean; error?: string | null; detail?: string | null; synced?: number }
-export interface MailOpened extends Omit<MailEntry, 'to'> { missing?: boolean; remote?: boolean; to: string; cc: string; html: string; attachments: { name: string; size: number; file: string }[] }
+export interface MailOpened extends Omit<MailEntry, 'to'> { missing?: boolean; remote?: boolean; images?: string[]; to: string; cc: string; html: string; attachments: { name: string; size: number; file: string }[] }
 export type MailAddResult = { account: MailAccount; roles: MailRole[]; error?: undefined } | { error: 'auth' | 'appPassword' | 'unreachable' | 'keyring' | 'noClient' | 'approval' | 'other'; detail?: string }
 
 /** AI Assist (assistant.js): an answer, and what its tools left for the screen. */
@@ -301,6 +301,7 @@ declare global {
         saveAs(id: string, attachment?: string | null): Promise<string | null>
         showFile(full: string): Promise<void>
         open(id: string, images?: boolean): Promise<MailOpened | null>
+        image(url: string): Promise<string | null>
         detect(address: string): Promise<{ server: MailServer; how: string } | null>
         add(address: string, server: MailServer, pass: string): Promise<MailAddResult>
         addMicrosoft(address: string): Promise<MailAddResult>

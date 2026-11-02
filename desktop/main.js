@@ -1597,6 +1597,7 @@ app.whenReady().then(() => {
   })
   ipcMain.handle('mail:showFile', (_, full) => { if (typeof full === 'string' && path.isAbsolute(full) && fs.existsSync(full)) shell.showItemInFolder(full) })
   ipcMain.handle('mail:open', (_, id, images) => mail.open(String(id), { images: images === true }))
+  ipcMain.handle('mail:image', (_, url) => mail.image(String(url)))
   // step 6: the clean-up and its first-run check, the garbage scan, filters, the spam filter, remote pictures
   const care = require('./mailclean')
   const short = g => Object.fromEntries(Object.entries(g).map(([k, v]) => [k, Array.isArray(v) ? { count: v.length, sample: v.slice(0, 30).map(x => typeof x === 'string' ? x : x.drop) } : v]))

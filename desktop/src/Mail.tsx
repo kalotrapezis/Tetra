@@ -328,6 +328,17 @@ function Reader({ id, color, stored, say, setDialog }: { id: string; color?: str
       const a = (e.target as Element).closest?.('a[href]') as HTMLAnchorElement | null
       if (a) { e.preventDefault(); follow(a) }
     })
+    // the pictures from the web, each as it comes; the text was already there
+    for (const u of m?.images ?? []) window.drive.mail.image(u).then(data => {
+      const d = frame.current?.contentDocument
+      if (!data || !d) return
+      const src = u.replace(/&amp;/g, '&')
+      d.querySelectorAll('img').forEach(img => {
+        if (img.getAttribute('src') !== src) return
+        img.onload = () => { if (frame.current) frame.current.style.height = `${d.documentElement.scrollHeight + 8}px` }
+        img.src = data
+      })
+    })
   }
   return (
     <article className="mail-reader">
@@ -358,7 +369,7 @@ function Reader({ id, color, stored, say, setDialog }: { id: string; color?: str
         <button className="text-button" onClick={() => window.drive.mail.privacy().then(p => window.drive.mail.setPrivacy({ ...p, senders: [...p.senders, m.fromAddress] })).then(() => load())}>{t('mail.alwaysSender')}</button>
       </div>}
       {m.missing ? <p className="muted">{t('mail.notYet')}</p>
-        : <iframe ref={frame} className="mail-body" sandbox="allow-same-origin" title={m.subject} onLoad={fit}
+        : <iframe ref={frame} key={m.images?.length ?? 0} className="mail-body" sandbox="allow-same-origin" title={m.subject} onLoad={fit}
           srcDoc={`<!doctype html><meta charset="utf-8"><style>body{margin:16px;font:15px/1.5 system-ui,"Noto Sans",sans-serif;color:#1b1d1f;background:#fff;overflow-wrap:anywhere}img{max-width:100%;height:auto}</style>${m.html}`} />}
     </article>
   )
