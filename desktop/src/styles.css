@@ -928,6 +928,19 @@ button.link.risk { color: #d8663f; font-weight: 600; }
 .timer-pin.on { opacity: 1; color: var(--timer-teal); }
 .timer-card.ringing .timer-pin.on { color: #fff; }
 .timer-pin:hover, .timer-trash:hover { opacity: 1; }
+.timer .topbar .segmented { margin: 0 auto; }
+.alarm-card { cursor: pointer; }
+.alarm-card.off .timer-left { opacity: .45; }
+.alarm-card .cal-switch { padding: 6px 0; align-items: center; }
+.alarm-next { grid-column: 1 / -1; margin: 0; }
+.alarm-days { display: flex; gap: 4px; }
+.alarm-days button { width: 34px; height: 34px; background: var(--island-2); }
+.alarm-days button.on { background: var(--timer-teal); color: #fff; }
+.timer-clock .field { width: 100%; }
+.stopwatch { flex-direction: column; align-items: center; gap: 24px; padding-top: 40px; }
+.stopwatch-time { font-size: 72px; font-variant-numeric: tabular-nums; font-family: ui-monospace, monospace; }
+.stopwatch-laps { width: min(420px, 100%); display: flex; flex-direction: column; gap: 6px; }
+.stopwatch-laps div { display: grid; grid-template-columns: 1fr 1fr auto; font-variant-numeric: tabular-nums; }
 
 /* Maps (Maps.tsx): the offline map, a side panel of search, saved places and trips */
 .maps-page { position: absolute; inset: 0; container-type: size; }

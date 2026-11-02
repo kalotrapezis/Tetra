@@ -154,3 +154,57 @@ test('clean clears the old copies and keeps each timer as it is: a stop, a pin, 
   assert.deepEqual(tablet.cards(now).map(r => r.id).sort(), ['c', 'd'])
   assert.equal(tablet.clean(), 0)
 })
+
+// Alarms and the stopwatch: the phone's TimerAlarmsTest, in this computer's time zone
+const local = (d, h, m) => new Date(2026, 10, d, h, m).getTime() // November 2026: the 2nd is a Monday
+
+test('an alarm on weekdays rings at its time, dismiss on one device stops it on the other, then the next day', () => {
+  const [tablet, computer] = pair()
+  const a = tablet.alarmAdd('07:30', ['MO', 'TU', 'WE', 'TH', 'FR'], 'School', local(1, 20, 0))
+  assert.equal(tablet.alarmCards(local(1, 20, 0))[0].next, local(2, 7, 30))
+  carry(tablet, computer)
+  assert.equal(computer.alarmCards(local(2, 7, 31))[0].ringing, local(2, 7, 30))
+  assert.ok(computer.alarmChange(a.id, 'dismiss', local(2, 7, 31)))
+  carry(computer, tablet)
+  const after = tablet.alarmCards(local(2, 7, 32))[0]
+  assert.equal(after.ringing, null)
+  assert.equal(after.next, local(3, 7, 30))
+  assert.equal(tablet.read().length, 0) // timers' readers skip alarms
+})
+
+test('a single alarm is off once dismissed; snooze rings ten minutes later; skip answers the next one', () => {
+  const [tablet] = pair()
+  const once = tablet.alarmAdd('06:00', [], '', local(2, 22, 0))
+  assert.equal(once.date, '2026-11-03')
+  tablet.alarmChange(once.id, 'snooze', local(3, 6, 1))
+  const s = tablet.alarmCards(local(3, 6, 5))[0]
+  assert.equal(s.ringing, null)
+  assert.equal(s.next, local(3, 6, 11))
+  assert.equal(tablet.alarmCards(local(3, 6, 11))[0].ringing, local(3, 6, 11))
+  tablet.alarmChange(once.id, 'dismiss', local(3, 6, 12))
+  assert.equal(tablet.alarmCards(local(3, 6, 12))[0].on, false)
+  const daily = tablet.alarmAdd('08:00', ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'], '', local(2, 12, 0))
+  tablet.alarmChange(daily.id, 'skip', local(2, 12, 0))
+  const d = tablet.alarmCards(local(2, 12, 0)).find(x => x.id === daily.id)
+  assert.equal(d.skipped, true)
+  assert.equal(d.next, local(4, 8, 0))
+  tablet.alarmChange(daily.id, 'delete', local(2, 12, 0))
+  assert.equal(tablet.alarms().length, 1)
+})
+
+test('the stopwatch counts, holds, laps and resets, and is the same on both devices', () => {
+  const [tablet, computer] = pair()
+  const s0 = Date.parse('2026-11-02T10:00:00Z')
+  assert.ok(tablet.watch('start', s0))
+  assert.ok(tablet.watch('lap', s0 + 62_400))
+  assert.ok(tablet.watch('hold', s0 + 90_000))
+  carry(tablet, computer)
+  const w = computer.stopwatch()
+  assert.equal(w.state, 'held')
+  assert.equal(w.elapsed, 90)
+  assert.deepEqual(w.laps, [62.4])
+  assert.ok(computer.watch('start', s0 + 200_000))
+  assert.equal(computer.stopwatch().started, s0 + 110_000)
+  assert.equal(computer.watch('reset', s0), true)
+  assert.equal(computer.watch('reset', s0), false)
+})

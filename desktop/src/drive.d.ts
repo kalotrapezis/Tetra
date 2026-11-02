@@ -100,6 +100,9 @@ export type TimerAction = 'pause' | 'resume' | 'stop' | 'ok' | 'restart' | 'pin'
 /** Settings › Clean up (cleaner.js): one thing Tetra can clean, its size now; `ready` false when it cannot be cleaned now. */
 export type CleanItem = { id: string; app?: string; bytes: number; files: number; ready: boolean }
 /** A timer as the computer counts it (timer.js active()). */
+export type AlarmAction = 'dismiss' | 'snooze' | 'skip' | 'on' | 'off' | 'delete'
+export interface AlarmItem { id: string; time: string; days: string[]; date: string | null; label: string; state: 'on' | 'off'; answered: number | null; snooze: number | null; rev: number; by: string; ringing: number | null; next: number | null; on: boolean; skipped: boolean }
+export interface StopwatchItem { state: 'counting' | 'held' | 'reset'; started: number | null; elapsed: number; laps: number[]; rev: number; by: string }
 export interface TimerItem { id: string; seconds: number; label: string; state: 'running' | 'paused' | 'stopped'; ends: number | null; left: number; rev: number; by: string; pinned: boolean; leftMs: number; ringing: boolean; ready: boolean }
 
 export interface VaultStatus { configured: boolean; unlocked: boolean; count: number }
@@ -280,6 +283,11 @@ declare global {
         active(): Promise<TimerItem[]>
         start(seconds: number): Promise<string>
         change(id: string, action: TimerAction): Promise<void>
+        alarms(): Promise<AlarmItem[]>
+        alarmSave(id: string | null, time: string, days: string[], label: string): Promise<void>
+        alarmChange(id: string, action: AlarmAction): Promise<void>
+        stopwatch(): Promise<StopwatchItem>
+        watch(action: 'start' | 'hold' | 'lap' | 'reset'): Promise<void>
         last(): Promise<number>
       }
       onTimerChanged(cb: () => void): () => void

@@ -139,6 +139,11 @@ function planTimer() {
     notify(i18n.t('main.timesUp'), t.label || i18n.t('main.timerOf', { length: timer.durationText(t.seconds) }))
     win?.webContents.send('timer-changed')
   }
+  for (const a of timers.alarmCards(now)) if (a.ringing != null && !timerRung.has(`${a.id}|${a.ringing}`)) {
+    timerRung.add(`${a.id}|${a.ringing}`)
+    notify(a.label || i18n.t('alarm.title'), a.time)
+    win?.webContents.send('timer-changed')
+  }
   const next = timers.nextEnd(now)
   timerAlarm = setTimeout(planTimer, Math.max(250, Math.min(next ? next - now : Infinity, 30_000)))
 }
@@ -1082,6 +1087,19 @@ app.whenReady().then(() => {
     timers.change(String(id), action)
     if (action === 'restart' && r) setSetting('timerLast', String(r.seconds))
     planTimer()
+  })
+  // Alarms and the stopwatch, in the same folder (timer.js)
+  ipcMain.handle('timer:alarms', () => timers.alarmCards())
+  ipcMain.handle('timer:alarmSave', (_, id, time, days, label) => { if (id) timers.alarmEdit(String(id), time, days, label); else timers.alarmAdd(time, days, label); planTimer() })
+  ipcMain.handle('timer:alarmChange', (_, id, action) => {
+    if (!['dismiss', 'snooze', 'skip', 'on', 'off', 'delete'].includes(action)) throw new Error('Unknown alarm action.')
+    timers.alarmChange(String(id), action)
+    planTimer()
+  })
+  ipcMain.handle('timer:stopwatch', () => timers.stopwatch())
+  ipcMain.handle('timer:watch', (_, action) => {
+    if (!['start', 'hold', 'lap', 'reset'].includes(action)) throw new Error('Unknown stopwatch action.')
+    timers.watch(action)
   })
   ipcMain.handle('contacts:call', (_, method, ...args) => {
     if (!CONTACTS_CALLS.includes(method)) throw new Error('Unknown Contacts action.')

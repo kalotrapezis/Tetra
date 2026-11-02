@@ -24,6 +24,7 @@ function parse(text, file = null) {
   try {
     const o = JSON.parse(text)
     if (!o || typeof o !== 'object') return null
+    if ((o.kind ?? 'timer') !== 'timer') return null // an alarm or the stopwatch (below)
     const state = String(o.state ?? RUNNING).toLowerCase()
     if (!ORDER.includes(state)) return null
     const ends = typeof o.ends === 'string' && o.ends ? Date.parse(o.ends) : null
@@ -82,15 +83,7 @@ class Timers {
       .sort((a, b) => a.ready - b.ready || a.leftMs - b.leftMs || a.seconds - b.seconds).slice(0, MAX)
   }
 
-  /** Written beside, then renamed over: nobody reads half a timer. */
-  write(r) {
-    fs.mkdirSync(this.root, { recursive: true })
-    const to = path.join(this.root, fileName(r.id, r.by))
-    const part = path.join(this.root, `.${path.basename(to)}.part`)
-    fs.writeFileSync(part, json(r))
-    fs.renameSync(part, to)
-    return { ...r, file: to }
-  }
+  write(r) { return { ...r, file: this.writeText(r.id, r.by, json(r)) } }
 
   /** A new timer, in the file of one that is over if there is one (its id on, a higher rev): files = timers at once. */
   start(seconds, now = Date.now(), label = '') {
@@ -146,12 +139,184 @@ class Timers {
     return removed
   }
 
-  /** When the next running timer ends (for the alarm), or null. */
+  /** When the next running timer ends or alarm rings (for the bell), or null. */
   nextEnd(now = Date.now()) {
     const ends = this.read().filter(r => r.state === RUNNING && r.ends != null && r.ends > now).map(r => r.ends)
+      .concat(this.alarms().map(a => alarmNext(a, now)).filter(t => t != null))
     return ends.length ? Math.min(...ends) : null
   }
+
+  texts() {
+    let names = []
+    try { names = fs.readdirSync(this.root) } catch { return [] }
+    return names.filter(n => !n.startsWith('.') && n.toLowerCase().endsWith('.json')).map(n => {
+      const f = path.join(this.root, n)
+      try { return fs.statSync(f).isFile() ? [fs.readFileSync(f, 'utf8'), f] : null } catch { return null }
+    }).filter(Boolean)
+  }
+
+  /** Every alarm not deleted, by the time of day (TimerAlarmFiles.alarms). */
+  alarms() {
+    return alarmWinners(this.texts().map(([t, f]) => parseAlarm(t, f)).filter(Boolean)).filter(a => a.state !== A_DELETED)
+      .sort((a, b) => a.time.localeCompare(b.time) || a.id.localeCompare(b.id))
+  }
+
+  /** The alarms with what the screen shows: ringing (since when), next, on, skipped. */
+  alarmCards(now = Date.now()) {
+    return this.alarms().map(a => {
+      const ring = alarmRinging(a, now), next = alarmNext(a, now)
+      return { ...a, ringing: ring, next, on: ring != null || next != null,
+        skipped: a.days.length > 0 && a.state === A_ON && ring == null && a.snooze == null && a.answered != null && a.answered > now }
+    })
+  }
+
+  /** Written beside, then renamed over: nobody reads half a file. */
+  writeText(id, by, text) {
+    fs.mkdirSync(this.root, { recursive: true })
+    const to = path.join(this.root, fileName(id, by))
+    const part = path.join(this.root, `.${path.basename(to)}.part`)
+    fs.writeFileSync(part, text)
+    fs.renameSync(part, to)
+    return to
+  }
+
+  /** A new alarm at "HH:MM" on [days] (none: once, the next such time), in a deleted one's file if there is one. */
+  alarmAdd(time, days, label = '', now = Date.now()) {
+    const all = alarmWinners(this.texts().map(([t, f]) => parseAlarm(t, f)).filter(Boolean))
+    const gone = all.filter(a => a.state === A_DELETED).sort((a, b) => a.id.localeCompare(b.id))[0]
+    const a = { id: gone?.id ?? 'alarm-' + crypto.randomBytes(3).toString('hex'), time: hhmm(time), days: dayCodes(days), date: null, label: String(label),
+      state: A_ON, answered: now, snooze: null, rev: (gone?.rev ?? 0) + 1, by: this.by }
+    if (!a.days.length) a.date = localDate(occurrence(a, now))
+    this.writeText(a.id, this.by, alarmJson(a))
+    return a
+  }
+
+  /** An alarm's new time, days or label, switched on (TimerControl.alarmEdit). */
+  alarmEdit(id, time, days, label, now = Date.now()) {
+    const a = this.alarms().find(x => x.id === id)
+    if (!a) return false
+    this.writeText(id, this.by, alarmJson(switchOn({ ...a, time: hhmm(time), days: dayCodes(days), label: String(label) }, now, this.by)))
+    return true
+  }
+
+  /** dismiss, snooze, skip (the next one), on, off or delete on the alarm [id] (TimerControl.alarmChange). */
+  alarmChange(id, action, now = Date.now()) {
+    const a = this.alarms().find(x => x.id === id)
+    if (!a) return false
+    const ring = alarmRinging(a, now), next = alarmNext(a, now), up = x => ({ ...x, rev: a.rev + 1, by: this.by })
+    const dismiss = at => up({ ...a, answered: at, snooze: null, state: a.days.length ? a.state : A_OFF })
+    const r = action === 'dismiss' ? ring != null && dismiss(ring)
+      : action === 'snooze' ? (ring != null ? up({ ...a, answered: ring, snooze: now + SNOOZE_MS }) : next != null && up({ ...a, answered: next, snooze: next + SNOOZE_MS }))
+      : action === 'skip' ? next != null && dismiss(next)
+      : action === 'on' ? switchOn(a, now, this.by)
+      : action === 'off' ? up({ ...a, state: A_OFF, snooze: null })
+      : action === 'delete' ? up({ ...a, state: A_DELETED, snooze: null }) : null
+    if (!r) return false
+    this.writeText(id, this.by, alarmJson(r))
+    return true
+  }
+
+  /** The one stopwatch, shared by the devices (StopwatchRecord.winner). */
+  stopwatch() {
+    const all = this.texts().map(([t, f]) => parseWatch(t, f)).filter(Boolean)
+    return all.reduce((b, w) => !b || w.rev > b.rev || (w.rev === b.rev && W_ORDER.indexOf(w.state) > W_ORDER.indexOf(b.state)) ? w : b, null)
+      ?? { state: W_RESET, started: null, elapsed: 0, laps: [], rev: 0, by: '' }
+  }
+
+  /** start, hold, lap or reset; answers whether anything changed. */
+  watch(action, now = Date.now()) {
+    const w = this.stopwatch(), up = x => ({ ...x, rev: w.rev + 1, by: this.by })
+    const r = action === 'start' ? w.state !== W_COUNTING && up({ ...w, state: W_COUNTING, started: now - watchMs(w, now), elapsed: 0 })
+      : action === 'hold' ? w.state === W_COUNTING && up({ ...w, state: W_HELD, elapsed: watchMs(w, now) / 1000, started: null })
+      : action === 'lap' ? w.state === W_COUNTING && up({ ...w, laps: [...w.laps, watchMs(w, now) / 1000] })
+      : action === 'reset' ? w.state !== W_RESET && up({ ...w, state: W_RESET, started: null, elapsed: 0, laps: [] }) : null
+    if (!r) return false
+    this.writeText(WATCH_ID, this.by, watchJson(r))
+    return true
+  }
 }
+
+/*
+ * Alarms and the stopwatch (the phone's TimerAlarms.kt, the same files and rules): beside the timers, one file per item per
+ * device, the highest rev wins; `kind` tells them from timers, whose parse skips them.
+ *
+ *   {"kind":"alarm","id":"alarm-k3f9a2","time":"07:30","days":["MO","TU"],"date":null,"label":"","state":"on","answered":null,"snooze":null,"rev":1,"by":"Tablet"}
+ *   {"kind":"stopwatch","id":"stopwatch","state":"counting","started":"2026-10-29T16:00:00Z","elapsed":0,"laps":[62.4],"rev":3,"by":"Tablet"}
+ *
+ * Each device rings an alarm in its own time zone; `answered` is the last ring stopped anywhere, `snooze` one more ring.
+ */
+const A_ON = 'on', A_OFF = 'off', A_DELETED = 'deleted', A_ORDER = [A_ON, A_OFF, A_DELETED] // equal rev: deleted, then off, wins
+const W_COUNTING = 'counting', W_HELD = 'held', W_RESET = 'reset', W_ORDER = [W_COUNTING, W_HELD, W_RESET], WATCH_ID = 'stopwatch'
+const DAY_CODES = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']
+const SNOOZE_MS = 10 * 60_000
+const pad = n => String(n).padStart(2, '0')
+const hhmm = s => { const m = /^(\d{1,2}):(\d{2})$/.exec(String(s).trim()); if (!m || +m[1] > 23 || +m[2] > 59) throw new Error('Time as HH:MM.'); return `${pad(+m[1])}:${m[2]}` }
+const dayCodes = days => DAY_CODES.filter(c => (days ?? []).some(d => String(d).toUpperCase().slice(0, 2) === c))
+const localDate = t => { if (t == null) return null; const d = new Date(t); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}` }
+const instant = v => typeof v === 'string' && v && v !== 'null' && !Number.isNaN(Date.parse(v)) ? Date.parse(v) : null
+
+function parseAlarm(text, file = null) {
+  try {
+    const o = JSON.parse(text)
+    if (o?.kind !== 'alarm') return null
+    const state = String(o.state ?? A_ON).toLowerCase()
+    if (!A_ORDER.includes(state)) return null
+    const id = typeof o.id === 'string' && o.id ? o.id : file ? path.basename(file).split('.')[0] : null
+    if (!id) return null
+    return { id, time: hhmm(o.time), days: dayCodes(Array.isArray(o.days) ? o.days : []), date: /^\d{4}-\d{2}-\d{2}$/.test(o.date) ? o.date : null,
+      label: typeof o.label === 'string' ? o.label : '', state, answered: instant(o.answered), snooze: instant(o.snooze),
+      rev: Number.isSafeInteger(o.rev) ? o.rev : 0, by: typeof o.by === 'string' ? o.by : '', file }
+  } catch { return null }
+}
+function alarmWinners(all) {
+  const best = new Map()
+  for (const a of all) { const b = best.get(a.id); if (!b || a.rev > b.rev || (a.rev === b.rev && A_ORDER.indexOf(a.state) > A_ORDER.indexOf(b.state))) best.set(a.id, a) }
+  return [...best.values()]
+}
+const alarmJson = a => JSON.stringify({ kind: 'alarm', id: a.id, time: a.time, days: a.days, date: a.date, label: a.label, state: a.state,
+  answered: a.answered == null ? null : new Date(a.answered).toISOString(), snooze: a.snooze == null ? null : new Date(a.snooze).toISOString(), rev: a.rev, by: a.by }, null, 1) + '\n'
+
+/** The first time it is set for after [after] by this computer's clock (snoozes aside), or null: a single one already past. */
+function occurrence(a, after) {
+  const [h, m] = a.time.split(':').map(Number)
+  if (!a.days.length && a.date) { const [y, mo, d] = a.date.split('-').map(Number); const t = new Date(y, mo - 1, d, h, m).getTime(); return t > after ? t : null }
+  const f = new Date(after)
+  for (let i = 0; i <= 8; i++) {
+    const d = new Date(f.getFullYear(), f.getMonth(), f.getDate() + i, h, m)
+    if ((!a.days.length || a.days.includes(DAY_CODES[(d.getDay() + 6) % 7])) && d.getTime() > after) return d.getTime()
+  }
+  return null
+}
+/** The ring going on now, if one is: set for at most ten minutes ago and not answered anywhere. */
+function alarmRinging(a, now) {
+  if (a.state !== A_ON) return null
+  const since = now - UNANSWERED_MS
+  const at = [occurrence(a, Math.max(since, a.answered ?? 0)), a.snooze].filter(t => t != null && t <= now && t > since && (a.answered == null || t > a.answered))
+  return at.length ? Math.min(...at) : null
+}
+/** When it rings next (not counting one ringing now): null when off or a single one gone by. */
+function alarmNext(a, now) {
+  if (a.state !== A_ON) return null
+  const after = Math.max(now, a.answered ?? 0)
+  const at = [occurrence(a, after), a.snooze != null && a.snooze > after ? a.snooze : null].filter(t => t != null)
+  return at.length ? Math.min(...at) : null
+}
+/** Switched on: a single one for the next time from now, nothing from before ringing. */
+const switchOn = (a, now, by) => ({ ...a, state: A_ON, answered: now, snooze: null, date: a.days.length ? null : localDate(occurrence({ ...a, date: null }, now)), rev: a.rev + 1, by })
+
+function parseWatch(text, file = null) {
+  try {
+    const o = JSON.parse(text)
+    if (o?.kind !== 'stopwatch') return null
+    const state = String(o.state ?? W_RESET).toLowerCase()
+    if (!W_ORDER.includes(state)) return null
+    return { state, started: instant(o.started), elapsed: Number.isFinite(+o.elapsed) ? +o.elapsed : 0,
+      laps: Array.isArray(o.laps) ? o.laps.map(Number).filter(Number.isFinite) : [], rev: Number.isSafeInteger(o.rev) ? o.rev : 0, by: typeof o.by === 'string' ? o.by : '', file }
+  } catch { return null }
+}
+const watchMs = (w, now) => w.state === W_COUNTING ? Math.max(0, now - (w.started ?? now)) : w.state === W_HELD ? Math.round(w.elapsed * 1000) : 0
+const watchJson = w => JSON.stringify({ kind: 'stopwatch', id: WATCH_ID, state: w.state, started: w.started == null ? null : new Date(w.started).toISOString(),
+  elapsed: w.elapsed, laps: w.laps, rev: w.rev, by: w.by }, null, 1) + '\n'
 
 /** "5 min", "1 h 30 min", "45 s": as the phone's durationText. */
 function durationText(seconds) {
@@ -159,4 +324,4 @@ function durationText(seconds) {
   return [h && i18n.t('timer.h', { n: h }), m && i18n.t('timer.min', { n: m }), (s || !seconds) && i18n.t('timer.s', { n: s })].filter(Boolean).join(' ')
 }
 
-module.exports = { Timers, fileName, parse, winners, leftMs, over, ringing, durationText, UNANSWERED_MS, MAX }
+module.exports = { Timers, fileName, parse, winners, leftMs, over, ringing, durationText, UNANSWERED_MS, MAX, parseAlarm, occurrence, alarmRinging, alarmNext, watchMs, SNOOZE_MS }
