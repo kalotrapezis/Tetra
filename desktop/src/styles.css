@@ -629,6 +629,7 @@ button.link.risk { color: #d8663f; font-weight: 600; }
 
 /* Notifications and Settings, at the foot of the sidebar (2026-09-26). */
 .rail-bottom { margin-top: auto; display: flex; flex-direction: column; gap: 4px; }
+.rail-apps { display: flex; flex-direction: column; gap: 4px; flex: 0 1 auto; min-height: 0; overflow-y: auto; }
 .rail-bottom + .rail-foot { margin-top: 8px; }
 .badge-count { margin-left: auto; min-width: 22px; padding: 1px 7px; border-radius: 999px; background: #d93a2f; color: #fff; font-size: 12px; font-weight: 600; text-align: center; }
 .page-scroll { height: 100%; overflow-y: auto; padding: 8px 8px 40px; }
@@ -904,8 +905,7 @@ button.link.risk { color: #d8663f; font-weight: 600; }
 /* The Timer (Timer.tsx): the clock and the running ones on the left, the recent and pinned times on the right */
 :root { --timer-teal: #26A69A; }
 .timer { height: 100%; display: flex; flex-direction: column; position: relative; }
-.timer-body { flex: 1; overflow-y: auto; display: flex; gap: 40px; padding: 8px 32px 120px; flex-wrap: wrap; align-items: flex-start; }
-.timer-main { flex: 0 1 380px; padding-right: 32px; border-right: 2px solid var(--island-2); display: flex; flex-direction: column; gap: 16px; }
+.timer-body { flex: 1; overflow-y: auto; padding: 8px 32px 120px; display: flex; justify-content: center; }
 .timer-clock { --cal-pink: var(--timer-teal); display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .timer-clock .muted { margin: 0; color: var(--muted); font-size: 13px; }
 .timer-controls { display: flex; gap: 12px; justify-content: center; }
@@ -913,7 +913,7 @@ button.link.risk { color: #d8663f; font-weight: 600; }
 .timer-clock .timer-controls svg, .timer-clock button svg { width: 18px; margin: 0; } /* not the clock face's .cal-clock svg */
 .timer-clock .cal-clock-head { margin: 16px 0 4px; }
 .timer-card.ringing .timer-left { font-size: 26px; white-space: nowrap; }
-.timer-cards { flex: 1 1 480px; align-content: start; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(max(180px, (100% - 24px) / 3), 1fr)); }
+.timer-cards { flex: 0 1 900px; align-content: start; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(max(180px, (100% - 24px) / 3), 1fr)); }
 .timer-card { position: relative; padding: 12px 16px; border-radius: 20px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .timer-card.ringing { background: var(--timer-teal); color: #fff; }
 .timer-left { font-size: 34px; font-variant-numeric: tabular-nums; font-family: ui-monospace, monospace; }
@@ -928,7 +928,15 @@ button.link.risk { color: #d8663f; font-weight: 600; }
 .timer-pin.on { opacity: 1; color: var(--timer-teal); }
 .timer-card.ringing .timer-pin.on { color: #fff; }
 .timer-pin:hover, .timer-trash:hover { opacity: 1; }
-.timer .topbar .segmented { margin: 0 auto; }
+.timer-dock { display: flex; align-items: center; gap: 12px; }
+.timer-action { width: 56px; height: 56px; box-shadow: 0 8px 30px #0006; }
+.timer-action:disabled { opacity: .45; }
+.timer-dial { padding: 8px; }
+.dialog:has(.timer-dial) { width: min(440px, 92vw); box-sizing: border-box; overflow-x: hidden; }
+.timer-dial .field { width: 100%; box-sizing: border-box; }
+.timer-crosscheck { display: flex; gap: 32px; justify-content: center; margin-top: 8px; }
+.timer-crosscheck .round { width: 56px; height: 56px; }
+.timer-crosscheck .round.filled { background: var(--timer-teal); color: #fff; }
 .alarm-card { cursor: pointer; }
 .alarm-card.off .timer-left { opacity: .45; }
 .alarm-card .cal-switch { padding: 6px 0; align-items: center; }
@@ -936,8 +944,7 @@ button.link.risk { color: #d8663f; font-weight: 600; }
 .alarm-days { display: flex; gap: 4px; }
 .alarm-days button { width: 34px; height: 34px; background: var(--island-2); }
 .alarm-days button.on { background: var(--timer-teal); color: #fff; }
-.timer-clock .field { width: 100%; }
-.stopwatch { flex-direction: column; align-items: center; gap: 24px; padding-top: 40px; }
+.stopwatch { display: flex; flex-direction: column; align-items: center; gap: 24px; padding-top: 40px; flex: 0 1 600px; }
 .stopwatch-time { font-size: 72px; font-variant-numeric: tabular-nums; font-family: ui-monospace, monospace; }
 .stopwatch-laps { width: min(420px, 100%); display: flex; flex-direction: column; gap: 6px; }
 .stopwatch-laps div { display: grid; grid-template-columns: 1fr 1fr auto; font-variant-numeric: tabular-nums; }
@@ -1136,6 +1143,21 @@ button.link.risk { color: #d8663f; font-weight: 600; }
 .ph-dial { width: 64px; height: 64px; border-radius: 50%; background: #2E9E5B; color: #fff; display: grid; place-items: center; }
 .ph-dial:disabled { opacity: .45; }
 .ph-dock { justify-content: center; }
+/* Messages (Messages.tsx): the conversations at the left, the open one beside them, as the tablet's */
+.sms-chat { flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 0 16px 90px 0; }
+.sms-head { display: flex; align-items: center; gap: 12px; padding: 4px 4px 12px; }
+.sms-head div { display: flex; flex-direction: column; } .sms-head small { color: var(--muted); }
+.sms-texts { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding: 4px; }
+.sms-bubble { max-width: 70%; align-self: flex-start; background: var(--island); padding: 8px 14px; border-radius: 18px 18px 18px 4px; display: flex; flex-direction: column; white-space: pre-wrap; overflow-wrap: anywhere; }
+.sms-bubble.mine { align-self: flex-end; background: color-mix(in srgb, var(--ct) 30%, var(--island)); border-radius: 18px 18px 4px 18px; }
+.sms-bubble.failed { outline: 1px solid #d93a3a; }
+.sms-bubble small { color: var(--muted); font-size: 11px; align-self: flex-end; }
+.sms-compose { display: flex; gap: 8px; align-items: flex-end; padding-top: 8px; }
+.sms-compose textarea { flex: 1; resize: none; max-height: 160px; field-sizing: content; border: 0; border-radius: 22px; padding: 12px 18px; font: inherit; color: var(--text); }
+.sms-send { width: 48px; height: 48px; background: var(--ct); color: #fff; }
+.sms-send:disabled { opacity: .45; }
+.sms-when { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; color: var(--muted); flex: none; }
+.sms-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--ct); }
 
 /* Translations (25 Oct): a label stays on one line and ends in … when a language's words are longer — never wrapped, never shrunk */
 .segmented button, .text-button, .filled-button, .outline-button, .chip, .self-chip, .island-item, .nav-item, .cal-chip, .ct-action small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }

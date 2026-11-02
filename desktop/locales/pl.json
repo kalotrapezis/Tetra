@@ -47,7 +47,7 @@
  "app.notes": "Notatki",
  "app.calendar": "Kalendarz",
  "app.mail": "Poczta",
- "app.timer": "Minutnik",
+ "app.timer": "Zegar",
  "app.maps": "Mapy",
  "app.contacts": "Kontakty",
  "app.phone": "Telefon",
@@ -2706,5 +2706,17 @@
  "alarm.none": "Brak budzików. Budzik dzwoni na tym urządzeniu i na każdym urządzeniu, z którym synchronizujesz; wyłącz go na jednym, a ucichnie na wszystkich.",
  "alarm.skipNext": "Pomiń następny",
  "alarm.unskip": "Cofnij pominięcie",
- "alarm.skipped": "następny pominięty"
+ "alarm.skipped": "następny pominięty",
+ "app.sms": "Wiadomości",
+ "sms.to": "Imię lub numer",
+ "sms.notSent": "Wiadomość nie została wysłana: {error}",
+ "sms.failed": "Nie wysłano",
+ "sms.sending": "Wysyłanie…",
+ "sms.you": "Ty",
+ "sms.pick": "Wybierz rozmowę",
+ "sms.none": "Jeszcze brak wiadomości",
+ "sms.noneHere": "Jeszcze brak wiadomości. Napisz pierwszą.",
+ "sms.write": "Wiadomość",
+ "sms.refresh": "Odśwież",
+ "sync.errSmsServerOnly": "Wiadomości są widoczne na głównym komputerze (serwerze)."
 }

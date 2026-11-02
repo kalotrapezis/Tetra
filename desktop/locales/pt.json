@@ -47,7 +47,7 @@
  "app.notes": "Notas",
  "app.calendar": "Calendário",
  "app.mail": "Correio",
- "app.timer": "Temporizador",
+ "app.timer": "Relógio",
  "app.maps": "Mapas",
  "app.contacts": "Contactos",
  "app.phone": "Telefone",
@@ -2614,5 +2614,17 @@
  "alarm.none": "Ainda sem alarmes. Um alarme toca neste dispositivo e em todos os dispositivos com que sincroniza; dispense-o num e pára em todos.",
  "alarm.skipNext": "Ignorar o próximo",
  "alarm.unskip": "Anular ignorar",
- "alarm.skipped": "o próximo ignorado"
+ "alarm.skipped": "o próximo ignorado",
+ "app.sms": "Mensagens",
+ "sms.to": "Nome ou número",
+ "sms.notSent": "A mensagem não foi enviada: {error}",
+ "sms.failed": "Não enviada",
+ "sms.sending": "A enviar…",
+ "sms.you": "Tu",
+ "sms.pick": "Escolha uma conversa",
+ "sms.none": "Ainda não há mensagens",
+ "sms.noneHere": "Ainda não há mensagens. Escreve a primeira.",
+ "sms.write": "Mensagem",
+ "sms.refresh": "Atualizar",
+ "sync.errSmsServerOnly": "As mensagens aparecem no computador principal (o servidor)."
 }

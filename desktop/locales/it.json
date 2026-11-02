@@ -47,7 +47,7 @@
  "app.notes": "Note",
  "app.calendar": "Calendario",
  "app.mail": "Posta",
- "app.timer": "Timer",
+ "app.timer": "Orologio",
  "app.maps": "Mappe",
  "app.contacts": "Contatti",
  "app.phone": "Telefono",
@@ -2614,5 +2614,17 @@
  "alarm.none": "Nessuna sveglia per ora. Una sveglia suona su questo dispositivo e su ogni dispositivo che sincronizzi; spegnila su uno e si ferma su tutti.",
  "alarm.skipNext": "Salta la prossima",
  "alarm.unskip": "Annulla salto",
- "alarm.skipped": "la prossima saltata"
+ "alarm.skipped": "la prossima saltata",
+ "app.sms": "Messaggi",
+ "sms.to": "Nome o numero",
+ "sms.notSent": "Il messaggio non è stato inviato: {error}",
+ "sms.failed": "Non inviato",
+ "sms.sending": "Invio…",
+ "sms.you": "Tu",
+ "sms.pick": "Scegli una conversazione",
+ "sms.none": "Ancora nessun messaggio",
+ "sms.noneHere": "Ancora nessun messaggio. Scrivi il primo.",
+ "sms.write": "Messaggio",
+ "sms.refresh": "Aggiorna",
+ "sync.errSmsServerOnly": "I messaggi si vedono sul computer principale (il server)."
 }

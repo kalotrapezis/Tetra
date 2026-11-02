@@ -47,7 +47,7 @@
  "app.notes": "Notizen",
  "app.calendar": "Kalender",
  "app.mail": "E-Mail",
- "app.timer": "Timer",
+ "app.timer": "Uhr",
  "app.maps": "Karten",
  "app.contacts": "Kontakte",
  "app.phone": "Telefon",
@@ -2522,5 +2522,17 @@
  "alarm.none": "Noch keine Wecker. Ein Wecker klingelt auf diesem Gerät und auf jedem Gerät, mit dem du synchronisierst; beende ihn auf einem, und er hört auf allen auf.",
  "alarm.skipNext": "Nächsten überspringen",
  "alarm.unskip": "Überspringen zurücknehmen",
- "alarm.skipped": "nächster übersprungen"
+ "alarm.skipped": "nächster übersprungen",
+ "app.sms": "Nachrichten",
+ "sms.to": "Name oder Nummer",
+ "sms.notSent": "Die Nachricht wurde nicht gesendet: {error}",
+ "sms.failed": "Nicht gesendet",
+ "sms.sending": "Wird gesendet…",
+ "sms.you": "Du",
+ "sms.pick": "Wähle eine Unterhaltung",
+ "sms.none": "Noch keine Nachrichten",
+ "sms.noneHere": "Noch keine Nachrichten. Schreib die erste.",
+ "sms.write": "Nachricht",
+ "sms.refresh": "Aktualisieren",
+ "sync.errSmsServerOnly": "Nachrichten werden auf dem Hauptcomputer (Server) angezeigt."
 }

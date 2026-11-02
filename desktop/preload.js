@@ -52,6 +52,11 @@ contextBridge.exposeInMainWorld('drive', {
   contactsFacePhoto: faceId => ipcRenderer.invoke('contacts:facePhoto', faceId),
   contactsSetBirthdays: id => ipcRenderer.invoke('contacts:setBirthdays', id),
   contactsSetByLast: on => ipcRenderer.invoke('contacts:setByLast', on),
+  sms: {
+    list: () => ipcRenderer.invoke('sms:list'),
+    send: (to, text) => ipcRenderer.invoke('sms:send', to, text),
+    read: thread => ipcRenderer.invoke('sms:read', thread),
+  },
   timer: {
     active: () => ipcRenderer.invoke('timer:active'),
     start: seconds => ipcRenderer.invoke('timer:start', seconds),

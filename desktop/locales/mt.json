@@ -47,7 +47,7 @@
  "app.notes": "Noti",
  "app.calendar": "Kalendarju",
  "app.mail": "Posta",
- "app.timer": "Tajmer",
+ "app.timer": "Arloġġ",
  "app.maps": "Mappi",
  "app.contacts": "Kuntatti",
  "app.phone": "Telefon",
@@ -2706,5 +2706,17 @@
  "alarm.none": "Għad m'hemm l-ebda allarm. Allarm idoqq fuq dan l-apparat u fuq kull apparat li tissinkronizza miegħu; waqqfu fuq wieħed u jieqaf fuq kollha.",
  "alarm.skipNext": "Aqbeż li jmiss",
  "alarm.unskip": "Ħassar il-qbiż",
- "alarm.skipped": "li jmiss maqbuż"
+ "alarm.skipped": "li jmiss maqbuż",
+ "app.sms": "Messaġġi",
+ "sms.to": "Isem jew numru",
+ "sms.notSent": "Il-messaġġ ma ntbagħatx: {error}",
+ "sms.failed": "Ma ntbagħatx",
+ "sms.sending": "Qed jintbagħat…",
+ "sms.you": "Int",
+ "sms.pick": "Agħżel konversazzjoni",
+ "sms.none": "Għad m’hemmx messaġġi",
+ "sms.noneHere": "Għad m’hemmx messaġġi. Ikteb l-ewwel wieħed.",
+ "sms.write": "Messaġġ",
+ "sms.refresh": "Aġġorna",
+ "sync.errSmsServerOnly": "Il-messaġġi jidhru fuq il-kompjuter ewlieni (is-server)."
 }

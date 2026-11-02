@@ -47,7 +47,7 @@
  "app.notes": "Bilješke",
  "app.calendar": "Kalendar",
  "app.mail": "Pošta",
- "app.timer": "Tajmer",
+ "app.timer": "Sat",
  "app.maps": "Karte",
  "app.contacts": "Kontakti",
  "app.phone": "Telefon",
@@ -2613,5 +2613,17 @@
  "alarm.none": "Još nema alarma. Alarm zvoni na ovom uređaju i na svakom uređaju s kojim sinkronizirate; isključite ga na jednom i prestaje na svima.",
  "alarm.skipNext": "Preskoči sljedeći",
  "alarm.unskip": "Poništi preskakanje",
- "alarm.skipped": "sljedeći preskočen"
+ "alarm.skipped": "sljedeći preskočen",
+ "app.sms": "Poruke",
+ "sms.to": "Ime ili broj",
+ "sms.notSent": "Poruka nije poslana: {error}",
+ "sms.failed": "Nije poslano",
+ "sms.sending": "Slanje…",
+ "sms.you": "Ti",
+ "sms.pick": "Odaberite razgovor",
+ "sms.none": "Još nema poruka",
+ "sms.noneHere": "Još nema poruka. Napiši prvu.",
+ "sms.write": "Poruka",
+ "sms.refresh": "Osvježi",
+ "sync.errSmsServerOnly": "Poruke se prikazuju na glavnom računalu (poslužitelju)."
 }

@@ -47,7 +47,7 @@
  "app.notes": "Poznámky",
  "app.calendar": "Kalendář",
  "app.mail": "Pošta",
- "app.timer": "Časovač",
+ "app.timer": "Hodiny",
  "app.maps": "Mapy",
  "app.contacts": "Kontakty",
  "app.phone": "Telefon",
@@ -2706,5 +2706,17 @@
  "alarm.none": "Zatím žádné budíky. Budík zazvoní na tomto zařízení i na každém zařízení, se kterým synchronizujete; vypnete-li ho na jednom, přestane zvonit na všech.",
  "alarm.skipNext": "Přeskočit příští",
  "alarm.unskip": "Zrušit přeskočení",
- "alarm.skipped": "příští přeskočen"
+ "alarm.skipped": "příští přeskočen",
+ "app.sms": "Zprávy",
+ "sms.to": "Jméno nebo číslo",
+ "sms.notSent": "Zpráva nebyla odeslána: {error}",
+ "sms.failed": "Neodesláno",
+ "sms.sending": "Odesílání…",
+ "sms.you": "Ty",
+ "sms.pick": "Vyberte konverzaci",
+ "sms.none": "Zatím žádné zprávy",
+ "sms.noneHere": "Zatím žádné zprávy. Napiš první.",
+ "sms.write": "Zpráva",
+ "sms.refresh": "Obnovit",
+ "sync.errSmsServerOnly": "Zprávy se zobrazují na hlavním počítači (serveru)."
 }

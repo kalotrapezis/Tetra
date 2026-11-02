@@ -1139,6 +1139,10 @@ app.whenReady().then(() => {
   ipcMain.handle('call:press', (_, what) => calls.press(String(what)))
   ipcMain.handle('call:height', (_, h) => calls.height(Math.max(150, Math.min(360, Number(h) || 150))))
   // the Phone (Drive-Android Plan.md § Phone): the phone's call history as it sends it (Phone/calls-YYYY-MM.jsonl), and recordings
+  // Messages: the phone's SMS, asked each time (sync.js smsOnPhone)
+  ipcMain.handle('sms:list', () => sync.smsOnPhone('/sms/list'))
+  ipcMain.handle('sms:send', (_, to, text) => sync.smsOnPhone(`/sms/send?to=${encodeURIComponent(String(to))}&text=${encodeURIComponent(String(text).slice(0, 2000))}`))
+  ipcMain.handle('sms:read', (_, thread) => sync.smsOnPhone(`/sms/read?thread=${encodeURIComponent(String(+thread || 0))}`))
   ipcMain.handle('phone:history', () => phoneHistory())
   ipcMain.handle('data:all', () => dataCounter.all())
   ipcMain.handle('data:wifi', () => dataCounter.wifi())

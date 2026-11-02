@@ -47,7 +47,7 @@
  "app.notes": "Piezīmes",
  "app.calendar": "Kalendārs",
  "app.mail": "Pasts",
- "app.timer": "Taimeris",
+ "app.timer": "Pulkstenis",
  "app.maps": "Kartes",
  "app.contacts": "Kontakti",
  "app.phone": "Tālrunis",
@@ -2613,5 +2613,17 @@
  "alarm.none": "Modinātāju vēl nav. Modinātājs zvana šajā ierīcē un katrā ierīcē, ar kuru sinhronizējat; izslēdziet to vienā, un tas apstājas visās.",
  "alarm.skipNext": "Izlaist nākamo",
  "alarm.unskip": "Atsaukt izlaišanu",
- "alarm.skipped": "nākamais izlaists"
+ "alarm.skipped": "nākamais izlaists",
+ "app.sms": "Ziņas",
+ "sms.to": "Vārds vai numurs",
+ "sms.notSent": "Ziņa netika nosūtīta: {error}",
+ "sms.failed": "Nav nosūtīts",
+ "sms.sending": "Sūta…",
+ "sms.you": "Tu",
+ "sms.pick": "Izvēlieties sarunu",
+ "sms.none": "Vēl nav ziņu",
+ "sms.noneHere": "Vēl nav ziņu. Uzraksti pirmo.",
+ "sms.write": "Ziņa",
+ "sms.refresh": "Atsvaidzināt",
+ "sync.errSmsServerOnly": "Ziņas redzamas galvenajā datorā (serverī)."
 }

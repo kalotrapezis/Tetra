@@ -47,7 +47,7 @@
  "app.notes": "Notes",
  "app.calendar": "Calendar",
  "app.mail": "Mail",
- "app.timer": "Timer",
+ "app.timer": "Clock",
  "app.maps": "Maps",
  "app.contacts": "Contacts",
  "app.phone": "Phone",
@@ -2522,5 +2522,17 @@
  "alarm.none": "No alarms yet. An alarm rings on this device and on every device you sync with; dismiss it on one and it stops on all.",
  "alarm.skipNext": "Skip next",
  "alarm.unskip": "Undo skip",
- "alarm.skipped": "next one skipped"
+ "alarm.skipped": "next one skipped",
+ "app.sms": "Messages",
+ "sms.to": "Name or number",
+ "sms.notSent": "The message was not sent: {error}",
+ "sms.failed": "Not sent",
+ "sms.sending": "Sending…",
+ "sms.you": "You",
+ "sms.pick": "Choose a conversation",
+ "sms.none": "No messages yet",
+ "sms.noneHere": "No messages yet. Write the first one.",
+ "sms.write": "Message",
+ "sms.refresh": "Refresh",
+ "sync.errSmsServerOnly": "Messages are shown on the main computer (the server)."
 }

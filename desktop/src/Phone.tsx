@@ -33,7 +33,7 @@ export const when = (iso: string) => {
 }
 export const length = (s: number) => (s >= 3600 ? `${Math.floor(s / 3600)}:${String(Math.floor(s / 60) % 60).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}` : `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`)
 
-function Face({ c, size }: { c?: Pick<Contact, 'photo' | 'name'>; size: number }) {
+export function Face({ c, size }: { c?: Pick<Contact, 'photo' | 'name'>; size: number }) {
   const first = c?.name.trim()[0]
   return c?.photo ? <img className="ct-face" src={`data:image/jpeg;base64,${c.photo}`} style={{ width: size, height: size }} alt="" />
     : <span className="ct-face ct-initial" style={{ width: size, height: size, fontSize: size * 0.42 }}>{first && /[\p{L}\p{N}]/u.test(first) ? first.toUpperCase() : <Icon name="person" size={size * 0.55} />}</span>

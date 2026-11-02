@@ -47,7 +47,7 @@
  "app.notes": "Jegyzetek",
  "app.calendar": "Naptár",
  "app.mail": "Levelek",
- "app.timer": "Időzítő",
+ "app.timer": "Óra",
  "app.maps": "Térképek",
  "app.contacts": "Névjegyek",
  "app.phone": "Telefon",
@@ -2522,5 +2522,17 @@
  "alarm.none": "Még nincs ébresztő. Az ébresztő ezen az eszközön és minden szinkronizált eszközön csenget; állítsa le az egyiken, és mindenhol leáll.",
  "alarm.skipNext": "Következő kihagyása",
  "alarm.unskip": "Kihagyás visszavonása",
- "alarm.skipped": "a következő kimarad"
+ "alarm.skipped": "a következő kimarad",
+ "app.sms": "Üzenetek",
+ "sms.to": "Név vagy szám",
+ "sms.notSent": "Az üzenet nem lett elküldve: {error}",
+ "sms.failed": "Nincs elküldve",
+ "sms.sending": "Küldés…",
+ "sms.you": "Te",
+ "sms.pick": "Válasszon beszélgetést",
+ "sms.none": "Még nincsenek üzenetek",
+ "sms.noneHere": "Még nincsenek üzenetek. Írd meg az elsőt.",
+ "sms.write": "Üzenet",
+ "sms.refresh": "Frissítés",
+ "sync.errSmsServerOnly": "Az üzenetek a fő számítógépen (a szerveren) látszanak."
 }

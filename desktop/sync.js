@@ -867,6 +867,26 @@ class SyncServer {
     for (const d of tablets) this.reach(d, `/call/state?s=${encodeURIComponent(JSON.stringify(s))}`, 4000).catch(() => {})
   }
 
+  /**
+   * Messages on the computer (the user, 2 Nov): the phone keeps the SMS, so each look asks it (SyncServer.kt /sms/list,
+   * /sms/send, /sms/read); nothing is stored here. Phones only. The phone's answer, or { error }.
+   * shortcut: a client computer gets an error, not a relay through the server; a relay (as callOnPhone's) when a laptop needs Messages.
+   */
+  async smsOnPhone(path) {
+    if (this.role() === 'client') return { error: t('sync.errSmsServerOnly') }
+    const phones = this.db.prepare(`SELECT id, name, kind, peer_fp, peer_hosts, peer_port, peer_token FROM sync_devices
+      WHERE peer_fp IS NOT NULL AND peer_token IS NOT NULL AND volume_uuid IS NULL AND kind NOT IN ('tablet', 'computer')`).all()
+    if (!phones.length) return { error: t('sync.errNoPhonePaired') }
+    let said = null
+    const got = await Promise.any(phones.map(async d => {
+      const r = await this.reach(d, path, 15_000)
+      if (r?.status === 200 && r.body) return { ...r.body, device: d.name }
+      said ||= r && (r.status !== 404 && typeof r.body?.error === 'string' ? `${d.name}: ${r.body.error}` : t('sync.errNeedsNewTetra', { name: d.name }))
+      throw new Error('no')
+    })).catch(() => null)
+    return got ?? { error: said ?? t('sync.errNoPhoneAnswered') }
+  }
+
   /** The call bubble's Answer, Decline or End, done by the phone (SyncServer.kt /call/action). { ok } or { error }. */
   async callAction(what, by = 'server') {
     if (this.role() === 'client') return this.client.relay(`/call/act?do=${encodeURIComponent(what)}`, 15_000)
@@ -931,7 +951,8 @@ class SyncServer {
         const got = res.socket.getPeerCertificate().fingerprint256?.replace(/:/g, '').toLowerCase()
         if (got !== device.peer_fp) { res.resume(); return reject(new Error('That is not the paired device.')) }
         const parts = []
-        res.on('data', c => { if (parts.length < 64) parts.push(c) }).on('end', () => {
+        let size = 0 // up to 4 MB, by bytes: the phone's newest messages (smsOnPhone) are one answer
+        res.on('data', c => { if ((size += c.length) <= 4e6) parts.push(c) }).on('end', () => {
           let body = null
           try { body = JSON.parse(Buffer.concat(parts).toString('utf8')) } catch {}
           resolve({ status: res.statusCode, body })

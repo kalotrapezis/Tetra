@@ -47,7 +47,7 @@
  "app.notes": "Nótaí",
  "app.calendar": "Féilire",
  "app.mail": "Ríomhphost",
- "app.timer": "Amadóir",
+ "app.timer": "Clog",
  "app.maps": "Léarscáileanna",
  "app.contacts": "Teagmhálacha",
  "app.phone": "Guthán",
@@ -2798,5 +2798,17 @@
  "alarm.none": "Níl aon aláram ann fós. Buaileann aláram ar an bhfeiste seo agus ar gach feiste a shioncronaíonn tú leis; múch ar cheann amháin é agus stopann sé ar gach ceann.",
  "alarm.skipNext": "Scipeáil an chéad cheann eile",
  "alarm.unskip": "Cealaigh an scipeáil",
- "alarm.skipped": "an chéad cheann eile scipeáilte"
+ "alarm.skipped": "an chéad cheann eile scipeáilte",
+ "app.sms": "Teachtaireachtaí",
+ "sms.to": "Ainm nó uimhir",
+ "sms.notSent": "Níor seoladh an teachtaireacht: {error}",
+ "sms.failed": "Níor seoladh",
+ "sms.sending": "Á sheoladh…",
+ "sms.you": "Tusa",
+ "sms.pick": "Roghnaigh comhrá",
+ "sms.none": "Níl aon teachtaireacht fós",
+ "sms.noneHere": "Níl aon teachtaireacht fós. Scríobh an chéad cheann.",
+ "sms.write": "Teachtaireacht",
+ "sms.refresh": "Athnuaigh",
+ "sync.errSmsServerOnly": "Taispeántar teachtaireachtaí ar an bpríomhríomhaire (an freastalaí)."
 }

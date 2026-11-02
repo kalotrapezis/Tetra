@@ -100,6 +100,7 @@ export type TimerAction = 'pause' | 'resume' | 'stop' | 'ok' | 'restart' | 'pin'
 /** Settings › Clean up (cleaner.js): one thing Tetra can clean, its size now; `ready` false when it cannot be cleaned now. */
 export type CleanItem = { id: string; app?: string; bytes: number; files: number; ready: boolean }
 /** A timer as the computer counts it (timer.js active()). */
+export interface SmsMessage { id: number; thread: number; address: string; body: string; at: number; mine: boolean; read: boolean; failed: boolean; sending: boolean }
 export type AlarmAction = 'dismiss' | 'snooze' | 'skip' | 'on' | 'off' | 'delete'
 export interface AlarmItem { id: string; time: string; days: string[]; date: string | null; label: string; state: 'on' | 'off'; answered: number | null; snooze: number | null; rev: number; by: string; ringing: number | null; next: number | null; on: boolean; skipped: boolean }
 export interface StopwatchItem { state: 'counting' | 'held' | 'reset'; started: number | null; elapsed: number; laps: number[]; rev: number; by: string }
@@ -279,6 +280,11 @@ declare global {
       calendarSetReminders(on: boolean): Promise<void>
       calendarSetAutostart(on: boolean): Promise<void>
       onCalendarChanged(cb: () => void): () => void
+      sms: {
+        list(): Promise<{ messages?: SmsMessage[]; device?: string; error?: string }>
+        send(to: string, text: string): Promise<{ ok?: boolean; error?: string }>
+        read(thread: number): Promise<{ ok?: boolean; error?: string }>
+      }
       timer: {
         active(): Promise<TimerItem[]>
         start(seconds: number): Promise<string>

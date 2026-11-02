@@ -47,7 +47,7 @@
  "app.notes": "Užrašai",
  "app.calendar": "Kalendorius",
  "app.mail": "Paštas",
- "app.timer": "Laikmatis",
+ "app.timer": "Laikrodis",
  "app.maps": "Žemėlapiai",
  "app.contacts": "Kontaktai",
  "app.phone": "Telefonas",
@@ -2706,5 +2706,17 @@
  "alarm.none": "Žadintuvų dar nėra. Žadintuvas skamba šiame įrenginyje ir visuose įrenginiuose, su kuriais sinchronizuojate; išjunkite jį viename ir jis nustos skambėti visuose.",
  "alarm.skipNext": "Praleisti kitą",
  "alarm.unskip": "Atšaukti praleidimą",
- "alarm.skipped": "kitas praleidžiamas"
+ "alarm.skipped": "kitas praleidžiamas",
+ "app.sms": "Žinutės",
+ "sms.to": "Vardas arba numeris",
+ "sms.notSent": "Žinutė neišsiųsta: {error}",
+ "sms.failed": "Neišsiųsta",
+ "sms.sending": "Siunčiama…",
+ "sms.you": "Tu",
+ "sms.pick": "Pasirinkite pokalbį",
+ "sms.none": "Žinučių dar nėra",
+ "sms.noneHere": "Žinučių dar nėra. Parašyk pirmąją.",
+ "sms.write": "Žinutė",
+ "sms.refresh": "Atnaujinti",
+ "sync.errSmsServerOnly": "Žinutės rodomos pagrindiniame kompiuteryje (serveryje)."
 }

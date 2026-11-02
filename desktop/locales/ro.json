@@ -47,7 +47,7 @@
  "app.notes": "Note",
  "app.calendar": "Calendar",
  "app.mail": "Poștă",
- "app.timer": "Temporizator",
+ "app.timer": "Ceas",
  "app.maps": "Hărți",
  "app.contacts": "Contacte",
  "app.phone": "Telefon",
@@ -2614,5 +2614,17 @@
  "alarm.none": "Încă nu există alarme. O alarmă sună pe acest dispozitiv și pe fiecare dispozitiv cu care sincronizezi; închide-o pe unul și se oprește pe toate.",
  "alarm.skipNext": "Omite următoarea",
  "alarm.unskip": "Anulează omiterea",
- "alarm.skipped": "următoarea omisă"
+ "alarm.skipped": "următoarea omisă",
+ "app.sms": "Mesaje",
+ "sms.to": "Nume sau număr",
+ "sms.notSent": "Mesajul nu a fost trimis: {error}",
+ "sms.failed": "Netrimis",
+ "sms.sending": "Se trimite…",
+ "sms.you": "Tu",
+ "sms.pick": "Alegeți o conversație",
+ "sms.none": "Încă nu există mesaje",
+ "sms.noneHere": "Încă nu există mesaje. Scrie-l pe primul.",
+ "sms.write": "Mesaj",
+ "sms.refresh": "Reîmprospătează",
+ "sync.errSmsServerOnly": "Mesajele apar pe computerul principal (serverul)."
 }

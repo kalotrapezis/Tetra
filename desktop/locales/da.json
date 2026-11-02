@@ -47,7 +47,7 @@
  "app.notes": "Noter",
  "app.calendar": "Kalender",
  "app.mail": "Mail",
- "app.timer": "Timer",
+ "app.timer": "Ur",
  "app.maps": "Kort",
  "app.contacts": "Kontakter",
  "app.phone": "Telefon",
@@ -2522,5 +2522,17 @@
  "alarm.none": "Ingen alarmer endnu. En alarm ringer på denne enhed og på alle enheder, du synkroniserer med; afvis den på én, og den stopper på alle.",
  "alarm.skipNext": "Spring næste over",
  "alarm.unskip": "Fortryd overspring",
- "alarm.skipped": "næste springes over"
+ "alarm.skipped": "næste springes over",
+ "app.sms": "Beskeder",
+ "sms.to": "Navn eller nummer",
+ "sms.notSent": "Beskeden blev ikke sendt: {error}",
+ "sms.failed": "Ikke sendt",
+ "sms.sending": "Sender…",
+ "sms.you": "Dig",
+ "sms.pick": "Vælg en samtale",
+ "sms.none": "Ingen beskeder endnu",
+ "sms.noneHere": "Ingen beskeder endnu. Skriv den første.",
+ "sms.write": "Besked",
+ "sms.refresh": "Opdater",
+ "sync.errSmsServerOnly": "Beskeder vises på hovedcomputeren (serveren)."
 }

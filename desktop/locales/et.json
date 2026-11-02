@@ -47,7 +47,7 @@
  "app.notes": "Märkmed",
  "app.calendar": "Kalender",
  "app.mail": "Post",
- "app.timer": "Taimer",
+ "app.timer": "Kell",
  "app.maps": "Kaardid",
  "app.contacts": "Kontaktid",
  "app.phone": "Telefon",
@@ -2522,5 +2522,17 @@
  "alarm.none": "Äratusi veel pole. Äratus heliseb sellel seadmel ja igal seadmel, millega sünkroonid; lülita see ühel välja ja see jääb vait kõigil.",
  "alarm.skipNext": "Jäta järgmine vahele",
  "alarm.unskip": "Võta vahelejätmine tagasi",
- "alarm.skipped": "järgmine jäetakse vahele"
+ "alarm.skipped": "järgmine jäetakse vahele",
+ "app.sms": "Sõnumid",
+ "sms.to": "Nimi või number",
+ "sms.notSent": "Sõnumit ei saadetud: {error}",
+ "sms.failed": "Saatmata",
+ "sms.sending": "Saatmine…",
+ "sms.you": "Sina",
+ "sms.pick": "Vali vestlus",
+ "sms.none": "Sõnumeid veel pole",
+ "sms.noneHere": "Sõnumeid veel pole. Kirjuta esimene.",
+ "sms.write": "Sõnum",
+ "sms.refresh": "Värskenda",
+ "sync.errSmsServerOnly": "Sõnumid on näha põhiarvutis (serveris)."
 }

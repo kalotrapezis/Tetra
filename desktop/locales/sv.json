@@ -47,7 +47,7 @@
  "app.notes": "Anteckningar",
  "app.calendar": "Kalender",
  "app.mail": "Mejl",
- "app.timer": "Timer",
+ "app.timer": "Klocka",
  "app.maps": "Kartor",
  "app.contacts": "Kontakter",
  "app.phone": "Telefon",
@@ -2522,5 +2522,17 @@
  "alarm.none": "Inga alarm än. Ett alarm ringer på den här enheten och på varje enhet du synkroniserar med; avvisa det på en, så tystnar det på alla.",
  "alarm.skipNext": "Hoppa över nästa",
  "alarm.unskip": "Ångra överhopp",
- "alarm.skipped": "nästa hoppas över"
+ "alarm.skipped": "nästa hoppas över",
+ "app.sms": "Meddelanden",
+ "sms.to": "Namn eller nummer",
+ "sms.notSent": "Meddelandet skickades inte: {error}",
+ "sms.failed": "Inte skickat",
+ "sms.sending": "Skickar…",
+ "sms.you": "Du",
+ "sms.pick": "Välj en konversation",
+ "sms.none": "Inga meddelanden än",
+ "sms.noneHere": "Inga meddelanden än. Skriv det första.",
+ "sms.write": "Meddelande",
+ "sms.refresh": "Uppdatera",
+ "sync.errSmsServerOnly": "Meddelanden visas på huvuddatorn (servern)."
 }

@@ -47,7 +47,7 @@
  "app.notes": "Notities",
  "app.calendar": "Agenda",
  "app.mail": "Mail",
- "app.timer": "Timer",
+ "app.timer": "Klok",
  "app.maps": "Kaarten",
  "app.contacts": "Contacten",
  "app.phone": "Telefoon",
@@ -2522,5 +2522,17 @@
  "alarm.none": "Nog geen wekkers. Een wekker gaat af op dit apparaat en op elk apparaat waarmee je synchroniseert; stop hem op één en hij stopt op alle.",
  "alarm.skipNext": "Volgende overslaan",
  "alarm.unskip": "Overslaan ongedaan maken",
- "alarm.skipped": "volgende overgeslagen"
+ "alarm.skipped": "volgende overgeslagen",
+ "app.sms": "Berichten",
+ "sms.to": "Naam of nummer",
+ "sms.notSent": "Het bericht is niet verstuurd: {error}",
+ "sms.failed": "Niet verstuurd",
+ "sms.sending": "Versturen…",
+ "sms.you": "Jij",
+ "sms.pick": "Kies een gesprek",
+ "sms.none": "Nog geen berichten",
+ "sms.noneHere": "Nog geen berichten. Schrijf het eerste.",
+ "sms.write": "Bericht",
+ "sms.refresh": "Vernieuwen",
+ "sync.errSmsServerOnly": "Berichten worden getoond op de hoofdcomputer (de server)."
 }

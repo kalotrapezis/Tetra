@@ -47,7 +47,7 @@
  "app.notes": "Muistiinpanot",
  "app.calendar": "Kalenteri",
  "app.mail": "Posti",
- "app.timer": "Ajastin",
+ "app.timer": "Kello",
  "app.maps": "Kartat",
  "app.contacts": "Yhteystiedot",
  "app.phone": "Puhelin",
@@ -2522,5 +2522,17 @@
  "alarm.none": "Ei vielä herätyksiä. Herätys soi tällä laitteella ja jokaisella laitteella, jonka kanssa synkronoit; hylkää se yhdellä, niin se lakkaa soimasta kaikilla.",
  "alarm.skipNext": "Ohita seuraava",
  "alarm.unskip": "Peru ohitus",
- "alarm.skipped": "seuraava ohitetaan"
+ "alarm.skipped": "seuraava ohitetaan",
+ "app.sms": "Viestit",
+ "sms.to": "Nimi tai numero",
+ "sms.notSent": "Viestiä ei lähetetty: {error}",
+ "sms.failed": "Ei lähetetty",
+ "sms.sending": "Lähetetään…",
+ "sms.you": "Sinä",
+ "sms.pick": "Valitse keskustelu",
+ "sms.none": "Ei vielä viestejä",
+ "sms.noneHere": "Ei vielä viestejä. Kirjoita ensimmäinen.",
+ "sms.write": "Viesti",
+ "sms.refresh": "Päivitä",
+ "sync.errSmsServerOnly": "Viestit näkyvät pääkoneella (palvelimella)."
 }

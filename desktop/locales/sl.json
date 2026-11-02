@@ -47,7 +47,7 @@
  "app.notes": "Zapiski",
  "app.calendar": "Koledar",
  "app.mail": "Pošta",
- "app.timer": "Časovnik",
+ "app.timer": "Ura",
  "app.maps": "Zemljevidi",
  "app.contacts": "Stiki",
  "app.phone": "Telefon",
@@ -2706,5 +2706,17 @@
  "alarm.none": "Budilk še ni. Budilka zvoni v tej napravi in v vsaki napravi, s katero sinhronizirate; izklopite jo v eni in preneha zvoniti v vseh.",
  "alarm.skipNext": "Preskoči naslednjega",
  "alarm.unskip": "Razveljavi preskok",
- "alarm.skipped": "naslednji preskočen"
+ "alarm.skipped": "naslednji preskočen",
+ "app.sms": "Sporočila",
+ "sms.to": "Ime ali številka",
+ "sms.notSent": "Sporočilo ni bilo poslano: {error}",
+ "sms.failed": "Ni poslano",
+ "sms.sending": "Pošiljanje…",
+ "sms.you": "Ti",
+ "sms.pick": "Izberite pogovor",
+ "sms.none": "Še ni sporočil",
+ "sms.noneHere": "Še ni sporočil. Napiši prvo.",
+ "sms.write": "Sporočilo",
+ "sms.refresh": "Osveži",
+ "sync.errSmsServerOnly": "Sporočila so prikazana na glavnem računalniku (strežniku)."
 }

@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import type { AlarmAction, AlarmItem, StopwatchItem, TimerAction, TimerItem } from './drive'
 import { ClockFace } from './Calendar'
-import { errorText } from './Dialogs'
+import { errorText, Modal } from './Dialogs'
 import { Icon } from './Icon'
 import { locale, t as tr } from './i18n'
 
-// The phone's Timer (Drive-Android TimerScreen.kt): the Calendar's clock picks hours and minutes, the recently used and
-// pinned times under it, the running ones on top. Each device counts by itself from the timer's file (timer.js).
+// The phone's Clock (Drive-Android TimerScreen.kt, TimerAlarmsScreen.kt): timers, alarms and the stopwatch, laid out as on
+// the tablet. Each device counts by itself from the files (timer.js).
 
 /** "5 min", "1 h 30 min", "45 s" (timer.js durationText). */
 export function durationText(seconds: number) {
@@ -54,29 +54,43 @@ function TimerCard({ t, act }: { t: TimerItem; act: (id: string, a: TimerAction)
   )
 }
 
+/** The clock in a dialog, × and ✓ under it (the tablet's DialDialog): a new timer's length, an alarm's time. */
+function DialDialog({ h0, m0, close, done, children }: { h0: number; m0: number; close: () => void; done: (h: number, m: number) => void; children?: ReactNode }) {
+  const [h, setH] = useState(h0)
+  const [m, setM] = useState(m0)
+  return (
+    <Modal onClose={close}>
+      <div className="cal-clock timer-clock timer-dial">
+        {children}
+        <ClockFace h={h} m={m} setH={setH} setM={setM} below />
+        <div className="timer-crosscheck">
+          <button className="round" title={tr('common.cancel')} onClick={close}><Icon name="close" /></button>
+          <button className="round filled" title={tr('common.save')} onClick={() => done(h, m)}><Icon name="checked" /></button>
+        </div>
+      </div>
+    </Modal>
+  )
+}
+
+/**
+ * The Clock as on the tablet (the user, 2 Nov: "the same as the tablet"): the cards in the middle; Timers, Alarms and
+ * Stopwatch in the island at the bottom, the pane's round actions beside it; the clock in a dialog.
+ */
 export function TimerPage({ say }: { say: (text: string) => void }) {
   const timers = useTimers()
-  const [tab, setTab] = useState(0)
-  const [h, setH] = useState(0)
-  const [m, setM] = useState(5)
-  const [lastId, setLastId] = useState<string | null>(null)
-  // the clock opens on the length last started here
-  useEffect(() => { window.drive.timer.last().then(s => { if (s) { setH(Math.min(23, Math.floor(s / 3600))); setM(Math.floor(s % 3600 / 60)) } }) }, [])
-  // the user, 18 Oct: "play is not needed as soon as I set a timer starts" — the minute let go (or Enter) starts it
-  const start = (hh: number, mm: number) => { const s = hh * 3600 + mm * 60; if (s > 0) window.drive.timer.start(s).then(setLastId, e => say(tr('timer.notStarted', { error: errorText(e) }))) }
+  const [tab, setTab] = useState(() => { try { return +(localStorage.getItem('timerTab') ?? 0) } catch { return 0 } })
+  const choose = (i: number) => { setTab(i); try { localStorage.setItem('timerTab', String(i)) } catch {} }
+  const [adding, setAdding] = useState<number | null>(null) // a new timer: the clock opens on the length last started here
+  const add = () => window.drive.timer.last().then(s => setAdding(s || 300), () => setAdding(300))
+  const start = (hh: number, mm: number) => { const s = hh * 3600 + mm * 60; setAdding(null); if (s > 0) window.drive.timer.start(s).catch(e => say(tr('timer.notStarted', { error: errorText(e) }))) }
   const act = (id: string, a: TimerAction) => window.drive.timer.change(id, a).catch(e => say(errorText(e)))
-  // Pause and Stop under the clock: the timer last started here, else the one ending first
-  const live = timers.filter(t => !t.ready && !t.ringing)
-  const current = live.find(t => t.id === lastId) ?? live[0]
-  // the user's sketch, 18 Oct: the clock, HH and MM under it, Pause and Stop under those; the timers' cards beside, no island
+  const [alarmEdit, setAlarmEdit] = useState<AlarmItem | 'new' | null>(null)
+  const watch = useStopwatch()
+  const watchAct = (x: 'start' | 'hold' | 'lap' | 'reset') => window.drive.timer.watch(x).then(watch.read, e => say(errorText(e)))
   return (
     <div className="timer">
       <header className="topbar">
         <div className="island title-island"><Icon name="timer" /><h1>{tr('app.timer')}</h1></div>
-        {/* as the phone's Clock (TimerAlarmsScreen.kt): Timers, Alarms and Stopwatch, the same files */}
-        <div className="segmented island">
-          {[tr('timer.tabTimers'), tr('timer.tabAlarms'), tr('stopwatch.title')].map((label, i) => <button key={i} className={tab === i ? 'on' : ''} onClick={() => setTab(i)}>{label}</button>)}
-        </div>
         {/* the user, 19 Oct: its own settings at the top right, as the Calendar's */}
         <div className="tools">
           <details className="menu">
@@ -92,24 +106,31 @@ export function TimerPage({ say }: { say: (text: string) => void }) {
           </details>
         </div>
       </header>
-      {tab === 1 ? <AlarmsPane say={say} /> : tab === 2 ? <StopwatchPane say={say} /> :
       <div className="timer-body">
-        <section className="timer-main">
-          <div className="cal-clock timer-clock">
-            <ClockFace h={h} m={m} setH={setH} setM={setM} below onDone={start} />
-            <div className="timer-controls">
-              {current?.state === 'paused'
-                ? <button className="filled-button" onClick={() => act(current.id, 'resume')}><Icon name="play" size={18} /> {tr('common.resume')}</button>
-                : <button className="filled-button" disabled={!current} onClick={() => current && act(current.id, 'pause')}><Icon name="pause" size={18} /> {tr('common.pause')}</button>}
-              <button className="outline-button" disabled={!current} onClick={() => current && act(current.id, 'stop')}><Icon name="close" size={18} /> {tr('common.stop')}</button>
-            </div>
-          </div>
-        </section>
-        <section className="timer-cards">
+        {tab === 0 && <section className="timer-cards">
           {timers.map(t => <TimerCard key={t.id} t={t} act={act} />)}
           {!timers.length && <p className="muted">{tr('timer.empty')}</p>}
-        </section>
-      </div>}
+        </section>}
+        {tab === 1 && <AlarmsPane say={say} edit={setAlarmEdit} />}
+        {tab === 2 && <StopwatchPane w={watch.w} />}
+      </div>
+      <div className="ct-dock timer-dock">
+        <nav className="notes-island island">
+          {([['timer', 'timer.tabTimers'], ['bell', 'timer.tabAlarms'], ['recent', 'stopwatch.title']] as const).map(([icon, l], i) =>
+            <button key={i} className={`island-item ${tab === i ? 'on' : ''}`} onClick={() => choose(i)}><Icon name={icon} size={20} /><span>{tr(l)}</span></button>)}
+        </nav>
+        {tab === 0 && <button className="round island timer-action" title={tr('common.new')} onClick={add}><Icon name="add" /></button>}
+        {tab === 1 && <button className="round island timer-action" title={tr('alarm.new')} onClick={() => setAlarmEdit('new')}><Icon name="add" /></button>}
+        {tab === 2 && <>
+          {watch.w?.state === 'counting'
+            ? <button className="round island timer-action" title={tr('common.pause')} onClick={() => watchAct('hold')}><Icon name="pause" /></button>
+            : <button className="round island timer-action" title={tr(watch.w?.state === 'held' ? 'common.resume' : 'common.start')} onClick={() => watchAct('start')}><Icon name="play" /></button>}
+          <button className="round island timer-action" title={tr('stopwatch.lap')} disabled={watch.w?.state !== 'counting'} onClick={() => watchAct('lap')}><Icon name="tag" /></button>
+          <button className="round island timer-action" title={tr('stopwatch.reset')} disabled={watch.w?.state !== 'held'} onClick={() => watchAct('reset')}><Icon name="refresh" /></button>
+        </>}
+      </div>
+      {adding != null && <DialDialog h0={Math.min(23, Math.floor(adding / 3600))} m0={Math.floor(adding % 3600 / 60)} close={() => setAdding(null)} done={start} />}
+      {alarmEdit && <AlarmDialog a={alarmEdit === 'new' ? null : alarmEdit} close={() => setAlarmEdit(null)} say={say} />}
     </div>
   )
 }
@@ -152,42 +173,34 @@ function AlarmCard({ a, edit, act }: { a: AlarmItem; edit: () => void; act: (id:
   )
 }
 
-/** Alarms: the clock and the days on the left (a new one, or the card clicked), the cards beside, as the timers'. */
-function AlarmsPane({ say }: { say: (text: string) => void }) {
+/** Alarms: one card each, the next ring above them; a card clicked opens it to edit (the tablet's AlarmsPane). */
+function AlarmsPane({ say, edit }: { say: (text: string) => void; edit: (a: AlarmItem) => void }) {
   const alarms = useAlarms()
-  const [editing, setEditing] = useState<string | null>(null)
-  const [h, setH] = useState(7)
-  const [m, setM] = useState(0)
-  const [days, setDays] = useState<string[]>([])
-  const [label, setLabel] = useState('')
-  const reset = () => { setEditing(null); setH(7); setM(0); setDays([]); setLabel('') }
-  const edit = (a: AlarmItem) => { setEditing(a.id); setH(+a.time.slice(0, 2)); setM(+a.time.slice(3)); setDays(a.days); setLabel(a.label) }
-  const save = () => window.drive.timer.alarmSave(editing, `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`, days, label.trim()).then(reset, e => say(errorText(e)))
-  const act = (id: string, x: AlarmAction) => window.drive.timer.alarmChange(id, x).then(() => { if (x === 'delete' && id === editing) reset() }, e => say(errorText(e)))
+  const act = (id: string, x: AlarmAction) => window.drive.timer.alarmChange(id, x).catch(e => say(errorText(e)))
   const next = alarms.map(a => a.next).filter((t): t is number => t != null).sort((a, b) => a - b)[0]
   return (
-    <div className="timer-body">
-      <section className="timer-main">
-        <div className="cal-clock timer-clock">
-          <input className="field" placeholder={tr('alarm.label')} value={label} onChange={e => setLabel(e.target.value)} />
-          <ClockFace h={h} m={m} setH={setH} setM={setM} below />
-          <div className="alarm-days">
-            {DAYS.map((d, i) => <button key={d} className={`round ${days.includes(d) ? 'on' : ''}`} title={dayName(i, 'short')}
-              onClick={() => setDays(days.includes(d) ? days.filter(x => x !== d) : [...days, d])}>{dayName(i, 'narrow')}</button>)}
-          </div>
-          <p className="muted">{!days.length ? tr('alarm.once') : days.length === 7 ? tr('alarm.everyDay') : '\u00a0'}</p>
-          <div className="timer-controls">
-            {editing && <button className="outline-button" onClick={reset}><Icon name="close" size={18} /> {tr('common.cancel')}</button>}
-            <button className="filled-button" onClick={save}><Icon name={editing ? 'save' : 'add'} size={18} /> {tr(editing ? 'common.save' : 'alarm.new')}</button>
-          </div>
-        </div>
-      </section>
-      <section className="timer-cards">
-        {next != null && <p className="muted alarm-next">{tr('alarm.in', { length: durationText(Math.ceil((next - Date.now()) / 60_000) * 60) })}</p>}
-        {alarms.map(a => <AlarmCard key={a.id} a={a} edit={() => edit(a)} act={act} />)}
-        {!alarms.length && <p className="muted">{tr('alarm.none')}</p>}
-      </section>
-    </div>
+    <section className="timer-cards">
+      {next != null && <p className="muted alarm-next">{tr('alarm.in', { length: durationText(Math.ceil((next - Date.now()) / 60_000) * 60) })}</p>}
+      {alarms.map(a => <AlarmCard key={a.id} a={a} edit={() => edit(a)} act={act} />)}
+      {!alarms.length && <p className="muted">{tr('alarm.none')}</p>}
+    </section>
+  )
+}
+
+/** A new alarm or an edit: the name, the time on the clock, the days (none: once). */
+function AlarmDialog({ a, close, say }: { a: AlarmItem | null; close: () => void; say: (text: string) => void }) {
+  const [days, setDays] = useState<string[]>(a?.days ?? [])
+  const [label, setLabel] = useState(a?.label ?? '')
+  const save = (h: number, m: number) => window.drive.timer.alarmSave(a?.id ?? null, `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`, days, label.trim()).then(close, e => say(errorText(e)))
+  return (
+    <DialDialog h0={a ? +a.time.slice(0, 2) : 7} m0={a ? +a.time.slice(3) : 0} close={close} done={save}>
+      <input className="field" placeholder={tr('alarm.label')} value={label} onChange={e => setLabel(e.target.value)} />
+      <div className="alarm-days">
+        {DAYS.map((d, i) => <button key={d} className={`round ${days.includes(d) ? 'on' : ''}`} title={dayName(i, 'short')}
+          onClick={() => setDays(days.includes(d) ? days.filter(x => x !== d) : [...days, d])}>{dayName(i, 'narrow')}</button>)}
+      </div>
+      <p className="muted">{!days.length ? tr('alarm.once') : days.length === 7 ? tr('alarm.everyDay') : '\u00a0'}</p>
+    </DialDialog>
   )
 }
 
@@ -197,30 +210,27 @@ export function stopwatchText(ms: number) {
   return (h ? `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}` : `${m}:${String(s).padStart(2, '0')}`) + '.' + Math.floor(ms % 1000 / 100)
 }
 
-/** The stopwatch, the same on every device: the time to a tenth, Start/Pause, Lap, Reset, the laps under them. */
-function StopwatchPane({ say }: { say: (text: string) => void }) {
+/** The stopwatch's file, read at each change and every 2 s; the screen moves every tenth while it counts. */
+function useStopwatch() {
   const [w, setW] = useState<StopwatchItem | null>(null)
   const [, tick] = useState(0)
-  const read = () => window.drive.timer.stopwatch().then(setW, () => {})
+  const read = () => { window.drive.timer.stopwatch().then(setW, () => {}) }
   useEffect(() => { read(); const off = window.drive.onTimerChanged(read); const t = setInterval(read, 2000); return () => { off(); clearInterval(t) } }, [])
   useEffect(() => { if (w?.state !== 'counting') return; const t = setInterval(() => tick(n => n + 1), 100); return () => clearInterval(t) }, [w?.state])
-  const act = (x: 'start' | 'hold' | 'lap' | 'reset') => window.drive.timer.watch(x).then(read, e => say(errorText(e)))
+  return { w, read }
+}
+
+/** The stopwatch, the same on every device: the time to a tenth, the laps under it; its buttons beside the island. */
+function StopwatchPane({ w }: { w: StopwatchItem | null }) {
   const ms = !w ? 0 : w.state === 'counting' ? Math.max(0, Date.now() - (w.started ?? Date.now())) : w.state === 'held' ? Math.round(w.elapsed * 1000) : 0
-  const counting = w?.state === 'counting'
   return (
-    <div className="timer-body stopwatch">
+    <section className="stopwatch">
       <div className="stopwatch-time">{stopwatchText(ms)}</div>
-      <div className="timer-controls">
-        {counting ? <button className="filled-button" onClick={() => act('hold')}><Icon name="pause" size={18} /> {tr('common.pause')}</button>
-          : <button className="filled-button" onClick={() => act('start')}><Icon name="play" size={18} /> {tr(w?.state === 'held' ? 'common.resume' : 'common.start')}</button>}
-        <button className="outline-button" disabled={!counting} onClick={() => act('lap')}><Icon name="tag" size={18} /> {tr('stopwatch.lap')}</button>
-        <button className="outline-button" disabled={w?.state !== 'held'} onClick={() => act('reset')}><Icon name="refresh" size={18} /> {tr('stopwatch.reset')}</button>
-      </div>
       <div className="stopwatch-laps">
         {w?.laps.map((t, i) => ({ t, i, split: t - (w.laps[i - 1] ?? 0) })).reverse().map(({ t, i, split }) =>
           <div key={i}><span>{tr('stopwatch.lapN', { n: i + 1 })}</span><span className="muted">{stopwatchText(split * 1000)}</span><span>{stopwatchText(t * 1000)}</span></div>)}
       </div>
-    </div>
+    </section>
   )
 }
 
