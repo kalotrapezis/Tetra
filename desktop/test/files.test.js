@@ -212,3 +212,21 @@ test('a scoped sync (the Calendar) answers for its part and leaves the memory of
     assert.deepEqual(r.moved, []); assert.deepEqual(r.want, [])
   } finally { fs.rmSync(tmp, { recursive: true, force: true }) }
 })
+
+test('the Browser\'s bookmarks and tabs: in .System/Browser/Shared, synced as Browser/…, out of Files, their own part', async () => {
+  const { tmp, files } = setup()
+  try {
+    const crypto = require('node:crypto')
+    const sha = b => crypto.createHash('sha256').update(b).digest('hex')
+    // a phone's bookmarks arrive as "Browser/Bookmarks/<device>.json" (the phone's BrowserSync.kt): kept in .System, never in Files
+    const rel = 'Browser/Bookmarks/Pixel-abc123.json'
+    assert.equal(files.disk('Browser'), path.join(files.root, '..', '.System', 'Browser', 'Shared'))
+    let r = await files.reconcile([{ path: rel, sha256: sha('{}') }, { path: 'Docs/a.txt', sha256: sha('alpha') }], 'phone', { scope: 'browser' })
+    assert.deepEqual(r.want, [rel], 'its part asks only for the Browser\'s files')
+    fs.mkdirSync(path.join(files.disk('Browser'), 'Tabs'), { recursive: true })
+    fs.writeFileSync(path.join(files.disk('Browser'), 'Tabs', 'Tablet-def456.json'), '{"tabs":[]}')
+    assert.equal(files.rel(files.resolve('Browser/Tabs/Tablet-def456.json')), 'Browser/Tabs/Tablet-def456.json')
+    assert.ok((await files.walk('')).includes('Browser/Tabs/Tablet-def456.json'), 'offered to the other devices under its sync name')
+    assert.ok(!(await files.list('')).some(i => i.name === 'Browser') && !fs.existsSync(path.join(files.root, 'Browser')))
+  } finally { fs.rmSync(tmp, { recursive: true, force: true }) }
+})

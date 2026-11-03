@@ -13,7 +13,7 @@ any document, is in Files.
 
 ```
 ~/Tetra/.System/<App>/<Kind>
-  App:  Photos  Files  Notes  Calendar  Timer  Contacts  Phone  Maps  Office  Sync  Backups  Data  Trash  Mail  Assistant
+  App:  Photos  Files  Notes  Calendar  Timer  Contacts  Phone  Maps  Office  Sync  Backups  Data  Trash  Mail  Assistant  Browser
   Kind: Data  Tools  Cache  Temp  Shared
 ```
 
@@ -50,6 +50,7 @@ A new app or kind is added to `system.js` and to this file first.
 | `Assistant/Shared/Briefs` | The pages the scheduled AI actions make (schedule.js, brief.js): `YYYY-MM-DD.html` the daily brief, `YYYY-MM-DD-<id>.html` another action's answer, `latest.json` the last one, for the phone's notification | new, 1 Nov 2026 |
 | `Assistant/Shared/schedules.json` | The scheduled AI actions and the brief's settings (schedule.js), synced so the phone sees and changes them; `runner` names the one computer that runs them | new, 1 Nov 2026 |
 | `Mail/Shared` | the mail archive (mail.js): `accounts.json` (no passwords), `index.jsonl`, `<address>/<Inbox, Sent…>/<yyyy>/… .eml` with each mail's attachments in `<same name>.files/`, `requests/` (the phones' actions, done and removed by the desktop); synced as `Mail/…` (MAIL_PLAN §11) | new, 31 Oct 2026 |
+| `Browser/Shared` | (phone and tablet; the computer only carries it) the Browser's bookmarks and open tabs: `Bookmarks/<device>.json` (every bookmark and folder that device knows, with change times and 30-day tombstones; every device merges them all), `Tabs/<device>.json` (its open tabs, shown on the others). Each device writes only its own files; synced as `Browser/…`, part `browser` | new, 3 Nov 2026 |
 | `Office/Data` | (phone and tablet) the Office templates, `.potx`/`.dotx` themes | `Tetra/.templates` |
 
 ## What stays in Files

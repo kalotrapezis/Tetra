@@ -575,6 +575,17 @@ app.whenReady().then(() => {
       clearTimeout(settle); settle = setTimeout(() => sync?.nudge().catch(() => {}), 500)
     })
   } catch (e) { console.warn('[data] cannot watch', e.message) }
+  // the Browser's bookmarks and tabs (phone and tablet; this computer only carries them): a device's file arriving here is
+  // passed on at once, as a timer is — the computer is where the phone and the tablet meet
+  try {
+    let settle = null
+    const browser = files.disk('Browser')
+    fs.mkdirSync(browser, { recursive: true })
+    fs.watch(browser, { recursive: true }, (_, name) => {
+      if (name && path.basename(String(name)).startsWith('.')) return // a write in progress (.part)
+      clearTimeout(settle); settle = setTimeout(() => sync?.nudge().catch(() => {}), 500)
+    })
+  } catch (e) { console.warn('[browser] cannot watch', e.message) }
   people = new faces.People(db, DATA_DIR)
   vault = new Vault(db, DATA_DIR)
   documents = new docs.Documents(db)
