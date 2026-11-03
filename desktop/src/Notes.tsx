@@ -202,8 +202,16 @@ function NoteEditor({ initial, setDialog, say, onClose }: {
   const changed = useRef(false)
   const area = useRef<HTMLTextAreaElement>(null)
   const checklist = initial.noteType === 'CHECKLIST'
-  // The text box is as tall as the note, so the page scrolls, not a box inside it.
-  useLayoutEffect(() => { const ta = area.current; if (ta) { ta.style.height = 'auto'; ta.style.height = `${ta.scrollHeight}px` } }, [content, reading])
+  // The text box is as tall as the note, so the page scrolls, not a box inside it. Measuring collapses the box for a
+  // moment, which pulled the page's scroll back to the top at every key (3 Nov: "the scroll moves the note"); the
+  // page's place is put back, and the browser then scrolls only as far as the caret needs.
+  useLayoutEffect(() => {
+    const ta = area.current, page = ta?.parentElement
+    if (!ta || !page) return
+    const top = page.scrollTop
+    ta.style.height = 'auto'; ta.style.height = `${ta.scrollHeight}px`
+    page.scrollTop = top
+  }, [content, reading])
   const trashed = !!initial.trashedAt
   const close = () => setDialog(null)
 
