@@ -72,10 +72,14 @@ export function NotesPage({ setDialog, say, openId }: { setDialog: (d: ReactNode
     if (noteType === 'CHECKLIST') n.checklistItems = []
     setDrawer(false); setOpen(n)
   }
-  function closed(n: Note | null, message?: string, undo?: () => Promise<unknown>) {
-    setOpen(null); reload()
+  // The editor is left before its last save lands: the list shows the note as it was left, so opening it again at
+  // once finds the text, and is read again from disk once the save is written.
+  function closed(n: Note | null, saved: Promise<unknown>, message?: string, undo?: () => Promise<unknown>) {
+    setOpen(null)
+    if (n && !message) setNotes(l => l?.map(x => x.id === n.id ? n : x) ?? l) // with a message it went to the Trash or Archive
+    const empty = n && !n.title.trim() && !n.content.trim() && !(n.checklistItems ?? []).some(i => i.text.trim())
+    saved.then(() => !message && n && empty ? call('remove', n.id) : null).then(reload, e => say(errorText(e))) // nothing written: no note
     if (message) say(message, undo && (() => { undo().then(reload) }))
-    else if (n && !n.title.trim() && !n.content.trim() && !(n.checklistItems ?? []).some(i => i.text.trim())) call('remove', n.id).then(reload) // nothing written: no note
   }
   // Export as Markdown (the user, 27 Oct): every note into a new folder in Files, a folder per label (notes.js).
   const exportAll = () => { setDrawer(false); window.drive.notesExportAll().then(r => say(t('notes.exported', { n: r.count, folder: r.folder })), e => say(errorText(e))) }
@@ -180,7 +184,7 @@ function NoteCard({ note, small, selected, onSelect, onOpen }: { note: Note; sma
 interface Snap { title: string; content: string; items: Item[] }
 
 function NoteEditor({ initial, setDialog, say, onClose }: {
-  initial: Note; setDialog: (d: ReactNode) => void; say: (text: string) => void; onClose: (n: Note | null, message?: string, undo?: () => Promise<unknown>) => void
+  initial: Note; setDialog: (d: ReactNode) => void; say: (text: string) => void; onClose: (n: Note | null, saved: Promise<unknown>, message?: string, undo?: () => Promise<unknown>) => void
 }) {
   const [title, setTitle] = useState(initial.title)
   const [content, setContent] = useState(initial.content ?? '')
@@ -203,7 +207,9 @@ function NoteEditor({ initial, setDialog, say, onClose }: {
   const trashed = !!initial.trashedAt
   const close = () => setDialog(null)
 
-  // Saved when typing stops for half a second (asked 2026-11-02), the whole note each time.
+  // Saved when typing stops for 1.5 s (asked 2026-11-02 at half a second; 2026-11-03: "give me 1.5–2 sec before save"),
+  // the whole note each time. Each save also sets off a sync with the phone 2.5 s later (main.js), so half a second
+  // meant a save and a sync at every pause between words.
   const saving = useRef<ReturnType<typeof setTimeout>>(undefined)
   const flush = useRef<() => Promise<unknown>>(() => Promise.resolve())
   const snapped = useRef(false)
@@ -211,15 +217,18 @@ function NoteEditor({ initial, setDialog, say, onClose }: {
     if (!changed.current) return
     flush.current = () => {
       clearTimeout(saving.current); flush.current = () => Promise.resolve()
-      // The note as it was when opened goes to its history before the first change is written over it.
-      const before = snapped.current ? Promise.resolve() : call('snapshot', initial.id)
+      // The note as it was when opened goes to its history before the first change is written over it. Both are sent
+      // at once, not one after the other's answer: main handles them in order, and a closing window still sends both.
+      const before = snapped.current ? null : call('snapshot', initial.id)
       snapped.current = true
-      return before.then(() => call('save', initial.id, { title, content, ...(checklist ? { checklistItems: items } : {}) }))
+      return Promise.all([before, call('save', initial.id, { title, content, ...(checklist ? { checklistItems: items } : {}) })])
     }
     clearTimeout(saving.current)
     setSaveState('saving')
-    saving.current = setTimeout(() => flush.current().then(() => { setSaveState('saved'); setSavedAt(Date.now()) }), 500)
+    saving.current = setTimeout(() => flush.current().then(() => { setSaveState('saved'); setSavedAt(Date.now()) }), 1500)
   }, [title, content, items])
+  // Closing the window reloads the page (to the tray), which unmounts nothing: what is still waiting is sent now.
+  useEffect(() => { const f = () => { flush.current() }; window.addEventListener('pagehide', f); return () => window.removeEventListener('pagehide', f) }, [])
   const edit = (next: Partial<Snap>, step = false, wordDone = false) => {
     const snap = { title, content, items, ...next }
     changed.current = true
@@ -248,11 +257,12 @@ function NoteEditor({ initial, setDialog, say, onClose }: {
     flush.current().then(() => empty ? call('remove', initial.id) : changed.current ? call('snapshot', initial.id) : null).catch(() => {})
   }, [])
 
-  async function leave(message?: string, undoIt?: () => Promise<unknown>) {
+  // Back goes at once (asked 2026-11-03: it waited for the save and the history copy, each a trip to main and back);
+  // they follow behind it, and the list is read again when they are written.
+  function leave(message?: string, undoIt?: () => Promise<unknown>) {
     left.current = true
-    await flush.current()
-    if (changed.current) await call('snapshot', initial.id)
-    onClose({ ...initial, title, content, checklistItems: items }, message, undoIt)
+    const saved = flush.current().then(() => changed.current ? call('snapshot', initial.id) : null)
+    onClose({ ...initial, ...meta, title, content, checklistItems: items }, saved, message, undoIt)
   }
 
   // A toolbar action on the text: the selection is kept, and the change is one undo step of its own.
@@ -306,7 +316,7 @@ function NoteEditor({ initial, setDialog, say, onClose }: {
           <span className="bar-fill" />
           <button className="text-button" onClick={() => call('save', initial.id, { trashedAt: null }).then(() => leave(t('notes.noteRestored')))}>{t('common.restore')}</button>
           <button className="text-button danger" onClick={() => setDialog(<Confirm title={t('notes.deleteOneTitle')} action={t('common.delete')} danger onClose={close}
-            body={t('notes.deleteOneBody')} onConfirm={() => { left.current = true; return call('remove', initial.id).then(() => onClose(null, t('notes.noteDeleted'))) }} />)}>{t('notes.deleteForGood')}</button>
+            body={t('notes.deleteOneBody')} onConfirm={() => { left.current = true; return call('remove', initial.id).then(() => onClose(null, Promise.resolve(), t('notes.noteDeleted'))) }} />)}>{t('notes.deleteForGood')}</button>
         </> : <>
           {tool('label', t('notes.labels'), tags, meta.labels.length > 0)}
           <span className="palette-anchor">
