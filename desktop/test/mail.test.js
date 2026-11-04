@@ -500,3 +500,34 @@ test('mail: Mail\'s magenta is the «Αποθήκη» tag\'s alone — an accoun
     assert.equal(mail.accounts()[1].color, '#4f8ff7', 'written, so the phone sees it too')
   } finally { fs.rmSync(dir, { recursive: true, force: true }) }
 })
+
+test("mail: the server's news about a saved mail, in the middle of fetching new ones, leaves it as it was", async () => {
+  const dir = tmp()
+  try {
+    const mail = new Mail(dir, { secret: () => 'x' })
+    const acc = { id: 'a@nup.ac.cy', notify: true }
+    mail.saveAccounts([acc])
+    const boxes = { INBOX: { 5: { subject: 'Συγγνώμη, η παράδοση δεν ολοκληρώθηκε', source: raw('Sorry') } } }
+    const c = fakeServer(boxes), run = { stop: false }
+    await mail.headers(c, acc, 'Inbox', 'INBOX')
+    await mail.bodies(c, acc, 'Inbox', 'INBOX', run)
+    const before = mail.index.get('a@nup.ac.cy/Inbox/7/5')
+    assert.equal(before.saved, true)
+    // a new mail; while it is fetched, Gmail says the old one was read (as imapflow hands over every FETCH it hears)
+    boxes.INBOX[6] = { subject: 'Νέο', source: raw('New') }
+    const fetch = c.fetch
+    c.fetch = async function* (range, query) {
+      if (range !== '1:*') yield { uid: 5, seq: 1, flags: new Set(['\\Seen']) }
+      yield* fetch.call(c, range, query)
+    }
+    await mail.headers(c, acc, 'Inbox', 'INBOX')
+    await mail.bodies(c, acc, 'Inbox', 'INBOX', run)
+    const after = mail.index.get('a@nup.ac.cy/Inbox/7/5')
+    assert.equal(after.subject, before.subject)
+    assert.equal(after.date, before.date)
+    assert.equal(after.file, before.file)
+    assert.equal(after.saved, true)
+    assert.ok(!fs.existsSync(path.join(dir, 'a@nup.ac.cy/Inbox/1970')), 'no second copy under an empty name')
+    assert.equal(mail.index.get('a@nup.ac.cy/Inbox/7/6').subject, 'Νέο')
+  } finally { fs.rmSync(dir, { recursive: true, force: true }) }
+})

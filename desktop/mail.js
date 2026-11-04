@@ -526,7 +526,11 @@ class Mail extends EventEmitter {
     }
     const fresh = uids.filter(u => !known.has(u) && !(skip?.has(u) && elsewhere.has(skip.get(u))))
     for (let i = 0; i < fresh.length; i += 500) {
+      const asked = new Set(fresh.slice(i, i + 500))
       for await (const m of c.fetch(fresh.slice(i, i + 500).join(','), { uid: true, envelope: true, flags: true, size: true, bodyStructure: true, internalDate: true }, { uid: true })) {
+        // the server's news about another mail comes through the same fetch (read on the phone: its UID and FLAGS only); taken
+        // for a new one, it blanked a saved mail's date, sender and subject, and it came down again as "1970 - - -" (4 Nov)
+        if (!asked.has(m.uid) || !m.envelope) continue
         const env = m.envelope ?? {}, from = env.from?.[0] ?? {}
         if (env.messageId && elsewhere?.has(env.messageId)) { skip?.set(m.uid, env.messageId); continue }
         const e = {
