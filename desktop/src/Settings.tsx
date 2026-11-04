@@ -13,6 +13,9 @@ import { UsageCard } from './Usage'
 
 // The foot of the sidebar (asked 2026-09-26): what Tetra said, kept — a notification goes by in seconds — and Settings.
 
+/** Each notification's applet (main.js notify()), by its icon in the rail; older ones, from before 4 Nov, keep the bell. */
+const NOTICE_ICON: Record<string, IconName> = { mail: 'mail', calendar: 'calendar', timer: 'timer', maps: 'map', phone: 'call', assistant: 'sparkle', sync: 'refresh', photos: 'photos', files: 'drive' }
+
 export function NotificationsPage() {
   const [list, setList] = useState<AppNotification[] | null>(null)
   const load = () => window.drive.notifications.list().then(l => { setList(l); window.drive.notifications.read() })
@@ -29,7 +32,7 @@ export function NotificationsPage() {
         {list?.map((n, i) => <div key={n.id}>
           {(i === 0 || day(list[i - 1].at) !== day(n.at)) && <h4 className="notice-day">{day(n.at)}</h4>}
           <div className={`notice island ${n.read ? '' : 'unread'}`}>
-            <Icon name="bell" size={20} />
+            <Icon name={NOTICE_ICON[n.applet ?? ''] ?? 'bell'} size={20} />
             <div><strong>{n.title}</strong>{n.body && <p>{n.body}</p>}</div>
             <small>{new Date(n.at).toLocaleTimeString(locale(), { hour: '2-digit', minute: '2-digit' })}</small>
           </div>

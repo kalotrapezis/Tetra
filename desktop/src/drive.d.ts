@@ -147,7 +147,7 @@ export interface SyncStatus { port: number; fingerprint: string; error: string |
 
 export interface TrashedPhoto { id: string; name: string; path: string; size: number; deletedAt: number }
 export interface Collection { id: string; name: string; count: number; cover: string | null; hidden: boolean; folder?: boolean; drive?: boolean; mirror?: boolean }
-export interface AppNotification { id: number; at: number; title: string; body: string | null; read: number }
+export interface AppNotification { id: number; at: number; title: string; body: string | null; read: number; applet: string | null }
 export interface PhotoPlace { path: string; name: string; count: number }
 
 declare global {
@@ -445,7 +445,7 @@ declare global {
       notesSynced(): Promise<{ at: number; device: string } | null>
       notesExportAll(): Promise<{ count: number; folder: string }>
       notesExportOne(id: string): Promise<string | null>
-      notifications: { list(): Promise<AppNotification[]>; read(): Promise<void>; clear(): Promise<void>; onChange(cb: () => void): () => void }
+      notifications: { list(): Promise<AppNotification[]>; read(applet?: string): Promise<void>; clear(): Promise<void>; onChange(cb: () => void): () => void }
       imports: {
         pick(folders: boolean): Promise<string[]>
         drives(): Promise<{ id: string; name: string; free: number }[]>

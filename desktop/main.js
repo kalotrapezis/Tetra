@@ -106,7 +106,7 @@ function planReminders() {
   if (!calendar || !db) return
   const now = Date.now(), on = setting('calendarReminders') !== 'off'
   const upTo = Math.max(+(setting('calendarUpTo') || now), now - 86_400_000)
-  if (on) for (const r of calendar.reminders(upTo, now + 1000)) notify(r.title || t('common.noTitle'), (now - r.at > 300_000 ? t('main.missed') : '') + reminderText(r))
+  if (on) for (const r of calendar.reminders(upTo, now + 1000)) notify('calendar', r.title || t('common.noTitle'), (now - r.at > 300_000 ? t('main.missed') : '') + reminderText(r))
   setSetting('calendarUpTo', String(now + 1000))
   if (!on) return
   const next = calendar.reminders(now + 1000, now + 120 * 86_400_000)[0]
@@ -136,12 +136,12 @@ function planTimer() {
   const now = Date.now()
   for (const t of timers.active(now)) if (t.ringing && !timerRung.has(`${t.id}|${t.rev}`)) {
     timerRung.add(`${t.id}|${t.rev}`)
-    notify(i18n.t('main.timesUp'), t.label || i18n.t('main.timerOf', { length: timer.durationText(t.seconds) }))
+    notify('timer', i18n.t('main.timesUp'), t.label || i18n.t('main.timerOf', { length: timer.durationText(t.seconds) }))
     win?.webContents.send('timer-changed')
   }
   for (const a of timers.alarmCards(now)) if (a.ringing != null && !timerRung.has(`${a.id}|${a.ringing}`)) {
     timerRung.add(`${a.id}|${a.ringing}`)
-    notify(a.label || i18n.t('alarm.title'), a.time)
+    notify('timer', a.label || i18n.t('alarm.title'), a.time)
     win?.webContents.send('timer-changed')
   }
   const next = timers.nextEnd(now)
@@ -393,11 +393,12 @@ function desktopFile() {
   const system = ['/usr/share/applications', '/usr/local/share/applications'].map(d => path.join(d, name)).find(f => fs.existsSync(f))
   return { name, path: system ?? path.join(app.getPath('home'), '.local/share/applications', name) }
 }
-function notify(title, body, open = null) {
+/** [applet]: whose it is ('mail', 'calendar', … the page it belongs to), for its icon and its own count (the user, 4 Nov). */
+function notify(applet, title, body, open = null) {
   // Kept as well as shown: a notification goes by in seconds, the Notifications page keeps them (asked 2026-09-26).
   try {
-    db.exec('CREATE TABLE IF NOT EXISTS notifications (id INTEGER PRIMARY KEY, at INTEGER NOT NULL, title TEXT NOT NULL, body TEXT, read INTEGER NOT NULL DEFAULT 0)')
-    db.prepare('INSERT INTO notifications(at, title, body) VALUES(?,?,?)').run(Date.now(), String(title), body == null ? null : String(body))
+    notesTable()
+    db.prepare('INSERT INTO notifications(at, title, body, applet) VALUES(?,?,?,?)').run(Date.now(), String(title), body == null ? null : String(body), applet)
     win?.webContents.send('notifications-changed')
   } catch (e) { console.warn('[notify]', e.message) }
   if (!Notification.isSupported() || sync?.nas()) return // a NAS: nobody sits at it; the list keeps it
@@ -406,6 +407,54 @@ function notify(title, body, open = null) {
   // held until it closes: one nobody holds is collected, and its click does nothing (the user, 23 Oct)
   shownNotes.add(n); n.on('close', () => shownNotes.delete(n))
   n.show()
+}
+function notesTable() {
+  db.exec('CREATE TABLE IF NOT EXISTS notifications (id INTEGER PRIMARY KEY, at INTEGER NOT NULL, title TEXT NOT NULL, body TEXT, read INTEGER NOT NULL DEFAULT 0, applet TEXT)')
+  try { db.exec('ALTER TABLE notifications ADD COLUMN applet TEXT') } catch {} // a table from before 4 Nov
+}
+/**
+ * A phone's AI Assist, done here (sync.js assistDo; the user, 4 Nov: "play youtube on the PC", "send the answer"): a
+ * YouTube search's first video or playlist, a station or a link in a player window of its own; an answer as a
+ * notification; the newest daily brief opened.
+ */
+let player = null, playerFirst = null
+const FIRST_JS = sel => `(() => { let n = 0; const t = setInterval(() => { for (const a of document.querySelectorAll(${JSON.stringify(sel)})) {
+  if (!a.href || a.href.includes('/shorts/') || a.closest('ytd-ad-slot-renderer,[class*=promoted],ytd-reel-shelf-renderer')) continue
+  clearInterval(t); location.href = a.href; return } if (++n > 120) clearInterval(t) }, 500) })()`
+const PLAY_JS = `(() => { let n = 0; const t = setInterval(() => { const m = [...document.querySelectorAll('video,audio')].find(x => x.currentSrc || x.src)
+  if (m && !m.paused) return clearInterval(t); if (m) m.play().catch(() => {}); else if (n === 6) document.querySelector('.jp-play,[class*=play-button],button[aria-label*=Play i],button[title*=Play i]')?.click()
+  if (++n > 40) clearInterval(t) }, 500) })()`
+function play(url, first = null) {
+  if (!player || player.isDestroyed()) {
+    player = new BrowserWindow({ width: 1100, height: 720, title: 'Tetra', icon: path.join(__dirname, 'public', 'icon.png'), autoHideMenuBar: true,
+      webPreferences: { partition: 'persist:player', sandbox: true, contextIsolation: true, autoplayPolicy: 'no-user-gesture-required' } })
+    player.on('closed', () => { player = null })
+    // YouTube's results page (again after its consent page, the first time): its first video or playlist; anything else: play
+    player.webContents.on('did-finish-load', () => {
+      const at = player.webContents.getURL()
+      if (playerFirst && /youtube\.com\/results/.test(at)) player.webContents.executeJavaScript(FIRST_JS(playerFirst)).catch(() => {})
+      else if (!/consent\./.test(at)) { if (/watch\?v=/.test(at)) playerFirst = null; player.webContents.executeJavaScript(PLAY_JS).catch(() => {}) }
+    })
+  }
+  playerFirst = first
+  player.loadURL(url); player.show(); player.focus()
+}
+async function assistHere(c, from) {
+  const who = from ? `${t('app.assistant')} · ${from}` : t('app.assistant')
+  if (c.what === 'play') {
+    const q = encodeURIComponent(String(c.q ?? '').trim()), list = !!c.list && c.site !== 'youtube_music'
+    if (c.site === 'youtube_music') return play(`https://music.youtube.com/search?q=${q}`, 'a[href*="watch?v="]')
+    return play(`https://www.youtube.com/results?${list ? 'sp=EgIQAw%3D%3D&' : ''}search_query=${q}`, list ? 'a[href*="/watch?v="][href*="list="]' : 'a[href*="/watch?v="]')
+  }
+  if (c.what === 'radio' || c.what === 'link') return /^https?:\/\//.test(String(c.url)) ? play(String(c.url)) : null
+  if (c.what === 'text') return notify('assistant', c.title ? `${who}: ${String(c.title).slice(0, 80)}` : who, String(c.text ?? '').slice(0, 4000))
+  if (c.what === 'brief') {
+    const dir = path.join(system.dir('Assistant', 'Shared', files.system), 'Briefs')
+    let latest = null; try { latest = JSON.parse(fs.readFileSync(path.join(dir, 'latest.json'), 'utf8')) } catch {}
+    const file = latest?.file && path.join(dir, path.basename(latest.file))
+    if (file && fs.existsSync(file)) { showWindow(); return shell.openPath(file) }
+    return notify('assistant', who, t('brief.none'))
+  }
 }
 async function checkSpace() {
   if (moving || driveBackup) return
@@ -423,21 +472,21 @@ async function checkSpace() {
   if (offer?.rules.auto && Date.now() - (said.auto ?? 0) > HOURS) { // at most hourly: what failed is not retried every minute
     said.auto = Date.now()
     const { name, deviceId } = offer
-    moveToDrive(deviceId, {}).then(r => r.moved && notify(t('main.freed', { size: fmtBytes(r.bytes) }), t('main.freedBody', { count: r.moved, n: r.moved.toLocaleString(), name })
+    moveToDrive(deviceId, {}).then(r => r.moved && notify('sync', t('main.freed', { size: fmtBytes(r.bytes) }), t('main.freedBody', { count: r.moved, n: r.moved.toLocaleString(), name })
       + (r.failed.length ? ' ' + t('main.freedStayed', { n: r.failed.length }) : '')))
-      .catch(e => notify(t('main.freeFailed', { name }), e.message))
+      .catch(e => notify('sync', t('main.freeFailed', { name }), e.message))
     return
   }
   if (offer && Date.now() - said.offer > 12 * HOURS) {
     said.offer = Date.now()
     const why = offer.rules.offload ? t('main.whyUnder', { percent: offer.rules.percent }) : t(`main.olderThan.${offer.rules.unit}`, { count: offer.rules.keep })
-    notify(t('main.freeAsk', { size: fmtBytes(offer.bytes) }), t('main.freeAskBody', { count: offer.count, n: offer.count.toLocaleString(), why, name: offer.name }))
+    notify('sync', t('main.freeAsk', { size: fmtBytes(offer.bytes) }), t('main.freeAskBody', { count: offer.count, n: offer.count.toLocaleString(), why, name: offer.name }))
   }
   const storage = sync.devices().find(x => x.rules?.role === 'storage' && x.rules.offload)
   const limit = storage ? storage.rules.percent : 90
   if (disk && disk.percent >= limit && Date.now() - said.full > 6 * HOURS) {
     said.full = Date.now()
-    notify(t('main.diskFull', { percent: disk.percent }), t('main.diskLeft', { free: fmtBytes(disk.free) }) + (offer ? ' ' + t('main.diskCouldGo', { size: fmtBytes(offer.bytes), name: offer.name })
+    notify('sync', t('main.diskFull', { percent: disk.percent }), t('main.diskLeft', { free: fmtBytes(disk.free) }) + (offer ? ' ' + t('main.diskCouldGo', { size: fmtBytes(offer.bytes), name: offer.name })
       : storage ? '' : ' ' + t('main.diskMakeStorage')))
   }
 }
@@ -487,7 +536,7 @@ async function sendFilesToPhone() {
   const { filePaths } = await dialog.showOpenDialog({ title: t('main.sendTitle'), properties: ['openFile', 'multiSelections'] })
   if (!filePaths.length) return
   const r = await sync.sendToDevice(filePaths).catch(e => ({ error: e.message }))
-  notify(r.sent ? t('main.sent', { count: r.sent, device: r.device }) : t('main.sentNothing'), r.error ?? t('main.sentWhere'))
+  notify('sync', r.sent ? t('main.sent', { count: r.sent, device: r.device }) : t('main.sentNothing'), r.error ?? t('main.sentWhere'))
 }
 
 /** `rescan` — 'faces' or 'documents' — reads photos that were read before, because the rules changed since. */
@@ -543,7 +592,7 @@ app.whenReady().then(() => {
   calendar = new Calendar(files.disk('Calendar'), files.disk('Trash'))
   try { fs.mkdirSync(calendar.root, { recursive: true }) } catch {}
   contacts = new Contacts(files.disk('Contacts'), files.disk('Trash'), calendar)
-  calls = new Calls({ contacts, act: what => sync.callAction(what), notify: (t, b) => notify(t, b), recordings: files.disk('Phone/Recordings'),
+  calls = new Calls({ contacts, act: what => sync.callAction(what), notify: (t, b) => notify('phone', t, b), recordings: files.disk('Phone/Recordings'),
     me: () => sync.role() === 'client' ? sync.client?.pairing()?.id : 'server',
     early: () => sync.role() !== 'client' && !db.prepare("SELECT 1 FROM sync_devices WHERE kind = 'computer' AND volume_uuid IS NULL").get(),
     relayable: () => sync.role() === 'client' ? sync.client.soundThere() : false,
@@ -555,8 +604,8 @@ app.whenReady().then(() => {
   // Mail (mail.js): the archive in .System/Mail/Shared; each account's password only in this computer's keyring
   mail = new Mail(system.dir('Mail', 'Shared', files.system), { secret: mailSecret, token: msToken })
   mail.on('changed', () => win?.webContents.send('mail-changed'))
-  mail.on('new', e => notify(e.from || e.fromAddress, e.subject || t('common.noTitle')))
-  mail.on('failed', (r, e) => notify(t('mail.notSent'), `${r.draft?.subject || t('common.noTitle')}: ${e.reason && e.reason !== 'other' ? t(`mail.err_${e.reason}`) : e.message}`))
+  mail.on('new', e => notify('mail', e.from || e.fromAddress, e.subject || t('common.noTitle')))
+  mail.on('failed', (r, e) => notify('mail', t('mail.notSent'), `${r.draft?.subject || t('common.noTitle')}: ${e.reason && e.reason !== 'other' ? t(`mail.err_${e.reason}`) : e.message}`))
   mail.picked = new Set() // files chosen here to attach: nothing else on this computer can be sent from the window
   mail.filesRoot = files.root // where a filter saves attachments ("save to a Files folder", MAIL_PLAN §6)
   // sync's old copies of timers that are over (timer.js clean; the phone clears its own the same way)
@@ -598,7 +647,8 @@ app.whenReady().then(() => {
     // a call answered on a client computer: its sound from and to the phone on this one's Bluetooth (callaudio.js)
     soundHere: () => !!calls?.bt.phones.some(p => p.connected),
     // a phone or tablet filled past 90 %: said once, its click opens Devices, where its card suggests what to move
-    onFull: (id, name, pct) => notify(t('sync.fullTitle', { device: name, pct }), t('sync.fullBody'), () => win?.webContents.send('open-devices')),
+    onAssist: (c, from) => assistHere(c, from),
+    onFull: (id, name, pct) => notify('sync', t('sync.fullTitle', { device: name, pct }), t('sync.fullBody'), () => win?.webContents.send('open-devices')),
     // a device's Mail row (its card's guide), the phone opening Mail, and «Χρήση και σε αυτή τη συσκευή» (MAIL_PLAN §15)
     mail: {
       rule: (device, row, name) => mail.setDevice(device, { name, off: row.direction === 'off', mode: row.direction === 'send' ? 'move' : 'copy',
@@ -621,7 +671,7 @@ app.whenReady().then(() => {
     clearTimeout(rescanTimer)
     rescanTimer = setTimeout(() => { startScan(); win?.webContents.send('sync-received') }, 3000)
   }, onSent: ({ device, paths }) => { // Send to computer: the phone's share menu, into Files › From phone
-    notify(t('main.received', { count: paths.length, device }), [...new Set(paths.map(p => p.split('/').pop()))].join(', '),
+    notify('sync', t('main.received', { count: paths.length, device }), [...new Set(paths.map(p => p.split('/').pop()))].join(', '),
       () => win?.webContents.send('open-files-folder', FROM_PHONE))
     win?.webContents.send('sync-received')
   } })
@@ -895,7 +945,7 @@ app.whenReady().then(() => {
   const checkMapAges = async () => {
     const due = (await mapBuilder.packs()).filter(p => p.old)
     const said = new Set(JSON.parse(setting('mapsOldSaid') || '[]'))
-    for (const p of due) if (!said.has(`${p.id}@${p.built}`)) notify(t('main.mapOld', { name: p.name }), t('main.mapOldBody'), () => win?.webContents.send('open-settings', 'maps'))
+    for (const p of due) if (!said.has(`${p.id}@${p.built}`)) notify('maps', t('main.mapOld', { name: p.name }), t('main.mapOldBody'), () => win?.webContents.send('open-settings', 'maps'))
     setSetting('mapsOldSaid', JSON.stringify(due.map(p => `${p.id}@${p.built}`))) // the maps no longer due drop out
   }
   if (!process.env.DRIVE_HIDDEN) { setTimeout(() => checkMapAges().catch(e => console.warn('[maps age]', e.message)), 30_000); setInterval(() => checkMapAges().catch(() => {}), 6 * 3_600_000) }
@@ -1057,14 +1107,15 @@ app.whenReady().then(() => {
     try {
       const r = await importing
       if (kind !== 'files') await startScan()
-      notify((r.stopped ? t('main.importStopped') : '') + t(`main.import.${move ? 'movedIn' : 'imported'}.${kind === 'files' ? 'files' : 'photos'}`, { count: r.imported, n: r.imported.toLocaleString() }),
+      notify(kind === 'files' ? 'files' : 'photos', (r.stopped ? t('main.importStopped') : '') + t(`main.import.${move ? 'movedIn' : 'imported'}.${kind === 'files' ? 'files' : 'photos'}`, { count: r.imported, n: r.imported.toLocaleString() }),
         [drive && t('main.importStraight', { name: drive.name }), r.skipped && t('main.importSkipped', { n: r.skipped }), r.failed.length && t('main.importFailed', { n: r.failed.length })].filter(Boolean).join(' '))
       return r
     } finally { importing = null; importStop = null }
   })
-  db.exec('CREATE TABLE IF NOT EXISTS notifications (id INTEGER PRIMARY KEY, at INTEGER NOT NULL, title TEXT NOT NULL, body TEXT, read INTEGER NOT NULL DEFAULT 0)')
-  ipcMain.handle('notifications:list', () => db.prepare('SELECT id, at, title, body, read FROM notifications ORDER BY at DESC LIMIT 500').all())
-  ipcMain.handle('notifications:read', () => { db.exec('UPDATE notifications SET read = 1 WHERE read = 0') })
+  notesTable()
+  ipcMain.handle('notifications:list', () => db.prepare('SELECT id, at, title, body, read, applet FROM notifications ORDER BY at DESC LIMIT 500').all())
+  // one applet's (its page opened), or all of them (the Notifications page)
+  ipcMain.handle('notifications:read', (_, applet) => { applet ? db.prepare('UPDATE notifications SET read = 1 WHERE read = 0 AND applet = ?').run(String(applet)) : db.exec('UPDATE notifications SET read = 1 WHERE read = 0') })
   ipcMain.handle('notifications:clear', () => { db.exec('DELETE FROM notifications') })
   // Appearance: Auto follows the system, or Light / Dark whatever it says. The page's colours follow nativeTheme.
   ipcMain.handle('settings:theme', () => setting('theme') || 'system')
@@ -1271,7 +1322,7 @@ app.whenReady().then(() => {
   const usage = new (require('./usage').Usage)(path.join(system.dir('Assistant', 'Shared', files.system), 'usage'), os.hostname())
   const recordUse = line => {
     usage.add(line)
-    if (usage.warnNow()) { const b = usage.budget(); notify(t('usage.warnTitle'), t('usage.warnBody', { spent: assistant.Bill.text(usage.month()), budget: assistant.Bill.text(b.monthly) }), () => win?.webContents.send('open-settings', 'assistant')) }
+    if (usage.warnNow()) { const b = usage.budget(); notify('assistant', t('usage.warnTitle'), t('usage.warnBody', { spent: assistant.Bill.text(usage.month()), budget: assistant.Bill.text(b.monthly) }), () => win?.webContents.send('open-settings', 'assistant')) }
   }
   const api = new assistant.Mistral({ key: assistKey, bill: new assistant.Bill(meterAdd, recordUse), allowed: () => aiSwitch.on() })
   /** The voice that reads: 'system' (this computer's own, free) or a Mistral voice's id, Mistral's first when none was picked. */
@@ -1357,7 +1408,7 @@ app.whenReady().then(() => {
   async function runSchedule(s, byHand = false) {
     if (scheduleRunning.has(s.id)) return null
     // past the month's budget nothing runs by itself, and it says so
-    if (usage.capped()) { if (!byHand) schedules.ran(s.id, Date.now()); notify(s.kind === 'brief' ? t('brief.title') : s.title, t('usage.capped')); return null }
+    if (usage.capped()) { if (!byHand) schedules.ran(s.id, Date.now()); notify('assistant', s.kind === 'brief' ? t('brief.title') : s.title, t('usage.capped')); return null }
     scheduleRunning.add(s.id)
     if (!byHand) schedules.ran(s.id, Date.now()) // first, so a slow run is not started twice
     const title = s.kind === 'brief' ? t('brief.title') : s.title
@@ -1367,16 +1418,22 @@ app.whenReady().then(() => {
       let html, line
       if (s.kind === 'brief') {
         const b = schedules.read().brief
-        ;({ html, line } = await brief.make({ now, calendar, notes, ask, fetch: globalThis.fetch, place: b.place, switches: b.sections, allowed: app => aiSwitch.allows(app) }, title))
+        // no place set (the user, 4 Nov: "it does not show weather … where do I declare location"): where the phone is now
+        let place = b.place
+        if (!place && b.sections?.weather !== false && aiSwitch.allows('web')) {
+          const fix = await sync?.phoneLocation(20_000).catch(() => null)
+          if (Number.isFinite(fix?.lat) && Number.isFinite(fix?.lng)) place = { name: t('brief.placePhone', { device: fix.device }), lat: fix.lat, lon: fix.lng }
+        }
+        ;({ html, line } = await brief.make({ now, calendar, notes, ask, fetch: globalThis.fetch, place, switches: b.sections, allowed: app => aiSwitch.allows(app) }, title))
       } else { line = await ask(`${s.prompt}\n\n(This runs by itself on a schedule and the answer is shown as a page: it may be longer than usual, in short paragraphs.)`); html = brief.answer(title, now, line) }
       const name = `${brief.dayKey(new Date(now))}${s.kind === 'brief' ? '' : '-' + s.id.slice(0, 8)}.html`, file = path.join(BRIEFS, name)
       fs.mkdirSync(BRIEFS, { recursive: true })
       fs.writeFileSync(file, html)
       fs.writeFileSync(path.join(BRIEFS, 'latest.json'), JSON.stringify({ at: now, title, text: String(line).slice(0, 300), file: name }))
-      notify(title, String(line).slice(0, 200) || t('brief.tapToOpen'), () => shell.openPath(file))
+      notify('assistant', title, String(line).slice(0, 200) || t('brief.tapToOpen'), () => shell.openPath(file))
       sync?.nudge().catch(() => {})
       return file
-    } catch (e) { notify(title, t('brief.failed', { error: e.message })); throw e } finally { scheduleRunning.delete(s.id) }
+    } catch (e) { notify('assistant', title, t('brief.failed', { error: e.message })); throw e } finally { scheduleRunning.delete(s.id) }
   }
   setTimeout(planSchedules, 15_000) // after the start's own work
   // changed on the phone (sync writes the file): the plan and the window follow
@@ -1550,10 +1607,10 @@ app.whenReady().then(() => {
     audioJobs.set(id, j); jobSend(j)
     runAudio(spec, doc, path.join(AUDIO, id), p => { Object.assign(j, p); jobSend(j) }, id).then(r => {
       Object.assign(j, { state: 'done', result: r }); jobSend(j)
-      notify(t('attach.readyTitle'), t('attach.readyBody', { name: r.title, min: Math.round(r.seconds / 60) }), () => assistantCommand('open'))
+      notify('assistant', t('attach.readyTitle'), t('attach.readyBody', { name: r.title, min: Math.round(r.seconds / 60) }), () => assistantCommand('open'))
     }, e => {
       Object.assign(j, { state: 'failed', error: e.message }); jobSend(j)
-      notify(t('attach.failedTitle'), e.message)
+      notify('assistant', t('attach.failedTitle'), e.message)
     })
     return jobView(j)
   })

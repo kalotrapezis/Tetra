@@ -1782,3 +1782,23 @@ test('a device 90 % full: said once, and the move suggested is two years, or one
     fs.rmSync(tmp, { recursive: true })
   }
 })
+
+test("a phone's AI Assist: done on this computer, or a clear error naming the devices there are", async () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'drive-sync-'))
+  const db = library.open(path.join(tmp, 'data'))
+  const done = []
+  const server = await new SyncServer({ db, dataDir: path.join(tmp, 'data'), photosRoot: path.join(tmp, 'Photos'), port: 0, onAssist: (c, from) => { done.push([c, from]) } }).start()
+  const call = (m, u, o) => request(server.port, server.fingerprint, m, u, o)
+  try {
+    const { token } = (await call('POST', '/pair', { json: { code: server.startPairing().code, name: 'Xiaomi 15' } })).body
+    assert.equal((await call('POST', '/assist/do', { json: { to: 'pc', what: 'play' } })).status, 401, 'only a paired device')
+    const here = await call('POST', '/assist/do', { token, json: { to: 'PC', what: 'play', q: 'disco', list: true } })
+    assert.deepEqual(here.body, { ok: true, device: server.self().name })
+    assert.deepEqual(done, [[{ to: 'PC', what: 'play', q: 'disco', list: true }, 'Xiaomi 15']])
+    const none = await call('POST', '/assist/do', { token, json: { to: 'tablet', what: 'text', text: 'γεια' } })
+    assert.match(none.body.error, /No paired device called "tablet"/)
+    assert.deepEqual(none.body.devices, [server.self().name], 'the asking phone is not offered back to itself')
+    assert.equal((await call('POST', '/assist/do', { token, json: { what: 'run', to: 'pc' } })).body.error, 'Unknown command.')
+    assert.equal(done.length, 1)
+  } finally { await server.stop?.(); db.close?.() }
+})

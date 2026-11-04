@@ -70,7 +70,7 @@ export function App() {
   const [analysis, setAnalysis] = useState<Analysis | null>(null)
   const [vault, setVault] = useState<VaultStatus | null>(null)
   const [editing, setEditing] = useState<{ item: Media; hide?: Hide } | null>(null)
-  const [unread, setUnread] = useState(0)
+  const [unread, setUnread] = useState<Record<string, number>>({}) // per applet (notify()'s first word), so each shows its own
   const [nas, setNas] = useState(false) // a NAS rings no timer: nobody sits at it (Role.tsx)
   // the pill by the name (the user, 26 Oct): Alpha when set up as a client or a NAS (not yet tried with a second computer), else Beta
   const [alpha, setAlpha] = useState(false)
@@ -78,7 +78,12 @@ export function App() {
   const [guide, setGuide] = useState(guideFirstTime) // the guide's panel beside the page: the first time, and from Settings › Guide
   useEffect(() => { const t = setTimeout(preloadContacts, 1500); return () => clearTimeout(t) }, []) // Contacts read ahead, so the page opens full (24 Oct)
   useEffect(() => {
-    const count = () => window.drive.notifications.list().then(l => setUnread(l.filter(n => !n.read).length))
+    const count = () => window.drive.notifications.list().then(async l => {
+      const by: Record<string, number> = {}
+      for (const n of l) if (!n.read) by[n.applet ?? ''] = (by[n.applet ?? ''] ?? 0) + 1
+      if (by[page.kind]) { await window.drive.notifications.read(page.kind); delete by[page.kind] } // its page open: seen
+      setUnread(by)
+    })
     count(); return window.drive.notifications.onChange(count)
   }, [page])
 
@@ -287,8 +292,9 @@ export function App() {
     })} />)
   }
 
+  const total = Object.values(unread).reduce((a, b) => a + b, 0)
   const nav = (target: Page, active: boolean, icon: IconName, label: string) => (
-    <button className={`nav-item ${active ? 'active' : ''}`} title={label} onClick={() => setPage(target)}><Icon name={icon} /><span>{label}</span></button>
+    <button className={`nav-item ${active ? 'active' : ''}`} title={label} onClick={() => setPage(target)}><Icon name={icon} /><span>{label}</span>{!active && unread[target.kind] > 0 && <span className="badge-count">{unread[target.kind]}</span>}</button>
   )
   const filesMode = page.kind === 'files' && !(page.mode === 'browse' && page.folder.startsWith('Trash')) ? page.mode : null
   const inFilesTrash = page.kind === 'files' && page.mode === 'browse' && page.folder.startsWith('Trash')
@@ -445,7 +451,7 @@ export function App() {
         )}
         <div className="rail-bottom">
           <button className={`nav-item ${page.kind === 'notifications' ? 'active' : ''}`} title={t('app.notifications')} onClick={() => setPage({ kind: 'notifications' })}>
-            <Icon name="bell" /><span>{t('app.notifications')}</span>{unread > 0 && <span className="badge-count">{unread}</span>}</button>
+            <Icon name="bell" /><span>{t('app.notifications')}</span>{total > 0 && <span className="badge-count">{total}</span>}</button>
           {nav({ kind: 'settings' }, page.kind === 'settings', 'settings', t('app.settings'))}
         </div>
         <div className="rail-foot">

@@ -35,6 +35,14 @@ site shows it, in every language.
 - [x] **Music behind the map**: Player mode for any page, background play, radio favourites in folders for ‹ ›, Maps' 🎧.
 - [x] **Messages**: SMS as chats on the phone, side by side on a tablet and on the computer; Tetra as the default SMS app.
 - [x] **Alarms and the stopwatch** synced with the computer's Clock.
+- [ ] **Notifications by applet** (4 Nov): on the computer each app in the sidebar shows its own count (cleared when
+      opened) and the Notifications list shows each one under its app's icon; on the phone a bell on Home opens a
+      notification centre grouped by applet with Home's icons, and each Home tile shows its own count. The launcher icons
+      stop counting what is always there (Listening, sync, a countdown).
+- [ ] **AI Assist plays and sends** (4 Nov): «play disco on YouTube» finds playlists and plays the first; «play the radio»
+      plays Maps' driving station, «βάλε Kosmos» a saved one; «δυνάμωσε / χαμήλωσε / ένταση στο 30»; «play it on the
+      tablet», «send the answer to the PC», «open the brief on the PC» go to another device through the computer.
+- [ ] **Daily brief weather** (4 Nov): without a place set it uses where the phone is; the phone's Scheduled tab shows and sets it.
 
 ## Numbers
 - [x] **Speed of Mail and AI Assist** (1 Nov, `desktop/PERF_MAIL_AI.md`): the computer's window 496 → 97 ms; Mail's list

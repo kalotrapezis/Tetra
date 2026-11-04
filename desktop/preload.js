@@ -115,7 +115,7 @@ contextBridge.exposeInMainWorld('drive', {
   notesExportOne: id => ipcRenderer.invoke('notes:exportOne', id),
   notifications: {
     list: () => ipcRenderer.invoke('notifications:list'),
-    read: () => ipcRenderer.invoke('notifications:read'),
+    read: applet => ipcRenderer.invoke('notifications:read', applet),
     clear: () => ipcRenderer.invoke('notifications:clear'),
     onChange: cb => { const f = () => cb(); ipcRenderer.on('notifications-changed', f); return () => ipcRenderer.removeListener('notifications-changed', f) },
   },

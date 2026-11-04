@@ -114,9 +114,9 @@ async function copyVerified(src, dest, expected) {
 
 class SyncServer {
   /** onReceived(receipt) runs after each verified file (e.g. to schedule a rescan); onSent({ device, paths }) after a burst of Send to computer. */
-  constructor({ db, documents, people, files, notes = null, onNotes = () => {}, onNotesSynced = () => {}, dataDir, photosRoot, onReceived = () => {}, onSent = () => {}, onCall = () => {}, port = PORT, beaconPort = BEACON_PORT, trashItem = null, purgatory = null, data = null, soundHere = () => false, callAudio = null, mail = null, onFull = null }) {
+  constructor({ db, documents, people, files, notes = null, onNotes = () => {}, onNotesSynced = () => {}, dataDir, photosRoot, onReceived = () => {}, onSent = () => {}, onCall = () => {}, onAssist = null, port = PORT, beaconPort = BEACON_PORT, trashItem = null, purgatory = null, data = null, soundHere = () => false, callAudio = null, mail = null, onFull = null }) {
     // soundHere(): the phone is on this computer's Bluetooth; callAudio(received, send) → stop: its call sound both ways (callaudio.js)
-    Object.assign(this, { db, documents, people, files, notes, onNotes, onNotesSynced, notesSynced: null, dataDir, photosRoot, onReceived, onSent, onCall, port, beaconPort, trashItem, purgatory, data, soundHere, callAudio })
+    Object.assign(this, { db, documents, people, files, notes, onNotes, onNotesSynced, notesSynced: null, dataDir, photosRoot, onReceived, onSent, onCall, onAssist, port, beaconPort, trashItem, purgatory, data, soundHere, callAudio })
     // mail: { rule(mailDevice, row, name), sync(), credentials(account) } — main.js's mail engine, for a device's Mail row
     this.mail = mail
     this.onFull = onFull // (deviceId, name, percent): a device filled past 90 %
@@ -905,6 +905,32 @@ class SyncServer {
     return got ?? { error: said ?? t('sync.errPhoneNoAnswer') }
   }
 
+  /**
+   * A command from a device's AI Assist ({ to, what: play | radio | link | text | brief, … }): done here when [to] is this
+   * computer (or empty), else sent to the paired device whose name or kind it names (SyncServer.kt /assist/do).
+   * { ok, device } or { error, devices } with the names there are, for the assistant to ask again.
+   */
+  async assistDo(c, fromId) {
+    if (!c || typeof c !== 'object' || !['play', 'radio', 'link', 'text', 'brief'].includes(c.what)) return { error: 'Unknown command.' }
+    const me = this.self(), to = String(c.to ?? '').trim().toLowerCase()
+    const devices = this.db.prepare(`SELECT id, name, kind, peer_fp, peer_hosts, peer_port, peer_token FROM sync_devices
+      WHERE peer_fp IS NOT NULL AND peer_token IS NOT NULL AND volume_uuid IS NULL`).all().filter(d => d.id !== fromId)
+    const names = [me.name, ...devices.map(d => d.name)]
+    const KIND = { computer: /^(computer|pc|laptop|desktop|υπολογιστ|λάπτοπ|λαπτοπ)/, tablet: /^(tablet|ταμπλέτ|τάμπλετ)/, phone: /^(phone|mobile|κινητ|τηλέφων)/ }
+    const isKind = (k, word) => KIND[k]?.test(word)
+    if (!to || to === me.name.toLowerCase() || isKind(me.kind, to) || isKind('computer', to) && !devices.some(d => d.kind === 'computer' && to.includes(d.name.toLowerCase()))) {
+      if (!this.onAssist) return { error: 'This computer cannot do that.' }
+      await this.onAssist(c, this.db.prepare('SELECT name FROM sync_devices WHERE id = ?').get(fromId)?.name ?? '')
+      return { ok: true, device: me.name }
+    }
+    const d = devices.find(x => x.name.toLowerCase() === to) ?? devices.find(x => to.includes(x.name.toLowerCase()) || x.name.toLowerCase().includes(to))
+      ?? devices.find(x => isKind(x.kind, to))
+    if (!d) return { error: `No paired device called "${c.to}".`, devices: names }
+    const r = await this.reach(d, `/assist/do?c=${encodeURIComponent(JSON.stringify({ ...c, text: c.text == null ? undefined : String(c.text).slice(0, 1000), from: this.db.prepare('SELECT name FROM sync_devices WHERE id = ?').get(fromId)?.name ?? '' }))}`, 8000)
+    if (r?.status === 200) return { ok: true, device: d.name }
+    return { error: r?.status === 404 ? `${d.name} needs a newer Tetra.` : `${d.name} did not answer (off, or away from the network).`, devices: names }
+  }
+
   /** Keeps the newer open/close of each path; answers with every path's newest. */
   mergeEditorTabs(tabs) {
     const keep = this.db.prepare(`INSERT INTO editor_tabs(path, open, at) VALUES(?, ?, ?)
@@ -1611,6 +1637,11 @@ class SyncServer {
     // One file of the mail archive by its path alone (Mail/<address>/…): a phone keeps only recent mail and fetches an older
     // one, or one it let go to free space (then sync no longer offers it), when it is opened (MAIL_PLAN §2).
     // The phone opened Mail: look for new mail now, not at the next quarter hour (the user, 31 Oct)
+    // AI Assist on a phone: "play it on the tablet", "send the answer to the PC" (the user, 4 Nov). For this computer, or
+    // passed on to the paired device named; what it may do is the receiver's own short list (assistDo).
+    if (req.method === 'POST' && url.pathname === '/assist/do') {
+      return this.send(res, 200, await this.assistDo(await this.json(req, 1 << 16), device.id))
+    }
     if (req.method === 'POST' && url.pathname === '/mail/sync') {
       if (this.connection(device.id, 'mail').direction === 'off') return this.send(res, 200, { off: true })
       this.mail?.sync?.()
