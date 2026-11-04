@@ -1,0 +1,10 @@
+{
+ "v": 1,
+ "kdf": "argon2id",
+ "m": 1024,
+ "t": 1,
+ "p": 1,
+ "salt": "nFCtWHnMExfVig4Q26X/Lw==",
+ "made": 1000,
+ "check": "uu729V5vMmkUkT/t.cZX6zbxDkv5K2+QmqtHf29689+c7on9MvU5ibtVTzyZhLSFPcmw/"
+}

@@ -10,6 +10,7 @@ const { Files } = require('./files')
 const faces = require('./faces')
 const places = require('./places')
 const { Vault } = require('./vault')
+const { Passwords, otpauth } = require('./passwords')
 const editor = require('./editor')
 const docs = require('./documents')
 const { SyncServer, lanAddresses, FROM_PHONE } = require('./sync')
@@ -129,6 +130,7 @@ const stopRouters = () => { for (const r of routers.values()) r.stop(); routers.
 let mapBuilder = null // the map builder (mapbuild.js): a country's map, roads and search, made here for every device
 let dataCounter = null // Data (datacount.js): this computer's network counts, its Wi-Fi, the phone's speed test
 let thumbs = null // Files' thumbnails (thumbs.js), made when Files first asks for one
+let passwords = null // Passwords and 2FA (passwords.js): the phone's encrypted vault in .System/Browser/Shared, read and written here
 const timerRung = new Set()
 function planTimer() {
   clearTimeout(timerAlarm)
@@ -368,6 +370,17 @@ const fmtBytes = n => n >= 1e9 ? `${(n / 1e9).toFixed(1)} GB` : `${Math.round(n 
 const shownNotes = new Set()
 // Mail's secrets: a password, or {"refresh": …} for an account signed in with Microsoft — encrypted, in this computer's settings only
 const mailSecret = id => { try { const s = setting('mailSecret:' + id); return s ? safeStorage.decryptString(Buffer.from(s, 'base64')) : null } catch { return null } }
+// Passwords' key and merge bases: in the app's own storage, encrypted by the system's keyring; without one, for this run only
+const passwordsMemory = new Map()
+const passwordsKeep = {
+  get: k => { if (passwordsMemory.has(k)) return passwordsMemory.get(k); try { const s = setting('passwords:' + k); return s ? safeStorage.decryptString(Buffer.from(s, 'base64')) : null } catch { return null } },
+  set: (k, v) => {
+    passwordsMemory.delete(k)
+    if (v == null) db.prepare('DELETE FROM settings WHERE key = ?').run('passwords:' + k)
+    else if (safeStorage.isEncryptionAvailable()) setSetting('passwords:' + k, safeStorage.encryptString(v).toString('base64'))
+    else passwordsMemory.set(k, v)
+  },
+}
 const keepMailSecret = (id, value) => setSetting('mailSecret:' + id, safeStorage.encryptString(value).toString('base64'))
 const msClient = () => setting('mailMicrosoftClientId') || ''
 const msTokens = new Map(), msRenewing = new Map()
@@ -632,11 +645,15 @@ app.whenReady().then(() => {
     fs.mkdirSync(browser, { recursive: true })
     fs.watch(browser, { recursive: true }, (_, name) => {
       if (name && path.basename(String(name)).startsWith('.')) return // a write in progress (.part)
+      if (/^(Passwords|TwoFactor)\b/.test(String(name))) win?.webContents.send('passwords-changed') // the page reads the others' again
       clearTimeout(settle); settle = setTimeout(() => sync?.nudge().catch(() => {}), 500)
     })
   } catch (e) { console.warn('[browser] cannot watch', e.message) }
   people = new faces.People(db, DATA_DIR)
   vault = new Vault(db, DATA_DIR)
+  // this computer's file name among the devices': its name and a piece of its machine id (two of one name differ), as the phone's
+  const machine = (() => { try { return fs.readFileSync('/etc/machine-id', 'utf8').trim().slice(0, 6) } catch { return '' } })()
+  passwords = new Passwords({ root: files.disk('Browser'), device: [os.hostname() || 'Computer', machine].filter(Boolean).join('-'), keep: passwordsKeep, user: os.userInfo().username })
   documents = new docs.Documents(db)
   // Read on each question, not once: a device's Photos row can change while the app runs.
   folders = new Folders(db, () => !!sync?.devices().some(d => !d.volume_uuid && d.connections.some(c => c.content === 'photos' && c.direction === 'both')))
@@ -865,6 +882,25 @@ app.whenReady().then(() => {
     if (!people.nextReview() && !documents.nextReview()) sync.nudge().catch(() => {})
   })
   ipcMain.handle('vault:status', () => vault.status())
+  // Passwords: secrets go to the window only while its page is open (unlocked); a wrong passphrase said in the app's words
+  const pwSaid = f => async (...a) => { try { return await f(...a) } catch (e) { throw new Error({ wrong: t('passwords.err.wrong'), short: t('hidden.errShort'), locked: t('passwords.err.locked') }[e.code] ?? e.message) } }
+  ipcMain.handle('passwords:status', () => passwords.status())
+  ipcMain.handle('passwords:passphrase', pwSaid((_, pass, isNew) => passwords.setPassphrase(String(pass), !!isNew)))
+  ipcMain.handle('passwords:open', pwSaid((_, secret) => passwords.open(String(secret))))
+  ipcMain.handle('passwords:lock', () => passwords.lock())
+  ipcMain.handle('passwords:forget', () => passwords.forget())
+  ipcMain.handle('passwords:list', pwSaid(() => passwords.list()))
+  ipcMain.handle('passwords:change', pwSaid((_, kind, old, item) => passwords.change(kind === '2fa' ? '2fa' : 'passwords', old ?? null, item ?? null)))
+  ipcMain.handle('passwords:codes', () => passwords.codes())
+  ipcMain.handle('passwords:otpauth', (_, link) => otpauth(String(link)))
+  let pwWords = null
+  ipcMain.handle('passwords:words', () => pwWords ??= fs.readFileSync(path.join(__dirname, 'data', 'eff_large_wordlist.txt'), 'utf8').split('\n').map(l => l.split('\t')[1]?.trim()).filter(Boolean))
+  // a secret on the clipboard is taken off after 30 s, if it is still there
+  ipcMain.handle('passwords:copy', (_, text) => {
+    const s = String(text)
+    clipboard.writeText(s)
+    setTimeout(() => { if (clipboard.readText() === s) clipboard.clear() }, 30_000)
+  })
   ipcMain.handle('vault:setup', (_, pass) => vault.setup(pass))
   ipcMain.handle('vault:unlock', (_, pass) => vault.unlock(pass))
   ipcMain.handle('vault:lock', () => vault.lock())
@@ -1869,6 +1905,14 @@ app.whenReady().then(() => {
   })
   // Tetra brought to the front: a look for new mail now (the user, 31 Oct), at most once a minute
   let mailLooked = 0
+  // Passwords locks again when nobody has looked at Tetra for five minutes, or the screen locks (the phone's locks each time)
+  let away = null
+  const goneAway = () => { clearTimeout(away); away = setTimeout(lockPasswords, 5 * 60_000) }
+  const lockPasswords = () => { if (passwords?.status().open) { passwords.lock(); win?.webContents.send('passwords-locked') } }
+  for (const e of ['blur', 'hide', 'minimize']) win.on(e, goneAway)
+  win.on('focus', () => clearTimeout(away))
+  powerMonitor.on('lock-screen', lockPasswords)
+  powerMonitor.on('suspend', lockPasswords)
   win.on('focus', () => { if (Date.now() - mailLooked > 60_000) { mailLooked = Date.now(); mail?.syncNow() } })
   watchCalendar()
   watchContacts()

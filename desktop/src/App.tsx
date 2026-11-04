@@ -19,6 +19,7 @@ import { MailPage } from './Mail'
 import { TimerBell, TimerPage } from './Timer'
 import { MapsPage } from './Maps'
 import { ContactsPage, preloadContacts } from './Contacts'
+import { PasswordsPage } from './Passwords'
 import { PhonePage } from './Phone'
 import { MessagesPage } from './Messages'
 import { DataPage } from './Data'
@@ -30,7 +31,7 @@ import { shownName } from './People'
 import { t, tr } from './i18n'
 
 type Page = { kind: 'photos' } | { kind: 'collections' } | { kind: 'collection'; id: string; name: string } | { kind: 'files'; mode: FilesMode; folder: string } | { kind: 'photoTrash' }
-  | { kind: 'people' } | { kind: 'person'; id: string; name: string } | { kind: 'review' } | { kind: 'map'; focus?: string } | { kind: 'hidden' } | { kind: 'sync' } | { kind: 'notes'; open?: string } | { kind: 'calendar' } | { kind: 'mail' } | { kind: 'timer' } | { kind: 'maps'; query?: string; at?: number } | { kind: 'assistant' } | { kind: 'contacts' } | { kind: 'phone' } | { kind: 'messages' } | { kind: 'data' } | { kind: 'notifications' } | { kind: 'settings'; start?: string; at?: number }
+  | { kind: 'people' } | { kind: 'person'; id: string; name: string } | { kind: 'review' } | { kind: 'map'; focus?: string } | { kind: 'hidden' } | { kind: 'sync' } | { kind: 'notes'; open?: string } | { kind: 'calendar' } | { kind: 'mail' } | { kind: 'timer' } | { kind: 'maps'; query?: string; at?: number } | { kind: 'assistant' } | { kind: 'contacts' } | { kind: 'passwords' } | { kind: 'phone' } | { kind: 'messages' } | { kind: 'data' } | { kind: 'notifications' } | { kind: 'settings'; start?: string; at?: number }
 
 const SYSTEM: { id: string; key: string; icon: IconName; test: (m: Media) => boolean }[] = [
   { id: 'favorites', key: 'files.favorites', icon: 'heart', test: m => !!m.favorite },
@@ -347,6 +348,7 @@ export function App() {
   else if (page.kind === 'phone') content = <PhonePage say={say} />
   else if (page.kind === 'messages') content = <MessagesPage say={say} />
   else if (page.kind === 'data') content = <DataPage />
+  else if (page.kind === 'passwords') content = <PasswordsPage setDialog={setDialog} say={say} />
   else if (page.kind === 'contacts') content = <ContactsPage setDialog={setDialog} say={say} openPerson={(id, name) => setPage({ kind: 'person', id, name })} />
   else if (page.kind === 'notifications') content = <NotificationsPage />
   else if (page.kind === 'settings') content = <SettingsPage key={page.at} start={page.start} onGuide={() => setGuide(true)} />
@@ -436,6 +438,7 @@ export function App() {
         {nav({ kind: 'timer' }, page.kind === 'timer', 'timer', t('app.timer'))}
         {nav({ kind: 'maps' }, page.kind === 'maps', 'map', t('app.maps'))}
         {nav({ kind: 'contacts' }, page.kind === 'contacts', 'person', t('app.contacts'))}
+        {nav({ kind: 'passwords' }, page.kind === 'passwords', 'lock', t('app.passwords'))}
         {nav({ kind: 'phone' }, page.kind === 'phone', 'call', t('app.phone'))}
         {nav({ kind: 'messages' }, page.kind === 'messages', 'chat', t('app.sms'))}
         {aiOn && nav({ kind: 'assistant' }, page.kind === 'assistant', 'sparkle', t('app.assistant'))}
