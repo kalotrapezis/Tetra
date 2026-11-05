@@ -51,10 +51,10 @@ const PROFILES = `  profiles:
  * phone. Asked without the graph's shortcuts, which are made for car.json.
  */
 const MAIN_ROADS = {
-  distance_influence: 0,
+  distance_influence: 90, // MapsRouting.MAIN_DISTANCE: straight on, not to the motorway at all costs (5 Nov)
   priority: [
     { if: 'road_class == MOTORWAY || road_class == TRUNK || road_class == PRIMARY || road_class == SECONDARY', multiply_by: '1' },
-    { else_if: 'road_class == TERTIARY', multiply_by: '0.8' },
+    { else_if: 'road_class == TERTIARY', multiply_by: '0.9' },
     { else_if: 'road_class == RESIDENTIAL || road_class == LIVING_STREET', multiply_by: '0.6' },
     { else_if: 'road_class == UNCLASSIFIED', multiply_by: '0.4' },
     { else_if: 'road_class == TRACK', multiply_by: '0.1' },
