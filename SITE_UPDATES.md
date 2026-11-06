@@ -51,4 +51,4 @@ site shows it, in every language.
       an answer's wait is Mistral's (1–9 s). Add them beside the README's speed table.
 
 ## Downloads
-- [x] Bump the download buttons, labels and QR code to the next release once it is out (now 0.8.0 beta 3).
+- [x] Bump the download buttons, labels and QR code to the next release once it is out (now Android 0.8.0 beta 6, the desktop 0.8.0 beta 5).
