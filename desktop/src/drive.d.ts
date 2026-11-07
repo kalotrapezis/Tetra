@@ -104,6 +104,16 @@ export interface SmsMessage { id: number; thread: number; address: string; body:
 export type AlarmAction = 'dismiss' | 'snooze' | 'skip' | 'on' | 'off' | 'delete'
 export interface AlarmItem { id: string; time: string; days: string[]; date: string | null; label: string; state: 'on' | 'off'; answered: number | null; snooze: number | null; rev: number; by: string; ringing: number | null; next: number | null; on: boolean; skipped: boolean }
 export interface StopwatchItem { state: 'counting' | 'held' | 'reset'; started: number | null; elapsed: number; laps: number[]; rev: number; by: string }
+/** A medicine as the computer works it out (pills.js derive): its file's fields and what the logs say. */
+export interface PillMed { id: string; name: string; strength: string; title: string; dose: number; times: string[]; days: string[]; every: number; until: string | null
+  perBox: number; refillDays: number; refillTimes: number; refillAsked: number; refillOn: string | null; archived: boolean; since: number | null
+  shape: 'round' | 'oval' | 'capsule' | 'liquid'; color: string; color2: string; food: '' | 'with' | 'before' | 'after' | 'empty'
+  stock: number; counted: boolean; daysLeft: number | null; lastDay: string | null; low: boolean; photo: string | null }
+export interface PillDose { med: string; due: number; state: 'waiting' | 'taken' | 'skipped' | 'missed'; at: number | null }
+export interface PillSlot { med: string; time: string; doses: PillDose[]; due: number; onTime: number; late: number; missed: number; lateMinutes: number }
+export interface PillAdvice { med: string; slot: string; kind: 'move' | 'days' | 'bedside' | 'earlier'; time: string | null; days: string[] }
+export interface PillsView { now: number; day: number; meds: PillMed[]; doses: PillDose[]; slots: PillSlot[]; advice: PillAdvice[] }
+export interface PillEvent { at: number; med: string; kind: string; due: number | null; amount: number; stock: number; note: string }
 export interface TimerItem { id: string; seconds: number; label: string; state: 'running' | 'paused' | 'stopped'; ends: number | null; left: number; rev: number; by: string; pinned: boolean; leftMs: number; ringing: boolean; ready: boolean }
 
 export interface VaultStatus { configured: boolean; unlocked: boolean; count: number }
@@ -297,6 +307,21 @@ declare global {
         last(): Promise<number>
       }
       onTimerChanged(cb: () => void): () => void
+      pills: {
+        read(dayStart: number): Promise<PillsView>
+        history(id: string): Promise<{ when: number; e: PillEvent | null }[]>
+        answer(id: string, due: number | null, action: 'take' | 'skip' | 'undo'): Promise<void>
+        save(m: Partial<PillMed> & { id: string }, boxes: number, loose: number): Promise<void>
+        addStock(id: string, boxes: number, loose: number): Promise<void>
+        setStock(id: string, value: number): Promise<void>
+        remove(id: string): Promise<void>
+        pickPhoto(id: string): Promise<string | null>
+        settings(): Promise<{ reminders: boolean }>
+        setReminders(on: boolean): Promise<void>
+      }
+      onPillsChanged(cb: () => void): () => void
+      onPillsChime(cb: () => void): () => void
+      onOpenPills(cb: () => void): () => void
       ai: {
         get(): Promise<AiSettings>
         set(changes: { enabled?: boolean; apps?: Record<string, boolean> }): Promise<AiSettings>

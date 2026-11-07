@@ -55,7 +55,7 @@ function TimerCard({ t, act }: { t: TimerItem; act: (id: string, a: TimerAction)
 }
 
 /** The clock in a dialog, × and ✓ under it (the tablet's DialDialog): a new timer's length, an alarm's time. */
-function DialDialog({ h0, m0, close, done, children }: { h0: number; m0: number; close: () => void; done: (h: number, m: number) => void; children?: ReactNode }) {
+export function DialDialog({ h0, m0, close, done, children }: { h0: number; m0: number; close: () => void; done: (h: number, m: number) => void; children?: ReactNode }) {
   const [h, setH] = useState(h0)
   const [m, setM] = useState(m0)
   return (

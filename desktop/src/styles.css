@@ -949,6 +949,105 @@ button.link.risk { color: #d8663f; font-weight: 600; }
 .stopwatch-laps { width: min(420px, 100%); display: flex; flex-direction: column; gap: 6px; }
 .stopwatch-laps div { display: grid; grid-template-columns: 1fr 1fr auto; font-variant-numeric: tabular-nums; }
 
+/* Pills (Pills.tsx): the Timer's page, in its pink (the phone's PILLS_COLOR) */
+:root { --cat-pills: #E5487A; }
+.settings-icon.pills { --c: var(--cat-pills); }
+.content[data-app=pills] { --app: var(--cat-pills); }
+.pills-col { flex: 0 1 900px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.pills-go { background: var(--cat-pills); color: #fff; }
+.pills-red { color: #e24b4a !important; }
+.pills-ok { color: var(--cat-pills); }
+.pills-head { margin: 8px 4px 0; font-size: 14px; color: var(--muted); font-weight: 600; }
+.pill-emblem { display: inline-grid; place-items: center; flex: none; border-radius: 50%; object-fit: cover; background: color-mix(in srgb, var(--cat-pills) 12%, transparent); }
+.pills-empty { display: flex; flex-direction: column; align-items: center; gap: 16px; padding-top: 32px; text-align: center; }
+.pills-week { display: flex; justify-content: space-between; }
+.pills-week button { display: flex; flex-direction: column; align-items: center; padding: 6px 12px; border-radius: 14px; }
+.pills-week button small { font-size: 11px; color: var(--muted); }
+.pills-week button.today small { color: var(--cat-pills); }
+.pills-week button b { font-size: 17px; font-weight: 500; }
+.pills-week button.on { background: color-mix(in srgb, var(--cat-pills) 22%, transparent); }
+.pills-week button.on b { font-weight: 700; }
+.pills-week button:hover { background: var(--hover); }
+.pills-parts { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); }
+.pills-card { padding: 12px 8px 8px 14px; border-radius: 24px; display: flex; flex-direction: column; }
+.pills-card.alarm { outline: 2px solid #e24b4a; }
+.pills-card h3 { display: flex; align-items: center; gap: 8px; margin: 0 0 4px; font-size: 15px; font-weight: 600; color: var(--cat-pills); }
+.pills-card.alarm h3 { color: #e24b4a; }
+.pills-card h3 .pills-title { flex: 1; color: var(--text); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pills-card.alarm h3 .pills-title { color: #e24b4a; }
+.pills-card h3 small { color: var(--muted); font-weight: 500; padding-right: 8px; }
+.pills-dose { display: flex; align-items: center; gap: 12px; padding: 8px 4px 8px 0; border-radius: 16px; }
+.pills-dose.open { cursor: pointer; }
+.pills-dose.open:hover { background: var(--hover); }
+.pills-dose-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.pills-dose.answered strong { color: var(--muted); }
+.pills-dose-text small, .pills-med small { color: var(--muted); font-size: 12.5px; }
+.pills-meds { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); }
+.pills-med { padding: 14px; border-radius: 24px; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; cursor: pointer; }
+.pills-med:hover { background: var(--island-2); }
+.pills-med .text-button { padding: 6px 10px; margin-left: -10px; display: inline-flex; align-items: center; gap: 4px; }
+.pills-bar { width: 100%; height: 6px; border-radius: 3px; background: var(--island-2); overflow: hidden; }
+.pills-bar span { display: block; height: 100%; background: var(--cat-pills); }
+.pills-bar.low span { background: #e24b4a; }
+.pills-settings { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; }
+.dialog:has(.pills-panel), .dialog:has(.pills-guide) { width: min(560px, 92vw); box-sizing: border-box; }
+.pills-panel { display: flex; flex-direction: column; gap: 10px; }
+.pills-panel-head { display: flex; align-items: center; gap: 14px; }
+.pills-panel-head > div { flex: 1; min-width: 0; }
+.pills-panel-head h3 { margin: 0; }
+.pills-panel-head p { margin: 2px 0 0; }
+.pills-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.pills-buttons .chip { background: var(--island-2); padding: 8px 14px; }
+.pills-history { display: flex; flex-direction: column; gap: 4px; max-height: 40vh; overflow-y: auto; }
+.pills-history div { display: grid; grid-template-columns: 150px 1fr; gap: 12px; font-size: 14px; }
+.pills-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.pills-metrics div { padding: 12px 14px; border-radius: 20px; display: flex; flex-direction: column; }
+.pills-metrics b { font-size: 24px; font-weight: 500; }
+.pills-metrics small { color: var(--muted); }
+.pills-advice { display: grid; grid-template-columns: auto 1fr auto; gap: 4px 10px; align-items: start; padding: 12px 6px 12px 14px; border-radius: 24px; background: color-mix(in srgb, var(--cat-pills) 14%, transparent); }
+.pills-advice > svg { color: var(--cat-pills); margin-top: 2px; }
+.pills-advice p { margin: 0; }
+.pills-advice .round { width: 30px; height: 30px; }
+.pills-advice .filled-button { grid-column: 2 / 4; justify-self: end; margin-right: 8px; }
+.pills-squares { display: grid; grid-template-columns: repeat(30, 1fr); gap: 3px; padding: 4px 6px 4px 0; }
+.pills-squares span { aspect-ratio: .7; border-radius: 3px; box-sizing: border-box; }
+.pills-squares .on { background: var(--cat-pills); }
+.pills-squares .late { background: color-mix(in srgb, var(--cat-pills) 40%, transparent); }
+.pills-squares .missed { border: 1.5px solid #e24b4a; }
+.pills-squares .skipped { background: var(--muted); }
+.pills-squares .waiting { border: 1.5px solid color-mix(in srgb, var(--muted) 40%, transparent); }
+.pills-guide { display: flex; flex-direction: column; gap: 12px; }
+.pills-guide h3 { margin: 4px 0 0; font-size: 20px; }
+.pills-guide-head { font-weight: 600; color: var(--muted); }
+.pills-progress { height: 4px; border-radius: 2px; background: var(--island-2); overflow: hidden; }
+.pills-progress span { display: block; height: 100%; background: var(--cat-pills); transition: width .2s; }
+.pills-label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--muted); }
+.pills-label .field { color: var(--text); font-size: 15px; }
+.pills-bad { outline: 2px solid #e24b4a; }
+.pills-center { display: flex; justify-content: center; }
+.pills-shapes { display: flex; gap: 10px; }
+.pills-shapes button { padding: 6px; border-radius: 16px; background: var(--island-2); outline: 2px solid transparent; }
+.pills-shapes button.on { outline-color: var(--cat-pills); }
+.pills-swatches { display: flex; flex-wrap: wrap; gap: 8px; }
+.pills-swatches button { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--muted); }
+.pills-swatches button.on { border: 3px solid var(--cat-pills); }
+.pills-times { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.pills-time { display: inline-flex; align-items: center; gap: 4px; padding: 2px 2px 2px 12px; border-radius: 999px; background: color-mix(in srgb, var(--cat-pills) 16%, transparent); color: var(--cat-pills); }
+.pills-time-text { color: var(--text); font-size: 16px; padding: 6px 2px; }
+.pills-time .round { width: 30px; height: 30px; color: var(--text); }
+.pills-guide .chip { background: var(--island-2); }
+.pills-guide .chip.on { background: var(--cat-pills); color: #fff; }
+.pills-days button.on { background: var(--cat-pills); }
+.pills-every { display: flex; align-items: center; gap: 8px; }
+.pills-every .round { width: 36px; height: 36px; font-size: 20px; }
+.pills-check { font-size: 15px; color: var(--text); align-items: center; }
+.pills-guide .pills-total { color: var(--cat-pills); font-weight: 600; font-size: 16px; margin: 0; }
+.pills-summary { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 24px; background: var(--island-2); }
+.pills-summary div { display: flex; flex-direction: column; }
+.pills-summary small { color: var(--muted); }
+.pills-gap { flex: 1; }
+.timer-dial:has(.pills-dial-mark) { --timer-teal: var(--cat-pills); }
+
 /* Maps (Maps.tsx): the offline map, a side panel of search, saved places and trips */
 .maps-page { position: absolute; inset: 0; container-type: size; }
 .maps-canvas { position: absolute; inset: 0; border-radius: var(--radius); overflow: hidden; }

@@ -1,6 +1,9 @@
 import { useId } from 'react'
 // Material Symbols Outlined 400 (Apache 2.0), the phone's icon family. Generated from @material-symbols/svg-400.
 const PATHS = {
+  barChart: 'M640-160v-280h160v280H640Zm-240 0v-640h160v640H400Zm-240 0v-440h160v440H160Z',
+  skipNext: 'M660,-240V-720H740V-240H660ZM220,-240V-720L580,-480L220,-240ZM300,-390L436,-480L300,-570V-390Z',
+  bedtime: 'M484,-80q-84,0 -157.5,-32t-128,-86.5Q144,-253 112,-326.5T80,-484q0,-146 93,-257.5T410,-880q-18,99 11,193.5T521,-521q71,71 165.5,100T880,-410q-26,144 -138,237T484,-80Zm0,-80q88,0 163,-44t118,-121q-86,-8 -163,-43.5T464,-465q-61,-61 -97,-138t-43,-163q-77,43 -120.5,118.5T160,-484q0,135 94.5,229.5T484,-160Z',
   menu: 'M120-240v-60h720v60H120Zm0-210v-60h720v60H120Zm0-210v-60h720v60H120Z',
   calendar: 'M180-80q-24 0-42-18t-18-42v-620q0-24 18-42t42-18h65v-60h65v60h340v-60h65v60h65q24 0 42 18t18 42v620q0 24-18 42t-42 18H180Zm0-60h600v-430H180v430Zm0-490h600v-130H180v130Zm0 0v-130 130Z',
   photos: 'M180-120q-24 0-42-18t-18-42v-600q0-24 18-42t42-18h600q24 0 42 18t18 42v600q0 24-18 42t-42 18H180Zm0-60h600v-600H180v600Zm56-97h489L578-473 446-302l-93-127-117 152Zm-56 97v-600 600Z',
@@ -167,6 +170,8 @@ const EVEN_ODD = new Set<string>(['folderScans', ...Object.values(SYSTEM_FOLDER_
 
 // The phone's own drawables on a 24 grid (Material Icons), for the Hide tools shared with it.
 const SMALL = {
+  // Pills' (Tetra-mobile ic_pill, a capsule half filled; drawn turned 45°, below), ic_bar_chart, ic_skip_next, ic_bedtime
+  pill: 'M12,7.5H8A4.5,4.5 0,0 0,8 16.5H12ZM12,7.5H16A4.5,4.5 0,0 1,16 16.5H12ZM12,9.3V14.7H16A2.7,2.7 0,0 0,16 9.3Z',
   dataUsage: 'M13,2.05v3.03c3.39,0.49 6,3.39 6,6.92 0,0.9 -0.18,1.75 -0.48,2.54l2.6,1.53c0.56,-1.24 0.88,-2.62 0.88,-4.07 0,-5.18 -3.95,-9.45 -9,-9.95zM12,19c-3.87,0 -7,-3.13 -7,-7 0,-3.53 2.61,-6.43 6,-6.92V2.05c-5.06,0.5 -9,4.76 -9,9.95 0,5.52 4.47,10 9.99,10 3.31,0 6.24,-1.61 8.06,-4.09l-2.6,-1.53C16.17,17.98 14.21,19 12,19z',
   wifi: 'M1,9l2,2c4.97,-4.97 13.03,-4.97 18,0l2,-2C16.93,2.93 7.08,2.93 1,9zM9,17l3,3 3,-3c-1.65,-1.66 -4.34,-1.66 -6,0zM5,13l2,2c2.76,-2.76 7.24,-2.76 10,0l2,-2C15.14,9.14 8.87,9.14 5,13z',
   textFields: 'M2.5,4v3h5v12h3V7h5V4H2.5zM21.5,9h-9v3h3v7h3v-7h3V9z',
@@ -189,6 +194,7 @@ const SMALL = {
 
 export function Icon({ name, size = 22 }: { name: IconName | 'motionOff' | keyof typeof SMALL; size?: number }) {
   const clip = useId()
+  if (name === 'pill') return <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path transform="rotate(-45 12 12)" d={SMALL.pill} /></svg>
   if (name in SMALL) return <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={SMALL[name as keyof typeof SMALL]} /></svg>
   if (name === 'motionOff') return <svg width={size} height={size} viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true">
     <defs><clipPath id={clip}><path d={MOTION_GAP} /></clipPath></defs>

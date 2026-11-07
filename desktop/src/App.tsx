@@ -17,6 +17,7 @@ import { NotesPage } from './Notes'
 import { CalendarPage } from './Calendar'
 import { MailPage } from './Mail'
 import { TimerBell, TimerPage } from './Timer'
+import { PillsChime, PillsPage } from './Pills'
 import { MapsPage } from './Maps'
 import { ContactsPage, preloadContacts } from './Contacts'
 import { PhonePage } from './Phone'
@@ -30,7 +31,7 @@ import { shownName } from './People'
 import { t, tr } from './i18n'
 
 type Page = { kind: 'photos' } | { kind: 'collections' } | { kind: 'collection'; id: string; name: string } | { kind: 'files'; mode: FilesMode; folder: string } | { kind: 'photoTrash' }
-  | { kind: 'people' } | { kind: 'person'; id: string; name: string } | { kind: 'review' } | { kind: 'map'; focus?: string } | { kind: 'hidden' } | { kind: 'sync' } | { kind: 'notes'; open?: string } | { kind: 'calendar' } | { kind: 'mail' } | { kind: 'timer' } | { kind: 'maps'; query?: string; at?: number } | { kind: 'assistant' } | { kind: 'contacts' } | { kind: 'phone' } | { kind: 'messages' } | { kind: 'data' } | { kind: 'notifications' } | { kind: 'settings'; start?: string; at?: number }
+  | { kind: 'people' } | { kind: 'person'; id: string; name: string } | { kind: 'review' } | { kind: 'map'; focus?: string } | { kind: 'hidden' } | { kind: 'sync' } | { kind: 'notes'; open?: string } | { kind: 'calendar' } | { kind: 'mail' } | { kind: 'timer' } | { kind: 'pills' } | { kind: 'maps'; query?: string; at?: number } | { kind: 'assistant' } | { kind: 'contacts' } | { kind: 'phone' } | { kind: 'messages' } | { kind: 'data' } | { kind: 'notifications' } | { kind: 'settings'; start?: string; at?: number }
 
 const SYSTEM: { id: string; key: string; icon: IconName; test: (m: Media) => boolean }[] = [
   { id: 'favorites', key: 'files.favorites', icon: 'heart', test: m => !!m.favorite },
@@ -132,6 +133,7 @@ export function App() {
   useEffect(() => window.drive.files.onOpenFolder(folder => setPage({ kind: 'files', mode: 'browse', folder })), [])
   // "The map of Cyprus is over 3 months old": its click opens Settings › Maps
   useEffect(() => window.drive.onOpenDevices(() => setPage({ kind: 'sync' })), [])
+  useEffect(() => window.drive.onOpenPills(() => setPage({ kind: 'pills' })), [])
   // a mailto: link (Tetra the default email app, or a link in a mail): Mail, writing a new mail with its fields
   const [compose, setCompose] = useState<(MailCompose & { at: number }) | null>(null)
   useEffect(() => window.drive.mail.onCompose(c => { setPage({ kind: 'mail' }); setCompose({ ...c, at: Date.now() }) }), [])
@@ -339,6 +341,7 @@ export function App() {
   else if (page.kind === 'calendar') content = <CalendarPage setDialog={setDialog} say={say} />
   else if (page.kind === 'mail') content = <MailPage setDialog={setDialog} say={say} compose={compose} />
   else if (page.kind === 'timer') content = <TimerPage say={say} />
+  else if (page.kind === 'pills') content = <PillsPage say={say} openSettings={() => setPage({ kind: 'settings', start: 'pills', at: Date.now() })} />
   // Maps with no map: Settings › Maps with the builder open
   else if (page.kind === 'maps') content = <MapsPage key={page.at} initial={page.query} say={say} onMakeMap={() => {
     try { localStorage.setItem('settingsTab', 'maps'); sessionStorage.setItem('openMapBuilder', '1') } catch {}
@@ -434,6 +437,7 @@ export function App() {
         {nav({ kind: 'notes' }, page.kind === 'notes', 'notes', t('app.notes'))}
         {nav({ kind: 'calendar' }, page.kind === 'calendar', 'calendar', t('app.calendar'))}
         {nav({ kind: 'timer' }, page.kind === 'timer', 'timer', t('app.timer'))}
+        {nav({ kind: 'pills' }, page.kind === 'pills', 'pill', t('app.pills'))}
         {nav({ kind: 'maps' }, page.kind === 'maps', 'map', t('app.maps'))}
         {nav({ kind: 'contacts' }, page.kind === 'contacts', 'person', t('app.contacts'))}
         {nav({ kind: 'phone' }, page.kind === 'phone', 'call', t('app.phone'))}
@@ -508,6 +512,7 @@ export function App() {
       {editing && <Editor item={editing.item} hide={editing.hide} onClose={() => setEditing(null)} onSaved={msg => { setEditing(null); say(msg); reload() }} />}
       {dialog}
       {!nas && <TimerBell />}
+      {!nas && <PillsChime />}
       {toast && <div className="island toast" role="status">{toast.text}
         {toast.undo && <button className="text-button" onClick={() => { const u = toast.undo!; setToast(null); u() }}>{toast.label ?? t('common.undo')}</button>}</div>}
     </div>

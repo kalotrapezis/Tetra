@@ -16,7 +16,7 @@ const fs = require('node:fs')
 const path = require('node:path')
 
 /** The apps the assistant can reach, by the names both platforms use in "apps". */
-const APPS = ['mail', 'calendar', 'notes', 'files', 'contacts', 'phone', 'timer', 'maps', 'web']
+const APPS = ['mail', 'calendar', 'notes', 'files', 'contacts', 'phone', 'timer', 'pills', 'maps', 'web']
 
 class AiSwitch {
   /** [hasKey]() says whether an AI key is set here: the default when no one has chosen yet. */

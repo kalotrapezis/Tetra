@@ -10,11 +10,12 @@ import { formatBytes } from './timeline'
 import { errorText } from './Dialogs'
 import { MailSettings } from './Mail'
 import { UsageCard } from './Usage'
+import { PillsSettings } from './Pills'
 
 // The foot of the sidebar (asked 2026-09-26): what Tetra said, kept — a notification goes by in seconds — and Settings.
 
 /** Each notification's applet (main.js notify()), by its icon in the rail; older ones, from before 4 Nov, keep the bell. */
-const NOTICE_ICON: Record<string, IconName> = { mail: 'mail', calendar: 'calendar', timer: 'timer', maps: 'map', phone: 'call', assistant: 'sparkle', sync: 'refresh', photos: 'photos', files: 'drive' }
+const NOTICE_ICON: Record<string, IconName> = { mail: 'mail', calendar: 'calendar', timer: 'timer', pills: 'pill', maps: 'map', phone: 'call', assistant: 'sparkle', sync: 'refresh', photos: 'photos', files: 'drive' }
 
 export function NotificationsPage() {
   const [list, setList] = useState<AppNotification[] | null>(null)
@@ -43,7 +44,7 @@ export function NotificationsPage() {
 }
 
 /** Settings' pages, as the phone's (SettingsScreen.SettingsPage): the general ones, then one an app in its colour. */
-type SettingsTab = 'appearance' | 'computer' | 'cleanUp' | 'photos' | 'mail' | 'maps' | 'phone' | 'assistant'
+type SettingsTab = 'appearance' | 'computer' | 'cleanUp' | 'photos' | 'mail' | 'maps' | 'phone' | 'pills' | 'assistant'
 const GENERAL: { id: SettingsTab; icon: IconName; title: string; summary: string }[] = [
   { id: 'appearance', icon: 'palette', title: 'settings.appearance', summary: 'settings.sum.appearance' },
   { id: 'computer', icon: 'server', title: 'reset.title', summary: 'settings.sum.computer' },
@@ -54,6 +55,7 @@ const APPS: { id: SettingsTab; icon: IconName; cat: string; title: string; summa
   { id: 'mail', icon: 'mail', cat: 'mail', title: 'app.mail', summary: 'settings.sum.mail' },
   { id: 'maps', icon: 'map', cat: 'maps', title: 'app.maps', summary: 'settings.sum.maps' },
   { id: 'phone', icon: 'call', cat: 'phone', title: 'app.phone', summary: 'settings.sum.phone' },
+  { id: 'pills', icon: 'pill', cat: 'pills', title: 'app.pills', summary: 'settings.sum.pills' },
   { id: 'assistant', icon: 'sparkle', cat: 'assistant', title: 'app.assistant', summary: 'settings.sum.assistant' },
 ]
 const TABS: SettingsTab[] = [...GENERAL, ...APPS].map(x => x.id)
@@ -100,6 +102,7 @@ export function SettingsPage({ onGuide, start }: { onGuide: () => void; start?: 
           {tab === 'mail' && <MailSettings />}
           {tab === 'maps' && <><MapsCard /><LocationCard /></>}
           {tab === 'phone' && <CallsCard />}
+          {tab === 'pills' && <PillsSettings />}
           {tab === 'assistant' && <><AiCard /><UsageCard /><MemoryCard /><section className="settings-card"><ScheduleList /></section><AssistCard /></>}
         </div>
       </div>
@@ -278,7 +281,7 @@ function AiCard() {
   if (!a) return null
   const set = (x: { enabled?: boolean; apps?: Record<string, boolean> }) => window.drive.ai.set(x).then(setA)
   const apps: [string, string][] = [['mail', 'app.mail'], ['calendar', 'app.calendar'], ['notes', 'app.notes'], ['files', 'app.files'], ['contacts', 'app.contacts'],
-    ['phone', 'app.phone'], ['timer', 'app.timer'], ['maps', 'app.maps'], ['web', 'assistant.aiWeb']]
+    ['phone', 'app.phone'], ['timer', 'app.timer'], ['pills', 'app.pills'], ['maps', 'app.maps'], ['web', 'assistant.aiWeb']]
   return (
     <section className="settings-card island">
       <h3><Icon name="sparkle" size={20} />{t('app.assistant')}</h3>

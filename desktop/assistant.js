@@ -12,6 +12,7 @@ const { t } = require('./i18n')
 const { plain, nameOf } = require('./contacts')
 const attach = require('./attach')
 const { estimate } = require('./audio')
+const P = require('./pills')
 
 const API = 'https://api.mistral.ai/v1'
 const CHAT = 'mistral-small-latest'
@@ -247,6 +248,17 @@ const SCHEMA = [
   fn('timer_start', 'Start a countdown timer in Tetra.', [], { minutes: p('integer', 'Minutes.'), seconds: p('integer', 'Seconds, besides the minutes.'), label: p('string', 'What it is for, if said.') }),
   fn('timer_list', 'The running and paused timers and the time left.', []),
   fn('timer_stop', 'Stop a timer from the last timer_list, or all of them.', [], { choice: p('integer', 'Its number in timer_list; leave out to stop all.') }),
+  fn('pills_list', 'The user\'s medicines in Tetra\'s Pills: dose, times, pills in stock, how many days they last, and today\'s doses (taken, waiting, missed).', []),
+  fn('pills_save', 'Add a medicine to Pills, add a new box or pills to its stock ("I got a new box of X 120 mg, 90 tablets": name X, strength 120 mg, boxes 1, per_box 90), or change its dose or times. Creates the medicine when there is none by that name.', ['name'],
+    { name: p('string', 'The medicine\'s name, without the strength.'), strength: p('string', 'As on the box: "120 mg", "5 mg/ml"; leave out if not said.'),
+      boxes: p('integer', 'Unopened boxes bought or in hand.'), per_box: p('integer', 'Pills (tablets, capsules) in a new, full box, if said.'),
+      pills: p('number', 'Pills left in an opened box, or loose, besides the boxes ("I have 48, a new box has 50": per_box 50, pills 48).'),
+      dose: p('number', 'Pills each time (0.5 for half); only if said.'),
+      times: STRINGS('Every time of day it is taken, HH:MM; the whole new list. Only if said.'),
+      days: { type: 'array', items: { type: 'string', enum: ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'] }, description: 'Only some weekdays; leave out for every day.' },
+      until: p('string', 'The last day of a course, YYYY-MM-DD, if said.') }),
+  fn('pills_taken', 'Mark the user\'s dose as taken ("I took it", "took my pills") or skipped. Without a name: every dose of the nearest time still waiting.', [],
+    { name: p('string', 'One medicine, if named.'), strength: p('string', 'Its strength, if two share the name.'), skip: p('boolean', 'Skipped, not taken.') }),
   fn('notes_search', 'Find notes with some words anywhere in them; answers a numbered list of titles and the matching line.', ['query'], { query: p('string', 'Words to look for.') }),
   fn('note_open', 'Open a note from the last notes_search list in Tetra\'s Notes.', ['choice'], CHOICE),
   fn('note_new', 'Make a new text note with what the user dictates.', ['text'], { text: p('string', 'The note\'s text, as said.'), title: p('string', 'A title, only if the user gave one.') }),
@@ -306,6 +318,7 @@ const SCHEMA = [
 /** Which of the user's apps each tool reads or changes (ai.js APPS): a tool of an app switched off is not even offered. */
 const TOOL_APP = {
   calendar_add: 'calendar', calendar_list: 'calendar', calendar_free: 'calendar', timer_start: 'timer', timer_list: 'timer', timer_stop: 'timer',
+  pills_list: 'pills', pills_save: 'pills', pills_taken: 'pills',
   notes_search: 'notes', note_open: 'notes', note_new: 'notes', shopping_list: 'notes', files_find: 'files', file_open: 'files',
   contacts_find: 'contacts', relation_remember: 'contacts', relation_forget: 'contacts', my_card: 'contacts', contact_call: 'phone',
   navigate: 'maps', youtube: 'web', report_save: 'files', web_search: 'web', make_image: 'web', attachment_read: 'files', audio_make: 'files',
@@ -333,8 +346,8 @@ const addDays = (date, n) => dayKey(new Date(localMs(date) + n * 86400000 + 3 * 
  */
 class Tools {
   /** [allowed](app): the user's switch for each app (ai.js); an app switched off is neither read nor changed. */
-  constructor({ calendar, timers, notes, files, contacts, maps, mail = null, schedules = null, memory = null, now = () => Date.now(), changed = () => {}, search, image, report, me = () => null, setMe = () => {}, allowed = () => true, extract = null }) {
-    Object.assign(this, { calendar, timers, notes, files, contacts, maps, mail, schedules, memory, now, changed, search, image, report, me, setMe, allowed, extract })
+  constructor({ calendar, timers, pills = null, notes, files, contacts, maps, mail = null, schedules = null, memory = null, now = () => Date.now(), changed = () => {}, search, image, report, me = () => null, setMe = () => {}, allowed = () => true, extract = null }) {
+    Object.assign(this, { calendar, timers, pills, notes, files, contacts, maps, mail, schedules, memory, now, changed, search, image, report, me, setMe, allowed, extract })
     this.doc = null // the file attached in this chat (attach.js), or { path, name } until it is read again
     this.lists = { contacts: [], files: [], notes: [], timers: [], mail: [], schedules: [], memory: [] }
   }
@@ -412,6 +425,61 @@ class Tools {
     for (const r of stop) this.timers.change(r.id, 'stop', this.now())
     this.changed('timer')
     return { forModel: `Stopped ${stop.length} timer(s).` }
+  }
+
+  // ---- Pills (pills.js; the phone's Assistant.pillsList, pillsSave, pillsTaken: the same tools, the same answers) ----
+  pillLine(m) {
+    const d = P.derive(m, this.pills.log(), this.now())
+    return `${d.title}: ${P.amount(d.dose)} pill(s) at ${d.times.join(', ') || 'NO TIME SET'}` + (d.days.length ? ` on ${d.days.join(',')}` : '') +
+      (d.counted ? `; stock ${P.amount(d.stock)}` : '; stock not counted') + (d.perBox > 0 ? ` (boxes of ${d.perBox})` : '') +
+      (d.daysLeft != null ? `; lasts ${d.daysLeft} day(s), till ${d.lastDay}` + (d.low ? ', LOW: time to order more' : '') : '')
+  }
+  pills_list() {
+    const { meds: all, log } = this.pills.read(), meds = all.filter(m => !m.archived), now = this.now()
+    if (!meds.length) return { forModel: 'No medicines in Tetra\'s Pills yet.' }
+    const stats = P.slots(meds, log, now).filter(s => s.due > 0).map(s => `- ${P.title(s.med)} at ${s.time}: of ${s.due} doses ${s.onTime} on time, ${s.late} late, ${s.missed} missed or skipped; ${s.lateMinutes} min late on average`)
+    const today = P.today(meds, log, now).map(d => `- ${P.clock(d.due)} ${P.title(d.med)}: ${d.state}`)
+    return { forModel: meds.map(m => '- ' + this.pillLine(m)).join('\n') + (stats.length ? '\nThe last 30 days:\n' + stats.join('\n') : '') + '\nToday\'s doses:\n' + (today.join('\n') || 'none') }
+  }
+  /** A new box ("I got a new box of X 120 mg, 90 tablets"), a new medicine, or its times changed: one tool. */
+  pills_save(a) {
+    const name = String(a.name ?? '').trim(), strength = String(a.strength ?? '').trim(), now = this.now()
+    if (!name) return { forModel: 'Say which medicine.' }
+    const found = P.find(this.pills.medicines(), name, strength)
+    if (found.length > 1) return { forModel: `More than one medicine matches: ${found.map(P.title).join(', ')}. Ask the user which, then call again with its strength.` }
+    const times = Array.isArray(a.times) ? [...new Set(a.times.map(t => /^(\d{1,2}):(\d{2})$/.exec(String(t).trim())).filter(m => m && +m[1] < 24 && +m[2] < 60).map(m => `${pad(+m[1])}:${m[2]}`))].sort() : null
+    const days = Array.isArray(a.days) ? P.DAY_CODES.filter(c => a.days.some(d => String(d).toUpperCase().slice(0, 2) === c)) : null
+    const perBox = Math.trunc(+a.per_box) > 0 ? Math.trunc(+a.per_box) : null
+    const made = !found.length
+    let m = found[0] ?? P.parse(JSON.stringify({ id: P.newId(), name: name[0].toUpperCase() + name.slice(1), strength, perBox: perBox ?? 0, since: new Date(now).toISOString() }))
+    m = { ...m, strength: strength || m.strength, dose: +a.dose > 0 ? P.halves(+a.dose) : m.dose, times: times ?? m.times, days: days ?? m.days,
+      until: /^\d{4}-\d{2}-\d{2}$/.test(String(a.until ?? '')) ? a.until : m.until }
+    m = this.pills.save(m)
+    const boxes = Math.max(0, Math.trunc(+a.boxes || 0)), loose = Math.max(0, +a.pills || 0)
+    if (boxes > 0 && (perBox ?? m.perBox) <= 0) { this.changed('pills'); return { forModel: `${made ? `Added the medicine ${P.title(m)}, but` : `For ${P.title(m)}`} Tetra does not know how many pills a box holds. Ask the user, then call again with per_box.` } }
+    if (boxes > 0 || loose > 0) this.pills.addStock(m.id, boxes, loose, perBox, now, 'AI Assist')
+    else if (perBox != null && perBox !== m.perBox) this.pills.save({ ...m, perBox })
+    this.changed('pills')
+    const saved = this.pills.medicines().find(x => x.id === m.id) ?? m
+    return { forModel: (made ? 'Added a new medicine. ' : 'Saved. ') + this.pillLine(saved) + (saved.times.length ? '' : '\nIt has no time set, so nothing will remind the user: ask at what time(s) it is taken and call again with times.') }
+  }
+  /** "I took it" / "took my pills" (after the reminder): the doses waiting now, or [name]'s; skip when the user says so. */
+  pills_taken(a) {
+    const { meds, log } = this.pills.read(), now = this.now(), name = String(a.name ?? '').trim()
+    const want = name ? P.find(meds, name, String(a.strength ?? '')) : meds
+    if (!want.length) return { forModel: `No medicine called ${name} in Pills.` }
+    const skip = a.skip === true
+    const open = P.today(want, log, now).filter(d => (d.state === 'waiting' || d.state === 'missed') && d.due <= now + 3 * 3600_000) // up to three hours early, not tomorrow's
+    const near = list => list.reduce((b, d) => !b || Math.abs(d.due - now) < Math.abs(b.due - now) ? d : b, null)
+    const list = name ? [...new Set(open.map(d => d.med.id))].map(id => near(open.filter(d => d.med.id === id))) : open.filter(d => d.due === near(open)?.due)
+    if (!list.length) {
+      if (!name || skip) return { forModel: 'No dose is waiting now.' }
+      const m = this.pills.take(want[0].id, null, now); this.changed('pills')
+      return { forModel: `Logged one dose of ${m.title} now, outside its times; stock ${P.amount(m.stock)}.` }
+    }
+    const after = list.map(d => skip ? this.pills.skip(d.med.id, d.due, now) : this.pills.take(d.med.id, d.due, now))
+    this.changed('pills')
+    return { forModel: (skip ? 'Skipped: ' : 'Marked taken: ') + list.map((d, i) => `${after[i].title} of ${P.clock(d.due)}, stock ${P.amount(after[i].stock)}` + (after[i].low ? ` (LOW, lasts ${after[i].daysLeft} days)` : '')).join('; ') }
   }
 
   // ---- Mail (MAIL_PLAN §8, step 7): the archive in .System/Mail/Shared, read here; nothing is sent or changed ----
@@ -786,10 +854,10 @@ class Tools {
   async make_image(a) { const f = await this.image(String(a.prompt || '')); return { forModel: `The picture is on the screen, saved as ${f.name} in Files › Assistant.`, image: f } }
 }
 
-const system = (now = new Date(), facts = []) => `You are Tetra's AI Assist, on the user's Linux computer, inside the app Tetra (calendar, timers, notes, files, contacts, maps; the user's phone is paired with it).
+const system = (now = new Date(), facts = []) => `You are Tetra's AI Assist, on the user's Linux computer, inside the app Tetra (calendar, timers, pills, notes, files, contacts, maps; the user's phone is paired with it).
 Now: ${now.toLocaleString('en-GB', { weekday: 'long', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })} (${Intl.DateTimeFormat().resolvedOptions().timeZone}).
 Answer in the user's language (usually Greek), in one or two short plain sentences: answers are often read aloud. No markdown.
-Use the tools for anything about the user's own calendar, timers, notes, files or contacts; never invent what they hold.
+Use the tools for anything about the user's own calendar, timers, medicines, notes, files or contacts; never invent what they hold.
 When a search finds several, say how many and ask which one (the screen shows the numbered list); "the first", "η δεύτερη" mean that list's numbers.
 A call is never placed by you: after contact_call say that the call waits for their yes; the phone dials it.
 "My sister", "ο μπαμπάς μου", "η γυναίκα μου": contacts_find with that relation. When the user says who someone is to them, relation_remember it.

@@ -75,6 +75,7 @@
       "file-kinds.json",
       "purgatory.js",
       "timer.js",
+      "pills.js",
       "datacount.js",
       "maps.js",
       "router.js",

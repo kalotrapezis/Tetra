@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, protocol, net, shell, Tray, Menu, Notification, nativeTheme, dialog, powerMonitor, safeStorage, globalShortcut, clipboard } = require('electron')
+const { app, BrowserWindow, ipcMain, protocol, net, shell, Tray, Menu, Notification, nativeTheme, dialog, powerMonitor, safeStorage, globalShortcut, clipboard, nativeImage } = require('electron')
 const fs = require('node:fs')
 const path = require('node:path')
 const os = require('node:os')
@@ -27,6 +27,7 @@ const { Calls } = require('./calls')
 const { DataCounter } = require('./datacount')
 let calls = null
 const timer = require('./timer')
+const pillsLib = require('./pills')
 const { Maps, labelsIn } = require('./maps')
 const { Router, join } = require('./router')
 const { MapBuilder } = require('./mapbuild')
@@ -159,6 +160,44 @@ function watchTimer() {
       settle = setTimeout(() => { win?.webContents.send('timer-changed'); planTimer(); sync?.nudge().catch(() => {}) }, 150)
     })
   } catch (e) { console.warn('[timer] cannot watch', e.message) }
+}
+// Pills (pills.js, the phone's Pills): the same files in .System/Pills/Shared. This computer reminds only when Settings ›
+// Pills › "Reminders on this computer" is on (off by itself: the phone reminds): at the dose's time, +30 and +60 min while
+// it waits, one notification a time with Taken and Skip (where the system shows buttons; a click opens Pills), and the chime.
+let pills = null, pillsAlarm = null
+const pillsRung = new Set(), pillsShown = new Map()
+function planPills() {
+  clearTimeout(pillsAlarm)
+  if (!pills || !db || setting('pillsReminders') !== 'on') return
+  const now = Date.now()
+  let meds = [], log = []
+  try { ({ meds, log } = pills.read()) } catch (e) { return console.warn('[pills] cannot read', e.message) }
+  for (const r of pillsLib.rings(meds, log, now)) if (!pillsRung.has(`${r.due}|${r.step}`)) { pillsRung.add(`${r.due}|${r.step}`); ringPills(r) }
+  const next = pillsLib.nextRing(meds, log, now)
+  pillsAlarm = setTimeout(planPills, Math.max(1000, Math.min(next ? next - now + 500 : Infinity, 30 * 60_000)))
+}
+function ringPills(r) {
+  const what = r.doses.map(d => `${pillsLib.title(d.med)} × ${pillsLib.amount(d.med.dose)}`).join(', ')
+  let low = []
+  try { low = pills.refillDue([...new Set(r.doses.map(d => d.med.id))]).map(m => t('pills.refillLine', { name: m.title, days: m.daysLeft ?? 0 })) } catch (e) { console.warn('[pills] refill', e.message) }
+  const answer = i => { for (const d of r.doses) i === 0 ? pills.take(d.med.id, d.due) : pills.skip(d.med.id, d.due); win?.webContents.send('pills-changed') }
+  pillsShown.get(r.due)?.close() // one notification a dose time: the reminder again takes the last one's place
+  const n = notify('pills', t('pills.reminderTitle', { time: pillsLib.clock(r.due) }), [what, ...low].join('\n'), () => win?.webContents.send('open-pills'),
+    { actions: [{ type: 'button', text: t(r.doses.length > 1 ? 'pills.takenAll' : 'pills.taken') }, { type: 'button', text: t('pills.skip') }], onAction: answer })
+  if (n) pillsShown.set(r.due, n)
+  win?.webContents.send('pills-chime')
+}
+function watchPills() {
+  let settle = null
+  try {
+    fs.mkdirSync(pills.root, { recursive: true })
+    fs.watch(pills.root, (_, name) => {
+      if (name && String(name).startsWith('.')) return // a write in progress
+      clearTimeout(settle)
+      // a dose answered on the phone, a box added by Claude: shown, the reminders planned again, the other devices told
+      settle = setTimeout(() => { win?.webContents.send('pills-changed'); planPills(); sync?.nudge().catch(() => {}) }, 150)
+    })
+  } catch (e) { console.warn('[pills] cannot watch', e.message) }
 }
 // Contacts ↔ Photos' people kept in step (contactfaces.js): when a contact changes, and every few minutes for Photos' side
 let linking = null
@@ -394,19 +433,22 @@ function desktopFile() {
   return { name, path: system ?? path.join(app.getPath('home'), '.local/share/applications', name) }
 }
 /** [applet]: whose it is ('mail', 'calendar', … the page it belongs to), for its icon and its own count (the user, 4 Nov). */
-function notify(applet, title, body, open = null) {
+/** [actions] (buttons, where the system shows them) answer to [onAction](index); the notification shown, or null. */
+function notify(applet, title, body, open = null, { actions, onAction } = {}) {
   // Kept as well as shown: a notification goes by in seconds, the Notifications page keeps them (asked 2026-09-26).
   try {
     notesTable()
     db.prepare('INSERT INTO notifications(at, title, body, applet) VALUES(?,?,?,?)').run(Date.now(), String(title), body == null ? null : String(body), applet)
     win?.webContents.send('notifications-changed')
   } catch (e) { console.warn('[notify]', e.message) }
-  if (!Notification.isSupported() || sync?.nas()) return // a NAS: nobody sits at it; the list keeps it
-  const n = new Notification({ title, body, icon: path.join(__dirname, 'public', 'icon.png') })
+  if (!Notification.isSupported() || sync?.nas()) return null // a NAS: nobody sits at it; the list keeps it
+  const n = new Notification({ title, body, icon: path.join(__dirname, 'public', 'icon.png'), ...(actions ? { actions } : {}) })
   n.on('click', () => { showWindow(); if (open) open(); else if (offer) win?.webContents.send('offload-offer', offer.deviceId) })
+  if (onAction) n.on('action', (_, i) => onAction(i))
   // held until it closes: one nobody holds is collected, and its click does nothing (the user, 23 Oct)
   shownNotes.add(n); n.on('close', () => shownNotes.delete(n))
   n.show()
+  return n
 }
 function notesTable() {
   db.exec('CREATE TABLE IF NOT EXISTS notifications (id INTEGER PRIMARY KEY, at INTEGER NOT NULL, title TEXT NOT NULL, body TEXT, read INTEGER NOT NULL DEFAULT 0, applet TEXT)')
@@ -601,6 +643,7 @@ app.whenReady().then(() => {
   contacts.chosen = setting('contactsBirthdays') || null // the calendar birthdays go into (Γενέθλια when none chosen)
   try { fs.mkdirSync(contacts.root, { recursive: true }) } catch {}
   timers = new timer.Timers(files.disk('Timer'), os.hostname() || 'Computer')
+  pills = new pillsLib.Pills(files.disk('Pills'), os.hostname() || 'Computer')
   // Mail (mail.js): the archive in .System/Mail/Shared; each account's password only in this computer's keyring
   mail = new Mail(system.dir('Mail', 'Shared', files.system), { secret: mailSecret, token: msToken })
   mail.on('changed', () => win?.webContents.send('mail-changed'))
@@ -1163,6 +1206,53 @@ app.whenReady().then(() => {
     if (!['start', 'hold', 'lap', 'reset'].includes(action)) throw new Error('Unknown stopwatch action.')
     timers.watch(action)
   })
+  // Pills (pills.js): what the page shows, worked out here from every device's files; each button one write to this
+  // computer's own file or log, the watcher showing it and telling the other devices
+  const pillPhoto = id => { try { return 'data:image/jpeg;base64,' + fs.readFileSync(pills.photo(id)).toString('base64') } catch { return null } }
+  ipcMain.handle('pills:read', (_, dayStart) => {
+    const now = Date.now(), { meds, log } = pills.read(), start = pillsLib.midnight(+dayStart || now)
+    const live = meds.filter(m => !m.archived)
+    const dose = d => ({ med: d.med.id, due: d.due, state: d.state, at: d.at })
+    const slots = pillsLib.slots(live, log, now)
+    return { now, day: start,
+      meds: meds.map(m => ({ ...pillsLib.derive(m, log, now), photo: pillPhoto(m.id), file: undefined })),
+      doses: (start === pillsLib.midnight(now) ? pillsLib.today(live, log, now) : pillsLib.doses(live, log, start, pillsLib.midnight(start, 1), now)).map(dose),
+      slots: slots.map(x => ({ med: x.med.id, time: x.time, doses: x.doses.map(dose), due: x.due, onTime: x.onTime, late: x.late, missed: x.missed, lateMinutes: x.lateMinutes })),
+      advice: pillsLib.advice(slots).map(a => ({ med: a.slot.med.id, slot: a.slot.time, kind: a.kind, time: a.time ?? null, days: a.days ?? [] })) }
+  })
+  ipcMain.handle('pills:history', (_, id) => pills.history(String(id)))
+  ipcMain.handle('pills:answer', (_, id, due, action) => {
+    if (!['take', 'skip', 'undo'].includes(action)) throw new Error('Unknown Pills action.')
+    pills[action](String(id), due == null ? null : +due)
+    planPills()
+  })
+  ipcMain.handle('pills:save', (_, m, boxes, loose) => {
+    if (!/^pill-[\w-]{1,40}$/.test(String(m?.id)) || !String(m.name ?? '').trim()) throw new Error('A medicine needs a name.')
+    const old = pills.all().find(x => x.id === m.id)
+    const keep = ['name', 'strength', 'dose', 'times', 'days', 'every', 'until', 'perBox', 'refillDays', 'refillTimes', 'archived', 'shape', 'color', 'color2', 'food']
+    const next = pillsLib.parse(JSON.stringify({ ...(old ?? { since: new Date().toISOString(), refillAsked: 0, refillOn: null }), ...Object.fromEntries(keep.filter(k => k in m).map(k => [k, m[k]])), id: m.id, deleted: false }))
+    if (!next) throw new Error('A medicine needs a name.')
+    pills.save(next)
+    if (!old && (+boxes > 0 || +loose > 0)) pills.addStock(next.id, +boxes || 0, +loose || 0, null, Date.now(), 'first')
+    planPills()
+  })
+  ipcMain.handle('pills:addStock', (_, id, boxes, loose) => { pills.addStock(String(id), +boxes || 0, +loose || 0) })
+  ipcMain.handle('pills:setStock', (_, id, value) => { pills.setStock(String(id), +value) })
+  ipcMain.handle('pills:remove', (_, id) => { pills.remove(String(id)); planPills() })
+  // a picture from this computer as the emblem: its middle square, 384 px, a JPEG (the phone's savePillPhoto)
+  ipcMain.handle('pills:pickPhoto', async (_, id) => {
+    if (!/^pill-[\w-]{1,40}$/.test(String(id))) throw new Error('Unknown medicine.')
+    const r = await dialog.showOpenDialog(win, { properties: ['openFile'], filters: [{ name: t('pills.photoPick'), extensions: ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp'] }] })
+    if (r.canceled || !r.filePaths[0]) return null
+    const img = nativeImage.createFromPath(r.filePaths[0])
+    if (img.isEmpty()) throw new Error('Not a picture.')
+    const { width, height } = img.getSize(), side = Math.min(width, height)
+    const square = img.crop({ x: Math.floor((width - side) / 2), y: Math.floor((height - side) / 2), width: side, height: side }).resize({ width: 384, height: 384, quality: 'best' })
+    pills.writeAtomic(`${id}.jpg`, square.toJPEG(88))
+    return pillPhoto(String(id))
+  })
+  ipcMain.handle('pills:settings', () => ({ reminders: setting('pillsReminders') === 'on' }))
+  ipcMain.handle('pills:setReminders', (_, on) => { setSetting('pillsReminders', on ? 'on' : 'off'); planPills() })
   ipcMain.handle('contacts:call', (_, method, ...args) => {
     if (!CONTACTS_CALLS.includes(method)) throw new Error('Unknown Contacts action.')
     const result = contacts[method](...args)
@@ -1344,7 +1434,7 @@ app.whenReady().then(() => {
   try { const old = path.join(system.dir('Assistant', 'Data', files.system), 'schedules.json'); if (fs.existsSync(old) && !fs.existsSync(schedulesFile)) { fs.mkdirSync(path.dirname(schedulesFile), { recursive: true }); fs.renameSync(old, schedulesFile) } } catch (e) { console.warn('[schedule] move', e.message) }
   const schedules = new schedule.Schedules(schedulesFile)
   // one Tools for the window's chat, a new one for each scheduled run (its own numbered lists)
-  const makeTools = () => new assistant.Tools({ calendar, timers, notes, files, contacts, maps, mail, schedules, memory, allowed: app => aiSwitch.allows(app),
+  const makeTools = () => new assistant.Tools({ calendar, timers, pills, notes, files, contacts, maps, mail, schedules, memory, allowed: app => aiSwitch.allows(app),
     // the Calendar's, Timer's and Contacts' folders are watched (shown, the devices told); Notes' is not
     changed: what => {
       if (what === 'notes') { win?.webContents.send('notes-changed'); sync?.nudge().catch(() => {}) }
@@ -1876,7 +1966,10 @@ app.whenReady().then(() => {
   planReminders()
   watchTimer()
   planTimer()
+  watchPills()
+  planPills()
   powerMonitor.on('resume', planTimer)
+  powerMonitor.on('resume', planPills)
   powerMonitor.on('resume', planReminders) // a timer does not run while the computer sleeps
   if (process.env.VITE_DEV_URL) win.loadURL(process.env.VITE_DEV_URL)
   else win.loadFile(path.join(__dirname, 'dist', 'index.html'))
