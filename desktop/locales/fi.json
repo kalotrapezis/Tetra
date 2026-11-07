@@ -2580,7 +2580,7 @@
  "pills.dose": "Pilleriä kerralla",
  "pills.addTime": "Aika",
  "pills.perBox": "Pilleriä uudessa pakkauksessa",
- "pills.boxesNow": "Pakkauksia sinulla",
+ "pills.boxesNow": "Uudet pakkaukset",
  "pills.looseNow": "Pilleriä jäljellä siinä",
  "pills.refillDays": "Päiviä ennen loppumista",
  "pills.refillTimes": "Montako muistutusta",
@@ -2631,7 +2631,7 @@
  "pills.next": "Seuraava",
  "pills.total": "Nyt sinulla on {n} pilleriä",
  "pills.needBoxSize": "Kirjoita, montako pilleriä uudessa pakkauksessa on",
- "pills.opened": "Yksi niistä on jo avattu",
+ "pills.opened": "Minulla on myös avattu pakkaus",
  "pills.hereNote": "Lääkkeesi ja otetut annokset synkronoidaan puhelimen, tabletin ja tietokoneen välillä. Vain laitteet, joissa tämä kytkin on päällä, soivat, joten vastaat annokseen vain kerran.",
  "settings.sum.pills": "Muistutukset tässä tietokoneessa"
 }

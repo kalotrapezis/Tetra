@@ -2672,7 +2672,7 @@
  "pills.dose": "Comprimés par prise",
  "pills.addTime": "Heure",
  "pills.perBox": "Comprimés dans une boîte neuve",
- "pills.boxesNow": "Boîtes que vous avez",
+ "pills.boxesNow": "Boîtes neuves",
  "pills.looseNow": "Comprimés restant dedans",
  "pills.refillDays": "Jours avant la fin du stock",
  "pills.refillTimes": "Nombre de rappels",
@@ -2723,7 +2723,7 @@
  "pills.next": "Suivant",
  "pills.total": "Vous avez maintenant {n} comprimés",
  "pills.needBoxSize": "Indiquez combien de comprimés contient une boîte neuve",
- "pills.opened": "L’une d’elles est déjà ouverte",
+ "pills.opened": "J’ai aussi une boîte entamée",
  "pills.hereNote": "Vos médicaments et les doses prises sont synchronisés entre votre téléphone, votre tablette et votre ordinateur. Seuls les appareils où ce réglage est activé sonnent, donc vous ne répondez qu’une fois à chaque dose.",
  "settings.sum.pills": "Rappels sur cet ordinateur"
 }

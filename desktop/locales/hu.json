@@ -2580,7 +2580,7 @@
  "pills.dose": "Tabletta egyszerre",
  "pills.addTime": "Idő",
  "pills.perBox": "Tabletta egy új dobozban",
- "pills.boxesNow": "Dobozaid száma",
+ "pills.boxesNow": "Új dobozok",
  "pills.looseNow": "Tabletta maradt benne",
  "pills.refillDays": "Nappal a kifogyás előtt",
  "pills.refillTimes": "Hány emlékeztető",
@@ -2631,7 +2631,7 @@
  "pills.next": "Tovább",
  "pills.total": "Most {n} tablettád van",
  "pills.needBoxSize": "Írd be, hány tabletta van egy új dobozban",
- "pills.opened": "Az egyik már ki van nyitva",
+ "pills.opened": "Van egy megkezdett dobozom is",
  "pills.hereNote": "A gyógyszereid és a bevett adagok szinkronizálódnak a telefonod, a táblagéped és a számítógéped között. Csak azok az eszközök csörögnek, amelyeken ez a kapcsoló be van kapcsolva, így egy adagra csak egyszer válaszolsz.",
  "settings.sum.pills": "Emlékeztetők ezen a számítógépen"
 }

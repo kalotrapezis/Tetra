@@ -2580,7 +2580,7 @@
  "pills.dose": "Piller ad gangen",
  "pills.addTime": "Tid",
  "pills.perBox": "Piller i en ny pakke",
- "pills.boxesNow": "Pakker du har",
+ "pills.boxesNow": "Nye pakker",
  "pills.looseNow": "Piller tilbage i den",
  "pills.refillDays": "Dage før det løber tør",
  "pills.refillTimes": "Antal påmindelser",
@@ -2631,7 +2631,7 @@
  "pills.next": "Næste",
  "pills.total": "Nu har du {n} piller",
  "pills.needBoxSize": "Skriv, hvor mange piller en ny pakke indeholder",
- "pills.opened": "Én af dem er allerede åbnet",
+ "pills.opened": "Jeg har også en åbnet pakke",
  "pills.hereNote": "Din medicin og de doser, du har taget, synkroniseres mellem din telefon, tablet og computer. Kun enheder med denne kontakt slået til ringer, så du svarer på en dosis én gang.",
  "settings.sum.pills": "Påmindelser på denne computer"
 }

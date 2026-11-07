@@ -2764,7 +2764,7 @@
  "pills.dose": "Tablečių vienu metu",
  "pills.addTime": "Laikas",
  "pills.perBox": "Tablečių naujoje dėžutėje",
- "pills.boxesNow": "Dėžučių, kurias turi",
+ "pills.boxesNow": "Naujos dėžutės",
  "pills.looseNow": "Tablečių liko joje",
  "pills.refillDays": "Dienų iki pasibaigimo",
  "pills.refillTimes": "Kiek priminimų",
@@ -2815,7 +2815,7 @@
  "pills.next": "Toliau",
  "pills.total": "Dabar turi {n} tabletes",
  "pills.needBoxSize": "Įrašyk, kiek tablečių yra naujoje dėžutėje",
- "pills.opened": "Viena jų jau atidaryta",
+ "pills.opened": "Turiu ir atidarytą dėžutę",
  "pills.hereNote": "Tavo vaistai ir išgertos dozės sinchronizuojami tarp telefono, planšetės ir kompiuterio. Skamba tik įrenginiai su įjungtu šiuo jungikliu, todėl į dozę atsakai tik kartą.",
  "settings.sum.pills": "Priminimai šiame kompiuteryje"
 }

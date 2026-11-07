@@ -2764,7 +2764,7 @@
  "pills.dose": "Pilloli kull darba",
  "pills.addTime": "Ħin",
  "pills.perBox": "Pilloli f’kaxxa ġdida",
- "pills.boxesNow": "Kaxxi li għandek",
+ "pills.boxesNow": "Kaxxi ġodda",
  "pills.looseNow": "Pilloli li fadal fiha",
  "pills.refillDays": "Jiem qabel ma jispiċċaw",
  "pills.refillTimes": "Kemm tfakkiriet",
@@ -2815,7 +2815,7 @@
  "pills.next": "Li jmiss",
  "pills.total": "Issa għandek {n} pilloli",
  "pills.needBoxSize": "Ikteb kemm fiha pilloli kaxxa ġdida",
- "pills.opened": "Waħda minnhom diġà miftuħa",
+ "pills.opened": "Għandi wkoll kaxxa miftuħa",
  "pills.hereNote": "Il-mediċini tiegħek u d-dożi li ħadt jiġu sinkronizzati bejn it-telefon, it-tablet u l-kompjuter tiegħek. Idoqqu biss l-apparati b’dan l-iswiċċ mixgħul, għalhekk twieġeb għal doża darba biss.",
  "settings.sum.pills": "Tfakkiriet fuq dan il-kompjuter"
 }

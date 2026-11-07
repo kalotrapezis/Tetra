@@ -336,7 +336,7 @@ function Guide({ start, fresh, close, save, say }: { start: PillMed; fresh: bool
     refillDays: String(start.refillDays), refillTimes: String(start.refillTimes), forDays: '', opened: false })
   const [step, setStep] = useState(0)
   const set = (x: Partial<PillMed>) => setD({ ...d, m: { ...d.m, ...x } })
-  const full = Math.max(0, (int(d.boxes) ?? 0) - (d.opened ? 1 : 0)), left = d.opened ? number(d.loose) ?? 0 : 0
+  const full = int(d.boxes) ?? 0, left = d.opened ? number(d.loose) ?? 0 : 0 // new boxes × a box's pills, and what is left in the open one
   const size = int(d.perBox) ?? 0
   const nameOk = !!d.m.name.trim(), doseOk = halves(number(d.dose) ?? 0) > 0, boxOk = !fresh || full === 0 || size > 0
   const can = [nameOk, true, doseOk, boxOk, nameOk && doseOk][step]

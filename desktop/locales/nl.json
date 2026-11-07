@@ -2580,7 +2580,7 @@
  "pills.dose": "Pillen per keer",
  "pills.addTime": "Tijd",
  "pills.perBox": "Pillen in een nieuw doosje",
- "pills.boxesNow": "Doosjes die je hebt",
+ "pills.boxesNow": "Nieuwe doosjes",
  "pills.looseNow": "Pillen die erin over zijn",
  "pills.refillDays": "Dagen voordat het op is",
  "pills.refillTimes": "Aantal herinneringen",
@@ -2631,7 +2631,7 @@
  "pills.next": "Volgende",
  "pills.total": "Nu heb je {n} pillen",
  "pills.needBoxSize": "Schrijf op hoeveel pillen een nieuw doosje bevat",
- "pills.opened": "Eén ervan is al open",
+ "pills.opened": "Ik heb ook een open doosje",
  "pills.hereNote": "Je medicijnen en de ingenomen doses worden gesynchroniseerd tussen je telefoon, tablet en computer. Alleen apparaten waarop deze schakelaar aan staat, gaan over, zodat je een dosis maar één keer beantwoordt.",
  "settings.sum.pills": "Herinneringen op deze computer"
 }

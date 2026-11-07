@@ -2580,7 +2580,7 @@
  "pills.dose": "Tabletten pro Einnahme",
  "pills.addTime": "Uhrzeit",
  "pills.perBox": "Tabletten in einer neuen Packung",
- "pills.boxesNow": "Packungen, die du hast",
+ "pills.boxesNow": "Neue Packungen",
  "pills.looseNow": "Tabletten, die darin übrig sind",
  "pills.refillDays": "Tage vor dem Aufbrauchen",
  "pills.refillTimes": "Wie viele Erinnerungen",
@@ -2631,7 +2631,7 @@
  "pills.next": "Weiter",
  "pills.total": "Jetzt hast du {n} Tabletten",
  "pills.needBoxSize": "Schreib, wie viele Tabletten eine neue Packung enthält",
- "pills.opened": "Eine davon ist schon geöffnet",
+ "pills.opened": "Ich habe auch eine angebrochene Packung",
  "pills.hereNote": "Deine Medikamente und die eingenommenen Dosen werden zwischen Handy, Tablet und Computer synchronisiert. Nur Geräte mit eingeschaltetem Schalter klingeln, sodass du eine Dosis nur einmal beantwortest.",
  "settings.sum.pills": "Erinnerungen auf diesem Computer"
 }

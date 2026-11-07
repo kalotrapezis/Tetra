@@ -2580,7 +2580,7 @@
  "pills.dose": "Piller varje gång",
  "pills.addTime": "Tid",
  "pills.perBox": "Piller i en ny förpackning",
- "pills.boxesNow": "Förpackningar du har",
+ "pills.boxesNow": "Nya förpackningar",
  "pills.looseNow": "Piller kvar i den",
  "pills.refillDays": "Dagar innan det tar slut",
  "pills.refillTimes": "Antal påminnelser",
@@ -2631,7 +2631,7 @@
  "pills.next": "Nästa",
  "pills.total": "Nu har du {n} piller",
  "pills.needBoxSize": "Skriv hur många piller en ny förpackning innehåller",
- "pills.opened": "En av dem är redan öppnad",
+ "pills.opened": "Jag har också en öppnad förpackning",
  "pills.hereNote": "Dina mediciner och de intagna doserna synkas mellan telefonen, surfplattan och datorn. Bara enheter med den här knappen på ringer, så du svarar på en dos bara en gång.",
  "settings.sum.pills": "Påminnelser på den här datorn"
 }

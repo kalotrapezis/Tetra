@@ -2671,7 +2671,7 @@
  "pills.dose": "Tableta po uzimanju",
  "pills.addTime": "Vrijeme",
  "pills.perBox": "Tableta u novoj kutiji",
- "pills.boxesNow": "Kutija koje imaš",
+ "pills.boxesNow": "Nove kutije",
  "pills.looseNow": "Tableta preostalo u njoj",
  "pills.refillDays": "Dana prije nego što ponestane",
  "pills.refillTimes": "Koliko podsjetnika",
@@ -2722,7 +2722,7 @@
  "pills.next": "Dalje",
  "pills.total": "Sada imaš {n} tableta",
  "pills.needBoxSize": "Upiši koliko tableta ima nova kutija",
- "pills.opened": "Jedna je već otvorena",
+ "pills.opened": "Imam i otvorenu kutiju",
  "pills.hereNote": "Tvoji lijekovi i uzete doze sinkroniziraju se između telefona, tableta i računala. Zvone samo uređaji s uključenim prekidačem, pa na dozu odgovaraš samo jednom.",
  "settings.sum.pills": "Podsjetnici na ovom računalu"
 }

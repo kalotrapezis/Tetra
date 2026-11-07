@@ -2672,7 +2672,7 @@
  "pills.dose": "Pastile de fiecare dată",
  "pills.addTime": "Ora",
  "pills.perBox": "Pastile într-o cutie nouă",
- "pills.boxesNow": "Cutii pe care le ai",
+ "pills.boxesNow": "Cutii noi",
  "pills.looseNow": "Pastile rămase în ea",
  "pills.refillDays": "Zile înainte să se termine",
  "pills.refillTimes": "Câte mementouri",
@@ -2723,7 +2723,7 @@
  "pills.next": "Înainte",
  "pills.total": "Acum ai {n} pastile",
  "pills.needBoxSize": "Scrie câte pastile are o cutie nouă",
- "pills.opened": "Una dintre ele este deja deschisă",
+ "pills.opened": "Am și o cutie începută",
  "pills.hereNote": "Medicamentele tale și dozele luate se sincronizează între telefon, tabletă și computer. Sună doar dispozitivele cu acest comutator activat, așa că răspunzi la o doză o singură dată.",
  "settings.sum.pills": "Mementouri pe acest computer"
 }

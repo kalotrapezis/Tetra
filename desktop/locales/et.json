@@ -2580,7 +2580,7 @@
  "pills.dose": "Tablette korraga",
  "pills.addTime": "Kellaaeg",
  "pills.perBox": "Tablette uues karbis",
- "pills.boxesNow": "Karpe sul on",
+ "pills.boxesNow": "Uued karbid",
  "pills.looseNow": "Tablette järel selles",
  "pills.refillDays": "Päevi enne lõppemist",
  "pills.refillTimes": "Mitu meeldetuletust",
@@ -2631,7 +2631,7 @@
  "pills.next": "Edasi",
  "pills.total": "Nüüd on sul {n} tabletti",
  "pills.needBoxSize": "Kirjuta, mitu tabletti on uues karbis",
- "pills.opened": "Üks neist on juba avatud",
+ "pills.opened": "Mul on ka avatud karp",
  "pills.hereNote": "Sinu ravimid ja võetud annused sünkroonitakse telefoni, tahvelarvuti ja arvuti vahel. Helisevad ainult seadmed, kus see lüliti on sees, nii et vastad annusele ainult korra.",
  "settings.sum.pills": "Meeldetuletused selles arvutis"
 }

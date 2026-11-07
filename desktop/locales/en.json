@@ -2580,7 +2580,7 @@
  "pills.dose": "Pills each time",
  "pills.addTime": "Time",
  "pills.perBox": "Pills in a new box",
- "pills.boxesNow": "Boxes you have",
+ "pills.boxesNow": "New boxes",
  "pills.looseNow": "Pills left in it",
  "pills.refillDays": "Days before running out",
  "pills.refillTimes": "How many reminders",
@@ -2631,7 +2631,7 @@
  "pills.next": "Next",
  "pills.total": "Now you have {n} pills",
  "pills.needBoxSize": "Write how many pills a new box has",
- "pills.opened": "One of them is already open",
+ "pills.opened": "I also have an open box",
  "pills.hereNote": "Your medicines and what you took sync with your other devices. Only the ones with this on ring, so you answer once.",
  "settings.sum.pills": "Reminders on this computer"
 }

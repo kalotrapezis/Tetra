@@ -2764,7 +2764,7 @@
  "pills.dose": "Tabletek na raz",
  "pills.addTime": "Godzina",
  "pills.perBox": "Tabletek w nowym opakowaniu",
- "pills.boxesNow": "Opakowań, które masz",
+ "pills.boxesNow": "Nowe opakowania",
  "pills.looseNow": "Tabletek pozostało w niej",
  "pills.refillDays": "Dni przed końcem zapasu",
  "pills.refillTimes": "Ile przypomnień",
@@ -2815,7 +2815,7 @@
  "pills.next": "Dalej",
  "pills.total": "Teraz masz {n} tabletek",
  "pills.needBoxSize": "Wpisz, ile tabletek jest w nowym opakowaniu",
- "pills.opened": "Jedno jest już otwarte",
+ "pills.opened": "Mam też otwarte opakowanie",
  "pills.hereNote": "Twoje leki i przyjęte dawki synchronizują się między telefonem, tabletem i komputerem. Dzwonią tylko urządzenia z włączonym tym przełącznikiem, więc na dawkę odpowiadasz tylko raz.",
  "settings.sum.pills": "Przypomnienia na tym komputerze"
 }

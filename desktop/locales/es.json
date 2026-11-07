@@ -2642,7 +2642,7 @@
  "pills.dose": "Pastillas cada vez",
  "pills.addTime": "Hora",
  "pills.perBox": "Pastillas en una caja nueva",
- "pills.boxesNow": "Cajas que tienes",
+ "pills.boxesNow": "Cajas nuevas",
  "pills.looseNow": "Pastillas que quedan en ella",
  "pills.refillDays": "Días antes de que se acaben",
  "pills.refillTimes": "Cuántos recordatorios",
@@ -2693,7 +2693,7 @@
  "pills.next": "Siguiente",
  "pills.total": "Ahora tienes {n} pastillas",
  "pills.needBoxSize": "Escribe cuántas pastillas trae una caja nueva",
- "pills.opened": "Una de ellas ya está abierta",
+ "pills.opened": "También tengo una caja abierta",
  "pills.hereNote": "Tus medicamentos y las dosis tomadas se sincronizan entre tu teléfono, tableta y ordenador. Solo suenan los dispositivos con este interruptor activado, así respondes a cada dosis una sola vez.",
  "settings.sum.pills": "Recordatorios en este ordenador"
 }

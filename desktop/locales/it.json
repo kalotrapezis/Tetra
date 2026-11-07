@@ -2672,7 +2672,7 @@
  "pills.dose": "Pillole per volta",
  "pills.addTime": "Ora",
  "pills.perBox": "Pillole in una confezione nuova",
- "pills.boxesNow": "Confezioni che hai",
+ "pills.boxesNow": "Confezioni nuove",
  "pills.looseNow": "Pillole rimaste al suo interno",
  "pills.refillDays": "Giorni prima che finiscano",
  "pills.refillTimes": "Quanti promemoria",
@@ -2723,7 +2723,7 @@
  "pills.next": "Avanti",
  "pills.total": "Ora hai {n} pillole",
  "pills.needBoxSize": "Scrivi quante pillole ha una confezione nuova",
- "pills.opened": "Una è già aperta",
+ "pills.opened": "Ho anche una confezione aperta",
  "pills.hereNote": "I tuoi farmaci e le dosi assunte si sincronizzano tra telefono, tablet e computer. Suonano solo i dispositivi con questo interruttore attivo, così rispondi a ogni dose una sola volta.",
  "settings.sum.pills": "Promemoria su questo computer"
 }

@@ -2671,7 +2671,7 @@
  "pills.dose": "Tabletes katru reizi",
  "pills.addTime": "Laiks",
  "pills.perBox": "Tabletes jaunā kastītē",
- "pills.boxesNow": "Kastītes, kas tev ir",
+ "pills.boxesNow": "Jaunas kastītes",
  "pills.looseNow": "Tabletes, kas palikušas tajā",
  "pills.refillDays": "Dienas pirms beigām",
  "pills.refillTimes": "Cik atgādinājumu",
@@ -2722,7 +2722,7 @@
  "pills.next": "Tālāk",
  "pills.total": "Tagad tev ir {n} tabletes",
  "pills.needBoxSize": "Ieraksti, cik tablešu ir jaunā kastītē",
- "pills.opened": "Viena no tām jau ir atvērta",
+ "pills.opened": "Man ir arī atvērta kastīte",
  "pills.hereNote": "Tavas zāles un iedzertās devas tiek sinhronizētas starp tālruni, planšetdatoru un datoru. Zvana tikai ierīces ar ieslēgtu šo slēdzi, tāpēc uz devu atbildi tikai vienreiz.",
  "settings.sum.pills": "Atgādinājumi šajā datorā"
 }

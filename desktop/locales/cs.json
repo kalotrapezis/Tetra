@@ -2764,7 +2764,7 @@
  "pills.dose": "Tablet najednou",
  "pills.addTime": "Čas",
  "pills.perBox": "Tablet v novém balení",
- "pills.boxesNow": "Kolik máš balení",
+ "pills.boxesNow": "Nová balení",
  "pills.looseNow": "Kolik tablet v něm zbývá",
  "pills.refillDays": "Dní před dochozením",
  "pills.refillTimes": "Kolik připomínek",
@@ -2815,7 +2815,7 @@
  "pills.next": "Další",
  "pills.total": "Teď máš {n} tablet",
  "pills.needBoxSize": "Napiš, kolik tablet má nové balení",
- "pills.opened": "Jedno už je otevřené",
+ "pills.opened": "Mám i otevřené balení",
  "pills.hereNote": "Tvé léky a užité dávky se synchronizují mezi telefonem, tabletem a počítačem. Zvonit budou jen zařízení se zapnutým přepínačem, takže dávku potvrdíš jen jednou.",
  "settings.sum.pills": "Připomenutí v tomto počítači"
 }

@@ -2856,7 +2856,7 @@
  "pills.dose": "Piollairí gach uair",
  "pills.addTime": "Am",
  "pills.perBox": "Piollairí i mbosca nua",
- "pills.boxesNow": "Boscaí atá agat",
+ "pills.boxesNow": "Boscaí nua",
  "pills.looseNow": "Piollairí fágtha ann",
  "pills.refillDays": "Laethanta sula n-éireoidh siad as",
  "pills.refillTimes": "Cé mhéad meabhrúchán",
@@ -2907,7 +2907,7 @@
  "pills.next": "Ar aghaidh",
  "pills.total": "Anois tá {n} piollaire agat",
  "pills.needBoxSize": "Scríobh cé mhéad piollaire atá i mbosca nua",
- "pills.opened": "Tá ceann acu oscailte cheana",
+ "pills.opened": "Tá bosca oscailte agam freisin",
  "pills.hereNote": "Déantar do chuid leigheasanna agus na dósanna a ghlac tú a shioncronú idir do ghuthán, do tháibléad agus do ríomhaire. Ní bhuaileann ach na gléasanna a bhfuil an lasc seo casta orthu, mar sin freagraíonn tú dáileog uair amháin.",
  "settings.sum.pills": "Meabhrúcháin ar an ríomhaire seo"
 }

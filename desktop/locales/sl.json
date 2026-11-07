@@ -2764,7 +2764,7 @@
  "pills.dose": "Tablet naenkrat",
  "pills.addTime": "Čas",
  "pills.perBox": "Tablet v novi škatli",
- "pills.boxesNow": "Škatle, ki jih imaš",
+ "pills.boxesNow": "Nove škatle",
  "pills.looseNow": "Tablet je ostalo v njej",
  "pills.refillDays": "Dni, preden zmanjka",
  "pills.refillTimes": "Koliko opomnikov",
@@ -2815,7 +2815,7 @@
  "pills.next": "Naprej",
  "pills.total": "Zdaj imaš {n} tablet",
  "pills.needBoxSize": "Vpiši, koliko tablet je v novi škatli",
- "pills.opened": "Ena je že odprta",
+ "pills.opened": "Imam tudi odprto škatlo",
  "pills.hereNote": "Tvoja zdravila in vzete odmerke se sinhronizirajo med telefonom, tablico in računalnikom. Zvonijo samo naprave z vklopljenim stikalom, tako da na odmerek odgovoriš samo enkrat.",
  "settings.sum.pills": "Opomniki na tem računalniku"
 }

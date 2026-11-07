@@ -2672,7 +2672,7 @@
  "pills.dose": "Comprimidos de cada vez",
  "pills.addTime": "Hora",
  "pills.perBox": "Comprimidos numa caixa nova",
- "pills.boxesNow": "Caixas que tens",
+ "pills.boxesNow": "Caixas novas",
  "pills.looseNow": "Comprimidos que restam nela",
  "pills.refillDays": "Dias antes de acabar",
  "pills.refillTimes": "Quantos lembretes",
@@ -2723,7 +2723,7 @@
  "pills.next": "Seguinte",
  "pills.total": "Agora tens {n} comprimidos",
  "pills.needBoxSize": "Escreve quantos comprimidos tem uma caixa nova",
- "pills.opened": "Uma delas já está aberta",
+ "pills.opened": "Também tenho uma caixa aberta",
  "pills.hereNote": "Os teus medicamentos e as doses tomadas sincronizam entre o telemóvel, o tablet e o computador. Só tocam os dispositivos com este interruptor ativado, por isso respondes a cada dose uma só vez.",
  "settings.sum.pills": "Lembretes neste computador"
 }
