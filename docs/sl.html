@@ -167,7 +167,7 @@
     <p class="lead">Ena zasebna superaplikacija za vaš telefon, tablet in računalnik. Svobodna programska oprema, brez računa, brez oblaka: vaše datoteke in pošta ostanejo na vaših napravah.</p>
     <div class="buttons">
       <div class="group"><h3><img src="img/android.svg" alt="">Android</h3>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>Prenesi za Android</b><span>APK · 0.8.0 beta 6 · Android 11+</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>Prenesi za Android</b><span>APK · 0.8.0 beta 7 · Android 11+</span></div></a>
         <div class="qr"><img src="img/qr-android.svg" alt="Koda QR za prenos za Android"><p>Ali jo skenirajte s telefonom.<br><a href="#faq-install">Kako jo namestiti</a></p></div></div>
       <div class="group"><h3><img src="img/linux.svg" alt="">Linux</h3>
         <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.5/Tetra-0.8.0-beta.5.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 5 · večina distribucij</span></div></a>
@@ -203,6 +203,10 @@
       <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Glasba za zemljevidom</h3><p>Vsaka stran, ki predvaja, postane predvajalnik z velikimi gumbi ‹ ⏯ › in predvaja naprej za drugimi aplikacijami. Postaje dajte v mapo in ‹ › gredo skozi njih. V Zemljevidih 🎧 predvaja izbrano postajo, medtem ko vozite.</p></div>
       <div class="tile" style="--c:#2E9E5B"><img src="img/icons/messages.png" alt=""><h3>Vaši SMS-i kot klepeti</h3><p>Sporočila prikazujejo vaše SMS-e kot pogovore: enega naenkrat na telefonu, drugega ob drugem na tablici in na računalniku, kjer jih pošlje telefon. AI Assist jih bere in piše, Tetra pa je lahko aplikacija za SMS na telefonu.</p></div>
       <div class="tile" style="--c:#F41879"><img src="img/icons/calendar.png" alt=""><h3>Budilke, ki zvonijo povsod</h3><p>Budilke in štoparica so enake na telefonu, tablici in računalniku. Izklopite budilko na eni napravi in utihne na vseh.</p></div>
+      <div class="tile" style="--c:#E5487A"><img src="img/icons/pills.png" alt=""><h3>Nikoli ne pozabite večerne tablete</h3><p>Tablete vas opomnijo ob uri odmerka in znova, dokler ga ne vzamete, z obvestilom ali z glasom AI Assist: ding-dong, nato pa vaše ime. Preštejejo tablete v vsaki škatlici in vas opozorijo nekaj dni, preden bodo pošle.</p></div>
+      <div class="tile" style="--c:#FD6A04"><img src="img/icons/assistant.png" alt=""><h3>Hitro vprašanje, isti pogovor</h3><p>Znova pritisnite tipko pomočnika na telefonu v desetih minutah in pogovor se nadaljuje, tako da lahko odgovorite na to, kar je vprašal. Hitri pogovori se shranijo tudi v Zgodovino.</p></div>
+      <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Zavihke menjajte z dvema prstoma</h3><p>Dva prsta navzgor ali navzdol preklopita na naslednji ali prejšnji zavihek. Na tablici se stranska vrstica skrije z enim dotikom, nov zavihek iz držane povezave pa se lahko odpre za stranjo, ki jo berete.</p></div>
+      <div class="tile" style="--c:#1A9AA8"><img src="img/icons/phone.png" alt=""><h3>Dvignite za sprejem, nikoli v žepu</h3><p>Dvignite telefon k ušesu, da sprejmete klic. Tetra spremlja celotno gibanje, od pogleda na klic na svetlobi do ušesa, zato telefon v žepu nikoli ne sprejme sam. Z zaslonom navzdol ga utišate.</p></div>
       <div class="tile" style="--c:#2E9D4F"><img src="img/icons/sync.png" alt=""><h3>Vsaka naprava, z enostavnimi besedami</h3><p>Vsaka kartica telefona, tableta in diska pove, kaj počne, po en stavek za aplikacijo. Uredi odpre vodnik: katera aplikacija, Izklopljeno, Zrcalo ali Premakni, koliko ostane v napravi, zemljevid tistega, kar se premika, nato Potrdi. Na telefonu ali tabletu se fotografije privzeto premaknejo, ostalo pa se kopira. Pri zasedenosti 90 % Tetra predlaga, kaj premakniti, in ne premakne ničesar brez vprašanja.</p></div>
     </div>
   </div>
@@ -226,6 +230,7 @@
       <button role="tab" id="tab-backup"aria-controls="panel-backup" aria-selected="false" tabindex="-1" style="--c:#2E9D4F;--on:#fff">Varnostna kopija</button>
       <button role="tab" id="tab-data" aria-controls="panel-data" aria-selected="false" tabindex="-1" style="--c:#9AD01E;--on:#111">Podatki</button>
       <button role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1" style="--c:#FD6A04;--on:#111">AI Assist</button>
+      <button role="tab" id="tab-pills" aria-controls="panel-pills" aria-selected="false" tabindex="-1" style="--c:#E5487A;--on:#fff">Tablete</button>
       <button role="tab" id="tab-guide"aria-controls="panel-guide" aria-selected="false" tabindex="-1" style="--c:#8E99A6;--on:#111">Vodnik · Nastavitve</button>
     </div>
     <div role="tabpanel" id="panel-home" aria-labelledby="tab-home">
@@ -311,6 +316,12 @@
       <figure class="card" style="--c:#FD6A04"><div class="pic"><img src="img/art/ai-brief.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>Stran za vaše jutro</h3><p>Dnevni pregled zbere današnji koledar, pošto, ki vas potrebuje, vreme in odprte kontrolne sezname iz Zapiskov. Vi izberete, kaj je v njem.</p></figcaption></figure>
     </div>
+    <div role="tabpanel" id="panel-pills" aria-labelledby="tab-pills" hidden>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Tablete</span><h3>Vaše tablete, ob pravem času</h3><p>Kartica za vsak del dneva, vsaka tableta narisana v svoji obliki in barvi ali prikazana s svojo fotografijo. „Vzeto“ je en dotik, tukaj ali na obvestilu, odmerek, ki ste ga sinoči pozabili, pa čaka na vrhu. Vsaka škatlica doda svoje tablete, Napredek pa pokaže, kaj pozabljate, in predlaga boljši čas.</p></figcaption></figure>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills-guide.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Tablete</span><h3>Dodajte zdravilo korak za korakom ali ga povejte</h3><p>Pet korakov: ime, kako izgleda, kdaj jo jemljete, koliko jih imate in kdaj naročiti več. Ko je AI Assist vklopljen, vse povejte v enem stavku in koraki se izpolnijo; preverite jih in pritisnete Naprej. Ali pa AI Assist povejte „Dobil sem novo škatlico z 90“ in se preštejejo.</p></figcaption></figure>
+    </div>
     <div role="tabpanel" id="panel-guide" aria-labelledby="tab-guide" hidden>
       <figure class="card" style="--c:#8E99A6"><div class="pic"><img src="img/art/guide.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/settings.png" alt=""><span class="pill">Vodnik</span><h3>Vodnik, ki vam pokaže</h3><p>Ob prvem zagonu in v Nastavitve › Vodnik: kam se dotakniti in zakaj, korak za korakom. Slike se premikajo, da pokažejo, kaj se dogaja, Preizkusi pa drži korak na očeh, medtem ko ga resnično izvajate.</p></figcaption></figure>
@@ -354,7 +365,7 @@
         <h3>Tetra za Android</h3>
         <p>Telefoni in tableti z Androidom 11 ali novejšim.</p>
         <a href="https://github.com/kalotrapezis/Tetra-mobile">Izvorna koda in podrobnosti na GitHubu</a>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>Prenesi APK</b><span>0.8.0 beta 6</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>Prenesi APK</b><span>0.8.0 beta 7</span></div></a>
       </div>
       <div class="panel">
         <h3>Tetra za računalnik</h3>

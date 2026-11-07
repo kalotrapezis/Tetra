@@ -167,7 +167,7 @@
     <p class="lead">Egyetlen privát szuperalkalmazás a telefonodhoz, táblagépedhez és számítógépedhez. Szabad szoftver, fiók nélkül, felhő nélkül: a fájljaid és leveleid az eszközeiden maradnak.</p>
     <div class="buttons">
       <div class="group"><h3><img src="img/android.svg" alt="">Android</h3>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>Letöltés Androidra</b><span>APK · 0.8.0 beta 6 · Android 11+</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>Letöltés Androidra</b><span>APK · 0.8.0 beta 7 · Android 11+</span></div></a>
         <div class="qr"><img src="img/qr-android.svg" alt="Az Android-letöltés QR-kódja"><p>Vagy olvasd be a telefonoddal.<br><a href="#faq-install">Így telepítheted</a></p></div></div>
       <div class="group"><h3><img src="img/linux.svg" alt="">Linux</h3>
         <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.5/Tetra-0.8.0-beta.5.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 5 · a legtöbb disztribúció</span></div></a>
@@ -203,6 +203,10 @@
       <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Zene a térkép mögött</h3><p>Minden lejátszó oldal nagy ‹ ⏯ › gombos lejátszó lesz, és tovább szól más alkalmazások mögött. Tegye a rádióállomásokat egy mappába, és a ‹ › végigmegy rajtuk. A Térképben a 🎧 a választott állomást játssza vezetés közben.</p></div>
       <div class="tile" style="--c:#2E9E5B"><img src="img/icons/messages.png" alt=""><h3>Az SMS-ei csevegésként</h3><p>Az Üzenetek az SMS-eit beszélgetésként mutatja: egyszerre egyet a telefonon, egymás mellett a táblagépen és a számítógépen, ahol a telefon küldi őket. Az AI Assist olvassa és írja őket, és a Tetra lehet a telefon SMS-alkalmazása.</p></div>
       <div class="tile" style="--c:#F41879"><img src="img/icons/calendar.png" alt=""><h3>Ébresztők, amelyek mindenhol szólnak</h3><p>Az ébresztők és a stopper ugyanazok a telefonon, a táblagépen és a számítógépen. Kapcsoljon ki egy ébresztőt az egyiken, és mindegyiken elhallgat.</p></div>
+      <div class="tile" style="--c:#E5487A"><img src="img/icons/pills.png" alt=""><h3>Soha ne felejtsd el az esti tablettát</h3><p>A Tabletták az adag idején emlékeztet, és újra, amíg be nem veszed, értesítésként vagy az AI Assist hangján: egy ding-dong, aztán a neved. Megszámolja minden doboz tablettáit, és napokkal azelőtt szól, hogy elfogynának.</p></div>
+      <div class="tile" style="--c:#FD6A04"><img src="img/icons/assistant.png" alt=""><h3>Egy gyors kérdés, ugyanaz a beszélgetés</h3><p>Nyomd meg újra a telefon asszisztens gombját tíz percen belül, és a beszélgetés folytatódik, így válaszolhatsz arra, amit kérdezett. A gyors beszélgetések az Előzményekben is megmaradnak.</p></div>
+      <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Lapváltás két ujjal</h3><p>Két ujj fel vagy le a következő vagy az előző lapra vált. Táblagépen az oldalsáv egyetlen érintéssel elrejthető, a hosszan nyomott hivatkozásból nyitott új lap pedig megnyílhat az olvasott oldal mögött.</p></div>
+      <div class="tile" style="--c:#1A9AA8"><img src="img/icons/phone.png" alt=""><h3>Emeld fel a fogadáshoz, soha nem a zsebben</h3><p>Emeld a telefont a füledhez, hogy fogadj egy hívást. A Tetra az egész mozdulatot követi, attól kezdve, hogy fényben ránézel a hívásra, egészen a füledig, ezért a zsebben lévő telefon soha nem veszi fel magától. Képernyővel lefelé elnémítja.</p></div>
       <div class="tile" style="--c:#2E9D4F"><img src="img/icons/sync.png" alt=""><h3>Minden eszköz, egyszerű szavakkal</h3><p>Minden telefon-, táblagép- és meghajtókártya egy mondatban leírja, mire való, appónként egy mondat. A Szerkesztés útmutatót nyit: melyik app, Ki, Tükör vagy Áthelyezés, mennyi marad az eszközön, egy térkép arról, mi mozog, majd Megerősítés. Telefonon vagy táblagépen a fotók alapértelmezés szerint átmozognak, a többi másolódik. 90 %-os telítettségnél a Tetra javasolja, mit érdemes áthelyezni, és kérdés nélkül semmit sem helyez át.</p></div>
     </div>
   </div>
@@ -226,6 +230,7 @@
       <button role="tab" id="tab-backup"aria-controls="panel-backup" aria-selected="false" tabindex="-1" style="--c:#2E9D4F;--on:#fff">Biztonsági mentés</button>
       <button role="tab" id="tab-data" aria-controls="panel-data" aria-selected="false" tabindex="-1" style="--c:#9AD01E;--on:#111">Adatok</button>
       <button role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1" style="--c:#FD6A04;--on:#111">AI Assist</button>
+      <button role="tab" id="tab-pills" aria-controls="panel-pills" aria-selected="false" tabindex="-1" style="--c:#E5487A;--on:#fff">Tabletták</button>
       <button role="tab" id="tab-guide"aria-controls="panel-guide" aria-selected="false" tabindex="-1" style="--c:#8E99A6;--on:#111">Útmutató · Beállítások</button>
     </div>
     <div role="tabpanel" id="panel-home" aria-labelledby="tab-home">
@@ -311,6 +316,12 @@
       <figure class="card" style="--c:#FD6A04"><div class="pic"><img src="img/art/ai-brief.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>Egy oldal a reggeledhez</h3><p>A napi összefoglaló összegyűjti a mai naptárat, a rád váró leveleket, az időjárást és a Jegyzetek nyitott ellenőrzőlistáit. Te választod ki, mi kerüljön bele.</p></figcaption></figure>
     </div>
+    <div role="tabpanel" id="panel-pills" aria-labelledby="tab-pills" hidden>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Tabletták</span><h3>A tablettáid, időben</h3><p>Egy kártya a nap minden részére, minden tabletta a saját alakjával és színével rajzolva, vagy a fényképével mutatva. A Bevéve egyetlen érintés, itt vagy az értesítésen, és a tegnap este elfelejtett adag legfelül vár. Minden doboz hozzáadja a tablettáit, a Haladás pedig megmutatja, mit felejtesz el, és jobb időpontot javasol.</p></figcaption></figure>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills-guide.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Tabletták</span><h3>Adj hozzá gyógyszert lépésről lépésre, vagy mondd el</h3><p>Öt lépés: a neve, hogyan néz ki, mikor szeded, mennyi van belőle, és mikor rendelj még. Bekapcsolt AI Assisttel mondd el mindent egyetlen mondatban, és a lépések kitöltődnek; ellenőrzöd őket, és megnyomod a Tovább gombot. Vagy mondd az AI Assistnek: „Kaptam egy új, 90 darabos dobozt”, és megszámolja őket.</p></figcaption></figure>
+    </div>
     <div role="tabpanel" id="panel-guide" aria-labelledby="tab-guide" hidden>
       <figure class="card" style="--c:#8E99A6"><div class="pic"><img src="img/art/guide.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/settings.png" alt=""><span class="pill">Útmutató</span><h3>Útmutató, amely megmutatja</h3><p>Az első indításkor és a Beállítások › Útmutató menüpontban: hol kell koppintani és miért, lépésenként. A képek mozognak, hogy megmutassák, mi történik, a Kipróbálom gomb pedig a lépést szem előtt tartja, amíg valóban meg nem csinálod.</p></figcaption></figure>
@@ -354,7 +365,7 @@
         <h3>Tetra Androidra</h3>
         <p>Telefonok és táblagépek, Android 11 vagy újabb.</p>
         <a href="https://github.com/kalotrapezis/Tetra-mobile">Forráskód és részletek a GitHubon</a>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>APK letöltése</b><span>0.8.0 beta 6</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>APK letöltése</b><span>0.8.0 beta 7</span></div></a>
       </div>
       <div class="panel">
         <h3>Tetra asztali gépre</h3>

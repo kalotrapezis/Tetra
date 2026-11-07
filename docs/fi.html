@@ -167,7 +167,7 @@
     <p class="lead">Yksi yksityinen superappi puhelimeesi, tablettiisi ja tietokoneeseesi. Ilmainen ohjelmisto, ei tiliä, ei pilveä: tiedostosi ja sähköpostisi pysyvät laitteillasi.</p>
     <div class="buttons">
       <div class="group"><h3><img src="img/android.svg" alt="">Android</h3>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>Lataa Androidille</b><span>APK · 0.8.0 beta 6 · Android 11+</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>Lataa Androidille</b><span>APK · 0.8.0 beta 7 · Android 11+</span></div></a>
         <div class="qr"><img src="img/qr-android.svg" alt="Android-latauksen QR-koodi"><p>Tai skannaa se puhelimellasi.<br><a href="#faq-install">Näin asennat sen</a></p></div></div>
       <div class="group"><h3><img src="img/linux.svg" alt="">Linux</h3>
         <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.5/Tetra-0.8.0-beta.5.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 5 · useimmat jakelut</span></div></a>
@@ -203,6 +203,10 @@
       <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Musiikkia kartan takana</h3><p>Jokaisesta soivasta sivusta tulee soitin isoin ‹ ⏯ › -painikkein, ja se soi muiden sovellusten takana. Laita radiokanavat kansioon, niin ‹ › käyvät ne läpi. Kartoissa 🎧 soittaa valitsemaasi kanavaa ajaessasi.</p></div>
       <div class="tile" style="--c:#2E9E5B"><img src="img/icons/messages.png" alt=""><h3>Tekstiviestisi keskusteluina</h3><p>Viestit näyttää tekstiviestisi keskusteluina: yksi kerrallaan puhelimessa, rinnakkain tabletilla ja tietokoneella, jossa puhelin lähettää ne. AI Assist lukee ja kirjoittaa niitä, ja Tetra voi olla puhelimen tekstiviestisovellus.</p></div>
       <div class="tile" style="--c:#F41879"><img src="img/icons/calendar.png" alt=""><h3>Herätykset, jotka soivat kaikkialla</h3><p>Herätykset ja sekuntikello ovat samat puhelimessa, tabletilla ja tietokoneella. Sammuta herätys yhdestä, niin se sammuu kaikista.</p></div>
+      <div class="tile" style="--c:#E5487A"><img src="img/icons/pills.png" alt=""><h3>Älä koskaan unohda iltapilleriä</h3><p>Pillerit muistuttaa annoksen ajasta ja uudelleen, kunnes otat sen, ilmoituksena tai AI Assistin äänellä: ding-dong ja sitten nimesi. Se laskee jokaisen pakkauksen pillerit ja kertoo päiviä ennen kuin ne loppuvat.</p></div>
+      <div class="tile" style="--c:#FD6A04"><img src="img/icons/assistant.png" alt=""><h3>Nopea kysymys, sama keskustelu</h3><p>Paina puhelimen avustajapainiketta uudelleen kymmenen minuutin sisällä, niin keskustelu jatkuu ja voit vastata siihen, mitä se kysyi. Pikakeskustelut tallentuvat myös Historiaan.</p></div>
+      <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Vaihda välilehteä kahdella sormella</h3><p>Kaksi sormea ylös tai alas vaihtaa seuraavaan tai edelliseen välilehteen. Tabletilla sivupalkki piiloutuu yhdellä napautuksella, ja pitkään painetusta linkistä avattu uusi välilehti voi aueta lukemasi sivun taakse.</p></div>
+      <div class="tile" style="--c:#1A9AA8"><img src="img/icons/phone.png" alt=""><h3>Nosta vastataksesi, ei koskaan taskussa</h3><p>Nosta puhelin korvallesi vastataksesi puheluun. Tetra seuraa koko liikettä, puhelun katsomisesta valossa korvaan asti, joten taskussa oleva puhelin ei koskaan vastaa itsestään. Näyttö alaspäin mykistää sen.</p></div>
       <div class="tile" style="--c:#2E9D4F"><img src="img/icons/sync.png" alt=""><h3>Jokainen laite selkeästi kuvattuna</h3><p>Jokainen puhelin-, tabletti- ja levykortti kertoo, mitä se tekee, yksi lause sovellusta kohden. Muokkaa avaa oppaan: mikä sovellus, Pois, Peili tai Siirrä, kuinka paljon jää laitteelle, kartta siitä, mitä siirtyy, sitten Vahvista. Puhelimessa tai tabletissa kuvat siirtyvät oletuksena ja muu kopioidaan. Kun levy on 90 % täynnä, Tetra ehdottaa, mitä siirtää, eikä siirrä mitään kysymättä.</p></div>
     </div>
   </div>
@@ -226,6 +230,7 @@
       <button role="tab" id="tab-backup"aria-controls="panel-backup" aria-selected="false" tabindex="-1" style="--c:#2E9D4F;--on:#fff">Varmuuskopio</button>
       <button role="tab" id="tab-data" aria-controls="panel-data" aria-selected="false" tabindex="-1" style="--c:#9AD01E;--on:#111">Data</button>
       <button role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1" style="--c:#FD6A04;--on:#111">AI Assist</button>
+      <button role="tab" id="tab-pills" aria-controls="panel-pills" aria-selected="false" tabindex="-1" style="--c:#E5487A;--on:#fff">Pillerit</button>
       <button role="tab" id="tab-guide"aria-controls="panel-guide" aria-selected="false" tabindex="-1" style="--c:#8E99A6;--on:#111">Opas · Asetukset</button>
     </div>
     <div role="tabpanel" id="panel-home" aria-labelledby="tab-home">
@@ -311,6 +316,12 @@
       <figure class="card" style="--c:#FD6A04"><div class="pic"><img src="img/art/ai-brief.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>Sivu aamuasi varten</h3><p>Päivän katsaus kokoaa tämän päivän kalenterin, sinua odottavat sähköpostit, sään ja avoimet tarkistuslistat Muistiinpanoista. Sinä valitset, mitä siihen tulee.</p></figcaption></figure>
     </div>
+    <div role="tabpanel" id="panel-pills" aria-labelledby="tab-pills" hidden>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Pillerit</span><h3>Pillerisi ajallaan</h3><p>Kortti jokaiselle vuorokauden osalle, jokainen pilleri piirrettynä muotonsa ja värinsä mukaan tai näytettynä valokuvansa kanssa. Otettu on yksi napautus, täällä tai ilmoituksessa, ja viime yönä unohtunut annos odottaa ylhäällä. Jokainen pakkaus lisää omat pillerinsä, ja Edistyminen näyttää, mitä unohdat, ja ehdottaa parempaa aikaa.</p></figcaption></figure>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills-guide.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Pillerit</span><h3>Lisää lääke vaihe vaiheelta tai sano se</h3><p>Viisi vaihetta: nimi, miltä se näyttää, milloin sen otat, kuinka monta sinulla on ja milloin tilaat lisää. Kun AI Assist on päällä, sano kaikki yhdellä lauseella, niin vaiheet täyttyvät; tarkistat ne ja painat Seuraava. Tai sano AI Assistille ”Sain uuden 90 pillerin pakkauksen”, niin ne lasketaan.</p></figcaption></figure>
+    </div>
     <div role="tabpanel" id="panel-guide" aria-labelledby="tab-guide" hidden>
       <figure class="card" style="--c:#8E99A6"><div class="pic"><img src="img/art/guide.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/settings.png" alt=""><span class="pill">Opas</span><h3>Opas, joka näyttää sinulle</h3><p>Ensimmäisellä käynnistyksellä ja kohdassa Asetukset › Opas: mihin napauttaa ja miksi, vaihe vaiheelta. Kuvat liikkuvat näyttääkseen, mitä tapahtuu, ja Kokeile pitää vaiheen näkyvissä, kun teet sen oikeasti.</p></figcaption></figure>
@@ -354,7 +365,7 @@
         <h3>Tetra Androidille</h3>
         <p>Puhelimet ja tabletit, Android 11 tai uudempi.</p>
         <a href="https://github.com/kalotrapezis/Tetra-mobile">Lähdekoodi ja tiedot GitHubissa</a>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>Lataa APK</b><span>0.8.0 beta 6</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>Lataa APK</b><span>0.8.0 beta 7</span></div></a>
       </div>
       <div class="panel">
         <h3>Tetra tietokoneelle</h3>

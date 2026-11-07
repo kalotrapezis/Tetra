@@ -167,7 +167,7 @@
     <p class="lead">En privat superapp för din telefon, surfplatta och dator. Fri programvara, inget konto, ingen molntjänst: dina filer och din mejl stannar på dina enheter.</p>
     <div class="buttons">
       <div class="group"><h3><img src="img/android.svg" alt="">Android</h3>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>Ladda ner för Android</b><span>APK · 0.8.0 beta 6 · Android 11+</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>Ladda ner för Android</b><span>APK · 0.8.0 beta 7 · Android 11+</span></div></a>
         <div class="qr"><img src="img/qr-android.svg" alt="QR-kod för nedladdningen av Android"><p>Eller skanna den med telefonen.<br><a href="#faq-install">Så installerar du den</a></p></div></div>
       <div class="group"><h3><img src="img/linux.svg" alt="">Linux</h3>
         <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.5/Tetra-0.8.0-beta.5.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 5 · de flesta distributioner</span></div></a>
@@ -203,6 +203,10 @@
       <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Musik bakom kartan</h3><p>Varje sida som spelar blir en spelare med stora ‹ ⏯ ›-knappar och fortsätter spela bakom andra appar. Lägg radiostationer i en mapp så går ‹ › igenom dem. I Kartor spelar 🎧 stationen du valde medan du kör.</p></div>
       <div class="tile" style="--c:#2E9E5B"><img src="img/icons/messages.png" alt=""><h3>Dina sms som chattar</h3><p>Meddelanden visar dina sms som konversationer: en i taget på telefonen, sida vid sida på en surfplatta och på datorn, där telefonen skickar dem. AI Assist läser och skriver dem, och Tetra kan vara telefonens sms-app.</p></div>
       <div class="tile" style="--c:#F41879"><img src="img/icons/calendar.png" alt=""><h3>Larm som ringer överallt</h3><p>Larm och tidtagaruret är desamma på telefonen, surfplattan och datorn. Stäng av ett larm på en så slutar det på alla.</p></div>
+      <div class="tile" style="--c:#E5487A"><img src="img/icons/pills.png" alt=""><h3>Glöm aldrig kvällspillret</h3><p>Piller påminner dig vid dosens tid och igen tills du har tagit den, som en avisering eller med AI Assists röst: ett ding-dong och sedan ditt namn. Den räknar pillren i varje förpackning och säger till dagar innan de tar slut.</p></div>
+      <div class="tile" style="--c:#FD6A04"><img src="img/icons/assistant.png" alt=""><h3>En snabb fråga, samma samtal</h3><p>Tryck på telefonens assistentknapp igen inom tio minuter så fortsätter samtalet, och du kan svara på det den frågade. Snabba samtal sparas också i Historik.</p></div>
+      <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Byt flik med två fingrar</h3><p>Två fingrar uppåt eller nedåt byter till nästa eller föregående flik. På en surfplatta döljs sidofältet med en tryckning, och en ny flik från en länk du håller nere kan öppnas bakom sidan du läser.</p></div>
+      <div class="tile" style="--c:#1A9AA8"><img src="img/icons/phone.png" alt=""><h3>Lyft för att svara, aldrig i fickan</h3><p>Håll telefonen mot örat för att svara på ett samtal. Tetra följer hela rörelsen, från att du tittar på samtalet i ljuset till örat, så en telefon i fickan svarar aldrig av sig själv. Med skärmen nedåt tystas den.</p></div>
       <div class="tile" style="--c:#2E9D4F"><img src="img/icons/sync.png" alt=""><h3>Varje enhet, med enkla ord</h3><p>Varje kort för telefon, surfplatta och disk säger vad den gör, en mening per app. Redigera öppnar en guide: vilken app, Av, Spegel eller Flytta, hur mycket som stannar på enheten, en karta över vad som flyttas, och sedan Bekräfta. På en telefon eller surfplatta flyttas bilder som standard och resten kopieras. Vid 90 % full föreslår Tetra vad som ska flyttas och flyttar inget utan att fråga.</p></div>
     </div>
   </div>
@@ -226,6 +230,7 @@
       <button role="tab" id="tab-backup"aria-controls="panel-backup" aria-selected="false" tabindex="-1" style="--c:#2E9D4F;--on:#fff">Säkerhetskopia</button>
       <button role="tab" id="tab-data" aria-controls="panel-data" aria-selected="false" tabindex="-1" style="--c:#9AD01E;--on:#111">Data</button>
       <button role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1" style="--c:#FD6A04;--on:#111">AI Assist</button>
+      <button role="tab" id="tab-pills" aria-controls="panel-pills" aria-selected="false" tabindex="-1" style="--c:#E5487A;--on:#fff">Piller</button>
       <button role="tab" id="tab-guide"aria-controls="panel-guide" aria-selected="false" tabindex="-1" style="--c:#8E99A6;--on:#111">Guide · Inställningar</button>
     </div>
     <div role="tabpanel" id="panel-home" aria-labelledby="tab-home">
@@ -311,6 +316,12 @@
       <figure class="card" style="--c:#FD6A04"><div class="pic"><img src="img/art/ai-brief.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>En sida för din morgon</h3><p>Den dagliga sammanfattningen samlar dagens kalender, mejl som behöver dig, vädret och öppna checklistor från Anteckningar. Du väljer vad som kommer med.</p></figcaption></figure>
     </div>
+    <div role="tabpanel" id="panel-pills" aria-labelledby="tab-pills" hidden>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Piller</span><h3>Dina piller, i tid</h3><p>Ett kort för varje del av dagen, varje piller ritat i sin form och färg eller visat med sitt foto. Tagna är en tryckning, här eller på aviseringen, och en dos som glömdes i går kväll väntar högst upp. Varje förpackning lägger till sina piller, och Framsteg visar vad du glömmer och föreslår en bättre tid.</p></figcaption></figure>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills-guide.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Piller</span><h3>Lägg till en medicin steg för steg, eller säg den</h3><p>Fem steg: namnet, hur det ser ut, när du tar det, hur många du har och när du ska beställa fler. Med AI Assist på säger du allt i en mening och stegen fylls i; du kontrollerar dem och trycker på Nästa. Eller säg till AI Assist ”Jag fick en ny förpackning med 90” så räknas de.</p></figcaption></figure>
+    </div>
     <div role="tabpanel" id="panel-guide" aria-labelledby="tab-guide" hidden>
       <figure class="card" style="--c:#8E99A6"><div class="pic"><img src="img/art/guide.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/settings.png" alt=""><span class="pill">Guide</span><h3>En guide som visar dig</h3><p>Vid första starten och i Inställningar › Guide: var du ska trycka och varför, steg för steg. Bilderna rör sig för att visa vad som händer, och Prova håller steget i sikte medan du gör det på riktigt.</p></figcaption></figure>
@@ -354,7 +365,7 @@
         <h3>Tetra för Android</h3>
         <p>Telefoner och surfplattor med Android 11 eller nyare.</p>
         <a href="https://github.com/kalotrapezis/Tetra-mobile">Källa och detaljer på GitHub</a>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>Ladda ner APK</b><span>0.8.0 beta 6</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>Ladda ner APK</b><span>0.8.0 beta 7</span></div></a>
       </div>
       <div class="panel">
         <h3>Tetra för datorn</h3>

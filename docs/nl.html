@@ -167,7 +167,7 @@
     <p class="lead">Eén privé superapp voor je telefoon, tablet en computer. Gratis software, geen account, geen cloud: je bestanden en mail blijven op je apparaten.</p>
     <div class="buttons">
       <div class="group"><h3><img src="img/android.svg" alt="">Android</h3>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>Download voor Android</b><span>APK · 0.8.0 beta 6 · Android 11+</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>Download voor Android</b><span>APK · 0.8.0 beta 7 · Android 11+</span></div></a>
         <div class="qr"><img src="img/qr-android.svg" alt="QR-code van de Android-download"><p>Of scan hem met je telefoon.<br><a href="#faq-install">Zo installeer je hem</a></p></div></div>
       <div class="group"><h3><img src="img/linux.svg" alt="">Linux</h3>
         <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.5/Tetra-0.8.0-beta.5.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 5 · de meeste distributies</span></div></a>
@@ -203,6 +203,10 @@
       <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Muziek achter de kaart</h3><p>Elke pagina die speelt wordt een speler met grote ‹ ⏯ ›-knoppen en speelt door achter andere apps. Zet radiozenders in een map en ‹ › gaan ze langs. In Kaarten speelt 🎧 de zender die je koos terwijl je rijdt.</p></div>
       <div class="tile" style="--c:#2E9E5B"><img src="img/icons/messages.png" alt=""><h3>Je sms'jes als chats</h3><p>Berichten toont je sms'jes als gesprekken: één tegelijk op de telefoon, naast elkaar op een tablet en op de computer, waar de telefoon ze verstuurt. AI Assist leest en schrijft ze, en Tetra kan de sms-app van de telefoon zijn.</p></div>
       <div class="tile" style="--c:#F41879"><img src="img/icons/calendar.png" alt=""><h3>Wekkers die overal afgaan</h3><p>Wekkers en de stopwatch zijn hetzelfde op de telefoon, de tablet en de computer. Zet een wekker op één uit en hij stopt op alle.</p></div>
+      <div class="tile" style="--c:#E5487A"><img src="img/icons/pills.png" alt=""><h3>Vergeet nooit de avondpil</h3><p>Pillen herinnert je op het tijdstip van de dosis en opnieuw tot je hem neemt, met een melding of met de stem van AI Assist: een ding-dong, dan je naam. Het telt de pillen van elke doos en waarschuwt je dagen voordat ze op zijn.</p></div>
+      <div class="tile" style="--c:#FD6A04"><img src="img/icons/assistant.png" alt=""><h3>Een snelle vraag, hetzelfde gesprek</h3><p>Druk binnen tien minuten opnieuw op de assistentknop van de telefoon en het gesprek gaat verder, zodat je kunt antwoorden op wat er gevraagd werd. Snelle gesprekken worden ook bewaard in Geschiedenis.</p></div>
+      <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Wissel van tabblad met twee vingers</h3><p>Twee vingers omhoog of omlaag schakelen naar het volgende of vorige tabblad. Op een tablet verdwijnt de zijbalk met één tik, en een nieuw tabblad vanaf een vastgehouden link kan achter de pagina openen die je leest.</p></div>
+      <div class="tile" style="--c:#1A9AA8"><img src="img/icons/phone.png" alt=""><h3>Optillen om op te nemen, nooit in je zak</h3><p>Houd de telefoon tegen je oor om een gesprek aan te nemen. Tetra volgt de hele beweging, van het kijken naar het gesprek in het licht tot je oor, dus een telefoon in je zak neemt nooit zelf op. Met het scherm naar beneden wordt hij gedempt.</p></div>
       <div class="tile" style="--c:#2E9D4F"><img src="img/icons/sync.png" alt=""><h3>Elk apparaat, in gewone woorden</h3><p>Elke kaart van een telefoon, tablet of schijf zegt wat die doet, één zin per app. Bewerken opent een gids: welke app, Uit, Spiegel of Verplaatsen, hoeveel er op het apparaat blijft, een overzicht van wat verplaatst wordt, en dan Bevestigen. Op een telefoon of tablet worden foto's standaard verplaatst en wordt de rest gekopieerd. Bij 90% vol stelt Tetra voor wat je moet verplaatsen, en verplaatst het niets zonder te vragen.</p></div>
     </div>
   </div>
@@ -226,6 +230,7 @@
       <button role="tab" id="tab-backup"aria-controls="panel-backup" aria-selected="false" tabindex="-1" style="--c:#2E9D4F;--on:#fff">Back-up</button>
       <button role="tab" id="tab-data" aria-controls="panel-data" aria-selected="false" tabindex="-1" style="--c:#9AD01E;--on:#111">Data</button>
       <button role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1" style="--c:#FD6A04;--on:#111">AI Assist</button>
+      <button role="tab" id="tab-pills" aria-controls="panel-pills" aria-selected="false" tabindex="-1" style="--c:#E5487A;--on:#fff">Pillen</button>
       <button role="tab" id="tab-guide"aria-controls="panel-guide" aria-selected="false" tabindex="-1" style="--c:#8E99A6;--on:#111">Handleiding · Instellingen</button>
     </div>
     <div role="tabpanel" id="panel-home" aria-labelledby="tab-home">
@@ -311,6 +316,12 @@
       <figure class="card" style="--c:#FD6A04"><div class="pic"><img src="img/art/ai-brief.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>Een pagina voor je ochtend</h3><p>Het dagelijkse overzicht verzamelt de agenda van vandaag, de mail die op je wacht, het weer en de open checklists uit Notities. Jij kiest wat erin komt.</p></figcaption></figure>
     </div>
+    <div role="tabpanel" id="panel-pills" aria-labelledby="tab-pills" hidden>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Pillen</span><h3>Je pillen, op tijd</h3><p>Een kaart voor elk deel van de dag, elke pil getekend in zijn vorm en kleur, of getoond met zijn foto. Ingenomen is één tik, hier of op de melding, en een dosis die je gisteravond vergat staat bovenaan te wachten. Elke doos voegt zijn pillen toe, en Voortgang laat zien wat je vergeet en stelt een beter tijdstip voor.</p></figcaption></figure>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills-guide.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Pillen</span><h3>Voeg een medicijn stap voor stap toe, of zeg het</h3><p>Vijf stappen: de naam, hoe hij eruitziet, wanneer je hem neemt, hoeveel je er hebt en wanneer je meer bestelt. Met AI Assist aan zeg je alles in één zin en de stappen worden ingevuld; je controleert ze en drukt op Volgende. Of zeg tegen AI Assist „Ik heb een nieuwe doos van 90 gekregen” en ze worden geteld.</p></figcaption></figure>
+    </div>
     <div role="tabpanel" id="panel-guide" aria-labelledby="tab-guide" hidden>
       <figure class="card" style="--c:#8E99A6"><div class="pic"><img src="img/art/guide.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/settings.png" alt=""><span class="pill">Handleiding</span><h3>Een handleiding die je laat zien</h3><p>Bij de eerste start en in Instellingen › Handleiding: waar je moet tikken en waarom, stap voor stap. De plaatjes bewegen om te laten zien wat er gebeurt, en Probeer het houdt de stap in beeld terwijl je het echt doet.</p></figcaption></figure>
@@ -354,7 +365,7 @@
         <h3>Tetra voor Android</h3>
         <p>Telefoons en tablets met Android 11 of nieuwer.</p>
         <a href="https://github.com/kalotrapezis/Tetra-mobile">Broncode en details op GitHub</a>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>Download APK</b><span>0.8.0 beta 6</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>Download APK</b><span>0.8.0 beta 7</span></div></a>
       </div>
       <div class="panel">
         <h3>Tetra voor de desktop</h3>

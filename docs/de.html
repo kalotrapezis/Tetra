@@ -167,7 +167,7 @@
     <p class="lead">Eine private Super-App für dein Telefon, Tablet und deinen Computer. Freie Software, kein Konto, keine Cloud: deine Dateien und Mails bleiben auf deinen Geräten.</p>
     <div class="buttons">
       <div class="group"><h3><img src="img/android.svg" alt="">Android</h3>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>Für Android herunterladen</b><span>APK · 0.8.0 beta 6 · Android 11+</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>Für Android herunterladen</b><span>APK · 0.8.0 beta 7 · Android 11+</span></div></a>
         <div class="qr"><img src="img/qr-android.svg" alt="QR-Code für den Android-Download"><p>Oder scanne den Code mit deinem Telefon.<br><a href="#faq-install">So installierst du es</a></p></div></div>
       <div class="group"><h3><img src="img/linux.svg" alt="">Linux</h3>
         <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.5/Tetra-0.8.0-beta.5.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 5 · die meisten Distributionen</span></div></a>
@@ -203,6 +203,10 @@
       <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Musik hinter der Karte</h3><p>Jede Seite, die spielt, wird zum Player mit großen ‹ ⏯ ›-Tasten und spielt hinter anderen Apps weiter. Leg Radiosender in einen Ordner, und ‹ › gehen sie durch. In Karten spielt 🎧 den gewählten Sender, während du fährst.</p></div>
       <div class="tile" style="--c:#2E9E5B"><img src="img/icons/messages.png" alt=""><h3>Deine SMS als Chats</h3><p>Nachrichten zeigt deine SMS als Unterhaltungen: eine nach der anderen auf dem Handy, nebeneinander auf dem Tablet und am Computer, wo das Handy sie sendet. AI Assist liest und schreibt sie, und Tetra kann die SMS-App des Handys sein.</p></div>
       <div class="tile" style="--c:#F41879"><img src="img/icons/calendar.png" alt=""><h3>Wecker, die überall klingeln</h3><p>Wecker und Stoppuhr sind auf Handy, Tablet und Computer dieselben. Schalte einen Wecker auf einem Gerät aus, und er verstummt auf allen.</p></div>
+      <div class="tile" style="--c:#E5487A"><img src="img/icons/pills.png" alt=""><h3>Vergiss nie die Abendtablette</h3><p>Tabletten erinnert dich zur Zeit der Dosis und danach immer wieder, bis du sie nimmst, als Benachrichtigung oder mit der Stimme von AI Assist: ein Ding-Dong, dann dein Name. Die App zählt die Tabletten jeder Packung und sagt dir Tage vorher Bescheid, bevor sie ausgehen.</p></div>
+      <div class="tile" style="--c:#FD6A04"><img src="img/icons/assistant.png" alt=""><h3>Eine kurze Frage, dasselbe Gespräch</h3><p>Drücke die Assistententaste des Telefons innerhalb von zehn Minuten noch einmal, und das Gespräch geht weiter, sodass du auf die Frage antworten kannst. Kurze Gespräche werden auch im Verlauf gespeichert.</p></div>
+      <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Tab wechseln mit zwei Fingern</h3><p>Zwei Finger nach oben oder unten wechseln zum nächsten oder vorherigen Tab. Auf einem Tablet verschwindet die Seitenleiste mit einem Tippen, und ein neuer Tab aus einem gehaltenen Link kann hinter der Seite aufgehen, die du gerade liest.</p></div>
+      <div class="tile" style="--c:#1A9AA8"><img src="img/icons/phone.png" alt=""><h3>Zum Antworten anheben, nie in der Tasche</h3><p>Halte das Telefon ans Ohr, um einen Anruf anzunehmen. Tetra verfolgt die ganze Bewegung, vom Blick auf den Anruf im Licht bis zum Ohr, daher nimmt ein Telefon in der Tasche nie von selbst ab. Mit dem Display nach unten wird es stummgeschaltet.</p></div>
       <div class="tile" style="--c:#2E9D4F"><img src="img/icons/sync.png" alt=""><h3>Jedes Gerät, in einfachen Worten</h3><p>Jede Karte eines Telefons, Tablets oder Laufwerks sagt, was sie tut, mit einem Satz pro App. Bearbeiten öffnet eine Anleitung: welche App, Aus, Spiegel oder Verschieben, wie viel auf dem Gerät bleibt, eine Übersicht, was wandert, dann Bestätigen. Auf Telefon und Tablet wandern Fotos standardmäßig, der Rest wird kopiert. Bei 90 % Füllstand schlägt Tetra vor, was verschoben werden soll, und verschiebt nichts ohne Nachfrage.</p></div>
     </div>
   </div>
@@ -226,6 +230,7 @@
       <button role="tab" id="tab-backup"aria-controls="panel-backup" aria-selected="false" tabindex="-1" style="--c:#2E9D4F;--on:#fff">Sicherung</button>
       <button role="tab" id="tab-data" aria-controls="panel-data" aria-selected="false" tabindex="-1" style="--c:#9AD01E;--on:#111">Daten</button>
       <button role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1" style="--c:#FD6A04;--on:#111">AI Assist</button>
+      <button role="tab" id="tab-pills" aria-controls="panel-pills" aria-selected="false" tabindex="-1" style="--c:#E5487A;--on:#fff">Tabletten</button>
       <button role="tab" id="tab-guide"aria-controls="panel-guide" aria-selected="false" tabindex="-1" style="--c:#8E99A6;--on:#111">Anleitung · Einstellungen</button>
     </div>
     <div role="tabpanel" id="panel-home" aria-labelledby="tab-home">
@@ -311,6 +316,12 @@
       <figure class="card" style="--c:#FD6A04"><div class="pic"><img src="img/art/ai-brief.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>Eine Seite für Ihren Morgen</h3><p>Der Tagesüberblick sammelt den heutigen Kalender, die Mails, die auf Sie warten, das Wetter und die offenen Checklisten aus Notizen. Sie wählen, was hineinkommt.</p></figcaption></figure>
     </div>
+    <div role="tabpanel" id="panel-pills" aria-labelledby="tab-pills" hidden>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Tabletten</span><h3>Deine Tabletten, pünktlich</h3><p>Eine Karte für jeden Tagesabschnitt, jede Tablette in ihrer Form und Farbe gezeichnet oder mit ihrem Foto gezeigt. Genommen ist ein Tippen, hier oder in der Benachrichtigung, und eine gestern Abend vergessene Dosis wartet ganz oben. Jede Packung fügt ihre Tabletten hinzu, und Verlauf zeigt, was du vergisst, und schlägt eine bessere Zeit vor.</p></figcaption></figure>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills-guide.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Tabletten</span><h3>Ein Medikament Schritt für Schritt hinzufügen oder sagen</h3><p>Fünf Schritte: der Name, wie sie aussieht, wann du sie nimmst, wie viele du hast und wann du nachbestellen musst. Mit eingeschaltetem AI Assist sagst du alles in einem Satz, und die Schritte füllen sich; du prüfst sie und tippst auf Weiter. Oder sag AI Assist „Ich habe eine neue Packung mit 90 bekommen“, und sie werden gezählt.</p></figcaption></figure>
+    </div>
     <div role="tabpanel" id="panel-guide" aria-labelledby="tab-guide" hidden>
       <figure class="card" style="--c:#8E99A6"><div class="pic"><img src="img/art/guide.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/settings.png" alt=""><span class="pill">Anleitung</span><h3>Eine Anleitung, die dir zeigt</h3><p>Beim ersten Start und unter Einstellungen › Anleitung: wo du tippst und warum, Schritt für Schritt. Die Bilder bewegen sich, um zu zeigen, was passiert, und Ausprobieren hält den Schritt im Blick, während du es wirklich tust.</p></figcaption></figure>
@@ -354,7 +365,7 @@
         <h3>Tetra für Android</h3>
         <p>Telefone und Tablets mit Android 11 oder neuer.</p>
         <a href="https://github.com/kalotrapezis/Tetra-mobile">Quellcode und Details auf GitHub</a>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>APK herunterladen</b><span>0.8.0 beta 6</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>APK herunterladen</b><span>0.8.0 beta 7</span></div></a>
       </div>
       <div class="panel">
         <h3>Tetra für den Desktop</h3>

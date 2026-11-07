@@ -167,7 +167,7 @@
     <p class="lead">Jedna súkromná superaplikácia pre váš telefón, tablet a počítač. Slobodný softvér, bez účtu a bez cloudu: vaše súbory a pošta zostávajú vo vašich zariadeniach.</p>
     <div class="buttons">
       <div class="group"><h3><img src="img/android.svg" alt="">Android</h3>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>Stiahnuť pre Android</b><span>APK · 0.8.0 beta 6 · Android 11+</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>Stiahnuť pre Android</b><span>APK · 0.8.0 beta 7 · Android 11+</span></div></a>
         <div class="qr"><img src="img/qr-android.svg" alt="QR kód na stiahnutie pre Android"><p>Alebo ju naskenujte telefónom.<br><a href="#faq-install">Ako ju nainštalovať</a></p></div></div>
       <div class="group"><h3><img src="img/linux.svg" alt="">Linux</h3>
         <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.5/Tetra-0.8.0-beta.5.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 5 · väčšina distribúcií</span></div></a>
@@ -203,6 +203,10 @@
       <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Hudba za mapou</h3><p>Každá stránka, ktorá hrá, sa stane prehrávačom s veľkými tlačidlami ‹ ⏯ › a hrá ďalej za inými aplikáciami. Dajte rádiá do priečinka a ‹ › nimi prechádzajú. V Mapách 🎧 púšťa stanicu, ktorú ste vybrali, kým šoférujete.</p></div>
       <div class="tile" style="--c:#2E9E5B"><img src="img/icons/messages.png" alt=""><h3>Vaše SMS ako chaty</h3><p>Správy ukazujú vaše SMS ako konverzácie: po jednej v telefóne, vedľa seba na tablete a na počítači, kde ich posiela telefón. AI Assist ich číta a píše a Tetra môže byť aplikáciou na SMS v telefóne.</p></div>
       <div class="tile" style="--c:#F41879"><img src="img/icons/calendar.png" alt=""><h3>Budíky, ktoré zvonia všade</h3><p>Budíky a stopky sú rovnaké v telefóne, na tablete aj na počítači. Vypnite budík na jednom zariadení a stíchne na všetkých.</p></div>
+      <div class="tile" style="--c:#E5487A"><img src="img/icons/pills.png" alt=""><h3>Nikdy nezabudnite na večernú tabletu</h3><p>Tablety vám pripomenú čas dávky a znova, kým ju nevezmete, oznámením alebo hlasom AI Assist: ding-dong a potom vaše meno. Počítajú tablety v každej škatuľke a upozornia vás niekoľko dní predtým, než dôjdu.</p></div>
+      <div class="tile" style="--c:#FD6A04"><img src="img/icons/assistant.png" alt=""><h3>Rýchla otázka, tá istá konverzácia</h3><p>Stlačte tlačidlo asistenta v telefóne znova do desiatich minút a konverzácia pokračuje, takže môžete odpovedať na to, na čo sa pýtal. Rýchle konverzácie sa ukladajú aj do histórie.</p></div>
+      <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Prepínajte karty dvoma prstami</h3><p>Dva prsty nahor alebo nadol prepnú na ďalšiu alebo predchádzajúcu kartu. Na tablete sa bočný panel skryje jedným klepnutím a nová karta z podržaného odkazu sa môže otvoriť za stránkou, ktorú čítate.</p></div>
+      <div class="tile" style="--c:#1A9AA8"><img src="img/icons/phone.png" alt=""><h3>Zdvihnite na prijatie, nikdy vo vrecku</h3><p>Priložte telefón k uchu a prijmete hovor. Tetra sleduje celý pohyb, od pohľadu na hovor na svetle až po ucho, takže telefón vo vrecku nikdy neprijme sám. Displejom nadol ho stíšite.</p></div>
       <div class="tile" style="--c:#2E9D4F"><img src="img/icons/sync.png" alt=""><h3>Každé zariadenie, jednoducho povedané</h3><p>Každá karta telefónu, tabletu a disku hovorí, čo robí, jedna veta na aplikáciu. Upraviť otvorí sprievodcu: ktorá aplikácia, Vypnuté, Zrkadlo alebo Presunúť, koľko zostane v zariadení, mapa toho, čo sa presúva, a potom Potvrdiť. Na telefóne alebo tablete sa fotky predvolene presúvajú a zvyšok sa kopíruje. Keď je disk zaplnený na 90 %, Tetra navrhne, čo presunúť, a nič nepresunie bez opýtania.</p></div>
     </div>
   </div>
@@ -226,6 +230,7 @@
       <button role="tab" id="tab-backup"aria-controls="panel-backup" aria-selected="false" tabindex="-1" style="--c:#2E9D4F;--on:#fff">Záloha</button>
       <button role="tab" id="tab-data" aria-controls="panel-data" aria-selected="false" tabindex="-1" style="--c:#9AD01E;--on:#111">Dáta</button>
       <button role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1" style="--c:#FD6A04;--on:#111">AI Assist</button>
+      <button role="tab" id="tab-pills" aria-controls="panel-pills" aria-selected="false" tabindex="-1" style="--c:#E5487A;--on:#fff">Tablety</button>
       <button role="tab" id="tab-guide"aria-controls="panel-guide" aria-selected="false" tabindex="-1" style="--c:#8E99A6;--on:#111">Sprievodca · Nastavenia</button>
     </div>
     <div role="tabpanel" id="panel-home" aria-labelledby="tab-home">
@@ -311,6 +316,12 @@
       <figure class="card" style="--c:#FD6A04"><div class="pic"><img src="img/art/ai-brief.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>Stránka pre vaše ráno</h3><p>Denný prehľad zhrnie dnešný kalendár, poštu, ktorá vás potrebuje, počasie a otvorené kontrolné zoznamy z Poznámok. Vy vyberáte, čo v ňom bude.</p></figcaption></figure>
     </div>
+    <div role="tabpanel" id="panel-pills" aria-labelledby="tab-pills" hidden>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Tablety</span><h3>Vaše tablety, načas</h3><p>Karta pre každú časť dňa, každá tableta nakreslená svojím tvarom a farbou alebo zobrazená na fotografii. „Užité“ je jedno klepnutie, tu alebo na oznámení, a dávka zabudnutá včera večer čaká hore. Každá škatuľka pridá svoje tablety a „Priebeh“ ukáže, na čo zabúdate, a navrhne lepší čas.</p></figcaption></figure>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills-guide.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Tablety</span><h3>Pridajte liek krok za krokom, alebo ho povedzte</h3><p>Päť krokov: názov, ako vyzerá, kedy ju užívate, koľko jej máte a kedy objednať ďalšie. So zapnutým AI Assist povedzte všetko jednou vetou a kroky sa vyplnia; skontrolujete ich a stlačíte „Ďalej“. Alebo povedzte AI Assist „Dostal som novú škatuľku s 90 kusmi“ a započítajú sa.</p></figcaption></figure>
+    </div>
     <div role="tabpanel" id="panel-guide" aria-labelledby="tab-guide" hidden>
       <figure class="card" style="--c:#8E99A6"><div class="pic"><img src="img/art/guide.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/settings.png" alt=""><span class="pill">Sprievodca</span><h3>Sprievodca, ktorý vám ukáže</h3><p>Pri prvom spustení a v Nastavenia › Sprievodca: kam ťuknúť a prečo, krok za krokom. Obrázky sa pohybujú, aby ukázali, čo sa deje, a Vyskúšať ukazuje krok, kým ho naozaj robíte.</p></figcaption></figure>
@@ -354,7 +365,7 @@
         <h3>Tetra pre Android</h3>
         <p>Telefóny a tablety s Androidom 11 alebo novším.</p>
         <a href="https://github.com/kalotrapezis/Tetra-mobile">Zdroj a podrobnosti na GitHub</a>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>Stiahnuť APK</b><span>0.8.0 beta 6</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>Stiahnuť APK</b><span>0.8.0 beta 7</span></div></a>
       </div>
       <div class="panel">
         <h3>Tetra pre počítač</h3>

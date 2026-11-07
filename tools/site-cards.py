@@ -103,6 +103,8 @@ NEW = {
     'ai-cloud': ('#FD6A04', [('d-ai-cloud.png', 800, 'pc', 640, 110), ('p-ai-skills.png', 250, 'phone', 1300, 230)]),
     'ai-scheduled': ('#FD6A04', [('d-ai-scheduled.png', 800, 'pc', 640, 110), ('p-ai-scheduled.png', 250, 'phone', 1300, 230)]),
     'ai-brief': ('#FD6A04', [('d-brief-dark.png', 470, 'tablet', 690, 130), ('d-brief-light.png', 470, 'tablet', 1090, 170)]),
+    'pills': ('#E5487A', [('p-pills-today.png', 270, 'phone', 680, 120), ('p-pills-medicines.png', 270, 'phone', 990, 170), ('p-pills-progress.png', 270, 'phone', 1300, 120)]),
+    'pills-guide': ('#E5487A', [('p-pills-home.png', 270, 'phone', 680, 170), ('p-pills-look.png', 270, 'phone', 990, 120), ('p-pills-when.png', 270, 'phone', 1300, 170)]),
 }
 
 def make_new(shots):

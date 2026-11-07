@@ -43,6 +43,10 @@ site shows it, in every language.
       plays Maps' driving station, «βάλε Kosmos» a saved one; «δυνάμωσε / χαμήλωσε / ένταση στο 30»; «play it on the
       tablet», «send the answer to the PC», «open the brief on the PC» go to another device through the computer.
 - [ ] **Daily brief weather** (4 Nov): without a place set it uses where the phone is; the phone's Scheduled tab shows and sets it.
+- [x] **Pills** (7 Nov, Android 0.8.0 beta 7): a tab with two cards (Today · Medicines · Progress; the step-by-step guide,
+      Home's icon) from `tools/site-cards.py` (`pills`, `pills-guide`), and a tile; English screenshots in Tetra-site-shots.
+- [x] **AI Assist's quick button keeps the conversation**, **Browser: two fingers change tab**, **Raise to answer, never in
+      your pocket**: a tile each (7 Nov).
 
 ## Numbers
 - [x] **Speed of Mail and AI Assist** (1 Nov, `desktop/PERF_MAIL_AI.md`): the computer's window 496 → 97 ms; Mail's list
@@ -51,4 +55,4 @@ site shows it, in every language.
       an answer's wait is Mistral's (1–9 s). Add them beside the README's speed table.
 
 ## Downloads
-- [x] Bump the download buttons, labels and QR code to the next release once it is out (now Android 0.8.0 beta 6, the desktop 0.8.0 beta 5).
+- [x] Bump the download buttons, labels and QR code to the next release once it is out (now Android 0.8.0 beta 7, the desktop 0.8.0 beta 5).

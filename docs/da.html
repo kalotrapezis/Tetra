@@ -167,7 +167,7 @@
     <p class="lead">En privat superapp til din telefon, tablet og computer. Fri software, ingen konto, ingen sky: dine filer og mails bliver på dine enheder.</p>
     <div class="buttons">
       <div class="group"><h3><img src="img/android.svg" alt="">Android</h3>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>Hent til Android</b><span>APK · 0.8.0 beta 6 · Android 11+</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>Hent til Android</b><span>APK · 0.8.0 beta 7 · Android 11+</span></div></a>
         <div class="qr"><img src="img/qr-android.svg" alt="QR-kode til Android-hentningen"><p>Eller scan den med din telefon.<br><a href="#faq-install">Sådan installerer du den</a></p></div></div>
       <div class="group"><h3><img src="img/linux.svg" alt="">Linux</h3>
         <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.5/Tetra-0.8.0-beta.5.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 5 · de fleste distributioner</span></div></a>
@@ -203,6 +203,10 @@
       <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Musik bag kortet</h3><p>Enhver side, der spiller, bliver en afspiller med store ‹ ⏯ ›-knapper og spiller videre bag andre apps. Læg radiostationer i en mappe, og ‹ › går igennem dem. I Kort spiller 🎧 den station, du valgte, mens du kører.</p></div>
       <div class="tile" style="--c:#2E9E5B"><img src="img/icons/messages.png" alt=""><h3>Dine sms'er som chats</h3><p>Beskeder viser dine sms'er som samtaler: én ad gangen på telefonen, side om side på en tablet og på computeren, hvor telefonen sender dem. AI Assist læser og skriver dem, og Tetra kan være telefonens sms-app.</p></div>
       <div class="tile" style="--c:#F41879"><img src="img/icons/calendar.png" alt=""><h3>Alarmer, der ringer overalt</h3><p>Alarmer og stopuret er de samme på telefonen, tabletten og computeren. Afvis en alarm på én, og den stopper på alle.</p></div>
+      <div class="tile" style="--c:#E5487A"><img src="img/icons/pills.png" alt=""><h3>Glem aldrig aftenpillen</h3><p>Piller minder dig om tidspunktet for dosen og igen, indtil du har taget den, som en notifikation eller med AI Assists stemme: et ding-dong og så dit navn. Den tæller pillerne i hver pakke og siger til dage, før de løber ud.</p></div>
+      <div class="tile" style="--c:#FD6A04"><img src="img/icons/assistant.png" alt=""><h3>Et hurtigt spørgsmål, samme samtale</h3><p>Tryk på telefonens assistentknap igen inden for ti minutter, så fortsætter samtalen, og du kan svare på det, den spurgte om. Hurtige samtaler gemmes også i Historik.</p></div>
+      <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Skift fane med to fingre</h3><p>To fingre op eller ned skifter til næste eller forrige fane. På en tablet skjules sidepanelet med ét tryk, og en ny fane fra et holdt link kan åbne bag den side, du læser.</p></div>
+      <div class="tile" style="--c:#1A9AA8"><img src="img/icons/phone.png" alt=""><h3>Løft for at svare, aldrig i lommen</h3><p>Løft telefonen op til øret for at tage et opkald. Tetra følger hele bevægelsen, fra du ser på opkaldet i lyset til øret, så en telefon i lommen aldrig svarer af sig selv. Med skærmen nedad bliver den lydløs.</p></div>
       <div class="tile" style="--c:#2E9D4F"><img src="img/icons/sync.png" alt=""><h3>Hver enhed, forklaret med almindelige ord</h3><p>Hvert kort for en telefon, tablet eller et drev siger, hvad det gør, én sætning pr. app. Rediger åbner en guide: hvilken app, Fra, Spejl eller Flyt, hvor meget der bliver på enheden, et kort over, hvad der flyttes, derefter Bekræft. På en telefon eller tablet flyttes fotos som standard, og resten kopieres. Ved 90 % fuld foreslår Tetra, hvad der skal flyttes, og flytter intet uden at spørge.</p></div>
     </div>
   </div>
@@ -226,6 +230,7 @@
       <button role="tab" id="tab-backup"aria-controls="panel-backup" aria-selected="false" tabindex="-1" style="--c:#2E9D4F;--on:#fff">Sikkerhedskopi</button>
       <button role="tab" id="tab-data" aria-controls="panel-data" aria-selected="false" tabindex="-1" style="--c:#9AD01E;--on:#111">Data</button>
       <button role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1" style="--c:#FD6A04;--on:#111">AI Assist</button>
+      <button role="tab" id="tab-pills" aria-controls="panel-pills" aria-selected="false" tabindex="-1" style="--c:#E5487A;--on:#fff">Piller</button>
       <button role="tab" id="tab-guide"aria-controls="panel-guide" aria-selected="false" tabindex="-1" style="--c:#8E99A6;--on:#111">Guide · Indstillinger</button>
     </div>
     <div role="tabpanel" id="panel-home" aria-labelledby="tab-home">
@@ -311,6 +316,12 @@
       <figure class="card" style="--c:#FD6A04"><div class="pic"><img src="img/art/ai-brief.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>En side til din morgen</h3><p>Dagens overblik samler dagens kalender, de mails, der venter på dig, vejret og de åbne tjeklister fra Noter. Du vælger, hvad der kommer med.</p></figcaption></figure>
     </div>
+    <div role="tabpanel" id="panel-pills" aria-labelledby="tab-pills" hidden>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Piller</span><h3>Dine piller, til tiden</h3><p>Et kort for hver del af dagen, hver pille tegnet i sin form og farve eller vist med sit foto. Taget er ét tryk, her eller på notifikationen, og en dosis, du glemte i går aftes, venter øverst. Hver pakke tilføjer sine piller, og Fremgang viser, hvad du glemmer, og foreslår et bedre tidspunkt.</p></figcaption></figure>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills-guide.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Piller</span><h3>Tilføj medicin trin for trin, eller sig det</h3><p>Fem trin: navn, hvordan den ser ud, hvornår du tager den, hvor mange du har, og hvornår du skal bestille flere. Med AI Assist slået til kan du sige det hele i én sætning, og trinnene udfyldes; du tjekker dem og trykker på Næste. Eller sig til AI Assist „Jeg har fået en ny pakke med 90“, så bliver de talt.</p></figcaption></figure>
+    </div>
     <div role="tabpanel" id="panel-guide" aria-labelledby="tab-guide" hidden>
       <figure class="card" style="--c:#8E99A6"><div class="pic"><img src="img/art/guide.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/settings.png" alt=""><span class="pill">Guide</span><h3>En guide, der viser dig vej</h3><p>Ved første start og under Indstillinger › Guide: hvor du skal trykke og hvorfor, trin for trin. Billederne bevæger sig for at vise, hvad der sker, og Prøv det holder trinet i syne, mens du gør det for alvor.</p></figcaption></figure>
@@ -354,7 +365,7 @@
         <h3>Tetra til Android</h3>
         <p>Telefoner og tablets med Android 11 eller nyere.</p>
         <a href="https://github.com/kalotrapezis/Tetra-mobile">Kildekode og detaljer på GitHub</a>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>Hent APK</b><span>0.8.0 beta 6</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>Hent APK</b><span>0.8.0 beta 7</span></div></a>
       </div>
       <div class="panel">
         <h3>Tetra til desktop</h3>

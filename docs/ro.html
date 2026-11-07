@@ -167,7 +167,7 @@
     <p class="lead">O superaplicație privată pentru telefonul, tableta și computerul tău. Software liber, fără cont, fără cloud: fișierele și mailul tău rămân pe dispozitivele tale.</p>
     <div class="buttons">
       <div class="group"><h3><img src="img/android.svg" alt="">Android</h3>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>Descarcă pentru Android</b><span>APK · 0.8.0 beta 6 · Android 11+</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>Descarcă pentru Android</b><span>APK · 0.8.0 beta 7 · Android 11+</span></div></a>
         <div class="qr"><img src="img/qr-android.svg" alt="Cod QR pentru descărcarea Android"><p>Sau scanează-l cu telefonul.<br><a href="#faq-install">Cum îl instalezi</a></p></div></div>
       <div class="group"><h3><img src="img/linux.svg" alt="">Linux</h3>
         <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.5/Tetra-0.8.0-beta.5.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 5 · majoritatea distribuțiilor</span></div></a>
@@ -203,6 +203,10 @@
       <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Muzică în spatele hărții</h3><p>Orice pagină care cântă devine un player cu butoane mari ‹ ⏯ › și continuă să cânte în spatele altor aplicații. Pune posturi de radio într-un dosar și ‹ › trec prin ele. În Hărți, 🎧 redă postul ales cât conduci.</p></div>
       <div class="tile" style="--c:#2E9E5B"><img src="img/icons/messages.png" alt=""><h3>SMS-urile tale, ca discuții</h3><p>Mesaje arată SMS-urile tale ca discuții: câte una pe telefon, alăturate pe tabletă și pe computer, unde le trimite telefonul. AI Assist le citește și le scrie, iar Tetra poate fi aplicația de SMS a telefonului.</p></div>
       <div class="tile" style="--c:#F41879"><img src="img/icons/calendar.png" alt=""><h3>Alarme care sună peste tot</h3><p>Alarmele și cronometrul sunt aceleași pe telefon, tabletă și computer. Oprește o alarmă pe unul și se oprește pe toate.</p></div>
+      <div class="tile" style="--c:#E5487A"><img src="img/icons/pills.png" alt=""><h3>Nu uita niciodată pastila de seară</h3><p>Pastile îți amintește ora dozei și din nou, până o iei, printr-o notificare sau cu vocea AI Assist: un ding-dong, apoi numele tău. Numără pastilele din fiecare cutie și te anunță cu zile înainte să se termine.</p></div>
+      <div class="tile" style="--c:#FD6A04"><img src="img/icons/assistant.png" alt=""><h3>O întrebare rapidă, aceeași conversație</h3><p>Apasă din nou butonul asistentului de pe telefon în zece minute și conversația continuă, așa că poți răspunde la ce a întrebat. Conversațiile rapide se păstrează și în Istoric.</p></div>
+      <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Schimbă fila cu două degete</h3><p>Două degete în sus sau în jos trec la fila următoare sau la cea anterioară. Pe o tabletă, bara laterală se ascunde cu o atingere, iar o filă nouă dintr-un link ținut apăsat se poate deschide în spatele paginii pe care o citești.</p></div>
+      <div class="tile" style="--c:#1A9AA8"><img src="img/icons/phone.png" alt=""><h3>Ridică pentru a răspunde, niciodată în buzunar</h3><p>Ridică telefonul la ureche ca să răspunzi la un apel. Tetra urmărește toată mișcarea, de la privitul apelului în lumină până la ureche, așa că un telefon din buzunar nu răspunde niciodată singur. Cu ecranul în jos, îl face mut.</p></div>
       <div class="tile" style="--c:#2E9D4F"><img src="img/icons/sync.png" alt=""><h3>Fiecare dispozitiv, spus simplu</h3><p>Fiecare card de telefon, tabletă și disc spune ce face, o propoziție pe aplicație. Editează deschide un ghid: ce aplicație, Dezactivat, Oglindă sau Mută, cât rămâne pe dispozitiv, o hartă a ce se mută, apoi Confirmă. Pe telefon sau tabletă, pozele se mută implicit, iar restul se copiază. La 90% plin, Tetra sugerează ce să mute și nu mută nimic fără să întrebe.</p></div>
     </div>
   </div>
@@ -226,6 +230,7 @@
       <button role="tab" id="tab-backup"aria-controls="panel-backup" aria-selected="false" tabindex="-1" style="--c:#2E9D4F;--on:#fff">Copie de rezervă</button>
       <button role="tab" id="tab-data" aria-controls="panel-data" aria-selected="false" tabindex="-1" style="--c:#9AD01E;--on:#111">Date</button>
       <button role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1" style="--c:#FD6A04;--on:#111">AI Assist</button>
+      <button role="tab" id="tab-pills" aria-controls="panel-pills" aria-selected="false" tabindex="-1" style="--c:#E5487A;--on:#fff">Pastile</button>
       <button role="tab" id="tab-guide"aria-controls="panel-guide" aria-selected="false" tabindex="-1" style="--c:#8E99A6;--on:#111">Ghid · Setări</button>
     </div>
     <div role="tabpanel" id="panel-home" aria-labelledby="tab-home">
@@ -311,6 +316,12 @@
       <figure class="card" style="--c:#FD6A04"><div class="pic"><img src="img/art/ai-brief.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>O pagină pentru dimineața ta</h3><p>Rezumatul zilnic adună calendarul de azi, mailurile care au nevoie de tine, vremea și listele de verificare deschise din Note. Tu alegi ce intră.</p></figcaption></figure>
     </div>
+    <div role="tabpanel" id="panel-pills" aria-labelledby="tab-pills" hidden>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Pastile</span><h3>Pastilele tale, la timp</h3><p>Un card pentru fiecare parte a zilei, fiecare pastilă desenată în forma și culoarea ei sau arătată prin fotografia ei. Luat este o singură atingere, aici sau pe notificare, iar o doză uitată aseară așteaptă sus. Fiecare cutie își adaugă pastilele, iar Progres arată ce uiți și sugerează o oră mai bună.</p></figcaption></figure>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills-guide.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Pastile</span><h3>Adaugă un medicament pas cu pas sau spune-l</h3><p>Cinci pași: numele, cum arată, când o iei, câte ai și când să comanzi mai multe. Cu AI Assist pornit, spune totul într-o singură propoziție și pașii se completează; îi verifici și apeși Înainte. Sau spune-i lui AI Assist „Am primit o cutie nouă de 90” și sunt numărate.</p></figcaption></figure>
+    </div>
     <div role="tabpanel" id="panel-guide" aria-labelledby="tab-guide" hidden>
       <figure class="card" style="--c:#8E99A6"><div class="pic"><img src="img/art/guide.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/settings.png" alt=""><span class="pill">Ghid</span><h3>Un ghid care îți arată</h3><p>La prima pornire și în Setări › Ghid: unde să atingi și de ce, pas cu pas. Imaginile se mișcă ca să arate ce se întâmplă, iar Încearcă ține pasul în vedere cât timp îl faci pe bune.</p></figcaption></figure>
@@ -354,7 +365,7 @@
         <h3>Tetra pentru Android</h3>
         <p>Telefoane și tablete cu Android 11 sau mai nou.</p>
         <a href="https://github.com/kalotrapezis/Tetra-mobile">Sursa și detaliile pe GitHub</a>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>Descarcă APK</b><span>0.8.0 beta 6</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>Descarcă APK</b><span>0.8.0 beta 7</span></div></a>
       </div>
       <div class="panel">
         <h3>Tetra pentru desktop</h3>

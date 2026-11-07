@@ -167,7 +167,7 @@
     <p class="lead">Üks privaatne superrakendus teie telefonile, tahvelarvutile ja arvutile. Vaba tarkvara, ilma kontota, ilma pilveta: teie failid ja e-post jäävad teie seadmetesse.</p>
     <div class="buttons">
       <div class="group"><h3><img src="img/android.svg" alt="">Android</h3>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>Laadige alla Androidile</b><span>APK · 0.8.0 beta 6 · Android 11+</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>Laadige alla Androidile</b><span>APK · 0.8.0 beta 7 · Android 11+</span></div></a>
         <div class="qr"><img src="img/qr-android.svg" alt="Androidi allalaadimise QR-kood"><p>Või skannige see oma telefoniga.<br><a href="#faq-install">Kuidas seda paigaldada</a></p></div></div>
       <div class="group"><h3><img src="img/linux.svg" alt="">Linux</h3>
         <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.5/Tetra-0.8.0-beta.5.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 5 · enamik distributsioone</span></div></a>
@@ -203,6 +203,10 @@
       <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Muusika kaardi taga</h3><p>Iga lehekülg, mis mängib, muutub suurte ‹ ⏯ › nuppudega mängijaks ja mängib edasi teiste rakenduste taga. Pane raadiojaamad kausta ja ‹ › käivad need läbi. Kaartides mängib 🎧 valitud jaama, kui sõidad.</p></div>
       <div class="tile" style="--c:#2E9E5B"><img src="img/icons/messages.png" alt=""><h3>Sinu SMS-id vestlustena</h3><p>Sõnumid näitab su SMS-e vestlustena: ühe kaupa telefonis, kõrvuti tahvlis ja arvutis, kus neid saadab telefon. AI Assist loeb ja kirjutab neid ning Tetra võib olla telefoni SMS-rakendus.</p></div>
       <div class="tile" style="--c:#F41879"><img src="img/icons/calendar.png" alt=""><h3>Äratused, mis helisevad kõikjal</h3><p>Äratused ja stopper on telefonis, tahvlis ja arvutis samad. Lõpeta äratus ühes seadmes ja see vaikib kõigis.</p></div>
+      <div class="tile" style="--c:#E5487A"><img src="img/icons/pills.png" alt=""><h3>Ärge unustage kunagi õhtust tabletti</h3><p>Tabletid tuletavad teile meelde annuse aja ja uuesti, kuni selle võtate, teatena või AI Assisti häälega: ding-dong ja seejärel teie nimi. See loeb iga karbi tabletid kokku ja annab päevi enne lõppemist teada.</p></div>
+      <div class="tile" style="--c:#FD6A04"><img src="img/icons/assistant.png" alt=""><h3>Kiire küsimus, sama vestlus</h3><p>Vajutage telefoni assistendinuppu kümne minuti jooksul uuesti ja vestlus jätkub, nii et saate vastata sellele, mida küsiti. Kiired vestlused salvestatakse ka ajalukku.</p></div>
+      <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Vahetage vahekaarti kahe sõrmega</h3><p>Kaks sõrme üles või alla vahetavad järgmise või eelmise vahekaardi. Tahvelarvutis peitub külgriba ühe puudutusega ja hoitud lingilt avatud uus vahekaart võib avaneda teie loetava lehe taha.</p></div>
+      <div class="tile" style="--c:#1A9AA8"><img src="img/icons/phone.png" alt=""><h3>Tõstke vastamiseks, mitte kunagi taskus</h3><p>Tõstke telefon kõne vastuvõtmiseks kõrva äärde. Tetra jälgib kogu liigutust, alates kõnele valguses vaatamisest kuni kõrvani, nii et taskus olev telefon ei vasta kunagi ise. Ekraaniga allapoole vaigistab selle.</p></div>
       <div class="tile" style="--c:#2E9D4F"><img src="img/icons/sync.png" alt=""><h3>Iga seade, selgete sõnadega</h3><p>Iga telefoni-, tahvelarvuti- ja kettakaart ütleb, mida see teeb, üks lause rakenduse kohta. Muuda avab juhendi: milline rakendus, Väljas, Peegel või Teisalda, kui palju jääb seadmesse, kaart liikuvatest asjadest, seejärel Kinnita. Telefonis või tahvelarvutis liiguvad fotod vaikimisi ja ülejäänu kopeeritakse. 90 % täituvusel soovitab Tetra, mida teisaldada, ega teisalda midagi küsimata.</p></div>
     </div>
   </div>
@@ -226,6 +230,7 @@
       <button role="tab" id="tab-backup"aria-controls="panel-backup" aria-selected="false" tabindex="-1" style="--c:#2E9D4F;--on:#fff">Varundus</button>
       <button role="tab" id="tab-data" aria-controls="panel-data" aria-selected="false" tabindex="-1" style="--c:#9AD01E;--on:#111">Andmeside</button>
       <button role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1" style="--c:#FD6A04;--on:#111">AI Assist</button>
+      <button role="tab" id="tab-pills" aria-controls="panel-pills" aria-selected="false" tabindex="-1" style="--c:#E5487A;--on:#fff">Tabletid</button>
       <button role="tab" id="tab-guide"aria-controls="panel-guide" aria-selected="false" tabindex="-1" style="--c:#8E99A6;--on:#111">Juhend · Seaded</button>
     </div>
     <div role="tabpanel" id="panel-home" aria-labelledby="tab-home">
@@ -311,6 +316,12 @@
       <figure class="card" style="--c:#FD6A04"><div class="pic"><img src="img/art/ai-brief.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>Lehekülg sinu hommikuks</h3><p>Päeva ülevaade kogub kokku tänase kalendri, sind ootavad kirjad, ilma ja avatud kontrollnimekirjad Märkmetest. Sina valid, mis sinna läheb.</p></figcaption></figure>
     </div>
+    <div role="tabpanel" id="panel-pills" aria-labelledby="tab-pills" hidden>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Tabletid</span><h3>Teie tabletid, õigel ajal</h3><p>Kaart iga päevaosa jaoks, iga tablett joonistatud oma kuju ja värviga või näidatud oma fotol. Võetud on üks puudutus, siin või teatel, ja eile õhtul unustatud annus ootab kõige ülal. Iga karp lisab oma tabletid ning Edenemine näitab, mida unustate, ja pakub paremat kellaaega.</p></figcaption></figure>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills-guide.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Tabletid</span><h3>Lisage ravim samm-sammult või öelge see</h3><p>Viis sammu: nimi, kuidas see välja näeb, millal seda võtate, kui palju teil on ja millal rohkem tellida. Kui AI Assist on sees, öelge kõik ühe lausega ja sammud täituvad; kontrollite need üle ja vajutate Edasi. Või öelge AI Assistile „Sain uue 90 tabletiga karbi“ ja need loetakse kokku.</p></figcaption></figure>
+    </div>
     <div role="tabpanel" id="panel-guide" aria-labelledby="tab-guide" hidden>
       <figure class="card" style="--c:#8E99A6"><div class="pic"><img src="img/art/guide.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/settings.png" alt=""><span class="pill">Juhend</span><h3>Juhend, mis näitab teile</h3><p>Esmakäivitusel ja seadetes jaotises Juhend: kuhu puudutada ja miks, samm-sammult. Pildid liiguvad, et näidata, mis juhtub, ja Proovi hoiab sammu nähtaval, kui te seda päriselt teete.</p></figcaption></figure>
@@ -354,7 +365,7 @@
         <h3>Tetra Androidile</h3>
         <p>Telefonid ja tahvelarvutid, Android 11 või uuem.</p>
         <a href="https://github.com/kalotrapezis/Tetra-mobile">Lähtekood ja üksikasjad GitHubis</a>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>Laadige APK alla</b><span>0.8.0 beta 6</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>Laadige APK alla</b><span>0.8.0 beta 7</span></div></a>
       </div>
       <div class="panel">
         <h3>Tetra arvutile</h3>

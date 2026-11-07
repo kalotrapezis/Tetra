@@ -167,7 +167,7 @@
     <p class="lead">Едно частно супер приложение за телефона, таблета и компютъра ви. Безплатен софтуер, без акаунт, без облак: файловете и имейлите ви остават на вашите устройства.</p>
     <div class="buttons">
       <div class="group"><h3><img src="img/android.svg" alt="">Android</h3>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>Изтегляне за Android</b><span>APK · 0.8.0 beta 6 · Android 11+</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>Изтегляне за Android</b><span>APK · 0.8.0 beta 7 · Android 11+</span></div></a>
         <div class="qr"><img src="img/qr-android.svg" alt="QR код за изтеглянето за Android"><p>Или го сканирайте с телефона си.<br><a href="#faq-install">Как се инсталира</a></p></div></div>
       <div class="group"><h3><img src="img/linux.svg" alt="">Linux</h3>
         <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.5/Tetra-0.8.0-beta.5.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 5 · повечето дистрибуции</span></div></a>
@@ -203,6 +203,10 @@
       <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Музика зад картата</h3><p>Всяка страница, която свири, става плейър с големи бутони ‹ ⏯ › и продължава да свири зад другите приложения. Сложете радиостанции в папка и ‹ › минават през тях. В Карти 🎧 пуска избраната станция, докато шофирате.</p></div>
       <div class="tile" style="--c:#2E9E5B"><img src="img/icons/messages.png" alt=""><h3>Вашите SMS като чатове</h3><p>Съобщения показва вашите SMS като разговори: по един на телефона, един до друг на таблета и на компютъра, където ги изпраща телефонът. AI Assist ги чете и пише, а Tetra може да бъде приложението за SMS на телефона.</p></div>
       <div class="tile" style="--c:#F41879"><img src="img/icons/calendar.png" alt=""><h3>Аларми, които звънят навсякъде</h3><p>Алармите и хронометърът са едни и същи на телефона, таблета и компютъра. Спрете аларма на едно устройство и тя спира на всички.</p></div>
+      <div class="tile" style="--c:#E5487A"><img src="img/icons/pills.png" alt=""><h3>Никога не забравяйте вечерното хапче</h3><p>Хапчета ви напомня в часа на приема и отново, докато не го вземете — като известие или с гласа на AI Assist: динг-донг, а после името ви. Брои хапчетата във всяка кутия и ви казва дни преди да свършат.</p></div>
+      <div class="tile" style="--c:#FD6A04"><img src="img/icons/assistant.png" alt=""><h3>Бърз въпрос, същият разговор</h3><p>Натиснете бутона за асистента на телефона отново в рамките на десет минути и разговорът продължава, така че можете да отговорите на въпроса му. Бързите разговори се пазят и в историята.</p></div>
+      <div class="tile" style="--c:#1A87FD"><img src="img/icons/browser.png" alt=""><h3>Смяна на раздел с два пръста</h3><p>Два пръста нагоре или надолу сменят към следващия или предишния раздел. На таблет страничната лента се скрива с едно докосване, а нов раздел от задържана връзка може да се отвори зад страницата, която четете.</p></div>
+      <div class="tile" style="--c:#1A9AA8"><img src="img/icons/phone.png" alt=""><h3>Вдигнете за отговор, никога в джоба</h3><p>Вдигнете телефона до ухото си, за да вдигнете обаждане. Tetra следи цялото движение — от погледа към обаждането на светло до ухото ви, затова телефон в джоба никога не вдига сам. С екрана надолу го заглушавате.</p></div>
       <div class="tile" style="--c:#2E9D4F"><img src="img/icons/sync.png" alt=""><h3>Всяко устройство, с прости думи</h3><p>Всяка карта на телефон, таблет или диск казва какво прави, по едно изречение за приложение. Редактирай отваря ръководство: кое приложение, Изключено, Огледало или Преместване, колко остава на устройството, карта на това, което се мести, после Потвърди. На телефон или таблет снимките се местят по подразбиране, а останалото се копира. При 90 % запълване Tetra предлага какво да се премести и не премества нищо без питане.</p></div>
     </div>
   </div>
@@ -226,6 +230,7 @@
       <button role="tab" id="tab-backup"aria-controls="panel-backup" aria-selected="false" tabindex="-1" style="--c:#2E9D4F;--on:#fff">Архив</button>
       <button role="tab" id="tab-data" aria-controls="panel-data" aria-selected="false" tabindex="-1" style="--c:#9AD01E;--on:#111">Данни</button>
       <button role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1" style="--c:#FD6A04;--on:#111">AI Assist</button>
+      <button role="tab" id="tab-pills" aria-controls="panel-pills" aria-selected="false" tabindex="-1" style="--c:#E5487A;--on:#fff">Хапчета</button>
       <button role="tab" id="tab-guide"aria-controls="panel-guide" aria-selected="false" tabindex="-1" style="--c:#8E99A6;--on:#111">Ръководство · Настройки</button>
     </div>
     <div role="tabpanel" id="panel-home" aria-labelledby="tab-home">
@@ -311,6 +316,12 @@
       <figure class="card" style="--c:#FD6A04"><div class="pic"><img src="img/art/ai-brief.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>Страница за вашата сутрин</h3><p>Дневният обзор събира днешния календар, имейлите, които чакат вас, времето и отворените списъци от Бележки. Вие избирате какво да влезе в него.</p></figcaption></figure>
     </div>
+    <div role="tabpanel" id="panel-pills" aria-labelledby="tab-pills" hidden>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Хапчета</span><h3>Хапчетата ви, навреме</h3><p>Карта за всяка част от деня, всяко хапче е нарисувано във формата и цвета си или показано със снимката си. „Взето“ е едно докосване, тук или в известието, а доза, забравена снощи, чака най-горе. Всяка кутия добавя своите хапчета, а „Напредък“ показва какво забравяте и предлага по-подходящ час.</p></figcaption></figure>
+      <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills-guide.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Хапчета</span><h3>Добавете лекарство стъпка по стъпка или го кажете</h3><p>Пет стъпки: името, как изглежда, кога го вземате, колко имате и кога да поръчате още. С включен AI Assist кажете всичко с едно изречение и стъпките се попълват; проверявате ги и натискате „Напред“. Или кажете на AI Assist „Взех нова кутия от 90“ и те се броят.</p></figcaption></figure>
+    </div>
     <div role="tabpanel" id="panel-guide" aria-labelledby="tab-guide" hidden>
       <figure class="card" style="--c:#8E99A6"><div class="pic"><img src="img/art/guide.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/settings.png" alt=""><span class="pill">Ръководство</span><h3>Ръководство, което ви показва</h3><p>При първото стартиране и в Настройки › Ръководство: къде да докоснете и защо, стъпка по стъпка. Снимките се движат, за да покажат какво се случва, а Опитайте задържа стъпката пред очите ви, докато я правите наистина.</p></figcaption></figure>
@@ -354,7 +365,7 @@
         <h3>Tetra за Android</h3>
         <p>Телефони и таблети с Android 11 или по-нов.</p>
         <a href="https://github.com/kalotrapezis/Tetra-mobile">Изходен код и подробности в GitHub</a>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.6/Tetra-0.8.0-beta.6-arm64.apk"><img src="img/android.svg" alt=""><div><b>Изтегляне на APK</b><span>0.8.0 beta 6</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.7/Tetra-0.8.0-beta.7-arm64.apk"><img src="img/android.svg" alt=""><div><b>Изтегляне на APK</b><span>0.8.0 beta 7</span></div></a>
       </div>
       <div class="panel">
         <h3>Tetra за компютър</h3>
