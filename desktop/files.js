@@ -57,6 +57,9 @@ function mergeCallLog(older, newer) {
   }
   return [...calls.values()].sort((a, b) => a.at - b.at).map(c => c.line + '\n').join('')
 }
+// Files both sides may change between syncs and that merge rather than land beside each other as "(2)".
+const isMerged = rel => isCallLog(rel) || rel === 'AI Assist/schedules.json'
+const mergeFile = (rel, older, newer) => isCallLog(rel) ? mergeCallLog(older, newer) : require('./schedule').mergeSchedules(older, newer)
 const isEvent = rel => rel.startsWith('Calendar/') && rel.toLowerCase().endsWith('.ics')
 /** A part of Drive that syncs on its own, at once (the Calendar, 18 Oct): its folders, and its kinds of file in the Trash. */
 const SCOPES = { calendar: { dirs: ['Calendar'], trashExts: ['.ics'] }, timer: { dirs: ['Timer'], trashExts: [] }, contacts: { dirs: ['Contacts'], trashExts: ['.vcf'] }, phone: { dirs: ['Phone'], trashExts: [] }, data: { dirs: ['Data'], trashExts: [] }, mail: { dirs: ['Mail/requests', 'Mail/outbox'], trashExts: [] }, assistant: { dirs: ['AI Assist'], trashExts: [] }, browser: { dirs: ['Browser'], trashExts: [] }, pills: { dirs: ['Pills'], trashExts: [] } }
@@ -504,7 +507,7 @@ class Files {
         continue
       }
       if (theirsHere && this.sentHere(deviceId, rel, sha)) continue // the device moved on from its own version: asked for (want)
-      if (theirsHere && isCallLog(rel) && want.includes(rel)) continue // both changed it: its lines are merged here once it comes
+      if (theirsHere && isMerged(rel) && want.includes(rel)) continue // both changed it: merged here once it comes
       const theirs = offeredShas.get(sha) ?? []
       // Offering a copy is safe on any sync, including the first: it adds, it never rearranges.
       if (!theirs.length) { if (gone.has(sha)) continue; have.push({ path: rel, sha256: sha, size: await this.sizeOf(rel), modified: await this.mtimeOf(rel) }); continue }
@@ -715,4 +718,4 @@ class Files {
   }
 }
 
-module.exports = { Files, TRASH, isCallLog, mergeCallLog, OPTIONAL_FOLDERS, COLORS, typeGroup, kindIcon, isSafeRel, isSafeName }
+module.exports = { Files, TRASH, isCallLog, mergeCallLog, isMerged, mergeFile, OPTIONAL_FOLDERS, COLORS, typeGroup, kindIcon, isSafeRel, isSafeName }
