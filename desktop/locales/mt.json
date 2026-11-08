@@ -2827,5 +2827,16 @@
  "pills.needBoxSize": "Ikteb kemm fiha pilloli kaxxa ġdida",
  "pills.opened": "Għandi wkoll kaxxa miftuħa",
  "pills.hereNote": "Il-mediċini tiegħek u d-dożi li ħadt jiġu sinkronizzati bejn it-telefon, it-tablet u l-kompjuter tiegħek. Idoqqu biss l-apparati b’dan l-iswiċċ mixgħul, għalhekk twieġeb għal doża darba biss.",
- "settings.sum.pills": "Tfakkiriet fuq dan il-kompjuter"
+ "settings.sum.pills": "Tfakkiriet fuq dan il-kompjuter",
+ "assistant.autoMemory": "Tgħallem dwari waħdu",
+ "assistant.autoMemoryNote": "Wara kull chat, talba qasira żejda tħares biss lejn dak li għidt għal fatti dejjiema (familja, xogħol, x'jogħġbok) u żżommhom fid-Dettalji personali, immarkati bħala mitgħallma. Darba fil-ġimgħa jiġu rranġati.",
+ "assistant.heldWhy": "Wara li qara test miktub minn oħrajn (posta, il-web, fajl), AI Assist irid jagħmel dan. Isir biss jekk tgħid iva:",
+ "assistant.heldDo": "Agħmlu",
+ "assistant.heldDone": "Sar: {what}",
+ "assistant.heldSkipped": "Ma sarx.",
+ "memory.tidyTitle": "AI Assist: dettalji personali rranġati",
+ "memory.tidyBody": "{count} bidla f'dak li AI Assist iżomm dwarek.",
+ "memory.tidyMerged": "Magħqud: {from} → {to}",
+ "memory.tidyRewritten": "Miktub mill-ġdid: {from} → {to}",
+ "memory.tidyDropped": "Imneħħi: {fact}"
 }

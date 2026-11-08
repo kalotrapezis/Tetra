@@ -2734,5 +2734,16 @@
  "pills.needBoxSize": "Ieraksti, cik tablešu ir jaunā kastītē",
  "pills.opened": "Man ir arī atvērta kastīte",
  "pills.hereNote": "Tavas zāles un iedzertās devas tiek sinhronizētas starp tālruni, planšetdatoru un datoru. Zvana tikai ierīces ar ieslēgtu šo slēdzi, tāpēc uz devu atbildi tikai vienreiz.",
- "settings.sum.pills": "Atgādinājumi šajā datorā"
+ "settings.sum.pills": "Atgādinājumi šajā datorā",
+ "assistant.autoMemory": "Mācīties par mani pašam",
+ "assistant.autoMemoryNote": "Pēc katras sarunas īss papildu pieprasījums pārskata tikai to, ko teicāt, meklējot paliekošus faktus (ģimene, darbs, kas patīk), un saglabā tos Personas datos kā iemācītus. Reizi nedēļā tie tiek sakārtoti.",
+ "assistant.heldWhy": "Pēc citu rakstīta teksta izlasīšanas (pasts, tīmeklis, fails) AI Assist vēlas izdarīt šo. Tas notiek tikai, ja sakāt jā:",
+ "assistant.heldDo": "Darīt",
+ "assistant.heldDone": "Izdarīts: {what}",
+ "assistant.heldSkipped": "Nav izdarīts.",
+ "memory.tidyTitle": "AI Assist: personas dati sakārtoti",
+ "memory.tidyBody": "{count} izmaiņa(s) tajā, ko AI Assist par jums glabā.",
+ "memory.tidyMerged": "Apvienots: {from} → {to}",
+ "memory.tidyRewritten": "Pārrakstīts: {from} → {to}",
+ "memory.tidyDropped": "Noņemts: {fact}"
 }

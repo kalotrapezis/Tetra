@@ -2643,5 +2643,16 @@
  "pills.needBoxSize": "Írd be, hány tabletta van egy új dobozban",
  "pills.opened": "Van egy megkezdett dobozom is",
  "pills.hereNote": "A gyógyszereid és a bevett adagok szinkronizálódnak a telefonod, a táblagéped és a számítógéped között. Csak azok az eszközök csörögnek, amelyeken ez a kapcsoló be van kapcsolva, így egy adagra csak egyszer válaszolsz.",
- "settings.sum.pills": "Emlékeztetők ezen a számítógépen"
+ "settings.sum.pills": "Emlékeztetők ezen a számítógépen",
+ "assistant.autoMemory": "Tanuljon rólam magától",
+ "assistant.autoMemoryNote": "Minden beszélgetés után egy rövid további kérés csak azt nézi át, amit mondtál, tartós tények után kutatva (család, munka, kedvelt dolgok), és a Személyes adatok közé menti őket tanultként jelölve. Hetente egyszer rendbe teszi őket.",
+ "assistant.heldWhy": "Mások által írt szöveg (levél, web, fájl) olvasása után az AI Assist ezt szeretné tenni. Csak akkor történik meg, ha igent mondasz:",
+ "assistant.heldDo": "Mehet",
+ "assistant.heldDone": "Kész: {what}",
+ "assistant.heldSkipped": "Nem történt meg.",
+ "memory.tidyTitle": "AI Assist: személyes adatok rendbe téve",
+ "memory.tidyBody": "{count} változás abban, amit az AI Assist rólad tárol.",
+ "memory.tidyMerged": "Összevonva: {from} → {to}",
+ "memory.tidyRewritten": "Átírva: {from} → {to}",
+ "memory.tidyDropped": "Törölve: {fact}"
 }

@@ -59,14 +59,16 @@ export interface UsageSummary { today: number; month: number; all: number; since
   byFeature: { key: string; usd: number; n: number }[]; byModel: { key: string; usd: number; n: number }[]; byDevice: { key: string; usd: number; n: number }[]
   files: { key: string; usd: number; n: number }[]; mp3s: { title: string; seconds: number; usd: number; at: number; device: string }[]
   budget: { monthly: number | null; warned: string }; prices: { checked: string; list: { model: string; price: string; per: string }[] } }
-export interface AssistReply { text: string; choices: AssistChoice[]; call: AssistCall | null; send: AssistSend | null; images: string[]; open: string | null; go: AssistGo | null; audio: AssistAudio | null; spent: number }
+/** A call held after text from others (mail, the web, a file): done only on the user's yes; [what] is exactly what it does. */
+export interface AssistHeld { id: string; what: string }
+export interface AssistReply { text: string; choices: AssistChoice[]; call: AssistCall | null; send: AssistSend | null; images: string[]; open: string | null; go: AssistGo | null; audio: AssistAudio | null; held: AssistHeld[]; spent: number }
 export interface AssistShortcuts { toggle: string; talk: string; live: string }
 export type Repeat = 'once' | 'daily' | 'weekly' | 'monthly' | 'yearly'
 export interface Schedule { id: string; kind: 'prompt' | 'brief'; title: string; prompt: string; time: string; repeat: Repeat; days: number[]; date: string | null; paused: boolean; last?: number; next: number | null }
 export interface Place { name: string; lat: number; lon: number }
 export interface BriefSettings { sections: Record<string, boolean>; place: Place | null }
 export interface AssistSettings {
-  hasKey: boolean; keyring: boolean; words: string; contactWords: boolean; voice: string; voiceName: string; pause: number; aloud: boolean; cassette: boolean
+  hasKey: boolean; keyring: boolean; words: string; contactWords: boolean; voice: string; voiceName: string; pause: number; aloud: boolean; cassette: boolean; autoMemory: boolean
   meter: { total: number; trip: number; since: number; past: { from: number; to: number; usd: number }[] }; spent: number; perMinute: number
   meName: string; shortcuts: AssistShortcuts; registered: Partial<Record<keyof AssistShortcuts, boolean>>; command: string; session: string; desktop: string
 }
@@ -406,6 +408,8 @@ declare global {
       usage: { summary(): Promise<UsageSummary>; setBudget(eur: number): Promise<UsageSummary['budget']> }
       assistant: {
         ask(text: string, aloud: boolean, file?: string): Promise<AssistReply>
+        confirm(id: string): Promise<{ text: string; call: AssistCall | null; send: AssistSend | null; open: string | null; go: AssistGo | null; choices: AssistChoice[] } | null>
+        refuse(id: string): Promise<void>
         attach(from: 'files' | 'device' | string): Promise<(AssistFile & { spent: number }) | null>
         dropped(file: File): string
         audioStart(spec: AssistAudio): Promise<AssistJob>
@@ -427,7 +431,7 @@ declare global {
         liveMute(on: boolean): Promise<void>
         liveEnd(): Promise<number>
         settings(): Promise<AssistSettings>
-        set(changes: Partial<{ words: string; contactWords: boolean; voice: string; voiceName: string; pause: number; aloud: boolean; cassette: boolean; shortcuts: Partial<AssistShortcuts> }>): Promise<void>
+        set(changes: Partial<{ words: string; contactWords: boolean; voice: string; voiceName: string; pause: number; aloud: boolean; cassette: boolean; autoMemory: boolean; shortcuts: Partial<AssistShortcuts> }>): Promise<void>
         setKey(key: string): Promise<boolean>
         voices(): Promise<{ id: string; name: string }[]>
         sample(voice: string): Promise<void>

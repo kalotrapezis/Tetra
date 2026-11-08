@@ -2643,5 +2643,16 @@
  "pills.needBoxSize": "Kirjoita, montako pilleriä uudessa pakkauksessa on",
  "pills.opened": "Minulla on myös avattu pakkaus",
  "pills.hereNote": "Lääkkeesi ja otetut annokset synkronoidaan puhelimen, tabletin ja tietokoneen välillä. Vain laitteet, joissa tämä kytkin on päällä, soivat, joten vastaat annokseen vain kerran.",
- "settings.sum.pills": "Muistutukset tässä tietokoneessa"
+ "settings.sum.pills": "Muistutukset tässä tietokoneessa",
+ "assistant.autoMemory": "Opi minusta itse",
+ "assistant.autoMemoryNote": "Jokaisen keskustelun jälkeen lyhyt lisäpyyntö käy läpi vain sen, mitä sanoit, pysyvien tietojen varalta (perhe, työ, mieltymykset) ja tallentaa ne Henkilötietoihin opituiksi merkittyinä. Kerran viikossa ne siivotaan.",
+ "assistant.heldWhy": "Luettuaan muiden kirjoittamaa tekstiä (sähköposti, verkko, tiedosto) AI Assist haluaa tehdä tämän. Se tapahtuu vain, jos sanot kyllä:",
+ "assistant.heldDo": "Tee se",
+ "assistant.heldDone": "Tehty: {what}",
+ "assistant.heldSkipped": "Ei tehty.",
+ "memory.tidyTitle": "AI Assist: henkilötiedot siivottu",
+ "memory.tidyBody": "{count} muutos(ta) siihen, mitä AI Assist tallentaa sinusta.",
+ "memory.tidyMerged": "Yhdistetty: {from} → {to}",
+ "memory.tidyRewritten": "Kirjoitettu uudelleen: {from} → {to}",
+ "memory.tidyDropped": "Poistettu: {fact}"
 }

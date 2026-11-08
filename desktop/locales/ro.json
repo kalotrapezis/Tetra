@@ -2735,5 +2735,16 @@
  "pills.needBoxSize": "Scrie câte pastile are o cutie nouă",
  "pills.opened": "Am și o cutie începută",
  "pills.hereNote": "Medicamentele tale și dozele luate se sincronizează între telefon, tabletă și computer. Sună doar dispozitivele cu acest comutator activat, așa că răspunzi la o doză o singură dată.",
- "settings.sum.pills": "Mementouri pe acest computer"
+ "settings.sum.pills": "Mementouri pe acest computer",
+ "assistant.autoMemory": "Să învețe singur despre mine",
+ "assistant.autoMemoryNote": "După fiecare conversație, o scurtă cerere în plus se uită doar la ce ai spus după fapte de durată (familie, muncă, ce îți place) și le păstrează în Date personale, marcate ca învățate. O dată pe săptămână sunt puse în ordine.",
+ "assistant.heldWhy": "După ce a citit text scris de alții (e-mail, web, un fișier), AI Assist vrea să facă asta. Se întâmplă doar dacă spui da:",
+ "assistant.heldDo": "Fă-o",
+ "assistant.heldDone": "Gata: {what}",
+ "assistant.heldSkipped": "Nu s-a făcut.",
+ "memory.tidyTitle": "AI Assist: date personale puse în ordine",
+ "memory.tidyBody": "{count} modificare(ări) la ce păstrează AI Assist despre tine.",
+ "memory.tidyMerged": "Unite: {from} → {to}",
+ "memory.tidyRewritten": "Rescris: {from} → {to}",
+ "memory.tidyDropped": "Eliminat: {fact}"
 }

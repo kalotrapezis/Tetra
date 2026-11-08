@@ -1489,6 +1489,7 @@ app.whenReady().then(() => {
     clearTimeout(scheduleTimer)
     const now = Date.now(), list = schedules.list(), ready = aiSwitch.on() && !!assistKey() // no key or AI off: nothing runs
     if (!schedules.runs(require('node:os').hostname())) return // another computer runs them
+    if (ready) tidyMemory().catch(e => console.warn('[memory] tidy', e.message))
     for (const s of list.filter(s => s.runNow)) { // Run now, asked on the phone
       schedules.change(s.id, { runNow: false })
       if (ready) runSchedule(s, true).catch(e => console.warn('[schedule]', e.message))
@@ -1532,6 +1533,28 @@ app.whenReady().then(() => {
       sync?.nudge().catch(() => {})
       return file
     } catch (e) { notify('assistant', title, t('brief.failed', { error: e.message })); throw e } finally { scheduleRunning.delete(s.id) }
+  }
+  /**
+   * The facts' weekly tidy (assistant.js tidy), built in like the daily brief: on the runner only, a week after the last; what
+   * changed is said on a page among the Briefs; fewer than two facts, no request.
+   */
+  let tidying = false
+  async function tidyMemory() {
+    const last = Number(setting('memoryTidiedAt')) || 0, now = Date.now()
+    if (tidying || now - last < 7 * 86_400_000 || usage.capped()) return
+    if (!last) { setSetting('memoryTidiedAt', String(now)); return } // the first week counts from now
+    tidying = true
+    try {
+      setSetting('memoryTidiedAt', String(now))
+      const changes = await assistant.tidy(api.as('memory'), memory, now)
+      if (!changes.length) return
+      const title = t('memory.tidyTitle'), text = changes.map(c => c.kind === 'dropped' ? t('memory.tidyDropped', { fact: c.from[0] })
+        : t(c.kind === 'merged' ? 'memory.tidyMerged' : 'memory.tidyRewritten', { from: c.from.join(' · '), to: c.to })).join('\n\n')
+      const name = `${brief.dayKey(new Date(now))}-memory.html`, file = path.join(BRIEFS, name)
+      fs.mkdirSync(BRIEFS, { recursive: true }); fs.writeFileSync(file, brief.answer(title, now, text))
+      notify('assistant', title, t('memory.tidyBody', { count: changes.length }), () => shell.openPath(file))
+      sync?.nudge().catch(() => {})
+    } finally { tidying = false }
   }
   setTimeout(planSchedules, 15_000) // after the start's own work
   // changed on the phone (sync writes the file): the plan and the window follow
@@ -1616,6 +1639,8 @@ app.whenReady().then(() => {
     const read = voice && reader(e.sender, voice), cut = new assistant.Sentences()
     const r = await chat.ask(String(text), w => { if (!e.sender.isDestroyed()) e.sender.send('assistant-words', w); if (read) cut.push(w).forEach(read.say) }, doc)
     if (read) { read.say(cut.rest()); await read.done() }
+    // auto memory: from the user's own words of this turn only, in the background (it costs a small request)
+    if (setting('assistantAutoMemory') !== '0' && aiSwitch.on()) assistant.learn(api.as('memory'), memory, String(text)).catch(e => console.warn('[assistant] learn', e.message))
     return { ...r, images: r.images.map(f => 'data:image/png;base64,' + fs.readFileSync(f.full).toString('base64')), spent: chat.bill.usd }
   })
   // History (the user, 1 Nov: "where is the history, the chats"): each chat on this computer only, never synced, the newest 100
@@ -1659,6 +1684,9 @@ app.whenReady().then(() => {
   })
   ipcMain.handle('assistant:deleteChat', (_, id) => fs.rmSync(chatFile(id), { force: true }))
   ipcMain.handle('assistant:transcribe', async (_, pcm) => ({ text: await api.as('dictation').transcribe(Int16Array.from(pcm), assistBias()), spent: chat.bill.usd }))
+  // a call held after text from others (mail, the web, a file), on the user's yes or no
+  ipcMain.handle('assistant:confirm', async (_, id) => { const r = await chat.confirm(String(id)); return r && { text: r.forModel, call: r.call ?? null, send: r.send ?? null, open: r.open ?? null, go: r.go ?? null, choices: r.choices ?? [] } })
+  ipcMain.handle('assistant:refuse', (_, id) => chat.refuse(String(id)))
   ipcMain.handle('assistant:hush', () => hush())
   ipcMain.handle('assistant:clear', () => { hush(); chat.clear(); assistTools.lists = { contacts: [], files: [], notes: [], timers: [], mail: [], schedules: [], memory: [] } })
   ipcMain.handle('assistant:youtube', (_, q) => shell.openExternal('https://www.youtube.com/results?search_query=' + encodeURIComponent(String(q).slice(0, 200))))
@@ -1906,7 +1934,7 @@ app.whenReady().then(() => {
   ipcMain.handle('assistant:settings', () => ({
     hasKey: !!assistKey(), keyring: safeStorage.isEncryptionAvailable(), words: assistWords(), contactWords: setting('assistantContactWords') === '1',
     voice: setting('assistantVoice') || '', voiceName: setting('assistantVoiceName') || '', pause: assistPause(), aloud: setting('assistantAloud') !== '0',
-    cassette: setting('assistantCassette') === '1', meter: meterNow(), spent: chat.bill.usd, perMinute: assistant.PER_MINUTE[assistant.REALTIME],
+    cassette: setting('assistantCassette') === '1', autoMemory: setting('assistantAutoMemory') !== '0', meter: meterNow(), spent: chat.bill.usd, perMinute: assistant.PER_MINUTE[assistant.REALTIME],
     // the live captions' "Theologos: …": the user's own card, once AI Assist knows it (my_card)
     meName: (c => c ? c.info.given || c.info.formatted : '')(contacts.all().find(c => c.info.uid === setting('assistantMe'))),
     shortcuts: shortcuts(), registered: shortcutsOn, command: launchCommand(), session: process.env.XDG_SESSION_TYPE || '', desktop: process.env.XDG_CURRENT_DESKTOP || '',
@@ -1927,6 +1955,7 @@ app.whenReady().then(() => {
     if (Number.isFinite(c.pause)) setSetting('assistantPause', String(Math.min(6000, Math.max(1000, Math.round(c.pause)))))
     if (typeof c.aloud === 'boolean') setSetting('assistantAloud', c.aloud ? '1' : '0')
     if (typeof c.cassette === 'boolean') setSetting('assistantCassette', c.cassette ? '1' : '0')
+    if (typeof c.autoMemory === 'boolean') setSetting('assistantAutoMemory', c.autoMemory ? '1' : '0')
     if (c.shortcuts && typeof c.shortcuts === 'object') {
       const next = shortcuts()
       for (const k of Object.keys(SHORTCUTS)) if (typeof c.shortcuts[k] === 'string') next[k] = c.shortcuts[k].slice(0, 60)

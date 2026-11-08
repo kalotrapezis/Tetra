@@ -4,7 +4,8 @@
  * and every scheduled action's instructions. One small file every device shares, like ai.json:
  *
  *   ~/Tetra/.System/Assistant/Shared/memory.json   (synced as "AI Assist/memory.json"; the phone's AssistantMemory the same)
- *   { "facts": [{ "id", "text", "at" }], "setAt": ms, "setBy": "desktop" | "<device>" }
+ *   { "facts": [{ "id", "text", "at", "source"? }], "setAt": ms, "setBy": "desktop" | "<device>" }
+ *   source "auto": learnt by itself from what the user said (assistant.js learn); none: the user's own, never deleted by a tidy
  *
  * shortcut: whoever changes it writes the whole file, the later one winning, so a fact added on two devices before they sync
  * keeps only one; merge by id if that ever bites.
@@ -14,6 +15,17 @@ const path = require('node:path')
 const crypto = require('node:crypto')
 
 const MAX = 20, LONG = 300 // they go into every request: a short list of short facts
+
+const plain = s => String(s).toLowerCase().normalize('NFD').replace(/\p{Mn}+/gu, '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim()
+/** Near the same fact: one's words inside the other's, or most words shared (stems: Greek endings change). */
+function near(a, b) {
+  const x = plain(a), y = plain(b)
+  if (!x || !y) return false
+  if (x.includes(y) || y.includes(x)) return true
+  const w = s => new Set(s.split(' ').filter(t => t.length > 2).map(t => t.slice(0, 5)))
+  const p = w(x), q = w(y), both = [...p].filter(t => q.has(t)).length
+  return both / Math.max(1, Math.min(p.size, q.size)) >= 0.85 // "his daughter is Eleni" and "… Maria" share 3 of 4: two facts
+}
 
 class Memory {
   constructor(file, by = 'desktop') { this.file = file; this.by = by }
@@ -26,14 +38,18 @@ class Memory {
     fs.writeFileSync(part, JSON.stringify({ facts, setAt: Date.now(), setBy: this.by }, null, 2)); fs.renameSync(part, this.file)
     return facts
   }
-  /** A new fact, or the one already saved with the same words. */
-  add(text) {
+  /**
+   * A new fact, or the one already saved with the same words. [source] "auto" (learnt by itself): a near one already kept,
+   * or a full list, keeps nothing and answers null.
+   */
+  add(text, source = null) {
     const t = String(text ?? '').replace(/\s+/g, ' ').trim().slice(0, LONG), facts = this.list()
     if (!t) throw new Error('Say what to remember.')
     const same = facts.find(f => f.text.toLowerCase() === t.toLowerCase())
     if (same) return same
+    if (source === 'auto' && (facts.length >= MAX || facts.some(f => near(f.text, t)))) return null
     if (facts.length >= MAX) throw new Error(`Already ${MAX} facts kept: forget one first.`)
-    const f = { id: crypto.randomUUID(), text: t, at: Date.now() }
+    const f = { id: crypto.randomUUID(), text: t, at: Date.now(), ...(source ? { source } : {}) }
     this.write([...facts, f])
     return f
   }
@@ -45,4 +61,4 @@ class Memory {
   forget(id) { return this.change(id, '') }
 }
 
-module.exports = { Memory, MAX }
+module.exports = { Memory, MAX, LONG, near }

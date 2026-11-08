@@ -2734,5 +2734,16 @@
  "pills.needBoxSize": "Upiši koliko tableta ima nova kutija",
  "pills.opened": "Imam i otvorenu kutiju",
  "pills.hereNote": "Tvoji lijekovi i uzete doze sinkroniziraju se između telefona, tableta i računala. Zvone samo uređaji s uključenim prekidačem, pa na dozu odgovaraš samo jednom.",
- "settings.sum.pills": "Podsjetnici na ovom računalu"
+ "settings.sum.pills": "Podsjetnici na ovom računalu",
+ "assistant.autoMemory": "Uči o meni samo",
+ "assistant.autoMemoryNote": "Nakon svakog razgovora kratki dodatni upit pregleda samo ono što ste rekli tražeći trajne činjenice (obitelj, posao, što volite) i sprema ih u Osobne podatke, označene kao naučene. Jednom tjedno se slože.",
+ "assistant.heldWhy": "Nakon čitanja teksta koji su napisali drugi (pošta, web, datoteka) AI Assist želi učiniti ovo. Dogodit će se samo ako kažete da:",
+ "assistant.heldDo": "Učini",
+ "assistant.heldDone": "Učinjeno: {what}",
+ "assistant.heldSkipped": "Nije učinjeno.",
+ "memory.tidyTitle": "AI Assist: osobni podaci složeni",
+ "memory.tidyBody": "Promjene ({count}) u onome što AI Assist čuva o vama.",
+ "memory.tidyMerged": "Spojeno: {from} → {to}",
+ "memory.tidyRewritten": "Prepisano: {from} → {to}",
+ "memory.tidyDropped": "Uklonjeno: {fact}"
 }
