@@ -1,0 +1,14 @@
+{
+  "manifest_version": 2,
+  "name": "Tetra Mail",
+  "description": "Brings the Inbox and Sent of accounts only Thunderbird can open into Tetra Mail, and sends through Thunderbird what Tetra sends from them.",
+  "version": "0.1.0",
+  "author": "Tetra",
+  "browser_specific_settings": {
+    "gecko": { "id": "tetra-mail@tetra.local", "strict_min_version": "128.0" }
+  },
+  "icons": { "64": "icon.png" },
+  "background": { "scripts": ["background.js"], "persistent": true },
+  "options_ui": { "page": "options.html", "open_in_tab": false },
+  "permissions": ["accountsRead", "messagesRead", "compose", "compose.send", "storage", "http://127.0.0.1/*"]
+}

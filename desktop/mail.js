@@ -359,12 +359,13 @@ class Mail extends EventEmitter {
   add({ address, name, server, user, auth = 'password' }) {
     const list = this.accounts().filter(a => a.id !== address)
     const used = new Set(list.map(a => a.color))
+    const tb = auth === 'thunderbird' // Thunderbird fetches and sends it (tbbridge.js): no server of Tetra's own, nothing cleaned there
     const acc = {
       id: address, address, name: name || (/^(gmail|googlemail)\.com$/.test(address.split('@')[1]) ? 'Gmail' : address.split('@')[1]), color: COLORS.find(c => !used.has(c)) ?? COLORS[list.length % COLORS.length],
-      server: { host: server.host, port: server.port, secure: server.secure, user }, provider: server.provider ?? null,
+      server: tb ? null : { host: server.host, port: server.port, secure: server.secure, user }, provider: tb ? null : server.provider ?? null,
       // shortcut: a server found by guessing sends through its own host on 465; a different one needs editing accounts.json
-      smtp: server.smtp ?? { host: server.host, port: 465, secure: true },
-      archive: true, archiveBy: 'year', serverClean: { on: true, attachmentsMonths: 36, otherMonths: 24 }, localClean: { on: false }, notify: true,
+      smtp: tb ? null : server.smtp ?? { host: server.host, port: 465, secure: true },
+      archive: true, archiveBy: 'year', serverClean: tb ? { on: false } : { on: true, attachmentsMonths: 36, otherMonths: 24 }, localClean: { on: false }, notify: true,
       auth, addedOn: 'desktop', added: Date.now(),
     }
     this.saveAccounts([...list, acc])
@@ -382,6 +383,7 @@ class Mail extends EventEmitter {
     this.watchRequests()
   }
   start(acc) {
+    if (acc.auth === 'thunderbird') return // its mail comes from the extension, when Thunderbird is open
     if (this.live.has(acc.id)) return
     const run = { acc, stop: false, client: null, wake: null }
     this.live.set(acc.id, run)
@@ -687,6 +689,7 @@ class Mail extends EventEmitter {
 
   /** A short connection of its own for an action, one at a time per account, so the sync's open folder is never changed under it. */
   withClient(acc, fn) {
+    if (acc.auth === 'thunderbird') return Promise.reject(Object.assign(new Error('Thunderbird keeps this account\'s server'), { reason: 'thunderbird' }))
     const run = async () => {
       const c = this.connect(acc.server, acc.server.user, await this.login(acc))
       try { await c.connect(); return await fn(c) } catch (e) { throw e.reason ? e : failure(e) } finally { await c.logout().catch(() => c.close()) }
@@ -710,6 +713,12 @@ class Mail extends EventEmitter {
     for (const [id, list] of byAccount) {
       const acc = this.accounts().find(a => a.id === id)
       if (!acc) continue
+      if (acc.auth === 'thunderbird') { // shortcut: read and ♥ are kept here only, the rest is done in Thunderbird; both ways when the extension carries actions
+        const flag = { read: ['seen', true], unread: ['seen', false], favorite: ['flagged', true], unfavorite: ['flagged', false] }[op]
+        if (!flag) throw Object.assign(new Error('Do this in Thunderbird'), { reason: 'thunderbird' })
+        for (const e of list) this.index.put({ ...e, [flag[0]]: flag[1] })
+        continue
+      }
       await this.withClient(acc, c => this.apply(c, acc, op, list, to))
       if (!['read', 'unread', 'favorite', 'unfavorite'].includes(op)) this.kick(id)
       if (learn && (op === 'spam' || op === 'notSpam')) { // Spam and Not spam teach the local filter (§5)
@@ -962,10 +971,17 @@ class Mail extends EventEmitter {
       const { simpleParser } = require('mailparser')
       const p = await simpleParser(raw)
       const all = x => (Array.isArray(x) ? x : x ? [x] : []).flatMap(a => a.value ?? [])
-      Object.assign(draft, { to: all(p.to), cc: all(p.cc), subject: p.subject ?? '', messageId: p.messageId || draft.messageId, attachments: p.attachments.filter(a => !a.related) })
+      Object.assign(draft, { to: all(p.to), cc: all(p.cc), subject: p.subject ?? '', messageId: p.messageId || draft.messageId, attachments: p.attachments.filter(a => !a.related),
+        html: draft.html ?? (p.html || p.textAsHtml || '') })
     } else raw = await this.compose(acc, draft)
     const to = [...(draft.to ?? []), ...(draft.cc ?? []), ...(draft.bcc ?? [])].map(a => String(a?.address ?? '')).filter(a => /^[^\s@<>]+@[^\s@<>]+$/.test(a))
     if (!to.length) throw Object.assign(new Error('No one to send it to'), { reason: 'noRecipients' })
+    if (acc.auth === 'thunderbird') {
+      await this.toThunderbird(acc, draft)
+      await this.keep(acc, 'Sent', raw, draft)
+      if (d.messageId) await this.discardDraft({ account: acc.id, messageId: d.messageId })
+      return { messageId: draft.messageId }
+    }
     const login = await this.login(acc), smtp = await this.smtpFor(acc)
     const transport = this.smtp({ host: smtp.host, port: smtp.port, secure: smtp.secure, requireTLS: !smtp.secure && !loopback(smtp.host), connectionTimeout: 20_000,
       auth: typeof login === 'string' ? { user: acc.server.user, pass: login } : { type: 'OAuth2', user: acc.server.user, accessToken: login.accessToken } })
@@ -978,6 +994,90 @@ class Mail extends EventEmitter {
     if (d.messageId) await this.discardDraft({ account: acc.id, messageId: d.messageId })
     this.kick(acc.id)
     return { messageId: draft.messageId }
+  }
+
+  // ── Accounts Thunderbird keeps (auth 'thunderbird'): a university's Microsoft 365 lets Thunderbird in, not Tetra. Tetra's
+  //    extension in Thunderbird hands their Inbox and Sent over (tbbridge.js) and sends what Tetra sends through Thunderbird.
+
+  /** The Message-IDs of a bridged folder here, without <>, as Thunderbird's headerMessageId: what the extension need not send. */
+  thunderbirdKnown(acc, folder) {
+    const out = []
+    for (const e of this.index.all()) if (e.account === acc.id && e.folder === folder && e.uidValidity === 'tb' && !e.gone) out.push(e.messageId.replace(/^<|>$/g, ''))
+    return out
+  }
+
+  /**
+   * One mail from Thunderbird: written once, green at once (these are Thunderbird's bytes). A mail known already only takes
+   * Thunderbird's read and ♥ when [update] says they changed there, so a mail read here is not made unread by a later pass.
+   */
+  async fromThunderbird(acc, { folder, raw, seen = false, flagged = false, fresh = false, update = false }) {
+    if (!['Inbox', 'Sent'].includes(folder)) throw new Error(`Not a bridged folder: ${folder}`)
+    const { simpleParser } = require('mailparser')
+    const p = await simpleParser(raw, { skipTextLinks: true })
+    const messageId = p.messageId || `<${crypto.createHash('sha1').update(raw).digest('hex')}@thunderbird>`
+    const id = `${acc.id}/${folder}/tb/${crypto.createHash('sha1').update(messageId).digest('hex')}`
+    const was = this.index.get(id)
+    if (was && !was.gone) {
+      if (update && (was.seen !== seen || was.flagged !== flagged)) { this.index.put({ ...was, seen, flagged }); this.changed() }
+      return { id, known: true }
+    }
+    const from = p.from?.value?.[0] ?? {}, all = x => (Array.isArray(x) ? x : x ? [x] : []).flatMap(a => a.value ?? []).map(a => a.address).filter(Boolean)
+    const e = {
+      id, account: acc.id, folder, uidValidity: 'tb', uid: 0, date: +(p.date || Date.now()), from: from.name || from.address || '', fromAddress: from.address || '',
+      to: all(p.to), subject: p.subject || '', messageId, seen, flagged, size: raw.length, attachments: 0, snippet: '', saved: false,
+    }
+    // what Tetra sent waits as 'local' (keep); Thunderbird's own copy, written with Tetra's id in X-Tetra-Id, takes its place
+    const tetraId = folder === 'Sent' && p.headers.get('x-tetra-id')
+    if (tetraId) for (const l of [...this.index.all()]) if (l.account === acc.id && l.folder === 'Sent' && l.uidValidity === 'local' && l.messageId === tetraId && !l.gone) {
+      if (l.file) this.unlink(l.file)
+      this.index.put({ ...l, gone: true, file: null, movedTo: id })
+    }
+    this.index.put({ ...e, ...(await this.store(acc, e, raw)) })
+    this.index.flush(); this.changed()
+    if (fresh && folder === 'Inbox' && !seen && acc.notify) this.emit('new', e, acc)
+    return { id, known: false }
+  }
+
+  /** Mail waiting for Thunderbird to send it: Tetra id → { id, account, draft, taken, resolve, reject, timer }. */
+  get thunderbirdOut() { return this._tbOut ??= new Map() }
+  /**
+   * Hands [draft] to the extension and waits until Thunderbird has sent it. Not picked up in [wait] ms (Thunderbird closed):
+   * it is taken back and the draft stays, so nothing goes out later behind the user's back.
+   */
+  toThunderbird(acc, draft, { wait = 120_000, sending = 600_000 } = {}) {
+    return new Promise((resolve, reject) => {
+      const job = { id: draft.messageId, account: acc.id, draft, taken: false, resolve, reject }
+      job.timer = setTimeout(() => { this.thunderbirdOut.delete(job.id); reject(Object.assign(new Error('Thunderbird is not open'), { reason: 'thunderbird' })) }, wait)
+      job.sending = sending
+      this.thunderbirdOut.set(job.id, job)
+    })
+  }
+  /** What the extension sends now, each handed over once: the draft's fields, its attachments as base64. */
+  thunderbirdTake() {
+    const list = x => (Array.isArray(x) ? x : []).filter(a => a?.address).map(a => ({ name: String(a.name ?? ''), address: String(a.address) }))
+    const out = []
+    for (const job of this.thunderbirdOut.values()) {
+      if (job.taken) continue
+      job.taken = true; clearTimeout(job.timer)
+      // taken but never answered (Thunderbird closed while sending): failed, so the window says so; Thunderbird's Sent tells the truth
+      job.timer = setTimeout(() => { this.thunderbirdOut.delete(job.id); job.reject(Object.assign(new Error('Thunderbird did not say it was sent'), { reason: 'thunderbird' })) }, job.sending)
+      const d = job.draft
+      out.push({
+        id: job.id, account: job.account, to: list(d.to), cc: list(d.cc), bcc: list(d.bcc), subject: String(d.subject ?? ''), html: String(d.html ?? ''),
+        attachments: (d.attachments ?? []).map(a => ({ name: String(a.name ?? a.filename ?? 'attachment'), type: a.type ?? a.contentType ?? 'application/octet-stream',
+          data: (a.content ?? fs.readFileSync(this.attachmentPath(a))).toString('base64') })),
+      })
+    }
+    return out
+  }
+  /** The extension's answer for a mail it took: sent, or [error]. */
+  thunderbirdDone(id, error = null) {
+    const job = this.thunderbirdOut.get(String(id))
+    if (!job?.taken) return false
+    clearTimeout(job.timer); this.thunderbirdOut.delete(job.id)
+    if (error) job.reject(Object.assign(new Error(String(error).slice(0, 300)), { reason: 'thunderbird' }))
+    else job.resolve()
+    return true
   }
 
   /** The HTML of a parsed mail, its inline pictures in it. */
