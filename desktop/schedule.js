@@ -103,11 +103,35 @@ class Schedules {
     o.list[i] = s; this.write(o)
     return s
   }
-  remove(id) { const o = this.read(); o.list = o.list.filter(s => s.id !== id); this.write(o) }
+  /** Gone, and remembered as gone ("removed": id → when), so a merge with a device's older copy does not bring it back. */
+  remove(id) { const o = this.read(); o.list = o.list.filter(s => s.id !== id); o.removed = { ...o.removed, [id]: this.now() }; this.write(o) }
   ran(id, at) { const o = this.read(), s = o.list.find(s => s.id === id); if (s) { s.last = at; this.write(o) } }
   /** Whether [me] runs them: the runner named in the file, or the first computer to ask, which becomes it. */
   runs(me) { const o = this.read(); if (!o.runner) { o.runner = me; this.write(o) } return o.runner === me }
   setBrief(x) { const o = this.read(); o.brief = { ...o.brief, ...x, sections: { ...o.brief.sections, ...x.sections } }; this.write(o); return o.brief }
 }
 
-module.exports = { Schedules, nextRun, due, REPEATS, BRIEF }
+/**
+ * Two versions of schedules.json as one, when this computer and a device both changed it before a sync (8 Nov: the runner
+ * writes "last" at every run, so a device's edit kept landing beside it as "schedules (2)…(8).json"). [newer] (the device's)
+ * wins key by key, each schedule by its id; "last" is the later of both; one in either is kept unless "removed" (either's)
+ * says it went after it was made.
+ * shortcut: no common ancestor, so an edit to the same schedule on both sides keeps the device's; per-field times if that bites.
+ */
+function mergeSchedules(older, newer) {
+  const read = t => { try { const o = JSON.parse(t); return Array.isArray(o?.list) ? o : null } catch { return null } }
+  const a = read(older), b = read(newer)
+  if (!a || !b) return b ? newer : older // one is not a schedules file (cut short?): keep the one that is, as before
+  const removed = { ...a.removed }
+  for (const [id, at] of Object.entries(b.removed ?? {})) removed[id] = Math.max(at, removed[id] ?? 0)
+  const byId = new Map()
+  for (const s of [...(a.list ?? []), ...(b.list ?? [])]) {
+    const was = byId.get(s.id)
+    const last = Math.max(was?.last ?? 0, s.last ?? 0)
+    byId.set(s.id, { ...was, ...s, ...(last ? { last } : {}) })
+  }
+  const list = [...byId.values()].filter(s => !(removed[s.id] >= (s.created ?? 0)))
+  return JSON.stringify({ ...a, ...b, list, ...(Object.keys(removed).length ? { removed } : {}) }, null, 2)
+}
+
+module.exports = { Schedules, nextRun, due, mergeSchedules, REPEATS, BRIEF }

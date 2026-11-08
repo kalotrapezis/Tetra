@@ -111,3 +111,24 @@ test('AI Assist\'s tool: "κάθε Δευτέρα στις 8 πες μου τι 
     assert.match((await new Tools({}).run('schedule_list')).forModel, /only on the computer/)
   } finally { fs.rmSync(dir, { recursive: true, force: true }) }
 })
+
+test('schedule: two versions changed on both sides merge by id, never a copy beside', () => {
+  const { mergeSchedules } = require('../schedule')
+  const here = { list: [{ id: 'brief', time: '07:00', created: 1, last: 500 }, { id: 'pc', prompt: 'added here', created: 300 }, { id: 'gone', created: 2 }], runner: 'pc', brief: { sections: { mail: true } } }
+  const device = { list: [{ id: 'brief', time: '07:30', created: 1, last: 400, runNow: true }, { id: 'phone', prompt: 'added there', created: 350 }, { id: 'gone', created: 2 }], runner: 'android:x', removed: { gone: 360 }, brief: { sections: { mail: false } } }
+  const m = JSON.parse(mergeSchedules(JSON.stringify(here), JSON.stringify(device)))
+  assert.deepEqual(m.list.map(s => s.id), ['brief', 'pc', 'phone'], 'both additions kept, the one deleted there gone')
+  assert.deepEqual(m.list[0], { id: 'brief', time: '07:30', created: 1, last: 500, runNow: true }, "the device's edit, the later run")
+  assert.equal(m.runner, 'android:x')
+  assert.equal(m.brief.sections.mail, false)
+  assert.deepEqual(m.removed, { gone: 360 })
+  // a brief deleted and made again later stays
+  const again = JSON.parse(mergeSchedules(JSON.stringify({ list: [], removed: { brief: 100 } }), JSON.stringify({ list: [{ id: 'brief', created: 200 }] })))
+  assert.deepEqual(again.list.map(s => s.id), ['brief'])
+  // a version that is not JSON loses nothing: the other is kept
+  assert.equal(mergeSchedules('{"list":[]}', '{"list":['), '{"list":[]}')
+  // Schedules.remove remembers it
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'sched-')), s = new Schedules(path.join(dir, 's.json'), () => 42)
+  s.remove('brief')
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(dir, 's.json'), 'utf8')).removed, { brief: 42 })
+})

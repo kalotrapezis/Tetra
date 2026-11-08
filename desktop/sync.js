@@ -13,7 +13,7 @@ const library = require('./library')
 const drives = require('./drives')
 const history = require('./history')
 const system = require('./system')
-const { isCallLog, mergeCallLog } = require('./files')
+const { isMerged, mergeFile } = require('./files')
 const { t } = require('./i18n')
 
 const PORT = 43180
@@ -1900,8 +1900,8 @@ class SyncServer {
       // "(2)" events were byte for byte their original (23 Oct).
       const here = fs.existsSync(target) ? await this.files.hash(rel) : null
       const same = here === expected
-      // Both changed a month's call log (29 Oct): one log with both's calls, never a copy beside it.
-      const merge = !same && here !== null && here !== replaces && isCallLog(rel)
+      // Both changed a month's call log (29 Oct) or the scheduled actions (8 Nov): one file with both's, never a copy beside it.
+      const merge = !same && here !== null && here !== replaces && isMerged(rel)
       let sha = expected
       if (same) await fsp.rm(part)
       else if (here !== null && (here === replaces || merge)) {
@@ -1909,7 +1909,7 @@ class SyncServer {
         await fsp.mkdir(path.dirname(old), { recursive: true })
         await fsp.copyFile(target, old)
         if (merge) {
-          await fsp.writeFile(part, mergeCallLog(await fsp.readFile(target, 'utf8'), await fsp.readFile(part, 'utf8')))
+          await fsp.writeFile(part, mergeFile(rel, await fsp.readFile(target, 'utf8'), await fsp.readFile(part, 'utf8')))
           sha = await library.sha256(part)
         }
         await fsp.rename(part, target)

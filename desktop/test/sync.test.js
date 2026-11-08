@@ -1802,3 +1802,41 @@ test("a phone's AI Assist: done on this computer, or a clear error naming the de
     assert.equal(done.length, 1)
   } finally { await server.stop?.(); db.close?.() }
 })
+
+test('schedules.json changed on both sides is merged here, not kept beside as "(2)" (8 Nov)', async () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'drive-sync-sched-'))
+  const root = path.join(tmp, 'Drive')
+  fs.mkdirSync(root, { recursive: true })
+  const db = library.open(path.join(tmp, 'data'))
+  const files = new Files(db, root)
+  const server = await new SyncServer({ db, documents: new Documents(db), people: new People(db, path.join(tmp, 'data')), files,
+    dataDir: path.join(tmp, 'data'), photosRoot: path.join(tmp, 'Photos'), port: 0 }).start()
+  const call = (m, u, o) => request(server.port, server.fingerprint, m, u, o)
+  const sha = b => crypto.createHash('sha256').update(b).digest('hex')
+  const rel = 'AI Assist/schedules.json'
+  const doc = (...list) => Buffer.from(JSON.stringify({ list, runner: 'pc' }, null, 2))
+  try {
+    const paired = (await call('POST', '/pair', { json: { code: server.startPairing().code, name: 'Xiaomi 15' } })).body
+    server.setConnection(paired.deviceId, 'files', { direction: 'both', keep: 'everything' })
+    const phone = paired.token
+    const manifest = b => call('POST', '/files/manifest', { token: phone, json: { files: [{ path: rel, sha256: sha(b), size: b.length }] } })
+    const put = b => call('PUT', `/file/${sha(b)}?path=${encodeURIComponent(rel)}`, { token: phone, body: b })
+    const v1 = doc({ id: 'brief', time: '07:00', created: 1 })
+    assert.deepEqual((await manifest(v1)).body.want, [rel]); await put(v1)
+    // the computer runs the brief (its "last") while the phone adds one
+    fs.writeFileSync(files.disk(rel), doc({ id: 'brief', time: '07:00', created: 1, last: 500 }))
+    const v2 = doc({ id: 'brief', time: '07:00', created: 1 }, { id: 'new', prompt: 'p', time: '08:00', created: 600 })
+    const r = await manifest(v2)
+    assert.deepEqual(r.body.want, [rel])
+    assert.deepEqual(r.body.have, [], "the computer's version is not offered as a copy")
+    assert.equal((await put(v2)).body.path, rel)
+    const merged = JSON.parse(fs.readFileSync(files.disk(rel), 'utf8'))
+    assert.deepEqual(merged.list, [{ id: 'brief', time: '07:00', created: 1, last: 500 }, { id: 'new', prompt: 'p', time: '08:00', created: 600 }])
+    assert.deepEqual(fs.readdirSync(path.dirname(files.disk(rel))).filter(n => n.startsWith('schedules')), ['schedules.json'])
+    // the merged version goes back to the phone in place of its own
+    assert.deepEqual((await manifest(v2)).body.have.map(h => [h.path, h.replaces]), [[rel, sha(v2)]])
+  } finally {
+    await server.stop()
+    fs.rmSync(tmp, { recursive: true })
+  }
+})
