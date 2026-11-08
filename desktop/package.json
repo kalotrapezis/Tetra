@@ -104,6 +104,7 @@
       "ai.js",
       "memory.js",
       "mailclean.js",
+      "mailai.js",
       "msauth.js",
       "models/*.onnx",
       "models/tessdata/*.traineddata",

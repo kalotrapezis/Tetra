@@ -85,6 +85,7 @@ const NOTE_CALLS = ['list', 'create', 'save', 'snapshot', 'history', 'restoreVer
 const CALENDAR_CALLS = ['calendars', 'occurrences', 'save', 'saveDay', 'skipDay', 'endBefore', 'split', 'trash', 'move', 'keep', 'newCalendar', 'setCalendar', 'deleteCalendar', 'scheduleEvent', 'trashed', 'restore']
 let calendar = null, reminderTimer = null, calendarIncoming = []
 let aiSwitch = null // the user's AI switch (ai.js), shared by every device
+let mailAi = null // mailai.js: new mail scored, its dates suggested, the user's style; on the runner only
 // Contacts (Drive-Android Plan.md § Contacts): .System/Contacts/Shared, one vCard a person; the window's calls, checked by name
 const CONTACTS_CALLS = ['list', 'save', 'trash', 'keep', 'trashed', 'restore', 'pairs', 'merge', 'notTheSame']
 let contacts = null
@@ -647,7 +648,7 @@ app.whenReady().then(() => {
   // Mail (mail.js): the archive in .System/Mail/Shared; each account's password only in this computer's keyring
   mail = new Mail(system.dir('Mail', 'Shared', files.system), { secret: mailSecret, token: msToken })
   mail.on('changed', () => win?.webContents.send('mail-changed'))
-  mail.on('new', e => notify('mail', e.from || e.fromAddress, e.subject || t('common.noTitle')))
+  mail.on('new', e => { if (!mailAi?.takes(e)) notify('mail', e.from || e.fromAddress, e.subject || t('common.noTitle')) }) // Mail AI on: only for urgency ≥ 2
   mail.on('failed', (r, e) => notify('mail', t('mail.notSent'), `${r.draft?.subject || t('common.noTitle')}: ${e.reason && e.reason !== 'other' ? t(`mail.err_${e.reason}`) : e.message}`))
   mail.picked = new Set() // files chosen here to attach: nothing else on this computer can be sent from the window
   mail.filesRoot = files.root // where a filter saves attachments ("save to a Files folder", MAIL_PLAN §6)
@@ -1433,6 +1434,13 @@ app.whenReady().then(() => {
   const schedulesFile = path.join(system.dir('Assistant', 'Shared', files.system), 'schedules.json')
   try { const old = path.join(system.dir('Assistant', 'Data', files.system), 'schedules.json'); if (fs.existsSync(old) && !fs.existsSync(schedulesFile)) { fs.mkdirSync(path.dirname(schedulesFile), { recursive: true }); fs.renameSync(old, schedulesFile) } } catch (e) { console.warn('[schedule] move', e.message) }
   const schedules = new schedule.Schedules(schedulesFile)
+  mailAi = new (require('./mailai').MailAi)({ mail, calendar, api, allowed: () => aiSwitch.allows('mail') && !!assistKey(), runs: () => schedules.runs(os.hostname()),
+    notify: (e, score) => notify('mail', `${score >= 3 ? '‼ ' : ''}${e.from || e.fromAddress}`, e.subject || t('common.noTitle')), changed: () => win?.webContents.send('mail-changed') })
+  mail.on('changed', () => mailAi.kick())
+  ipcMain.handle('mailai:forMail', (_, id) => mailAi.forMail(String(id)))
+  ipcMain.handle('mailai:tiers', () => mailAi.tiers())
+  ipcMain.handle('mailai:add', (_, id) => mailAi.add(String(id)))
+  ipcMain.handle('mailai:dismiss', (_, id) => mailAi.dismiss(String(id)))
   // one Tools for the window's chat, a new one for each scheduled run (its own numbered lists)
   const makeTools = () => new assistant.Tools({ calendar, timers, pills, notes, files, contacts, maps, mail, schedules, memory, allowed: app => aiSwitch.allows(app),
     // the Calendar's, Timer's and Contacts' folders are watched (shown, the devices told); Notes' is not

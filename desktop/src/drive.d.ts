@@ -34,6 +34,8 @@ export interface MailDevice { device: string; name: string; mode: 'copy' | 'move
 export interface MailPrivacy { images: 'ask' | 'always'; senders: string[] }
 export interface MailEntry { id: string; account: string; folder: MailRole; uid: number; date: number; from: string; fromAddress: string; to: string[]
   subject: string; seen: boolean; flagged: boolean; size: number; attachments: number; snippet: string; saved: boolean; file?: string; gone?: boolean } // gone: deleted from the server, kept here (Αποθήκευση)
+/** A date found in a mail by Mail AI (mailai.js, ai/events.jsonl). */
+export interface MailAiEvent { id: string; mail: string; title: string; start: string; end: string | null; allDay: boolean; place: string | null; status: 'suggested' | 'added' | 'dismissed'; at: number }
 export interface MailFolder { role: MailRole; accounts: { id: string; unread: number; total: number; orange: number }[] }
 export interface MailState { busy?: boolean; error?: string | null; detail?: string | null; synced?: number }
 export interface MailOpened extends Omit<MailEntry, 'to'> { missing?: boolean; remote?: boolean; images?: string[]; to: string; cc: string; html: string; attachments: { name: string; size: number; file: string }[] }
@@ -354,6 +356,10 @@ declare global {
         storage(): Promise<MailStorageInfo>
         defaultApp(): Promise<{ supported: boolean; isDefault: boolean; current?: string | null }>
         makeDefault(): Promise<unknown>
+        aiFor(id: string): Promise<{ urgency: { score: number; why: string } | null; events: MailAiEvent[] }>
+        aiTiers(): Promise<Record<string, number>>
+        aiAdd(id: string): Promise<MailAiEvent>
+        aiDismiss(id: string): Promise<MailAiEvent>
         onCompose(fn: (c: MailCompose) => void): () => void
         openFolder(id?: string): Promise<void>
         setCheck(c: MailCheck): Promise<MailCheck>
