@@ -1839,3 +1839,35 @@ button.assist-cost { cursor: pointer; border: 0; font: inherit; color: inherit; 
 .usage-history td { padding: 6px 4px; border-bottom: 1px solid var(--hover); }
 .usage-history td:last-child { text-align: right; font-weight: 600; white-space: nowrap; }
 .usage-history td:nth-child(2) { text-align: right; width: 4em; }
+/* Passwords (Passwords.tsx): the Clock's layout, rows of logins, cards, addresses and 2FA codes; the applet's purple */
+:root { --pw-purple: #7E37ED; --pw-text: #b58cff; } /* the purple as text: lighter on the dark */
+@media (prefers-color-scheme: light) { :root { --pw-text: #7E37ED; } }
+.pw { height: 100%; }
+.pw-list { flex: 0 1 900px; display: flex; flex-direction: column; gap: 8px; }
+.pw-row { display: flex; align-items: center; gap: 6px; padding: 8px 10px 8px 16px; border-radius: 20px; }
+.pw-row:has(.pw-pin) { padding-left: 6px; }
+.pw-what { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.pw-what > * { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pw-what .muted { font-size: 13px; }
+.pw-pin { opacity: .55; } .pw-pin.on { opacity: 1; color: var(--pw-text); }
+.pw-secret { font-family: ui-monospace, monospace; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); user-select: all; }
+.pw-code { font-family: ui-monospace, monospace; font-size: 26px; letter-spacing: 1px; padding: 4px 12px; border-radius: 12px; color: var(--pw-text); font-variant-numeric: tabular-nums; }
+.pw-code:hover { background: var(--hover); }
+.pw-left { --p: 1; width: 34px; height: 34px; display: grid; place-items: center; font-size: 12px; border-radius: 50%; flex: none;
+  background: radial-gradient(var(--island) 58%, transparent 60%), conic-gradient(var(--pw-purple) calc(var(--p) * 360deg), var(--island-2) 0); }
+.pw-empty { text-align: center; margin-top: 40px; }
+.pw-filled { background: var(--pw-purple); color: #fff; }
+.pw-form { display: grid; gap: 10px; width: min(460px, 86vw); }
+.pw-form h3 { margin: 0 0 4px; }
+.pw-field { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+.pw-field input[type=range] { accent-color: var(--pw-purple); }
+.pw-with { display: flex; align-items: flex-end; gap: 6px; } .pw-with .pw-field { flex: 1; }
+.pw-two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.pw-advanced { display: grid; gap: 8px; } .pw-advanced summary { cursor: pointer; color: var(--muted); margin-bottom: 8px; }
+.pw-gen { display: grid; gap: 14px; padding: 22px; border-radius: 24px; max-width: 640px; width: 100%; margin: 0 auto; box-sizing: border-box; }
+.pw-gen .segmented { justify-self: center; }
+.pw-made { font-family: ui-monospace, monospace; font-size: 22px; text-align: center; word-break: break-all; padding: 16px; border-radius: 16px; background: var(--island-2); user-select: all; }
+.pw-gen p { margin: 0; text-align: center; }
+.pw-checks { display: flex; flex-wrap: wrap; gap: 16px; }
+.pw-check { display: flex; gap: 8px; align-items: center; cursor: pointer; }
+.pw-check input { accent-color: var(--pw-purple); }

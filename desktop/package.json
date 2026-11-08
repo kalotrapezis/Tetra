@@ -64,6 +64,8 @@
       "data/places.tsv.gz",
       "editor.js",
       "vault.js",
+      "passwords.js",
+      "data/eff_large_wordlist.txt",
       "places.js",
       "analyzer.js",
       "folders.js",
