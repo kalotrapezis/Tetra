@@ -699,7 +699,7 @@ app.whenReady().then(() => {
       sync: () => mail.syncNow(),
       credentials: id => {
         const acc = mail.accounts().find(a => a.id === id)
-        if (!acc) return null
+        if (!acc || acc.auth === 'thunderbird') return null // only Thunderbird on this computer can open it: the phone gets its mail by sync
         const base = { account: acc.id, address: acc.address, name: acc.name, server: acc.server, smtp: acc.smtp, provider: acc.provider ?? null }
         if (acc.auth === 'microsoft') return { ...base, signIn: 'microsoft' } // the phone signs in itself: no token leaves this computer
         const password = mailSecret(acc.id)
@@ -1979,6 +1979,17 @@ app.whenReady().then(() => {
     mail.index; mail.foreign // the getters read them
     chatList() // AI Assist's History, ready before it is asked for
     if (!process.env.DRIVE_HIDDEN) mail.startAll() // a hidden QA copy fetches nothing
+    // the door for Tetra's Thunderbird extension (tbbridge.js): accounts only Thunderbird can open, such as a university's Microsoft 365
+    if (!process.env.DRIVE_HIDDEN) require('./tbbridge').start(mail, {
+      token: () => setting('thunderbirdToken') || null, save: v => setSetting('thunderbirdToken', v),
+      // a box of its own, not attached to the window: attached, it never showed on KDE Wayland (8 Nov); unanswered in 2 minutes is a no
+      ask: async () => { win?.show(); win?.focus()
+        const answer = new AbortController(), late = setTimeout(() => answer.abort(), 120_000)
+        try {
+          const r = await dialog.showMessageBox({ type: 'question', buttons: [t('mail.tbAllow'), t('common.cancel')], defaultId: 1, cancelId: 1, title: 'Tetra', message: t('mail.tbPairTitle'), detail: t('mail.tbPairText'), signal: answer.signal })
+          return r.response === 0
+        } finally { clearTimeout(late) } },
+    }).catch(e => console.warn('[tbbridge] not started:', e.message))
   }, 1500))
   if (argCommand(process.argv)) win.webContents.once('did-finish-load', () => setTimeout(() => assistantCommand(argCommand(process.argv)), 1500))
   if (argMailto(process.argv)) win.webContents.once('did-finish-load', () => setTimeout(() => openMailto(argMailto(process.argv)), 1500))

@@ -105,6 +105,7 @@
       "memory.js",
       "mailclean.js",
       "msauth.js",
+      "tbbridge.js",
       "models/*.onnx",
       "models/tessdata/*.traineddata",
       "dist/**",
