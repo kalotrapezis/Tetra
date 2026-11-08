@@ -333,6 +333,8 @@ contextBridge.exposeInMainWorld('drive', {
   // AI Assist (assistant.js): Mistral and the tools in main, the key never here
   assistant: {
     ask: (text, aloud, file) => ipcRenderer.invoke('assistant:ask', text, aloud, file),
+    confirm: id => ipcRenderer.invoke('assistant:confirm', id),
+    refuse: id => ipcRenderer.invoke('assistant:refuse', id),
     attach: from => ipcRenderer.invoke('assistant:attach', from),
     dropped: file => webUtils.getPathForFile(file),
     audioStart: spec => ipcRenderer.invoke('assistant:audioStart', spec),

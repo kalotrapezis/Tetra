@@ -2725,5 +2725,16 @@
  "pills.needBoxSize": "Scrivi quante pillole ha una confezione nuova",
  "pills.opened": "Ho anche una confezione aperta",
  "pills.hereNote": "I tuoi farmaci e le dosi assunte si sincronizzano tra telefono, tablet e computer. Suonano solo i dispositivi con questo interruttore attivo, così rispondi a ogni dose una sola volta.",
- "settings.sum.pills": "Promemoria su questo computer"
+ "settings.sum.pills": "Promemoria su questo computer",
+ "assistant.autoMemory": "Imparare su di me da solo",
+ "assistant.autoMemoryNote": "Dopo ogni chat, una breve richiesta in più guarda solo ciò che hai detto per trovare fatti duraturi (famiglia, lavoro, gusti) e li conserva in Dati personali, segnati come appresi. Una volta a settimana vengono riordinati.",
+ "assistant.heldWhy": "Dopo aver letto testo scritto da altri (mail, web, un file), AI Assist vuole fare questo. Avviene solo se dici di sì:",
+ "assistant.heldDo": "Fallo",
+ "assistant.heldDone": "Fatto: {what}",
+ "assistant.heldSkipped": "Non fatto.",
+ "memory.tidyTitle": "AI Assist: dati personali riordinati",
+ "memory.tidyBody": "{count} modifica/he a ciò che AI Assist conserva su di te.",
+ "memory.tidyMerged": "Uniti: {from} → {to}",
+ "memory.tidyRewritten": "Riscritto: {from} → {to}",
+ "memory.tidyDropped": "Rimosso: {fact}"
 }

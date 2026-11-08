@@ -2633,5 +2633,16 @@
  "pills.needBoxSize": "Skriv hur många piller en ny förpackning innehåller",
  "pills.opened": "Jag har också en öppnad förpackning",
  "pills.hereNote": "Dina mediciner och de intagna doserna synkas mellan telefonen, surfplattan och datorn. Bara enheter med den här knappen på ringer, så du svarar på en dos bara en gång.",
- "settings.sum.pills": "Påminnelser på den här datorn"
+ "settings.sum.pills": "Påminnelser på den här datorn",
+ "assistant.autoMemory": "Lär dig om mig själv",
+ "assistant.autoMemoryNote": "Efter varje chatt tittar en kort extra förfrågan bara på det du sa efter bestående fakta (familj, arbete, vad du gillar) och sparar dem i Personliga uppgifter, märkta som inlärda. En gång i veckan städas de.",
+ "assistant.heldWhy": "Efter att ha läst text som andra skrivit (mejl, webben, en fil) vill AI Assist göra detta. Det sker bara om du säger ja:",
+ "assistant.heldDo": "Gör det",
+ "assistant.heldDone": "Klart: {what}",
+ "assistant.heldSkipped": "Inte gjort.",
+ "memory.tidyTitle": "AI Assist: personliga uppgifter städade",
+ "memory.tidyBody": "{count} ändring(ar) i det AI Assist sparar om dig.",
+ "memory.tidyMerged": "Sammanslaget: {from} → {to}",
+ "memory.tidyRewritten": "Omskrivet: {from} → {to}",
+ "memory.tidyDropped": "Borttaget: {fact}"
 }

@@ -2817,5 +2817,16 @@
  "pills.needBoxSize": "Napiš, kolik tablet má nové balení",
  "pills.opened": "Mám i otevřené balení",
  "pills.hereNote": "Tvé léky a užité dávky se synchronizují mezi telefonem, tabletem a počítačem. Zvonit budou jen zařízení se zapnutým přepínačem, takže dávku potvrdíš jen jednou.",
- "settings.sum.pills": "Připomenutí v tomto počítači"
+ "settings.sum.pills": "Připomenutí v tomto počítači",
+ "assistant.autoMemory": "Učit se o mně samo",
+ "assistant.autoMemoryNote": "Po každém chatu krátký dodatečný dotaz projde jen to, co jste řekli, a hledá trvalé údaje (rodina, práce, co máte rádi); uloží je do Osobních údajů jako naučené. Jednou týdně se uklidí.",
+ "assistant.heldWhy": "Po přečtení textu od jiných (pošta, web, soubor) chce AI Assist udělat toto. Stane se to jen, když řeknete ano:",
+ "assistant.heldDo": "Udělat",
+ "assistant.heldDone": "Hotovo: {what}",
+ "assistant.heldSkipped": "Neprovedeno.",
+ "memory.tidyTitle": "AI Assist: osobní údaje uklizeny",
+ "memory.tidyBody": "Změny ({count}) v tom, co si o vás AI Assist pamatuje.",
+ "memory.tidyMerged": "Sloučeno: {from} → {to}",
+ "memory.tidyRewritten": "Přepsáno: {from} → {to}",
+ "memory.tidyDropped": "Odstraněno: {fact}"
 }

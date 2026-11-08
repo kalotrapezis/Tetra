@@ -2633,5 +2633,16 @@
  "pills.needBoxSize": "Schrijf op hoeveel pillen een nieuw doosje bevat",
  "pills.opened": "Ik heb ook een open doosje",
  "pills.hereNote": "Je medicijnen en de ingenomen doses worden gesynchroniseerd tussen je telefoon, tablet en computer. Alleen apparaten waarop deze schakelaar aan staat, gaan over, zodat je een dosis maar één keer beantwoordt.",
- "settings.sum.pills": "Herinneringen op deze computer"
+ "settings.sum.pills": "Herinneringen op deze computer",
+ "assistant.autoMemory": "Zelf over mij leren",
+ "assistant.autoMemoryNote": "Na elk gesprek bekijkt een kort extra verzoek alleen wat jij zei op blijvende feiten (familie, werk, voorkeuren) en bewaart ze bij Persoonlijke gegevens, gemarkeerd als geleerd. Eens per week worden ze opgeruimd.",
+ "assistant.heldWhy": "Na het lezen van tekst van anderen (mail, web, een bestand) wil AI Assist dit doen. Het gebeurt alleen als je ja zegt:",
+ "assistant.heldDo": "Doen",
+ "assistant.heldDone": "Gedaan: {what}",
+ "assistant.heldSkipped": "Niet gedaan.",
+ "memory.tidyTitle": "AI Assist: persoonlijke gegevens opgeruimd",
+ "memory.tidyBody": "{count} wijziging(en) in wat AI Assist over je bewaart.",
+ "memory.tidyMerged": "Samengevoegd: {from} → {to}",
+ "memory.tidyRewritten": "Herschreven: {from} → {to}",
+ "memory.tidyDropped": "Verwijderd: {fact}"
 }

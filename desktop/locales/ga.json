@@ -2909,5 +2909,16 @@
  "pills.needBoxSize": "Scríobh cé mhéad piollaire atá i mbosca nua",
  "pills.opened": "Tá bosca oscailte agam freisin",
  "pills.hereNote": "Déantar do chuid leigheasanna agus na dósanna a ghlac tú a shioncronú idir do ghuthán, do tháibléad agus do ríomhaire. Ní bhuaileann ach na gléasanna a bhfuil an lasc seo casta orthu, mar sin freagraíonn tú dáileog uair amháin.",
- "settings.sum.pills": "Meabhrúcháin ar an ríomhaire seo"
+ "settings.sum.pills": "Meabhrúcháin ar an ríomhaire seo",
+ "assistant.autoMemory": "Foghlaim fúm leis féin",
+ "assistant.autoMemoryNote": "Tar éis gach comhrá, féachann iarratas beag breise ar a ndúirt tú amháin le fíricí buana a aimsiú (teaghlach, obair, rudaí is maith leat) agus coinníonn sé iad i Sonraí pearsanta, marcáilte mar fhoghlamtha. Uair sa tseachtain cuirtear in ord iad.",
+ "assistant.heldWhy": "Tar éis téacs a scríobh daoine eile a léamh (ríomhphost, an gréasán, comhad), ba mhaith le AI Assist é seo a dhéanamh. Ní tharlaíonn sé ach má deir tú tá:",
+ "assistant.heldDo": "Déan é",
+ "assistant.heldDone": "Déanta: {what}",
+ "assistant.heldSkipped": "Níor rinneadh é.",
+ "memory.tidyTitle": "AI Assist: sonraí pearsanta curtha in ord",
+ "memory.tidyBody": "{count} athrú ar a gcoinníonn AI Assist fút.",
+ "memory.tidyMerged": "Cumasctha: {from} → {to}",
+ "memory.tidyRewritten": "Athscríofa: {from} → {to}",
+ "memory.tidyDropped": "Bainte: {fact}"
 }

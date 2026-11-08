@@ -2725,5 +2725,16 @@
  "pills.needBoxSize": "Escreve quantos comprimidos tem uma caixa nova",
  "pills.opened": "Também tenho uma caixa aberta",
  "pills.hereNote": "Os teus medicamentos e as doses tomadas sincronizam entre o telemóvel, o tablet e o computador. Só tocam os dispositivos com este interruptor ativado, por isso respondes a cada dose uma só vez.",
- "settings.sum.pills": "Lembretes neste computador"
+ "settings.sum.pills": "Lembretes neste computador",
+ "assistant.autoMemory": "Aprender sobre mim sozinho",
+ "assistant.autoMemoryNote": "Após cada conversa, um pequeno pedido extra analisa apenas o que disse à procura de factos duradouros (família, trabalho, gostos) e guarda-os em Dados pessoais, marcados como aprendidos. Uma vez por semana são arrumados.",
+ "assistant.heldWhy": "Depois de ler texto escrito por outros (email, web, um ficheiro), o AI Assist quer fazer isto. Só acontece se disser que sim:",
+ "assistant.heldDo": "Fazer",
+ "assistant.heldDone": "Feito: {what}",
+ "assistant.heldSkipped": "Não feito.",
+ "memory.tidyTitle": "AI Assist: dados pessoais arrumados",
+ "memory.tidyBody": "{count} alteração(ões) ao que o AI Assist guarda sobre si.",
+ "memory.tidyMerged": "Juntado: {from} → {to}",
+ "memory.tidyRewritten": "Reescrito: {from} → {to}",
+ "memory.tidyDropped": "Removido: {fact}"
 }

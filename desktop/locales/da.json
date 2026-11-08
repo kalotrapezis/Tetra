@@ -2633,5 +2633,16 @@
  "pills.needBoxSize": "Skriv, hvor mange piller en ny pakke indeholder",
  "pills.opened": "Jeg har også en åbnet pakke",
  "pills.hereNote": "Din medicin og de doser, du har taget, synkroniseres mellem din telefon, tablet og computer. Kun enheder med denne kontakt slået til ringer, så du svarer på en dosis én gang.",
- "settings.sum.pills": "Påmindelser på denne computer"
+ "settings.sum.pills": "Påmindelser på denne computer",
+ "assistant.autoMemory": "Lær om mig af sig selv",
+ "assistant.autoMemoryNote": "Efter hver chat ser en kort ekstra forespørgsel kun på det, du sagde, efter varige fakta (familie, arbejde, hvad du kan lide) og gemmer dem i Personlige oplysninger, markeret som lært. En gang om ugen ryddes de op.",
+ "assistant.heldWhy": "Efter at have læst tekst skrevet af andre (mail, nettet, en fil) vil AI Assist gøre dette. Det sker kun, hvis du siger ja:",
+ "assistant.heldDo": "Gør det",
+ "assistant.heldDone": "Udført: {what}",
+ "assistant.heldSkipped": "Ikke udført.",
+ "memory.tidyTitle": "AI Assist: personlige oplysninger ryddet op",
+ "memory.tidyBody": "{count} ændring(er) i det, AI Assist gemmer om dig.",
+ "memory.tidyMerged": "Slået sammen: {from} → {to}",
+ "memory.tidyRewritten": "Omskrevet: {from} → {to}",
+ "memory.tidyDropped": "Fjernet: {fact}"
 }

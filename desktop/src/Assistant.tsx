@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
-import type { AssistAudio, AssistCall, AssistChoice, AssistFile, AssistGo, AssistJob, AssistSend, AssistSettings } from './drive'
+import type { AssistAudio, AssistCall, AssistChoice, AssistFile, AssistGo, AssistHeld, AssistJob, AssistSend, AssistSettings } from './drive'
 import { Icon } from './Icon'
 import { t } from './i18n'
 import { errorText } from './Dialogs'
@@ -9,7 +9,7 @@ import { APP, SectionBar, SectionView, WordCloud, type Section } from './AssistS
 // AI Assist (the phone's AssistantScreen.kt, ported; assistant.js has the why): the chat, walkie-talkie on the mic button,
 // live on the waveform one. Mistral and Tetra's tools run in main; the microphone, the voice and the record here.
 
-type Bubble = { mine: boolean; text: string; choices?: AssistChoice[]; call?: AssistCall | null; send?: AssistSend | null; images?: string[]; error?: boolean; files?: AssistFile[]; audio?: AssistAudio | null; job?: string }
+type Bubble = { mine: boolean; text: string; choices?: AssistChoice[]; call?: AssistCall | null; send?: AssistSend | null; images?: string[]; error?: boolean; files?: AssistFile[]; audio?: AssistAudio | null; job?: string; held?: AssistHeld[] }
 type Phase = 'idle' | 'listening' | 'thinking'
 type LivePhase = 'connecting' | 'listening' | 'thinking' | 'speaking' | 'stopping'
 const TURN: Record<LivePhase, number> = { connecting: 20, listening: 40, thinking: 90, speaking: 200, stopping: 0 } // the record's degrees a second
@@ -96,6 +96,7 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
   const [pending, setPending] = useState<AssistCall | null>(null)
   const [pendingMail, setPendingMail] = useState<AssistSend | null>(null) // a mail written, waiting for the user's Send
   const [pendingAudio, setPendingAudio] = useState<AssistAudio | null>(null) // audio_make's estimate, waiting for the user's yes
+  const [held, setHeld] = useState<AssistHeld[]>([]) // calls held after text from others, waiting for the user's yes
   const [file, setFileState] = useState<AssistFile | null>(keptFile) // attached, goes with the next message
   const setFile = (f: AssistFile | null) => setFileState(keptFile = f)
   const [attaching, setAttaching] = useState(false)
@@ -150,6 +151,20 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
     catch (e) { say(errorText(e), true) }
   }
   function skipAudio() { setPendingAudio(null); say(t('attach.skipped')) }
+  async function doHeld(h: AssistHeld) {
+    setHeld(x => x.filter(y => y.id !== h.id))
+    try {
+      const r = await window.drive.assistant.confirm(h.id)
+      if (!r) return
+      say(t('assistant.heldDone', { what: h.what }))
+      // the user said yes to exactly this call: it is placed, no second yes
+      if (r.call) call(r.call)
+      if (r.send) setPendingMail(r.send)
+      if (r.open) window.drive.files.open(r.open).catch(() => say(t('assistant.cannotOpen'), true))
+      if (r.go) goTo(r.go)
+    } catch (e) { say(errorText(e), true) }
+  }
+  function skipHeld(h: AssistHeld) { setHeld(x => x.filter(y => y.id !== h.id)); window.drive.assistant.refuse(h.id); say(t('assistant.heldSkipped')) }
   async function attachFrom(from: string) {
     setClip(false); setAttaching(true)
     try { const r = await window.drive.assistant.attach(from); if (r) { setFile(r); setSpent(r.spent) } } catch (e) { say(errorText(e), true) }
@@ -176,6 +191,8 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
     if (pendingMail) { const yes = text.trim().split(/\s+/).length <= 3 ? yesNo(text) : null; if (yes != null) { if (yes) sendMail(pendingMail); else keepMail(); if (inLive) listenAgain(); return } }
     // and to an MP3's estimate: nothing is spent before it
     if (pendingAudio) { const yes = text.trim().split(/\s+/).length <= 3 ? yesNo(text) : null; if (yes != null) { if (yes) startAudio(pendingAudio); else skipAudio(); if (inLive) listenAgain(); return } }
+    // and to calls held after text from others: a short yes does them all, a no none
+    if (held.length) { const yes = text.trim().split(/\s+/).length <= 3 ? yesNo(text) : null; if (yes != null) { for (const h of held) yes ? doHeld(h) : skipHeld(h); if (inLive) listenAgain(); return } }
     setPhase('thinking')
     if (inLive) { live.current!.muted = true; window.drive.assistant.liveMute(true); setLivePhase('thinking') }
     hush()
@@ -183,7 +200,9 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
     const offWords = window.drive.assistant.onWords(w => { setDraft(d => (d ?? '') + w); if (inLive) setLiveAi(a => a + w) })
     try {
       const r = await window.drive.assistant.ask(text, s.aloud || inLive, f?.path)
-      setBubbles(b => [...b, { mine: false, text: r.text, choices: r.choices, call: r.call, send: r.send, images: r.images, audio: r.audio }])
+      setBubbles(b => [...b, { mine: false, text: r.text, choices: r.choices, call: r.call, send: r.send, images: r.images, audio: r.audio, held: r.held }])
+      for (const h of held) window.drive.assistant.refuse(h.id) // a new question passes over what still waited
+      setHeld(r.held ?? [])
       setPendingCall(r.call)
       setPendingMail(r.send)
       setPendingAudio(r.audio)
@@ -298,7 +317,7 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
 
   const status = phase === 'listening' ? t(hearing ? 'assistant.hearing' : 'assistant.listening') : phase === 'thinking' ? t('assistant.thinking') : null
   const setAloud = (on: boolean) => { if (!s) return; setS({ ...s, aloud: on }); window.drive.assistant.set({ aloud: on }); if (!on) hush() }
-  const newChat = () => { hush(); window.drive.assistant.clear(); setBubbles(() => []); setPendingCall(null); setPendingAudio(null); setFile(null); setSpent(0); setChatId(crypto.randomUUID()) }
+  const newChat = () => { hush(); window.drive.assistant.clear(); setBubbles(() => []); setPendingCall(null); setPendingAudio(null); setHeld([]); setFile(null); setSpent(0); setChatId(crypto.randomUUID()) }
   // a wide window has the sidebar; a narrow one (the user: "if it becomes too narrow, the phone's layout") the island's handle
   useEffect(() => {
     const el = page.current
@@ -309,7 +328,7 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
   }, [])
   // each answered turn kept in History, this computer only
   useEffect(() => { if (phase === 'idle' && bubbles.some(b => b.mine)) window.drive.assistant.keep(chatId, bubbles.map(b => ({ mine: b.mine, text: b.text, error: b.error, files: b.files, job: b.job }))) }, [phase, bubbles.length]) // eslint-disable-line react-hooks/exhaustive-deps
-  const openChat = (id: string) => window.drive.assistant.openChat(id).then(b => { setBubbles(() => b.map(x => ({ mine: x.mine, text: x.text, error: x.error, files: x.files, job: x.job }))); setChatId(id); setPendingCall(null); setOpen(false) })
+  const openChat = (id: string) => window.drive.assistant.openChat(id).then(b => { setBubbles(() => b.map(x => ({ mine: x.mine, text: x.text, error: x.error, files: x.files, job: x.job }))); setChatId(id); setPendingCall(null); setHeld([]); setOpen(false) })
   const saveKey = async () => {
     try { await window.drive.assistant.setKey(keyText); setKeyText(''); load() } catch (e) { say(errorText(e), true) }
   }
@@ -353,7 +372,8 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
           <WordCloud offer={offer} hidden={!!typed || !!file} /></div>}
         {bubbles.map((b, i) => <BubbleView key={i} b={b} pending={i === bubbles.length - 1 ? pending : null} choose={choose} call={call} cancel={cancelCall}
           mail={i === bubbles.length - 1 ? pendingMail : null} sendMail={sendMail} keepMail={keepMail}
-          audio={i === bubbles.length - 1 ? pendingAudio : null} startAudio={startAudio} skipAudio={skipAudio} job={b.job ? jobs[b.job] ?? null : null} />)}
+          audio={i === bubbles.length - 1 ? pendingAudio : null} startAudio={startAudio} skipAudio={skipAudio} job={b.job ? jobs[b.job] ?? null : null}
+          held={held.filter(h => b.held?.some(x => x.id === h.id))} doHeld={doHeld} skipHeld={skipHeld} />)}
         {draft != null && <div className="assist-bubble">{draft || '…'}</div>}
       </div>
       {status && <p className="assist-status">{status}</p>}
@@ -409,6 +429,11 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
             <button className="filled-button" onClick={() => startAudio(pendingAudio)}>{t('attach.start')}</button>
             <button className="text-button" onClick={skipAudio}>{t('common.cancel')}</button>
           </div>}
+          {held.map(h => <div key={h.id} className="reset-actions">
+            <small>{h.what}</small>
+            <button className="filled-button" onClick={() => doHeld(h)}>{t('assistant.heldDo')}</button>
+            <button className="text-button" onClick={() => skipHeld(h)}>{t('common.cancel')}</button>
+          </div>)}
         </div>
         <div className="assist-livebar">
           <button className="round assist-end" disabled={livePhase === 'stopping'} title={t('assistant.liveEnd')} onClick={() => endLive()}><Icon name="close" size={28} /></button>
@@ -420,8 +445,9 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
   )
 }
 
-function BubbleView({ b, pending, choose, call, cancel, mail, sendMail, keepMail, audio, startAudio, skipAudio, job }: { b: Bubble; pending: AssistCall | null; choose: (c: AssistChoice) => void; call: (c: AssistCall) => void; cancel: () => void
-  mail: AssistSend | null; sendMail: (m: AssistSend) => void; keepMail: () => void; audio: AssistAudio | null; startAudio: (a: AssistAudio) => void; skipAudio: () => void; job: AssistJob | null }) {
+function BubbleView({ b, pending, choose, call, cancel, mail, sendMail, keepMail, audio, startAudio, skipAudio, job, held, doHeld, skipHeld }: { b: Bubble; pending: AssistCall | null; choose: (c: AssistChoice) => void; call: (c: AssistCall) => void; cancel: () => void
+  mail: AssistSend | null; sendMail: (m: AssistSend) => void; keepMail: () => void; audio: AssistAudio | null; startAudio: (a: AssistAudio) => void; skipAudio: () => void; job: AssistJob | null
+  held: AssistHeld[]; doHeld: (h: AssistHeld) => void; skipHeld: (h: AssistHeld) => void }) {
   return (
     <div className={`assist-bubble ${b.mine ? 'mine' : ''} ${b.error ? 'error' : ''}`}>
       {b.files?.map((f, i) => <div key={i} className="assist-file"><Icon name={/\.pdf$/i.test(f.name) ? 'filePdf' : 'fileDoc'} size={22} /><span>{f.name}</span>{f.pages > 1 && <small>{t('attach.pages', { count: f.pages })}</small>}</div>)}
@@ -441,6 +467,14 @@ function BubbleView({ b, pending, choose, call, cancel, mail, sendMail, keepMail
         <button className="filled-button" onClick={() => call(pending)}><Icon name="call" size={18} /> {t('assistant.call', { name: pending.name })}</button>
         <button className="text-button" onClick={cancel}>{t('common.cancel')}</button>
       </div>}
+      {held.map(h => <div key={h.id} className="assist-mail">
+        <small>{t('assistant.heldWhy')}</small>
+        <p>{h.what}</p>
+        <div className="reset-actions">
+          <button className="filled-button" onClick={() => doHeld(h)}>{t('assistant.heldDo')}</button>
+          <button className="text-button" onClick={() => skipHeld(h)}>{t('common.cancel')}</button>
+        </div>
+      </div>)}
       {mail && <div className="assist-mail">
         <small>{t('mail.toField')}: {mail.to} · {mail.subject}</small>
         <p>{mail.preview}</p>

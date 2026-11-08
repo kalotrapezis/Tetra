@@ -362,6 +362,8 @@ function AssistCard() {
       <p className="muted">{t('assistant.wordsNote')}</p>
       <label className="cal-switch"><input type="checkbox" checked={s.contactWords} onChange={e => set({ contactWords: e.target.checked })} />
         <span><strong>{t('assistant.contactWords')}</strong><br />{t('assistant.contactWordsNote')}</span></label>
+      <label className="cal-switch"><input type="checkbox" checked={s.autoMemory} onChange={e => set({ autoMemory: e.target.checked })} />
+        <span><strong>{t('assistant.autoMemory')}</strong><br />{t('assistant.autoMemoryNote')}</span></label>
     </section>
     <section className="settings-card island">
       <h3><Icon name="volumeUp" size={20} />{t('assistant.voice')}</h3>

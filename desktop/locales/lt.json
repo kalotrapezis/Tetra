@@ -2817,5 +2817,16 @@
  "pills.needBoxSize": "Įrašyk, kiek tablečių yra naujoje dėžutėje",
  "pills.opened": "Turiu ir atidarytą dėžutę",
  "pills.hereNote": "Tavo vaistai ir išgertos dozės sinchronizuojami tarp telefono, planšetės ir kompiuterio. Skamba tik įrenginiai su įjungtu šiuo jungikliu, todėl į dozę atsakai tik kartą.",
- "settings.sum.pills": "Priminimai šiame kompiuteryje"
+ "settings.sum.pills": "Priminimai šiame kompiuteryje",
+ "assistant.autoMemory": "Mokytis apie mane pačiam",
+ "assistant.autoMemoryNote": "Po kiekvieno pokalbio trumpa papildoma užklausa peržiūri tik tai, ką pasakėte, ieškodama ilgalaikių faktų (šeima, darbas, kas patinka), ir saugo juos Asmeniniuose duomenyse, pažymėtus kaip išmoktus. Kartą per savaitę jie sutvarkomi.",
+ "assistant.heldWhy": "Perskaitęs kitų parašytą tekstą (paštas, internetas, failas) AI Assist nori tai padaryti. Tai įvyks tik jei pasakysite taip:",
+ "assistant.heldDo": "Daryti",
+ "assistant.heldDone": "Atlikta: {what}",
+ "assistant.heldSkipped": "Neatlikta.",
+ "memory.tidyTitle": "AI Assist: asmeniniai duomenys sutvarkyti",
+ "memory.tidyBody": "Pakeitimai ({count}) tame, ką AI Assist apie jus saugo.",
+ "memory.tidyMerged": "Sujungta: {from} → {to}",
+ "memory.tidyRewritten": "Perrašyta: {from} → {to}",
+ "memory.tidyDropped": "Pašalinta: {fact}"
 }

@@ -2633,5 +2633,16 @@
  "pills.needBoxSize": "Kirjuta, mitu tabletti on uues karbis",
  "pills.opened": "Mul on ka avatud karp",
  "pills.hereNote": "Sinu ravimid ja võetud annused sünkroonitakse telefoni, tahvelarvuti ja arvuti vahel. Helisevad ainult seadmed, kus see lüliti on sees, nii et vastad annusele ainult korra.",
- "settings.sum.pills": "Meeldetuletused selles arvutis"
+ "settings.sum.pills": "Meeldetuletused selles arvutis",
+ "assistant.autoMemory": "Õpi minu kohta ise",
+ "assistant.autoMemoryNote": "Pärast iga vestlust vaatab lühike lisapäring ainult seda, mida ütlesid, püsivate faktide leidmiseks (pere, töö, eelistused) ja hoiab neid isikuandmetes õpituna märgituna. Kord nädalas need korrastatakse.",
+ "assistant.heldWhy": "Pärast teiste kirjutatud teksti lugemist (e-kiri, veeb, fail) tahab AI Assist teha järgmist. See juhtub ainult siis, kui ütled jah:",
+ "assistant.heldDo": "Tee ära",
+ "assistant.heldDone": "Tehtud: {what}",
+ "assistant.heldSkipped": "Ei tehtud.",
+ "memory.tidyTitle": "AI Assist: isikuandmed korrastatud",
+ "memory.tidyBody": "{count} muudatus(t) selles, mida AI Assist sinu kohta hoiab.",
+ "memory.tidyMerged": "Ühendatud: {from} → {to}",
+ "memory.tidyRewritten": "Ümber kirjutatud: {from} → {to}",
+ "memory.tidyDropped": "Eemaldatud: {fact}"
 }

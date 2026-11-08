@@ -2633,5 +2633,16 @@
  "pills.needBoxSize": "Write how many pills a new box has",
  "pills.opened": "I also have an open box",
  "pills.hereNote": "Your medicines and what you took sync with your other devices. Only the ones with this on ring, so you answer once.",
- "settings.sum.pills": "Reminders on this computer"
+ "settings.sum.pills": "Reminders on this computer",
+ "assistant.autoMemory": "Learn about me by itself",
+ "assistant.autoMemoryNote": "After each chat, a short extra request looks only at what you said for lasting facts (family, work, what you like) and keeps them in Personal details, marked as learnt. Once a week they are tidied.",
+ "assistant.heldWhy": "After reading text others wrote (mail, the web, a file), AI Assist wants to do this. It happens only if you say yes:",
+ "assistant.heldDo": "Do it",
+ "assistant.heldDone": "Done: {what}",
+ "assistant.heldSkipped": "Not done.",
+ "memory.tidyTitle": "AI Assist: personal details tidied",
+ "memory.tidyBody": "{count} change(s) to what AI Assist keeps about you.",
+ "memory.tidyMerged": "Merged: {from} → {to}",
+ "memory.tidyRewritten": "Rewritten: {from} → {to}",
+ "memory.tidyDropped": "Dropped: {fact}"
 }
