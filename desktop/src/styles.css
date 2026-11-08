@@ -1871,3 +1871,5 @@ button.assist-cost { cursor: pointer; border: 0; font: inherit; color: inherit; 
 .pw-checks { display: flex; flex-wrap: wrap; gap: 16px; }
 .pw-check { display: flex; gap: 8px; align-items: center; cursor: pointer; }
 .pw-check input { accent-color: var(--pw-purple); }
+/* The maps fill their page whatever loads last: maplibre's own CSS comes with the lazy page now and set them relative, at no height (8 Nov: "maps on desktop is just a black screen") */
+.maps-canvas.maplibregl-map, .map.maplibregl-map { position: absolute; inset: 0; }
