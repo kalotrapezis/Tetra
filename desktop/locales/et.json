@@ -2667,5 +2667,16 @@
  "dock.mode.pinned": "Alati nähtav",
  "dock.mode.autohide": "Peidetud; ilmub, kui hiir jõuab vasakusse serva",
  "dock.mode.handle": "Peidetud vasaku serva sanga taha",
- "dock.show": "Näita rakendusi"
+ "dock.show": "Näita rakendusi",
+ "center.noDoses": "Täna annuseid pole",
+ "center.allTaken": "Praegu kõik võetud",
+ "center.noTimers": "Ükski taimer ei tööta",
+ "center.nextAlarm": "Järgmine äratus {time}",
+ "center.noAlarm": "Äratust pole",
+ "center.noMissed": "Vastamata kõnesid pole",
+ "center.callBack": "Helista tagasi",
+ "center.noUnread": "Lugemata sõnumeid pole",
+ "center.reply": "Vasta…",
+ "center.daysLeft": "{days} päeva jäänud",
+ "center.forecast": "Selle tempoga: {size} lõpuks"
 }

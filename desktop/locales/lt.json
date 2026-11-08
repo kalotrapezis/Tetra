@@ -2851,5 +2851,16 @@
  "dock.mode.pinned": "Visada matomas",
  "dock.mode.autohide": "Paslėptas; atsiranda, kai pelė pasiekia kairįjį kraštą",
  "dock.mode.handle": "Paslėptas už rankenėlės kairiajame krašte",
- "dock.show": "Rodyti programas"
+ "dock.show": "Rodyti programas",
+ "center.noDoses": "Šiandien dozių nėra",
+ "center.allTaken": "Kol kas viskas išgerta",
+ "center.noTimers": "Laikmatis neveikia",
+ "center.nextAlarm": "Kitas žadintuvas {time}",
+ "center.noAlarm": "Žadintuvo nėra",
+ "center.noMissed": "Praleistų skambučių nėra",
+ "center.callBack": "Perskambinti",
+ "center.noUnread": "Neskaitytų žinučių nėra",
+ "center.reply": "Atsakyti…",
+ "center.daysLeft": "Liko {days} d.",
+ "center.forecast": "Tokiu tempu: {size} iki pabaigos"
 }

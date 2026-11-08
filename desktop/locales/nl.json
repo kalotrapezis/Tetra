@@ -2667,5 +2667,16 @@
  "dock.mode.pinned": "Altijd zichtbaar",
  "dock.mode.autohide": "Verborgen; verschijnt als de muis de linkerrand raakt",
  "dock.mode.handle": "Verborgen achter een greep aan de linkerrand",
- "dock.show": "Apps tonen"
+ "dock.show": "Apps tonen",
+ "center.noDoses": "Vandaag geen doses",
+ "center.allTaken": "Voorlopig alles genomen",
+ "center.noTimers": "Geen timer actief",
+ "center.nextAlarm": "Volgende wekker {time}",
+ "center.noAlarm": "Geen wekker",
+ "center.noMissed": "Geen gemiste oproepen",
+ "center.callBack": "Terugbellen",
+ "center.noUnread": "Geen ongelezen berichten",
+ "center.reply": "Antwoorden…",
+ "center.daysLeft": "Nog {days} dagen",
+ "center.forecast": "In dit tempo: {size} aan het eind"
 }

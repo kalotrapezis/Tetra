@@ -2759,5 +2759,16 @@
  "dock.mode.pinned": "Mereu vizibil",
  "dock.mode.autohide": "Ascuns; apare când mouse-ul atinge marginea stângă",
  "dock.mode.handle": "Ascuns după un mâner la marginea stângă",
- "dock.show": "Arată aplicațiile"
+ "dock.show": "Arată aplicațiile",
+ "center.noDoses": "Nicio doză azi",
+ "center.allTaken": "Totul luat deocamdată",
+ "center.noTimers": "Niciun cronometru pornit",
+ "center.nextAlarm": "Următoarea alarmă {time}",
+ "center.noAlarm": "Nicio alarmă",
+ "center.noMissed": "Niciun apel pierdut",
+ "center.callBack": "Sună înapoi",
+ "center.noUnread": "Niciun mesaj necitit",
+ "center.reply": "Răspunde…",
+ "center.daysLeft": "Mai sunt {days} zile",
+ "center.forecast": "În acest ritm: {size} la final"
 }

@@ -14,7 +14,7 @@ const SMS = '#2E9E5B'
 interface Thread { id: number; address: string; last: SmsMessage; unread: number }
 
 /** The conversations, newest first (the phone's SmsRules.threads). */
-function threadsOf(list: SmsMessage[]): Thread[] {
+export function threadsOf(list: SmsMessage[]): Thread[] {
   const by = new Map<number, SmsMessage[]>()
   for (const m of list) (by.get(m.thread) ?? by.set(m.thread, []).get(m.thread)!).push(m)
   return [...by.entries()].map(([id, ms]) => {

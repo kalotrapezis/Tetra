@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { AiSettings, MemoryFact, AppNotification, AssistSettings, AssistShortcuts, CleanItem } from './drive'
+import type { AiSettings, MemoryFact, AssistSettings, AssistShortcuts, CleanItem } from './drive'
 import { ScheduleList } from './Schedules'
 import { accelerator, money } from './assist'
 import { Icon, type IconName } from './Icon'
@@ -15,34 +15,6 @@ import { PillsSettings } from './Pills'
 // The foot of the sidebar (asked 2026-09-26): what Tetra said, kept — a notification goes by in seconds — and Settings.
 
 /** Each notification's applet (main.js notify()), by its icon in the rail; older ones, from before 4 Nov, keep the bell. */
-const NOTICE_ICON: Record<string, IconName> = { mail: 'mail', calendar: 'calendar', timer: 'timer', pills: 'pill', maps: 'map', phone: 'call', assistant: 'sparkle', sync: 'refresh', photos: 'photos', files: 'drive' }
-
-export function NotificationsPage() {
-  const [list, setList] = useState<AppNotification[] | null>(null)
-  const load = () => window.drive.notifications.list().then(l => { setList(l); window.drive.notifications.read() })
-  useEffect(() => { load(); return window.drive.notifications.onChange(load) }, [])
-  const day = (at: number) => new Date(at).toLocaleDateString(locale(), { weekday: 'long', day: 'numeric', month: 'long' })
-  return (
-    <div className="page-scroll">
-      <header className="page-head">
-        <h1>{t('app.notifications')}</h1>
-        {!!list?.length && <button className="text-button" onClick={() => window.drive.notifications.clear().then(load)}>{t('notifications.clearAll')}</button>}
-      </header>
-      {list?.length === 0 && <div className="empty"><p>{t('notifications.empty')}</p></div>}
-      <div className="notice-list">
-        {list?.map((n, i) => <div key={n.id}>
-          {(i === 0 || day(list[i - 1].at) !== day(n.at)) && <h4 className="notice-day">{day(n.at)}</h4>}
-          <div className={`notice island ${n.read ? '' : 'unread'}`}>
-            <Icon name={NOTICE_ICON[n.applet ?? ''] ?? 'bell'} size={20} />
-            <div><strong>{n.title}</strong>{n.body && <p>{n.body}</p>}</div>
-            <small>{new Date(n.at).toLocaleTimeString(locale(), { hour: '2-digit', minute: '2-digit' })}</small>
-          </div>
-        </div>)}
-      </div>
-    </div>
-  )
-}
-
 /** Settings' pages, as the phone's (SettingsScreen.SettingsPage): the general ones, then one an app in its colour. */
 type SettingsTab = 'appearance' | 'computer' | 'cleanUp' | 'photos' | 'mail' | 'maps' | 'phone' | 'pills' | 'assistant'
 const GENERAL: { id: SettingsTab; icon: IconName; title: string; summary: string }[] = [

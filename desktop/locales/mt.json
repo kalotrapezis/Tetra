@@ -2851,5 +2851,16 @@
  "dock.mode.pinned": "Dejjem jidher",
  "dock.mode.autohide": "Moħbi; jidher meta l-maws jilħaq it-tarf tax-xellug",
  "dock.mode.handle": "Moħbi wara manku fit-tarf tax-xellug",
- "dock.show": "Uri l-apps"
+ "dock.show": "Uri l-apps",
+ "center.noDoses": "L-ebda doża llum",
+ "center.allTaken": "Kollox meħud għalissa",
+ "center.noTimers": "L-ebda tajmer għaddej",
+ "center.nextAlarm": "L-allarm li jmiss {time}",
+ "center.noAlarm": "L-ebda allarm",
+ "center.noMissed": "L-ebda telefonata mitlufa",
+ "center.callBack": "Ċempel lura",
+ "center.noUnread": "L-ebda messaġġ mhux moqri",
+ "center.reply": "Wieġeb…",
+ "center.daysLeft": "Fadal {days} jiem",
+ "center.forecast": "B’dan ir-ritmu: {size} sal-aħħar"
 }

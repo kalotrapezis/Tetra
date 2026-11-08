@@ -2667,5 +2667,16 @@
  "dock.mode.pinned": "Винаги видим",
  "dock.mode.autohide": "Скрит; показва се, когато мишката стигне левия край",
  "dock.mode.handle": "Скрит зад дръжка в левия край",
- "dock.show": "Покажи приложенията"
+ "dock.show": "Покажи приложенията",
+ "center.noDoses": "Няма дози днес",
+ "center.allTaken": "Всичко е взето засега",
+ "center.noTimers": "Няма работещ таймер",
+ "center.nextAlarm": "Следваща аларма {time}",
+ "center.noAlarm": "Няма аларма",
+ "center.noMissed": "Няма пропуснати",
+ "center.callBack": "Обади се",
+ "center.noUnread": "Няма непрочетени",
+ "center.reply": "Отговор…",
+ "center.daysLeft": "Остават {days} дни",
+ "center.forecast": "С това темпо: {size} до края"
 }

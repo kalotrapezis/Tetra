@@ -2667,5 +2667,16 @@
  "dock.mode.pinned": "Immer sichtbar",
  "dock.mode.autohide": "Ausgeblendet; erscheint, wenn die Maus den linken Rand erreicht",
  "dock.mode.handle": "Ausgeblendet hinter einem Griff am linken Rand",
- "dock.show": "Apps zeigen"
+ "dock.show": "Apps zeigen",
+ "center.noDoses": "Heute keine Dosen",
+ "center.allTaken": "Vorerst alles genommen",
+ "center.noTimers": "Kein Timer läuft",
+ "center.nextAlarm": "Nächster Wecker {time}",
+ "center.noAlarm": "Kein Wecker",
+ "center.noMissed": "Keine verpassten Anrufe",
+ "center.callBack": "Zurückrufen",
+ "center.noUnread": "Keine ungelesenen Nachrichten",
+ "center.reply": "Antworten…",
+ "center.daysLeft": "Noch {days} Tage",
+ "center.forecast": "In diesem Tempo: {size} bis zum Ende"
 }

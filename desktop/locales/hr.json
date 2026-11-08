@@ -2758,5 +2758,16 @@
  "dock.mode.pinned": "Uvijek vidljiv",
  "dock.mode.autohide": "Skriven; pojavi se kad miš dođe do lijevog ruba",
  "dock.mode.handle": "Skriven iza ručke na lijevom rubu",
- "dock.show": "Prikaži aplikacije"
+ "dock.show": "Prikaži aplikacije",
+ "center.noDoses": "Danas nema doza",
+ "center.allTaken": "Zasad sve uzeto",
+ "center.noTimers": "Nijedan mjerač ne radi",
+ "center.nextAlarm": "Sljedeći alarm {time}",
+ "center.noAlarm": "Nema alarma",
+ "center.noMissed": "Nema propuštenih poziva",
+ "center.callBack": "Uzvrati poziv",
+ "center.noUnread": "Nema nepročitanih poruka",
+ "center.reply": "Odgovori…",
+ "center.daysLeft": "Još {days} dana",
+ "center.forecast": "Ovim tempom: {size} do kraja"
 }

@@ -2667,5 +2667,16 @@
  "dock.mode.pinned": "Aina näkyvissä",
  "dock.mode.autohide": "Piilossa; tulee esiin, kun hiiri vie vasempaan reunaan",
  "dock.mode.handle": "Piilossa vasemman reunan kahvan takana",
- "dock.show": "Näytä sovellukset"
+ "dock.show": "Näytä sovellukset",
+ "center.noDoses": "Ei annoksia tänään",
+ "center.allTaken": "Kaikki otettu toistaiseksi",
+ "center.noTimers": "Ajastin ei ole käynnissä",
+ "center.nextAlarm": "Seuraava herätys {time}",
+ "center.noAlarm": "Ei herätystä",
+ "center.noMissed": "Ei vastaamattomia puheluja",
+ "center.callBack": "Soita takaisin",
+ "center.noUnread": "Ei lukemattomia viestejä",
+ "center.reply": "Vastaa…",
+ "center.daysLeft": "{days} päivää jäljellä",
+ "center.forecast": "Tällä tahdilla: {size} loppuun mennessä"
 }

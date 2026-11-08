@@ -2667,5 +2667,16 @@
  "dock.mode.pinned": "Alltid synlig",
  "dock.mode.autohide": "Dold; visas när musen når vänsterkanten",
  "dock.mode.handle": "Dold bakom ett handtag vid vänsterkanten",
- "dock.show": "Visa apparna"
+ "dock.show": "Visa apparna",
+ "center.noDoses": "Inga doser i dag",
+ "center.allTaken": "Allt taget för nu",
+ "center.noTimers": "Ingen timer igång",
+ "center.nextAlarm": "Nästa alarm {time}",
+ "center.noAlarm": "Inget alarm",
+ "center.noMissed": "Inga missade samtal",
+ "center.callBack": "Ring tillbaka",
+ "center.noUnread": "Inga olästa meddelanden",
+ "center.reply": "Svara…",
+ "center.daysLeft": "{days} dagar kvar",
+ "center.forecast": "I den här takten: {size} vid slutet"
 }

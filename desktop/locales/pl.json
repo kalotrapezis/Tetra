@@ -2851,5 +2851,16 @@
  "dock.mode.pinned": "Zawsze widoczny",
  "dock.mode.autohide": "Ukryty; pojawia się, gdy mysz dotknie lewej krawędzi",
  "dock.mode.handle": "Ukryty za uchwytem przy lewej krawędzi",
- "dock.show": "Pokaż aplikacje"
+ "dock.show": "Pokaż aplikacje",
+ "center.noDoses": "Dziś brak dawek",
+ "center.allTaken": "Na razie wszystko przyjęte",
+ "center.noTimers": "Żaden minutnik nie działa",
+ "center.nextAlarm": "Następny alarm {time}",
+ "center.noAlarm": "Brak alarmu",
+ "center.noMissed": "Brak nieodebranych połączeń",
+ "center.callBack": "Oddzwoń",
+ "center.noUnread": "Brak nieprzeczytanych wiadomości",
+ "center.reply": "Odpowiedz…",
+ "center.daysLeft": "Zostało {days} dni",
+ "center.forecast": "W tym tempie: {size} do końca"
 }

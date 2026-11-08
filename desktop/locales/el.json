@@ -2667,5 +2667,16 @@
  "dock.mode.pinned": "Πάντα ορατό",
  "dock.mode.autohide": "Κρυφό· ανοίγει όταν το ποντίκι φτάσει στην αριστερή άκρη",
  "dock.mode.handle": "Κρυφό πίσω από μια λαβή στην αριστερή άκρη",
- "dock.show": "Εμφάνιση εφαρμογών"
+ "dock.show": "Εμφάνιση εφαρμογών",
+ "center.noDoses": "Καμία δόση σήμερα",
+ "center.allTaken": "Όλα παρμένα για τώρα",
+ "center.noTimers": "Κανένα χρονόμετρο σε λειτουργία",
+ "center.nextAlarm": "Επόμενο ξυπνητήρι {time}",
+ "center.noAlarm": "Κανένα ξυπνητήρι",
+ "center.noMissed": "Καμία αναπάντητη",
+ "center.callBack": "Κλήση πίσω",
+ "center.noUnread": "Κανένα αδιάβαστο μήνυμα",
+ "center.reply": "Απάντηση…",
+ "center.daysLeft": "{days} ημέρες ακόμα",
+ "center.forecast": "Με αυτόν τον ρυθμό: {size} ως το τέλος"
 }

@@ -2667,5 +2667,16 @@
  "dock.mode.pinned": "Always shown",
  "dock.mode.autohide": "Hide; show when the mouse reaches the left edge",
  "dock.mode.handle": "Hide behind a handle at the left edge",
- "dock.show": "Show the apps"
+ "dock.show": "Show the apps",
+ "center.noDoses": "No doses today",
+ "center.allTaken": "All taken for now",
+ "center.noTimers": "No timer running",
+ "center.nextAlarm": "Next alarm {time}",
+ "center.noAlarm": "No alarm set",
+ "center.noMissed": "No missed calls",
+ "center.callBack": "Call back",
+ "center.noUnread": "No unread messages",
+ "center.reply": "Reply…",
+ "center.daysLeft": "{days} days left",
+ "center.forecast": "At this pace: {size} by the end"
 }
