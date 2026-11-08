@@ -2769,5 +2769,11 @@
  "center.noUnread": "Nelasītu ziņu nav",
  "center.reply": "Atbildēt…",
  "center.daysLeft": "Atlikušas {days} dienas",
- "center.forecast": "Šādā tempā: {size} līdz beigām"
+ "center.forecast": "Šādā tempā: {size} līdz beigām",
+ "usage.history": "Vēsture",
+ "usage.tab.days": "Dienas",
+ "usage.tab.months": "Mēneši",
+ "usage.tab.years": "Gadi",
+ "usage.saved": "Saglabāts ✓",
+ "usage.more": "Vēl {count}"
 }

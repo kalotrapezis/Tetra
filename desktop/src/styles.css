@@ -1832,3 +1832,10 @@ button.assist-cost { cursor: pointer; border: 0; font: inherit; color: inherit; 
 .center-check:hover svg { color: var(--c); }
 .center-clear { justify-self: start; align-self: flex-start; }
 @media (max-width: 1100px) { .center { grid-template-columns: 1fr; } .center-cards { order: -1; } }
+
+/* Usage's history (8 Nov): days, months, years, newest first */
+.usage-history-tabs { display: flex; gap: 8px; margin: 4px 0 8px; }
+.usage-history { width: 100%; border-collapse: collapse; }
+.usage-history td { padding: 6px 4px; border-bottom: 1px solid var(--hover); }
+.usage-history td:last-child { text-align: right; font-weight: 600; white-space: nowrap; }
+.usage-history td:nth-child(2) { text-align: right; width: 4em; }

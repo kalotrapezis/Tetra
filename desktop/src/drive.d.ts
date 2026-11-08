@@ -58,7 +58,9 @@ export interface AssistJob { id: string; title: string; state: 'running' | 'done
 export interface UsageSummary { today: number; month: number; all: number; since: number; meter: number; days: { day: string; usd: number }[]
   byFeature: { key: string; usd: number; n: number }[]; byModel: { key: string; usd: number; n: number }[]; byDevice: { key: string; usd: number; n: number }[]
   files: { key: string; usd: number; n: number }[]; mp3s: { title: string; seconds: number; usd: number; at: number; device: string }[]
-  budget: { monthly: number | null; warned: string }; prices: { checked: string; list: { model: string; price: string; per: string }[] } }
+  budget: { monthly: number | null; warned: string }; prices: { checked: string; list: { model: string; price: string; per: string }[] }
+  history: { days: UsagePeriod[]; months: UsagePeriod[]; years: UsagePeriod[] } }
+export interface UsagePeriod { key: string; usd: number; n: number }
 /** A call held after text from others (mail, the web, a file): done only on the user's yes; [what] is exactly what it does. */
 export interface AssistHeld { id: string; what: string }
 export interface AssistReply { text: string; choices: AssistChoice[]; call: AssistCall | null; send: AssistSend | null; images: string[]; open: string | null; go: AssistGo | null; audio: AssistAudio | null; held: AssistHeld[]; spent: number }

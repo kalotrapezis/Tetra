@@ -2770,5 +2770,11 @@
  "center.noUnread": "Sem mensagens por ler",
  "center.reply": "Responder…",
  "center.daysLeft": "Faltam {days} dias",
- "center.forecast": "A este ritmo: {size} no fim"
+ "center.forecast": "A este ritmo: {size} no fim",
+ "usage.history": "Histórico",
+ "usage.tab.days": "Dias",
+ "usage.tab.months": "Meses",
+ "usage.tab.years": "Anos",
+ "usage.saved": "Guardado ✓",
+ "usage.more": "Mais {count}"
 }

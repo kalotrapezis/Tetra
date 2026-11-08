@@ -2678,5 +2678,11 @@
  "center.noUnread": "Nincs olvasatlan üzenet",
  "center.reply": "Válasz…",
  "center.daysLeft": "Még {days} nap",
- "center.forecast": "Ilyen ütemben: {size} a végére"
+ "center.forecast": "Ilyen ütemben: {size} a végére",
+ "usage.history": "Előzmények",
+ "usage.tab.days": "Napok",
+ "usage.tab.months": "Hónapok",
+ "usage.tab.years": "Évek",
+ "usage.saved": "Mentve ✓",
+ "usage.more": "További {count}"
 }

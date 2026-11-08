@@ -2862,5 +2862,11 @@
  "center.noUnread": "Brak nieprzeczytanych wiadomości",
  "center.reply": "Odpowiedz…",
  "center.daysLeft": "Zostało {days} dni",
- "center.forecast": "W tym tempie: {size} do końca"
+ "center.forecast": "W tym tempie: {size} do końca",
+ "usage.history": "Historia",
+ "usage.tab.days": "Dni",
+ "usage.tab.months": "Miesiące",
+ "usage.tab.years": "Lata",
+ "usage.saved": "Zapisano ✓",
+ "usage.more": "Jeszcze {count}"
 }

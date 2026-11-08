@@ -2740,5 +2740,11 @@
  "center.noUnread": "Sin mensajes sin leer",
  "center.reply": "Responder…",
  "center.daysLeft": "Quedan {days} días",
- "center.forecast": "A este ritmo: {size} al final"
+ "center.forecast": "A este ritmo: {size} al final",
+ "usage.history": "Historial",
+ "usage.tab.days": "Días",
+ "usage.tab.months": "Meses",
+ "usage.tab.years": "Años",
+ "usage.saved": "Guardado ✓",
+ "usage.more": "{count} más"
 }

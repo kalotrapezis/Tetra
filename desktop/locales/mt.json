@@ -2862,5 +2862,11 @@
  "center.noUnread": "L-ebda messaġġ mhux moqri",
  "center.reply": "Wieġeb…",
  "center.daysLeft": "Fadal {days} jiem",
- "center.forecast": "B’dan ir-ritmu: {size} sal-aħħar"
+ "center.forecast": "B’dan ir-ritmu: {size} sal-aħħar",
+ "usage.history": "Storja",
+ "usage.tab.days": "Jiem",
+ "usage.tab.months": "Xhur",
+ "usage.tab.years": "Snin",
+ "usage.saved": "Issejvjat ✓",
+ "usage.more": "{count} oħra"
 }

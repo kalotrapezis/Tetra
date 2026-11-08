@@ -2678,5 +2678,11 @@
  "center.noUnread": "Geen ongelezen berichten",
  "center.reply": "Antwoorden…",
  "center.daysLeft": "Nog {days} dagen",
- "center.forecast": "In dit tempo: {size} aan het eind"
+ "center.forecast": "In dit tempo: {size} aan het eind",
+ "usage.history": "Geschiedenis",
+ "usage.tab.days": "Dagen",
+ "usage.tab.months": "Maanden",
+ "usage.tab.years": "Jaren",
+ "usage.saved": "Opgeslagen ✓",
+ "usage.more": "Nog {count}"
 }

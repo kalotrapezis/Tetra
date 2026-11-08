@@ -2862,5 +2862,11 @@
  "center.noUnread": "Neskaitytų žinučių nėra",
  "center.reply": "Atsakyti…",
  "center.daysLeft": "Liko {days} d.",
- "center.forecast": "Tokiu tempu: {size} iki pabaigos"
+ "center.forecast": "Tokiu tempu: {size} iki pabaigos",
+ "usage.history": "Istorija",
+ "usage.tab.days": "Dienos",
+ "usage.tab.months": "Mėnesiai",
+ "usage.tab.years": "Metai",
+ "usage.saved": "Išsaugota ✓",
+ "usage.more": "Dar {count}"
 }

@@ -2770,5 +2770,11 @@
  "center.noUnread": "Niciun mesaj necitit",
  "center.reply": "Răspunde…",
  "center.daysLeft": "Mai sunt {days} zile",
- "center.forecast": "În acest ritm: {size} la final"
+ "center.forecast": "În acest ritm: {size} la final",
+ "usage.history": "Istoric",
+ "usage.tab.days": "Zile",
+ "usage.tab.months": "Luni",
+ "usage.tab.years": "Ani",
+ "usage.saved": "Salvat ✓",
+ "usage.more": "Încă {count}"
 }

@@ -2678,5 +2678,11 @@
  "center.noUnread": "Няма непрочетени",
  "center.reply": "Отговор…",
  "center.daysLeft": "Остават {days} дни",
- "center.forecast": "С това темпо: {size} до края"
+ "center.forecast": "С това темпо: {size} до края",
+ "usage.history": "История",
+ "usage.tab.days": "Дни",
+ "usage.tab.months": "Месеци",
+ "usage.tab.years": "Години",
+ "usage.saved": "Запазено ✓",
+ "usage.more": "Още {count}"
 }

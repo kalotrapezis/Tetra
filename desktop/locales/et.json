@@ -2678,5 +2678,11 @@
  "center.noUnread": "Lugemata sõnumeid pole",
  "center.reply": "Vasta…",
  "center.daysLeft": "{days} päeva jäänud",
- "center.forecast": "Selle tempoga: {size} lõpuks"
+ "center.forecast": "Selle tempoga: {size} lõpuks",
+ "usage.history": "Ajalugu",
+ "usage.tab.days": "Päevad",
+ "usage.tab.months": "Kuud",
+ "usage.tab.years": "Aastad",
+ "usage.saved": "Salvestatud ✓",
+ "usage.more": "Veel {count}"
 }
