@@ -122,6 +122,13 @@ export interface PillsView { now: number; day: number; meds: PillMed[]; doses: P
 export interface PillEvent { at: number; med: string; kind: string; due: number | null; amount: number; stock: number; note: string }
 export interface TimerItem { id: string; seconds: number; label: string; state: 'running' | 'paused' | 'stopped'; ends: number | null; left: number; rev: number; by: string; pinned: boolean; leftMs: number; ringing: boolean; ready: boolean }
 
+/** Passwords (passwords.js): recipe = a passphrase chosen by some device; kept = its key kept here; need = asked (again); open = unlocked. */
+export interface PasswordsStatus { recipe: boolean; kept: boolean; need: boolean; open: boolean }
+export interface Login { key?: string; host: string; user: string; password: string; note: string; pinned: boolean }
+export interface Card { key?: string; name: string; number: string; month: string; year: string }
+export interface Address { key: string; fields: Record<string, string> }
+export interface OtpCode { key?: string; issuer: string; account: string; secret: string; algorithm: string; digits: number; period: number; pinned: boolean }
+export interface PasswordsList { logins: Login[]; cards: Card[]; addresses: Address[]; codes: OtpCode[]; devices: number; unreadable: number }
 export interface VaultStatus { configured: boolean; unlocked: boolean; count: number }
 export interface VaultItem { id: string; sha256: string; name: string; rel_path: string; mime: string; is_video: number; size: number; taken_at: number; has_thumb: number }
 
@@ -300,6 +307,21 @@ declare global {
         list(): Promise<{ messages?: SmsMessage[]; device?: string; error?: string }>
         send(to: string, text: string): Promise<{ ok?: boolean; error?: string }>
         read(thread: number): Promise<{ ok?: boolean; error?: string }>
+      }
+      passwords: {
+        status(): Promise<PasswordsStatus>
+        passphrase(pass: string, isNew?: boolean): Promise<void>
+        open(secret: string): Promise<void>
+        lock(): Promise<void>
+        forget(): Promise<void>
+        list(): Promise<PasswordsList>
+        change(kind: 'passwords' | '2fa', old: string | null, item: Login | Card | { fields: Record<string, string> } | OtpCode | null): Promise<PasswordsList>
+        codes(): Promise<{ key: string; code: string; left: number }[]>
+        otpauth(link: string): Promise<Omit<OtpCode, 'key' | 'pinned'> | null>
+        words(): Promise<string[]>
+        copy(text: string): Promise<void>
+        onLocked(cb: () => void): () => void
+        onChanged(cb: () => void): () => void
       }
       timer: {
         active(): Promise<TimerItem[]>

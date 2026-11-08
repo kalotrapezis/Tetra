@@ -1,0 +1,10 @@
+{
+ "v": 1,
+ "kdf": "argon2id",
+ "m": 1024,
+ "t": 1,
+ "p": 1,
+ "salt": "nFCtWHnMExfVig4Q26X/Lw==",
+ "nonce": "kpM3jeVpnO9o/lig",
+ "data": "n0L60TgwCik8qc8XTe9gG8DtjH1NP4zH9Gx+unBgpnjsUBQ4PDKrEQWsY+ArTLlx/OTgFe1cP2kwMwyMHXgshCUvc+PEMKAqtWpsUu3bP2OXISIWJ/qnPy1XP7xHVdGDeBJ1ZKkDNefbkXtUx9Tyvko0rG47+LcJNMgsoOA++IUucZBFbrOM5RZ3gO/V7ONscE3GIe9fxGykeHsHk4MDbZOWmAkemcoEM3Avf/FQpVVu6bItkvEJRstCJWNEfdmkUK3V63u+oldw2AY8UNaREnzhh0GmDf8uql1SabYPdQ6CzYjXsaxswqkWLkBvoy9ibxEXIzQBlquzFdGRV4722dVZozWF0gz6Pg=="
+}

@@ -1,3 +1,12 @@
+> **Passwords and 2FA (4 Nov 2026, branch `claude/desktop-passwords-a67b52`; not merged, not pushed).** The phone's Passwords
+> applet (Tetra-mobile `claude/password-manager-29e709`, SYNC_PLAN 6aw) on the desktop: `desktop/passwords.js` reads and writes
+> `.System/Browser/Shared/{Passwords,TwoFactor}/<device>.enc` in the phone's format (Argon2id by libsodium, AES-256-GCM, the
+> SecretSet merge; values written with Android org.json's `\/`, or the phone would read them as changed). This computer's file
+> is `<hostname>-<6 of machine-id>.enc`; its key and merge bases are in library.db's settings (`passwords:*`, safeStorage), never
+> in ~/Tetra. The page (`src/Passwords.tsx`) locks at start, after 5 min away and when the screen locks; it opens with the
+> computer's login password (PAM's unix_chkpwd) or the sync passphrase. Tests: `test/passwords.test.js` on files made by
+> `test/fixtures/passwords/Make.java` (BouncyCastle, RFC 9106-checked, as the phone). EFF word list in `data/` (CC BY 3.0).
+
 > **Mail, step 1 (31 Oct 2026, branch `mail`, worktree Tetra-worktrees/mail; not merged, not pushed).** The plan is
 > Tetra-mobile's MAIL_PLAN.md (§10 step 1). `desktop/mail.js`: accounts (address → known provider / Thunderbird's
 > autoconfig / the domain's autoconfig / MX / imap.·mail. guesses), the password checked against the server, then kept
