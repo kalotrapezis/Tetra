@@ -2655,5 +2655,17 @@
  "memory.tidyBody": "{count} muudatus(t) selles, mida AI Assist sinu kohta hoiab.",
  "memory.tidyMerged": "Ühendatud: {from} → {to}",
  "memory.tidyRewritten": "Ümber kirjutatud: {from} → {to}",
- "memory.tidyDropped": "Eemaldatud: {fact}"
+ "memory.tidyDropped": "Eemaldatud: {fact}",
+ "dock.more": "Veel",
+ "dock.edit": "Muuda dokki",
+ "dock.editNote": "Märgitud rakendused on dokis, teised ootavad ⋯ all. Nooled muudavad järjekorda.",
+ "dock.up": "Üles",
+ "dock.down": "Alla",
+ "dock.look": "Välimus",
+ "dock.iconsOnly": "Ainult ikoonid",
+ "dock.showing": "Nähtavus",
+ "dock.mode.pinned": "Alati nähtav",
+ "dock.mode.autohide": "Peidetud; ilmub, kui hiir jõuab vasakusse serva",
+ "dock.mode.handle": "Peidetud vasaku serva sanga taha",
+ "dock.show": "Näita rakendusi"
 }

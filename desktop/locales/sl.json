@@ -2839,5 +2839,17 @@
  "memory.tidyBody": "Spremembe ({count}) v tem, kar AI Assist hrani o vas.",
  "memory.tidyMerged": "Združeno: {from} → {to}",
  "memory.tidyRewritten": "Prepisano: {from} → {to}",
- "memory.tidyDropped": "Odstranjeno: {fact}"
+ "memory.tidyDropped": "Odstranjeno: {fact}",
+ "dock.more": "Več",
+ "dock.edit": "Uredi dok",
+ "dock.editNote": "Označene aplikacije so v doku; druge čakajo pod ⋯. Puščice spremenijo vrstni red.",
+ "dock.up": "Gor",
+ "dock.down": "Dol",
+ "dock.look": "Videz",
+ "dock.iconsOnly": "Samo ikone",
+ "dock.showing": "Prikaz",
+ "dock.mode.pinned": "Vedno viden",
+ "dock.mode.autohide": "Skrit; pokaže se, ko miška doseže levi rob",
+ "dock.mode.handle": "Skrit za ročajem na levem robu",
+ "dock.show": "Pokaži aplikacije"
 }

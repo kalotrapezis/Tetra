@@ -1757,3 +1757,32 @@ button.link.risk { color: #d8663f; font-weight: 600; }
 .usage-prices table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 13px; }
 .usage-prices td { padding: 4px 6px; border-bottom: 1px solid var(--hover); }
 button.assist-cost { cursor: pointer; border: 0; font: inherit; color: inherit; }
+
+/* The dock (the user, 8 Nov): icons only, ⋯ for what does not fit, auto-hide at the window's edge or behind a handle */
+.app { position: relative; }
+.rail-apps { flex: 1 1 auto; overflow: hidden; }
+.rail-apps > .nav-item, .rail-bottom > .nav-item { position: relative; flex: none; }
+.dock-more.open:not(.active) { background: var(--hover); }
+.dock-more-body { position: fixed; top: auto; right: auto; width: 240px; padding: 8px; gap: 2px; overflow-y: auto; }
+.dock-more-body .nav-item { width: 100%; }
+.rail.icons { width: 72px; padding: 16px 10px; }
+.rail.icons .nav-item { justify-content: center; padding: 12px; }
+.rail.icons .nav-item > span:not(.badge-count), .rail.icons .brand-name, .rail.icons .alpha-badge, .rail.icons .beta-badge,
+.rail.icons .rail-foot > span, .rail.icons .rail-progress span { display: none; }
+.rail.icons .brand { justify-content: center; padding: 4px 0 20px; }
+.rail.icons .rail-foot { justify-content: center; padding: 0; }
+.rail.icons .rail-progress { padding: 0 4px 8px; }
+.rail.icons .badge-count { position: absolute; top: 2px; right: 2px; margin: 0; }
+.rail.floating { position: absolute; left: 12px; top: 12px; bottom: 12px; z-index: 30; box-shadow: 0 8px 30px #0006; transition: transform .18s ease, opacity .18s ease; }
+.rail.floating.away { transform: translateX(calc(-100% - 24px)); opacity: 0; pointer-events: none; }
+.dock-edge { position: fixed; left: 0; top: 0; bottom: 0; width: 6px; z-index: 31; }
+.dock-nipple { position: fixed; left: 0; top: 50%; transform: translateY(-50%); width: 10px; height: 72px; border-radius: 0 999px 999px 0; background: var(--accent); opacity: .55; z-index: 31; }
+.dock-nipple:hover { opacity: 1; width: 14px; }
+.dock-edit-list { display: grid; gap: 2px; margin: 8px 0 12px; max-height: 50vh; overflow-y: auto; }
+.dock-edit-row { display: flex; align-items: center; gap: 4px; }
+.dock-edit-row label { flex: 1; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.dock-edit-row .round { width: 32px; height: 32px; }
+.round.flip svg { transform: rotate(180deg); }
+@media (max-width: 1000px) { .dock-more-body .nav-item { font-size: inherit; justify-content: flex-start; padding: 10px 14px; } }
+.dock-edit-opts { display: grid; gap: 8px; }
+.dock-edit-opts label { display: flex; gap: 10px; align-items: center; cursor: pointer; }

@@ -2839,5 +2839,17 @@
  "memory.tidyBody": "Zmiany ({count}) w tym, co AI Assist o tobie przechowuje.",
  "memory.tidyMerged": "Połączono: {from} → {to}",
  "memory.tidyRewritten": "Przepisano: {from} → {to}",
- "memory.tidyDropped": "Usunięto: {fact}"
+ "memory.tidyDropped": "Usunięto: {fact}",
+ "dock.more": "Więcej",
+ "dock.edit": "Edytuj dok",
+ "dock.editNote": "Zaznaczone aplikacje są w doku; pozostałe czekają pod ⋯. Strzałki zmieniają kolejność.",
+ "dock.up": "W górę",
+ "dock.down": "W dół",
+ "dock.look": "Wygląd",
+ "dock.iconsOnly": "Tylko ikony",
+ "dock.showing": "Wyświetlanie",
+ "dock.mode.pinned": "Zawsze widoczny",
+ "dock.mode.autohide": "Ukryty; pojawia się, gdy mysz dotknie lewej krawędzi",
+ "dock.mode.handle": "Ukryty za uchwytem przy lewej krawędzi",
+ "dock.show": "Pokaż aplikacje"
 }

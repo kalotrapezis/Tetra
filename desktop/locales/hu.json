@@ -2655,5 +2655,17 @@
  "memory.tidyBody": "{count} változás abban, amit az AI Assist rólad tárol.",
  "memory.tidyMerged": "Összevonva: {from} → {to}",
  "memory.tidyRewritten": "Átírva: {from} → {to}",
- "memory.tidyDropped": "Törölve: {fact}"
+ "memory.tidyDropped": "Törölve: {fact}",
+ "dock.more": "Továbbiak",
+ "dock.edit": "Dokk szerkesztése",
+ "dock.editNote": "A bejelölt alkalmazások a dokkban vannak, a többi a ⋯ alatt vár. A nyilak a sorrendet változtatják.",
+ "dock.up": "Fel",
+ "dock.down": "Le",
+ "dock.look": "Megjelenés",
+ "dock.iconsOnly": "Csak ikonok",
+ "dock.showing": "Megjelenítés",
+ "dock.mode.pinned": "Mindig látható",
+ "dock.mode.autohide": "Rejtett; megjelenik, ha az egér a bal szélhez ér",
+ "dock.mode.handle": "Rejtett egy fogantyú mögött a bal szélen",
+ "dock.show": "Alkalmazások mutatása"
 }

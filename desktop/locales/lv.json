@@ -2746,5 +2746,17 @@
  "memory.tidyBody": "{count} izmaiņa(s) tajā, ko AI Assist par jums glabā.",
  "memory.tidyMerged": "Apvienots: {from} → {to}",
  "memory.tidyRewritten": "Pārrakstīts: {from} → {to}",
- "memory.tidyDropped": "Noņemts: {fact}"
+ "memory.tidyDropped": "Noņemts: {fact}",
+ "dock.more": "Vairāk",
+ "dock.edit": "Rediģēt doku",
+ "dock.editNote": "Atzīmētās lietotnes ir dokā, pārējās gaida zem ⋯. Bultiņas maina secību.",
+ "dock.up": "Uz augšu",
+ "dock.down": "Uz leju",
+ "dock.look": "Izskats",
+ "dock.iconsOnly": "Tikai ikonas",
+ "dock.showing": "Rādīšana",
+ "dock.mode.pinned": "Vienmēr redzams",
+ "dock.mode.autohide": "Paslēpts; parādās, kad pele sasniedz kreiso malu",
+ "dock.mode.handle": "Paslēpts aiz roktura kreisajā malā",
+ "dock.show": "Rādīt lietotnes"
 }

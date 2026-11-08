@@ -2931,5 +2931,17 @@
  "memory.tidyBody": "{count} athrú ar a gcoinníonn AI Assist fút.",
  "memory.tidyMerged": "Cumasctha: {from} → {to}",
  "memory.tidyRewritten": "Athscríofa: {from} → {to}",
- "memory.tidyDropped": "Bainte: {fact}"
+ "memory.tidyDropped": "Bainte: {fact}",
+ "dock.more": "Tuilleadh",
+ "dock.edit": "Cuir an duga in eagar",
+ "dock.editNote": "Tá na haipeanna ticeáilte sa duga; fanann na cinn eile faoi ⋯. Athraíonn na saigheada an t-ord.",
+ "dock.up": "Suas",
+ "dock.down": "Síos",
+ "dock.look": "Cuma",
+ "dock.iconsOnly": "Deilbhíní amháin",
+ "dock.showing": "Taispeáint",
+ "dock.mode.pinned": "Le feiceáil i gcónaí",
+ "dock.mode.autohide": "I bhfolach; le feiceáil nuair a shroicheann an luch an imeall clé",
+ "dock.mode.handle": "I bhfolach taobh thiar de hanla ar an imeall clé",
+ "dock.show": "Taispeáin na haipeanna"
 }

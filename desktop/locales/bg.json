@@ -2655,5 +2655,17 @@
  "memory.tidyBody": "{count} промяна(и) в това, което AI Assist пази за вас.",
  "memory.tidyMerged": "Обединено: {from} → {to}",
  "memory.tidyRewritten": "Пренаписано: {from} → {to}",
- "memory.tidyDropped": "Премахнато: {fact}"
+ "memory.tidyDropped": "Премахнато: {fact}",
+ "dock.more": "Още",
+ "dock.edit": "Редактиране на дока",
+ "dock.editNote": "Отметнатите приложения са в дока; другите чакат под ⋯. Стрелките сменят реда.",
+ "dock.up": "Нагоре",
+ "dock.down": "Надолу",
+ "dock.look": "Изглед",
+ "dock.iconsOnly": "Само икони",
+ "dock.showing": "Показване",
+ "dock.mode.pinned": "Винаги видим",
+ "dock.mode.autohide": "Скрит; показва се, когато мишката стигне левия край",
+ "dock.mode.handle": "Скрит зад дръжка в левия край",
+ "dock.show": "Покажи приложенията"
 }

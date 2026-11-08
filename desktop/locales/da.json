@@ -2655,5 +2655,17 @@
  "memory.tidyBody": "{count} ændring(er) i det, AI Assist gemmer om dig.",
  "memory.tidyMerged": "Slået sammen: {from} → {to}",
  "memory.tidyRewritten": "Omskrevet: {from} → {to}",
- "memory.tidyDropped": "Fjernet: {fact}"
+ "memory.tidyDropped": "Fjernet: {fact}",
+ "dock.more": "Mere",
+ "dock.edit": "Rediger dock",
+ "dock.editNote": "Afkrydsede apps er i docken; de andre venter under ⋯. Pilene ændrer rækkefølgen.",
+ "dock.up": "Flyt op",
+ "dock.down": "Flyt ned",
+ "dock.look": "Udseende",
+ "dock.iconsOnly": "Kun ikoner",
+ "dock.showing": "Visning",
+ "dock.mode.pinned": "Altid synlig",
+ "dock.mode.autohide": "Skjult; vises når musen når venstre kant",
+ "dock.mode.handle": "Skjult bag et håndtag i venstre kant",
+ "dock.show": "Vis apps"
 }

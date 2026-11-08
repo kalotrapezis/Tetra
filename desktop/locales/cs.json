@@ -2839,5 +2839,17 @@
  "memory.tidyBody": "Změny ({count}) v tom, co si o vás AI Assist pamatuje.",
  "memory.tidyMerged": "Sloučeno: {from} → {to}",
  "memory.tidyRewritten": "Přepsáno: {from} → {to}",
- "memory.tidyDropped": "Odstraněno: {fact}"
+ "memory.tidyDropped": "Odstraněno: {fact}",
+ "dock.more": "Více",
+ "dock.edit": "Upravit dok",
+ "dock.editNote": "Zaškrtnuté aplikace jsou v doku; ostatní čekají pod ⋯. Šipky mění pořadí.",
+ "dock.up": "Nahoru",
+ "dock.down": "Dolů",
+ "dock.look": "Vzhled",
+ "dock.iconsOnly": "Jen ikony",
+ "dock.showing": "Zobrazení",
+ "dock.mode.pinned": "Vždy viditelný",
+ "dock.mode.autohide": "Skrytý; ukáže se, když myš dojede k levému okraji",
+ "dock.mode.handle": "Skrytý za úchytem u levého okraje",
+ "dock.show": "Zobrazit aplikace"
 }

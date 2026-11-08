@@ -2655,5 +2655,17 @@
  "memory.tidyBody": "{count} muutos(ta) siihen, mitä AI Assist tallentaa sinusta.",
  "memory.tidyMerged": "Yhdistetty: {from} → {to}",
  "memory.tidyRewritten": "Kirjoitettu uudelleen: {from} → {to}",
- "memory.tidyDropped": "Poistettu: {fact}"
+ "memory.tidyDropped": "Poistettu: {fact}",
+ "dock.more": "Lisää",
+ "dock.edit": "Muokkaa telakkaa",
+ "dock.editNote": "Valitut sovellukset ovat telakassa, muut odottavat ⋯-valikossa. Nuolet muuttavat järjestystä.",
+ "dock.up": "Ylös",
+ "dock.down": "Alas",
+ "dock.look": "Ulkoasu",
+ "dock.iconsOnly": "Vain kuvakkeet",
+ "dock.showing": "Näkyvyys",
+ "dock.mode.pinned": "Aina näkyvissä",
+ "dock.mode.autohide": "Piilossa; tulee esiin, kun hiiri vie vasempaan reunaan",
+ "dock.mode.handle": "Piilossa vasemman reunan kahvan takana",
+ "dock.show": "Näytä sovellukset"
 }
