@@ -442,6 +442,7 @@
  "phone.recents": "Recent",
  "phone.favourites": "Favorieten",
  "phone.recordings": "Opnamen",
+ "phone.keypad": "Toetsenblok",
  "sync.errChanged": "Het veranderde onderweg; er is niets bewaard.",
  "sync.errNotPlugged": "{name} is niet aangesloten.",
  "sync.errPlugInFirst": "Sluit eerst {name} aan.",

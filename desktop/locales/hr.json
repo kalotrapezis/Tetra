@@ -453,6 +453,7 @@
  "phone.recents": "Nedavni",
  "phone.favourites": "Favoriti",
  "phone.recordings": "Snimke",
+ "phone.keypad": "Tipkovnica",
  "sync.errChanged": "Promijenilo se usput; ništa nije zadržano.",
  "sync.errNotPlugged": "{name} nije priključen.",
  "sync.errPlugInFirst": "Prvo priključite {name}.",

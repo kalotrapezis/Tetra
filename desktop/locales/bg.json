@@ -442,6 +442,7 @@
  "phone.recents": "Последни",
  "phone.favourites": "Любими",
  "phone.recordings": "Записи",
+ "phone.keypad": "Клавиатура",
  "sync.errChanged": "Промени се по пътя; нищо не е запазено.",
  "sync.errNotPlugged": "{name} не е включен.",
  "sync.errPlugInFirst": "Първо включете {name}.",

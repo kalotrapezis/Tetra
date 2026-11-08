@@ -475,6 +475,7 @@
  "phone.recents": "Le déanaí",
  "phone.favourites": "Ceanáin",
  "phone.recordings": "Taifeadtaí",
+ "phone.keypad": "Eochaircheap",
  "sync.errChanged": "D’athraigh sé ar an mbealach; níor coinníodh aon rud.",
  "sync.errNotPlugged": "Níl {name} plugáilte isteach.",
  "sync.errPlugInFirst": "Plugáil {name} isteach ar dtús.",

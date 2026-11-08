@@ -442,6 +442,7 @@
  "phone.recents": "Seneste",
  "phone.favourites": "Favoritter",
  "phone.recordings": "Optagelser",
+ "phone.keypad": "Tastatur",
  "sync.errChanged": "Den blev ændret undervejs; intet blev gemt.",
  "sync.errNotPlugged": "{name} er ikke sat i.",
  "sync.errPlugInFirst": "Sæt først {name} i.",

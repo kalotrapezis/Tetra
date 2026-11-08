@@ -464,6 +464,7 @@
  "phone.recents": "Nedávné",
  "phone.favourites": "Oblíbené",
  "phone.recordings": "Nahrávky",
+ "phone.keypad": "Klávesnice",
  "sync.errChanged": "Cestou se změnil; nic se neuložilo.",
  "sync.errNotPlugged": "{name} není připojený.",
  "sync.errPlugInFirst": "Nejdřív připojte {name}.",

@@ -442,6 +442,7 @@
  "phone.recents": "Πρόσφατες",
  "phone.favourites": "Αγαπημένα",
  "phone.recordings": "Ηχογραφήσεις",
+ "phone.keypad": "Πληκτρολόγιο",
  "sync.errChanged": "Άλλαξε στη διαδρομή· δεν κρατήθηκε τίποτα.",
  "sync.errNotPlugged": "Το {name} δεν είναι συνδεδεμένο.",
  "sync.errPlugInFirst": "Συνδέστε πρώτα το {name}.",

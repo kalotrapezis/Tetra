@@ -11,7 +11,7 @@ import { international } from './phonecountry'
 
 type Logged = { at: string; number: string; dir: 'in' | 'out' | 'missed' | 'declined' | 'blocked' | 'voicemail'; secs: number; contact?: string; name?: string; note?: string }
 type Recording = { name: string; size: number; at: number }
-type Tab = 'recents' | 'favourites' | 'contacts' | 'recordings'
+type Tab = 'recents' | 'favourites' | 'contacts' | 'recordings' | 'keypad'
 const PHONE = '#168C93'
 export const key = (n: string) => n.replace(/\D/g, '').slice(-9)
 const errorText = (e: unknown) => (e instanceof Error ? e.message.replace(/^Error invoking remote method '[^']+': (Error: )?/, '') : String(e))
@@ -57,6 +57,16 @@ function useFirst<T>(all: T[], step = 60): [T[], (el: HTMLElement | null) => voi
 
 export function PhonePage({ say }: { say: (text: string) => void }) {
   const [tab, setTab] = useState<Tab>('recents')
+  // a narrow window (the user, 8 Nov): one page as the phone's — the list, or the keypad as a fifth tab — as Contacts does
+  const root = useRef<HTMLDivElement>(null)
+  const [narrow, setNarrow] = useState(false)
+  useEffect(() => {
+    const ro = new ResizeObserver(() => setNarrow((root.current?.clientWidth ?? 1200) < 880))
+    ro.observe(root.current!)
+    return () => ro.disconnect()
+  }, [])
+  useEffect(() => { if (!narrow && tab === 'keypad') setTab('recents') }, [narrow, tab])
+  const pad = narrow && tab === 'keypad'
   const [query, setQuery] = useState('')
   const [calls, setCalls] = useState<Logged[] | null>(null)
   const [contacts, setContacts] = useState<Contact[]>([])
@@ -100,16 +110,16 @@ export function PhonePage({ say }: { say: (text: string) => void }) {
   const found = typed.replace(/\D/g, '').length >= 3 ? contacts.filter(c => c.phones.some(p => p.value.replace(/\D/g, '').includes(typed.replace(/\D/g, '')))).slice(0, 4) : []
 
   return (
-    <div className="ct" style={{ ['--ct' as string]: PHONE }}>
+    <div className={`ct ph ${narrow ? 'narrow' : ''}`} style={{ ['--ct' as string]: PHONE }} ref={root}>
       <header className="topbar ct-topbar">
-        <div className="island title-island ct-search">
+        {!pad && <div className="island title-island ct-search">
           <Icon name="search" />
           <input placeholder={t(`phone.search_${tab}`)} value={query} onChange={e => setQuery(e.target.value)} />
           {query && <button className="round flat" title={t('common.clear')} onClick={() => setQuery('')}><Icon name="close" /></button>}
-        </div>
+        </div>}
       </header>
       <div className="ct-body">
-        <section className="ct-list">
+        {!pad && <section className="ct-list">
           {tab === 'recents' && <>
             <div className="chips">{(['all', 'missed', 'spam'] as const).map(f => <button key={f} className={`chip ${filter === f ? 'on' : ''}`} onClick={() => setFilter(f)}>{f === 'all' ? t('common.all') : f === 'missed' ? t('phone.missed') : t('phone.spamN', { n: spam.length })}</button>)}</div>
             {filter === 'spam' ? <>
@@ -152,8 +162,8 @@ export function PhonePage({ say }: { say: (text: string) => void }) {
               <span className="ct-name">{r.name.replace(/\.[^.]+$/, '')}<small>{Math.round(r.size / 1024)} KB</small></span>
             </button>)}
           </>}
-        </section>
-        <section className="ct-page">
+        </section>}
+        {(!narrow || pad) && <section className="ct-page">
           <div className="ph-pad">
             <input className="ph-number" value={number} placeholder={t('phone.number')} onChange={e => setNumber(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') callNow(typed) }} />
             <div className="ph-found">{found.map(c => <button key={c.uid} className="chip" onClick={() => setNumber(c.phones.find(p => p.value.replace(/\D/g, '').includes(typed.replace(/\D/g, '')))?.value || '')}>{c.name}</button>)}</div>
@@ -165,11 +175,11 @@ export function PhonePage({ say }: { say: (text: string) => void }) {
             </div>
             <p className="hint">{t('phone.padHint')}</p>
           </div>
-        </section>
+        </section>}
       </div>
       <div className="ct-dock ph-dock">
         <nav className="notes-island island">
-          {([['recents', 'phone.recents', 'history'], ['favourites', 'phone.favourites', 'heart'], ['contacts', 'app.contacts', 'person'], ['recordings', 'phone.recordings', 'mic']] as const).map(([id, l, icon]) =>
+          {([['recents', 'phone.recents', 'history'], ['favourites', 'phone.favourites', 'heart'], ['contacts', 'app.contacts', 'person'], ['recordings', 'phone.recordings', 'mic'], ...(narrow ? [['keypad', 'phone.keypad', 'dialpad']] as const : [])] as const).map(([id, l, icon]) =>
             <button key={id} className={`island-item ${tab === id ? 'on' : ''}`} onClick={() => setTab(id)}><Icon name={icon} size={20} /><span>{t(l)}</span></button>)}
         </nav>
       </div>

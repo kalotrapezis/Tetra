@@ -453,6 +453,7 @@
  "phone.recents": "Recentes",
  "phone.favourites": "Favoritos",
  "phone.recordings": "Gravações",
+ "phone.keypad": "Teclado",
  "sync.errChanged": "Mudou pelo caminho; nada foi guardado.",
  "sync.errNotPlugged": "{name} não está ligada.",
  "sync.errPlugInFirst": "Ligue primeiro {name}.",

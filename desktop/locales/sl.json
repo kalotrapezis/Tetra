@@ -464,6 +464,7 @@
  "phone.recents": "Nedavni",
  "phone.favourites": "Priljubljeni",
  "phone.recordings": "Posnetki",
+ "phone.keypad": "Tipkovnica",
  "sync.errChanged": "Med prenosom se je spremenila; nič ni bilo shranjeno.",
  "sync.errNotPlugged": "{name} ni priključen.",
  "sync.errPlugInFirst": "Najprej priklopite {name}.",

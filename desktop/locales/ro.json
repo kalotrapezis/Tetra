@@ -453,6 +453,7 @@
  "phone.recents": "Recente",
  "phone.favourites": "Preferate",
  "phone.recordings": "Înregistrări",
+ "phone.keypad": "Tastatură",
  "sync.errChanged": "S-a modificat pe drum; nu s-a păstrat nimic.",
  "sync.errNotPlugged": "{name} nu este conectată.",
  "sync.errPlugInFirst": "Conectează mai întâi {name}.",

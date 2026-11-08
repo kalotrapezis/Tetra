@@ -442,6 +442,7 @@
  "phone.recents": "Anrufliste",
  "phone.favourites": "Favoriten",
  "phone.recordings": "Aufnahmen",
+ "phone.keypad": "Tastenfeld",
  "sync.errChanged": "Unterwegs geändert; nichts wurde behalten.",
  "sync.errNotPlugged": "{name} ist nicht angeschlossen.",
  "sync.errPlugInFirst": "Schließe zuerst {name} an.",

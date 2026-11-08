@@ -464,6 +464,7 @@
  "phone.recents": "Ostatnie",
  "phone.favourites": "Ulubione",
  "phone.recordings": "Nagrania",
+ "phone.keypad": "Klawiatura",
  "sync.errChanged": "Zmienił się w trakcie; nic nie zostało zachowane.",
  "sync.errNotPlugged": "{name} nie jest podłączony.",
  "sync.errPlugInFirst": "Najpierw podłącz {name}.",
