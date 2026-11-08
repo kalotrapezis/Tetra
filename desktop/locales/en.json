@@ -2678,5 +2678,11 @@
  "center.noUnread": "No unread messages",
  "center.reply": "Reply…",
  "center.daysLeft": "{days} days left",
- "center.forecast": "At this pace: {size} by the end"
+ "center.forecast": "At this pace: {size} by the end",
+ "usage.history": "History",
+ "usage.tab.days": "Days",
+ "usage.tab.months": "Months",
+ "usage.tab.years": "Years",
+ "usage.saved": "Saved ✓",
+ "usage.more": "{count} more"
 }

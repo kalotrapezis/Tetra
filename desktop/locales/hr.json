@@ -2769,5 +2769,11 @@
  "center.noUnread": "Nema nepročitanih poruka",
  "center.reply": "Odgovori…",
  "center.daysLeft": "Još {days} dana",
- "center.forecast": "Ovim tempom: {size} do kraja"
+ "center.forecast": "Ovim tempom: {size} do kraja",
+ "usage.history": "Povijest",
+ "usage.tab.days": "Dani",
+ "usage.tab.months": "Mjeseci",
+ "usage.tab.years": "Godine",
+ "usage.saved": "Spremljeno ✓",
+ "usage.more": "Još {count}"
 }

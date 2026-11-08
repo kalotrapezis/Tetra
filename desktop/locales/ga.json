@@ -2954,5 +2954,11 @@
  "center.noUnread": "Gan teachtaireachtaí nár léadh",
  "center.reply": "Freagair…",
  "center.daysLeft": "{days} lá fágtha",
- "center.forecast": "Ag an ráta seo: {size} faoin deireadh"
+ "center.forecast": "Ag an ráta seo: {size} faoin deireadh",
+ "usage.history": "Stair",
+ "usage.tab.days": "Laethanta",
+ "usage.tab.months": "Míonna",
+ "usage.tab.years": "Blianta",
+ "usage.saved": "Sábháilte ✓",
+ "usage.more": "{count} eile"
 }

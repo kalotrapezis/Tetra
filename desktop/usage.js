@@ -88,7 +88,16 @@ class Usage {
     const mp3s = all.filter(x => x.f === 'mp3').sort((a, b) => b.t - a.t).slice(0, 20).map(x => ({ title: x.title || x.file || '', seconds: x.s, usd: x.cost, at: x.t, device: x.device }))
     return { today: sum(all.filter(x => dayKey(x.t) === today)), month: sum(all.filter(x => monthKey(x.t) === month)), all: sum(all), since: all.reduce((m, x) => Math.min(m, x.t), now),
       days, byFeature: group(x => x.f, all.filter(x => x.f !== 'mp3')), byModel: group(x => x.m, all.filter(x => x.f !== 'mp3')), byDevice: group(x => x.device, all),
-      files, mp3s, budget: this.budget() }
+      files, mp3s, budget: this.budget(), history: this.history(all) }
+  }
+
+  /** Every day, month and year with spending, newest first (the user, 8 Nov: "a table that keeps the days, months and year");
+   *  the month files are all kept, so nothing ends after 30 days. An MP3's line repeats its job's cost: left out. */
+  history(all = this.lines()) {
+    const paid = all.filter(x => x.f !== 'mp3')
+    const by = key => [...paid.reduce((g, x) => { const k = key(x); const o = g.get(k) ?? { key: k, usd: 0, n: 0 }; o.usd += x.usd; o.n++; return g.set(k, o) }, new Map()).values()]
+      .sort((a, b) => (a.key < b.key ? 1 : -1))
+    return { days: by(x => dayKey(x.t)), months: by(x => monthKey(x.t)), years: by(x => monthKey(x.t).slice(0, 4)) }
   }
 }
 

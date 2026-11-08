@@ -2678,5 +2678,11 @@
  "center.noUnread": "Ingen ulæste beskeder",
  "center.reply": "Svar…",
  "center.daysLeft": "{days} dage tilbage",
- "center.forecast": "I dette tempo: {size} ved slutningen"
+ "center.forecast": "I dette tempo: {size} ved slutningen",
+ "usage.history": "Historik",
+ "usage.tab.days": "Dage",
+ "usage.tab.months": "Måneder",
+ "usage.tab.years": "År",
+ "usage.saved": "Gemt ✓",
+ "usage.more": "{count} mere"
 }

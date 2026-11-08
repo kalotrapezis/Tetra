@@ -2862,5 +2862,11 @@
  "center.noUnread": "Ni neprebranih sporočil",
  "center.reply": "Odgovori…",
  "center.daysLeft": "Še {days} dni",
- "center.forecast": "S tem tempom: {size} do konca"
+ "center.forecast": "S tem tempom: {size} do konca",
+ "usage.history": "Zgodovina",
+ "usage.tab.days": "Dnevi",
+ "usage.tab.months": "Meseci",
+ "usage.tab.years": "Leta",
+ "usage.saved": "Shranjeno ✓",
+ "usage.more": "Še {count}"
 }

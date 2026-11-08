@@ -2678,5 +2678,11 @@
  "center.noUnread": "Κανένα αδιάβαστο μήνυμα",
  "center.reply": "Απάντηση…",
  "center.daysLeft": "{days} ημέρες ακόμα",
- "center.forecast": "Με αυτόν τον ρυθμό: {size} ως το τέλος"
+ "center.forecast": "Με αυτόν τον ρυθμό: {size} ως το τέλος",
+ "usage.history": "Ιστορικό",
+ "usage.tab.days": "Μέρες",
+ "usage.tab.months": "Μήνες",
+ "usage.tab.years": "Χρόνια",
+ "usage.saved": "Αποθηκεύτηκε ✓",
+ "usage.more": "Άλλες {count}"
 }

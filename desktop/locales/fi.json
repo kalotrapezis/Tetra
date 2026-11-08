@@ -2678,5 +2678,11 @@
  "center.noUnread": "Ei lukemattomia viestejä",
  "center.reply": "Vastaa…",
  "center.daysLeft": "{days} päivää jäljellä",
- "center.forecast": "Tällä tahdilla: {size} loppuun mennessä"
+ "center.forecast": "Tällä tahdilla: {size} loppuun mennessä",
+ "usage.history": "Historia",
+ "usage.tab.days": "Päivät",
+ "usage.tab.months": "Kuukaudet",
+ "usage.tab.years": "Vuodet",
+ "usage.saved": "Tallennettu ✓",
+ "usage.more": "{count} lisää"
 }

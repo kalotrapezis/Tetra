@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { UsageSummary } from './drive'
+import type { UsagePeriod, UsageSummary } from './drive'
 import { money } from './assist'
 import { Icon } from './Icon'
 import { locale, t } from './i18n'
@@ -16,12 +16,16 @@ export function UsageCard() {
   const [u, setU] = useState<UsageSummary | null>(null)
   const [budget, setBudget] = useState('')
   const [said, setSaid] = useState('')
+  const [saved, setSaved] = useState(false)
   const load = () => window.drive.usage.summary().then(x => { setU(x); setBudget(x.budget.monthly != null ? String(x.budget.monthly) : '') })
   useEffect(() => { load() }, [])
   if (!u) return null
   const day = (ms: number) => new Intl.DateTimeFormat(locale(), { day: 'numeric', month: 'short', year: 'numeric' }).format(ms)
-  const saveBudget = () => window.drive.usage.setBudget(Number(budget.replace(',', '.')) || 0).then(load, e => setSaid(errorText(e)))
   const b = u.budget.monthly
+  // Save only when it changes, and «Saved ✓» after (8 Nov: "I pressed save and it still says save, as if not pressed")
+  const typed = Number(budget.replace(',', '.')) > 0 ? Math.round(Number(budget.replace(',', '.')) * 100) / 100 : null
+  const changed = typed !== b
+  const saveBudget = () => { if (changed) window.drive.usage.setBudget(typed ?? 0).then(() => { setSaved(true); load() }, e => setSaid(errorText(e))) }
   const before = Math.max(0, u.meter - u.all) // spent before this record began (the meter's odometer is older)
   const feature = (f: string) => { const k = `usage.f.${f}`, w = t(k); return w === k ? f : w }
   return <section className="settings-card island usage">
@@ -33,14 +37,15 @@ export function UsageCard() {
     </div>
     {before > 0.00005 && <p className="muted">{t('usage.before', { usd: money(before) })}</p>}
     <Days days={u.days} />
+    <History h={u.history} />
     {b != null && <div className="usage-budget">
       <small>{t('usage.budgetUsed', { spent: money(u.month), budget: money(b) })}</small>
       <div className="usage-track"><span style={{ width: `${Math.min(100, (u.month / b) * 100)}%` }} className={u.month >= b ? 'over' : u.month >= 0.8 * b ? 'near' : ''} /></div>
     </div>}
     <div className="reset-actions">
       <label className="usage-budget-field">{t('usage.budget')}
-        <input className="field" inputMode="decimal" placeholder={t('usage.budgetNone')} value={budget} onChange={e => setBudget(e.target.value)} onKeyDown={e => e.key === 'Enter' && saveBudget()} /></label>
-      <button className="filled-button" onClick={saveBudget}>{t('common.save')}</button>
+        <input className="field" inputMode="decimal" placeholder={t('usage.budgetNone')} value={budget} onChange={e => { setBudget(e.target.value); setSaved(false) }} onKeyDown={e => e.key === 'Enter' && saveBudget()} /></label>
+      <button className="filled-button" disabled={!changed} onClick={saveBudget}>{saved && !changed ? t('usage.saved') : t('common.save')}</button>
     </div>
     <p className="muted">{t('usage.budgetNote')}</p>
     {said && <p className="muted">{said}</p>}
@@ -91,4 +96,23 @@ function Breakdown({ title, rows }: { title: string; rows: { label: string; usd:
   return <><h4>{title}</h4><div className="usage-rows">{rows.slice(0, 10).map(r => <div key={r.label} className="usage-row" title={t('usage.calls', { count: r.n })}>
     <span>{r.label}</span><span className="usage-bar"><span style={{ width: `${(r.usd / max) * 100}%`, background: BAR }} /></span><strong>{money(r.usd)}</strong>
   </div>)}</div></>
+}
+
+/** The history: every day, month or year with spending, newest first; 31 rows, then «more». */
+function History({ h }: { h: UsageSummary['history'] }) {
+  const [tab, setTab] = useState<'days' | 'months' | 'years'>('days')
+  const [all, setAll] = useState(false)
+  if (!h?.days.length) return null
+  const rows: UsagePeriod[] = h[tab]
+  const label = (k: string) => tab === 'years' ? k
+    : tab === 'months' ? new Intl.DateTimeFormat(locale(), { month: 'long', year: 'numeric' }).format(new Date(k + '-15T12:00'))
+    : new Intl.DateTimeFormat(locale(), { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(k + 'T12:00'))
+  return <>
+    <h4>{t('usage.history')}</h4>
+    <div className="usage-history-tabs">{(['days', 'months', 'years'] as const).map(k =>
+      <button key={k} className={`chip ${tab === k ? 'on' : ''}`} onClick={() => { setTab(k); setAll(false) }}>{t(`usage.tab.${k}`)}</button>)}</div>
+    <table className="usage-history"><tbody>{(all ? rows : rows.slice(0, 31)).map(p =>
+      <tr key={p.key}><td>{label(p.key)}</td><td className="muted">× {p.n}</td><td>{money(p.usd)}</td></tr>)}</tbody></table>
+    {!all && rows.length > 31 && <button className="text-button" onClick={() => setAll(true)}>{t('usage.more', { count: rows.length - 31 })}</button>}
+  </>
 }

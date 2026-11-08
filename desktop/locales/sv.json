@@ -2678,5 +2678,11 @@
  "center.noUnread": "Inga olästa meddelanden",
  "center.reply": "Svara…",
  "center.daysLeft": "{days} dagar kvar",
- "center.forecast": "I den här takten: {size} vid slutet"
+ "center.forecast": "I den här takten: {size} vid slutet",
+ "usage.history": "Historik",
+ "usage.tab.days": "Dagar",
+ "usage.tab.months": "Månader",
+ "usage.tab.years": "År",
+ "usage.saved": "Sparat ✓",
+ "usage.more": "{count} till"
 }

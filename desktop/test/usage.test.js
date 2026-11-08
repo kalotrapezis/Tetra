@@ -55,6 +55,16 @@ test('older lines, other devices and broken lines: read, never lost; the dashboa
   assert.deepEqual(s.byDevice.map(x => x.key).sort(), ['pc', 'phone'])
 })
 
+test('history: every day, month and year with spending, newest first; an older month stays, an MP3 counted once', () => {
+  const dir = fresh(), u = new Usage(dir, 'pc', { now: () => at })
+  fs.writeFileSync(path.join(dir, 'phone-2025-12.jsonl'), JSON.stringify({ v: 1, t: new Date(2025, 11, 31, 12).getTime(), f: 'chat', m: 'm', usd: 0.1 }) + '\n')
+  u.add({ f: 'chat', m: 'm', usd: 0.25 }); u.add({ f: 'chat', m: 'm', usd: 0.05 }); u.add({ f: 'mp3', s: 60, cost: 9 })
+  const h = u.summary().history
+  assert.deepEqual(h.days.map(x => [x.key, +x.usd.toFixed(2), x.n]), [['2026-11-01', 0.3, 2], ['2025-12-31', 0.1, 1]])
+  assert.deepEqual(h.months.map(x => x.key), ['2026-11', '2025-12'])
+  assert.deepEqual(h.years.map(x => [x.key, +x.usd.toFixed(2)]), [['2026', 0.3], ['2025', 0.1]])
+})
+
 test('budget: a warning once at 80 %, and the cap stops what runs by itself', () => {
   const dir = fresh(), u = new Usage(dir, 'pc', { now: () => at })
   assert.equal(u.capped(), false, 'no budget, no cap')

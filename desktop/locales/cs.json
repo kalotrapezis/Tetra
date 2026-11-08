@@ -2862,5 +2862,11 @@
  "center.noUnread": "Žádné nepřečtené zprávy",
  "center.reply": "Odpovědět…",
  "center.daysLeft": "Zbývá {days} dní",
- "center.forecast": "Tímto tempem: {size} do konce"
+ "center.forecast": "Tímto tempem: {size} do konce",
+ "usage.history": "Historie",
+ "usage.tab.days": "Dny",
+ "usage.tab.months": "Měsíce",
+ "usage.tab.years": "Roky",
+ "usage.saved": "Uloženo ✓",
+ "usage.more": "Dalších {count}"
 }
