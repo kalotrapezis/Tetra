@@ -76,22 +76,13 @@ function Info({ text }: { text: string }) {
 const card: React.CSSProperties = { background: 'var(--thumb-bg)', borderRadius: 16, padding: 16 }
 const h3: React.CSSProperties = { margin: 0, display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'space-between' }
 
-export function DataPage() {
-  const [all, setAll] = useState<All | null>(null)
-  const [wifi, setWifi] = useState<Wifi | null>(null)
-  const [byApp, setByApp] = useState(false)
-  const [picked, setPicked] = useState<string | null>(null)
-  const [allApps, setAllApps] = useState(false)
-  const [openHotspot, setOpenHotspot] = useState(false)
-  // read again each minute: the phone's counts arrive hourly with sync, and the page may stay open
-  useEffect(() => { const read = () => window.drive.dataAll().then(a => setAll(a as All)).catch(() => setAll(was => was ?? { plan: null, devices: {}, me: '' })); read(); const t = setInterval(read, 60_000); return () => clearInterval(t) }, [])
-  useEffect(() => { const look = () => window.drive.dataWifi().then(setWifi).catch(() => {}); look(); const t = setInterval(look, 3000); return () => clearInterval(t) }, [])
-  const today = new Date(); const todayIso = iso(today)
-  const plan = all?.plan ?? null
+/** The cycle and the plan's status, as the phone's DataRules.status: shared by the page and the notification centre's card. */
+export function planStatus(all: All, today = new Date()) {
+  const todayIso = iso(today)
+  const plan = all.plan ?? null
   const [start, end] = cycle(plan, today)
 
-  const view = useMemo(() => {
-    if (!all) return null
+  const view = (() => {
     const devices = Object.entries(all.devices).map(([id, lines]) => {
       const days = new Map<string, Line>(); for (const l of lines) if (l.d && !l.app && l.mobile !== undefined) days.set(l.d, l)
       return { id, name: lines.find(l => l.deviceName)?.deviceName || id, days, apps: lines.filter(l => l.app && l.d), drops: lines.filter(l => l.event && DROPS[l.event]) }
@@ -101,8 +92,7 @@ export function DataPage() {
     // when the phone last counted (its newest month says; a phone before 25 Oct does not)
     const counted = Math.max(0, ...(phone ? all.devices[phone.id] : []).map(l => (l.deviceName !== undefined && l.counted) || 0))
     return { devices, phone, counted }
-  }, [all])
-  if (!all || !view) return <main className="page-scroll"><p className="muted">{t('data.reading')}</p></main>
+  })()
   const { devices, phone, counted: phoneCounted } = view
 
   // the plan's status, as the phone's DataRules.status
@@ -119,6 +109,22 @@ export function DataPage() {
   const ahead = cycleDays.filter(k => k > todayIso).map(k => forecast(phoneHistory, parseDay(k), parseDay(todayIso)))
   const projection = used - todayUse + Math.max(todayUse, forecast(phoneHistory, parseDay(todayIso), parseDay(todayIso))) + ahead.reduce((a, b) => a + b, 0)
 
+  return { todayIso, plan, start, end, devices, phone, phoneCounted, cycleDays, phoneHistory, perDay, used, limited, size, daysLeft, budget, todayUse, ahead, projection }
+}
+
+export function DataPage() {
+  const [all, setAll] = useState<All | null>(null)
+  const [wifi, setWifi] = useState<Wifi | null>(null)
+  const [byApp, setByApp] = useState(false)
+  const [picked, setPicked] = useState<string | null>(null)
+  const [allApps, setAllApps] = useState(false)
+  const [openHotspot, setOpenHotspot] = useState(false)
+  // read again each minute: the phone's counts arrive hourly with sync, and the page may stay open
+  useEffect(() => { const read = () => window.drive.dataAll().then(a => setAll(a as All)).catch(() => setAll(was => was ?? { plan: null, devices: {}, me: '' })); read(); const t = setInterval(read, 60_000); return () => clearInterval(t) }, [])
+  useEffect(() => { const look = () => window.drive.dataWifi().then(setWifi).catch(() => {}); look(); const t = setInterval(look, 3000); return () => clearInterval(t) }, [])
+  const status = useMemo(() => all && planStatus(all), [all])
+  if (!all || !status) return <main className="page-scroll"><p className="muted">{t('data.reading')}</p></main>
+  const { todayIso, plan, start, end, devices, phone, phoneCounted, cycleDays, phoneHistory, perDay, used, limited, size, daysLeft, budget, todayUse, ahead, projection } = status
   // the bars: the cycle's days, the phone's kinds (or by app across the devices), the days to come faint
   const isPhone = (id: string) => id === phone?.id
   const kindHistory = (f: (k: Kinds) => number) => { const m = new Map<string, number>(); phone?.days.forEach((l, k) => m.set(k, f(kinds(l, true)))); return m }

@@ -33,7 +33,7 @@ const MapsPage = later(() => import('./Maps'), 'MapsPage')
 const PhonePage = later(() => import('./Phone'), 'PhonePage')
 const MessagesPage = later(() => import('./Messages'), 'MessagesPage')
 const DataPage = later(() => import('./Data'), 'DataPage')
-const NotificationsPage = later(() => import('./Settings'), 'NotificationsPage')
+const NotificationsPage = later(() => import('./Center'), 'NotificationsPage')
 const SettingsPage = later(() => import('./Settings'), 'SettingsPage')
 const AssistantPage = later(() => import('./Assistant'), 'AssistantPage')
 
@@ -376,7 +376,7 @@ export function App() {
   else if (page.kind === 'messages') content = <MessagesPage say={say} />
   else if (page.kind === 'data') content = <DataPage />
   else if (page.kind === 'contacts') content = <ContactsPage setDialog={setDialog} say={say} openPerson={(id, name) => setPage({ kind: 'person', id, name })} />
-  else if (page.kind === 'notifications') content = <NotificationsPage />
+  else if (page.kind === 'notifications') content = <NotificationsPage go={kind => setPage({ kind })} say={say} />
   else if (page.kind === 'settings') content = <SettingsPage key={page.at} start={page.start} onGuide={() => setGuide(true)} />
   else if (page.kind === 'photoTrash') content = <TrashPage onBack={() => setPage({ kind: 'collections' })} setDialog={setDialog} say={say} onChanged={reload} />
   else if (page.kind === 'hidden') content = <HiddenPage onBack={() => setPage({ kind: 'collections' })} setDialog={setDialog} say={say} onChanged={reload} />

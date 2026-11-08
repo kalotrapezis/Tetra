@@ -2851,5 +2851,16 @@
  "dock.mode.pinned": "Vedno viden",
  "dock.mode.autohide": "Skrit; pokaže se, ko miška doseže levi rob",
  "dock.mode.handle": "Skrit za ročajem na levem robu",
- "dock.show": "Pokaži aplikacije"
+ "dock.show": "Pokaži aplikacije",
+ "center.noDoses": "Danes ni odmerkov",
+ "center.allTaken": "Zaenkrat vse vzeto",
+ "center.noTimers": "Noben časovnik ne teče",
+ "center.nextAlarm": "Naslednji alarm {time}",
+ "center.noAlarm": "Ni alarma",
+ "center.noMissed": "Ni zgrešenih klicev",
+ "center.callBack": "Pokliči nazaj",
+ "center.noUnread": "Ni neprebranih sporočil",
+ "center.reply": "Odgovori…",
+ "center.daysLeft": "Še {days} dni",
+ "center.forecast": "S tem tempom: {size} do konca"
 }

@@ -2943,5 +2943,16 @@
  "dock.mode.pinned": "Le feiceáil i gcónaí",
  "dock.mode.autohide": "I bhfolach; le feiceáil nuair a shroicheann an luch an imeall clé",
  "dock.mode.handle": "I bhfolach taobh thiar de hanla ar an imeall clé",
- "dock.show": "Taispeáin na haipeanna"
+ "dock.show": "Taispeáin na haipeanna",
+ "center.noDoses": "Gan dáileog inniu",
+ "center.allTaken": "Gach rud tógtha go fóill",
+ "center.noTimers": "Níl amadóir ar siúl",
+ "center.nextAlarm": "An chéad aláram eile {time}",
+ "center.noAlarm": "Gan aláram",
+ "center.noMissed": "Gan glaonna caillte",
+ "center.callBack": "Glaoigh ar ais",
+ "center.noUnread": "Gan teachtaireachtaí nár léadh",
+ "center.reply": "Freagair…",
+ "center.daysLeft": "{days} lá fágtha",
+ "center.forecast": "Ag an ráta seo: {size} faoin deireadh"
 }

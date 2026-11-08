@@ -2667,5 +2667,16 @@
  "dock.mode.pinned": "Altid synlig",
  "dock.mode.autohide": "Skjult; vises når musen når venstre kant",
  "dock.mode.handle": "Skjult bag et håndtag i venstre kant",
- "dock.show": "Vis apps"
+ "dock.show": "Vis apps",
+ "center.noDoses": "Ingen doser i dag",
+ "center.allTaken": "Alt taget for nu",
+ "center.noTimers": "Ingen timer kører",
+ "center.nextAlarm": "Næste alarm {time}",
+ "center.noAlarm": "Ingen alarm",
+ "center.noMissed": "Ingen ubesvarede opkald",
+ "center.callBack": "Ring tilbage",
+ "center.noUnread": "Ingen ulæste beskeder",
+ "center.reply": "Svar…",
+ "center.daysLeft": "{days} dage tilbage",
+ "center.forecast": "I dette tempo: {size} ved slutningen"
 }

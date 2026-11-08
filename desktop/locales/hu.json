@@ -2667,5 +2667,16 @@
  "dock.mode.pinned": "Mindig látható",
  "dock.mode.autohide": "Rejtett; megjelenik, ha az egér a bal szélhez ér",
  "dock.mode.handle": "Rejtett egy fogantyú mögött a bal szélen",
- "dock.show": "Alkalmazások mutatása"
+ "dock.show": "Alkalmazások mutatása",
+ "center.noDoses": "Ma nincs adag",
+ "center.allTaken": "Egyelőre minden bevéve",
+ "center.noTimers": "Nem fut időzítő",
+ "center.nextAlarm": "Következő ébresztő {time}",
+ "center.noAlarm": "Nincs ébresztő",
+ "center.noMissed": "Nincs nem fogadott hívás",
+ "center.callBack": "Visszahívás",
+ "center.noUnread": "Nincs olvasatlan üzenet",
+ "center.reply": "Válasz…",
+ "center.daysLeft": "Még {days} nap",
+ "center.forecast": "Ilyen ütemben: {size} a végére"
 }

@@ -2851,5 +2851,16 @@
  "dock.mode.pinned": "Vždy viditelný",
  "dock.mode.autohide": "Skrytý; ukáže se, když myš dojede k levému okraji",
  "dock.mode.handle": "Skrytý za úchytem u levého okraje",
- "dock.show": "Zobrazit aplikace"
+ "dock.show": "Zobrazit aplikace",
+ "center.noDoses": "Dnes žádné dávky",
+ "center.allTaken": "Zatím vše vzato",
+ "center.noTimers": "Neběží žádný časovač",
+ "center.nextAlarm": "Další budík {time}",
+ "center.noAlarm": "Žádný budík",
+ "center.noMissed": "Žádné zmeškané hovory",
+ "center.callBack": "Zavolat zpět",
+ "center.noUnread": "Žádné nepřečtené zprávy",
+ "center.reply": "Odpovědět…",
+ "center.daysLeft": "Zbývá {days} dní",
+ "center.forecast": "Tímto tempem: {size} do konce"
 }

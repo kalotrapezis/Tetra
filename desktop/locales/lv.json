@@ -2758,5 +2758,16 @@
  "dock.mode.pinned": "Vienmēr redzams",
  "dock.mode.autohide": "Paslēpts; parādās, kad pele sasniedz kreiso malu",
  "dock.mode.handle": "Paslēpts aiz roktura kreisajā malā",
- "dock.show": "Rādīt lietotnes"
+ "dock.show": "Rādīt lietotnes",
+ "center.noDoses": "Šodien devu nav",
+ "center.allTaken": "Pagaidām viss iedzerts",
+ "center.noTimers": "Neviens taimeris nedarbojas",
+ "center.nextAlarm": "Nākamais modinātājs {time}",
+ "center.noAlarm": "Modinātāja nav",
+ "center.noMissed": "Neatbildētu zvanu nav",
+ "center.callBack": "Atzvanīt",
+ "center.noUnread": "Nelasītu ziņu nav",
+ "center.reply": "Atbildēt…",
+ "center.daysLeft": "Atlikušas {days} dienas",
+ "center.forecast": "Šādā tempā: {size} līdz beigām"
 }

@@ -2729,5 +2729,16 @@
  "dock.mode.pinned": "Siempre visible",
  "dock.mode.autohide": "Oculto; aparece al llevar el ratón al borde izquierdo",
  "dock.mode.handle": "Oculto tras un tirador en el borde izquierdo",
- "dock.show": "Mostrar las apps"
+ "dock.show": "Mostrar las apps",
+ "center.noDoses": "Sin dosis hoy",
+ "center.allTaken": "Todo tomado por ahora",
+ "center.noTimers": "Ningún temporizador activo",
+ "center.nextAlarm": "Próxima alarma {time}",
+ "center.noAlarm": "Sin alarma",
+ "center.noMissed": "Sin llamadas perdidas",
+ "center.callBack": "Devolver llamada",
+ "center.noUnread": "Sin mensajes sin leer",
+ "center.reply": "Responder…",
+ "center.daysLeft": "Quedan {days} días",
+ "center.forecast": "A este ritmo: {size} al final"
 }
