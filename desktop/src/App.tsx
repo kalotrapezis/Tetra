@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { Fragment, lazy, Suspense, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { isScreenshot, matches, type Level, type Media } from './timeline'
 import type { Analysis, Collection, DeviceFolder, MailCompose, MergeUndo, Person, VaultStatus } from './drive'
 import { Icon, type IconName } from './Icon'
@@ -6,29 +6,35 @@ import { Timeline } from './Timeline'
 import { Viewer } from './Viewer'
 import { Collections } from './Collections'
 import { CollectionPicker, Confirm, FolderPicker, NewCollection, errorText } from './Dialogs'
-import { Files, type FilesMode } from './Files'
-import { TrashPage } from './TrashPage'
+import type { FilesMode } from './Files'
 import { AnalysisBar, ChooseCover, CombinePicker, MergeHistory, PeopleHistory, PeoplePage, RenamePerson, ReviewPage } from './People'
-import { MapView } from './MapView'
 import { HiddenPage, VaultGate } from './Hidden'
-import { Editor, type Hide } from './Editor'
+import type { Hide } from './Editor'
 import { OffloadDialog, SyncPage } from './Sync'
-import { NotesPage } from './Notes'
-import { CalendarPage } from './Calendar'
-import { MailPage } from './Mail'
 import { TimerBell, TimerPage } from './Timer'
 import { PillsChime, PillsPage } from './Pills'
-import { MapsPage } from './Maps'
 import { ContactsPage, preloadContacts } from './Contacts'
-import { PhonePage } from './Phone'
-import { MessagesPage } from './Messages'
-import { DataPage } from './Data'
-import { NotificationsPage, SettingsPage } from './Settings'
 import { ImportDialog } from './Import'
-import { AssistantPage } from './Assistant'
 import { GuidePanel, guideFirstTime, type GuideGo } from './Guide'
 import { shownName } from './People'
 import { t, tr } from './i18n'
+
+// Pages are fetched when first opened, not at start: Mail, Maps (maplibre), Settings… cost nothing until used
+const later = <T extends Record<string, any>, K extends keyof T>(load: () => Promise<T>, name: K) => lazy(() => load().then(m => ({ default: m[name] })))
+const Files = later(() => import('./Files'), 'Files')
+const TrashPage = later(() => import('./TrashPage'), 'TrashPage')
+const MapView = later(() => import('./MapView'), 'MapView')
+const Editor = later(() => import('./Editor'), 'Editor')
+const NotesPage = later(() => import('./Notes'), 'NotesPage')
+const CalendarPage = later(() => import('./Calendar'), 'CalendarPage')
+const MailPage = later(() => import('./Mail'), 'MailPage')
+const MapsPage = later(() => import('./Maps'), 'MapsPage')
+const PhonePage = later(() => import('./Phone'), 'PhonePage')
+const MessagesPage = later(() => import('./Messages'), 'MessagesPage')
+const DataPage = later(() => import('./Data'), 'DataPage')
+const NotificationsPage = later(() => import('./Settings'), 'NotificationsPage')
+const SettingsPage = later(() => import('./Settings'), 'SettingsPage')
+const AssistantPage = later(() => import('./Assistant'), 'AssistantPage')
 
 type Page = { kind: 'photos' } | { kind: 'collections' } | { kind: 'collection'; id: string; name: string } | { kind: 'files'; mode: FilesMode; folder: string } | { kind: 'photoTrash' }
   | { kind: 'people' } | { kind: 'person'; id: string; name: string } | { kind: 'review' } | { kind: 'map'; focus?: string } | { kind: 'hidden' } | { kind: 'sync' } | { kind: 'notes'; open?: string } | { kind: 'calendar' } | { kind: 'mail' } | { kind: 'timer' } | { kind: 'pills' } | { kind: 'maps'; query?: string; at?: number } | { kind: 'assistant' } | { kind: 'contacts' } | { kind: 'phone' } | { kind: 'messages' } | { kind: 'data' } | { kind: 'notifications' } | { kind: 'settings'; start?: string; at?: number }
@@ -464,7 +470,7 @@ export function App() {
         </div>
       </nav>
       <main className="content" data-app={page.kind}>
-        {content}
+        <Suspense fallback={null}>{content}</Suspense>
         {section && section !== 'files' && ['photos', 'collections', 'collection'].includes(page.kind) && picked.length === 0 && dock}
         {page.kind === 'person' && person && picked.length === 0 && (
           <div className="island selection-bar person-bar">
@@ -509,7 +515,7 @@ export function App() {
           onCollect={custom ? undefined : m => collect([m])} onUncollect={custom && !mirror ? m => uncollect([m]) : undefined} onMove={driveId ? undefined : m => moveTo([m])}
           uncollectTitle={folderAlbum ? t('photos.moveOutOf', { folder: folderAlbum }) : undefined} />
       )}
-      {editing && <Editor item={editing.item} hide={editing.hide} onClose={() => setEditing(null)} onSaved={msg => { setEditing(null); say(msg); reload() }} />}
+      {editing && <Suspense fallback={null}><Editor item={editing.item} hide={editing.hide} onClose={() => setEditing(null)} onSaved={msg => { setEditing(null); say(msg); reload() }} /></Suspense>}
       {dialog}
       {!nas && <TimerBell />}
       {!nas && <PillsChime />}

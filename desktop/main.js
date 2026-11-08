@@ -282,6 +282,7 @@ function worker() {
     else if (m.type === 'scan-progress') win?.webContents.send('scan-progress', { done: m.done, changed: m.changed })
     else if (m.type === 'scanned') { const d = scanDone; scanDone = null; m.error ? d?.reject(new Error(m.error)) : d?.resolve(m.result) }
     else if (m.type === 'answer') { const q = asks.get(m.id); asks.delete(m.id); m.error ? q?.reject(new Error(m.error)) : q?.resolve(m.result) }
+    if (!analysis.running) rest()
   })
   analyzer.on('error', e => console.error('[analyzer]', e))
   analyzer.on('exit', code => {
@@ -293,6 +294,13 @@ function worker() {
     sendAnalysis()
   })
   return analyzer
+}
+
+/** The analyzer's models (onnx, hundreds of MB) leave memory two minutes after its last job; worker() starts it again when asked. */
+let resting = null
+function rest() {
+  clearTimeout(resting)
+  resting = setTimeout(() => { if (analyzer && !analysis.running && !scanning && !asks.size) analyzer.terminate() }, 2 * 60_000)
 }
 
 /** A place, list or trip changed here, on a phone or by Claude: the window shows it (as the Timer's folder). */
@@ -357,7 +365,7 @@ function startScan() {
       if (r?.changed || filled) { sync?.nudge().catch(() => {}); backUpPluggedDrives() }
       return r
     })
-    .finally(() => { scanning = null; analyzeLibrary() })
+    .finally(() => { scanning = null; analyzeLibrary(null, true) })
   return scanning
 }
 
@@ -394,7 +402,23 @@ async function backUpPluggedDrives() {
     await backUpToDrive(d.device.id).catch(e => console.warn('[drive]', e.message))
   }
 }
-function showWindow() { if (win) { win.show(); win.focus() } }
+/**
+ * Closed to the tray, the window holds only Tetra's bells (#tray: the Timer's alarm and the pills chime, which ring through
+ * the window), not the whole app: the photo library and every page stay out of memory until the window is opened again.
+ */
+let light = false
+function loadPage(tray) {
+  light = tray
+  if (process.env.VITE_DEV_URL) return win.loadURL(process.env.VITE_DEV_URL + (tray ? '#tray' : ''))
+  return win.loadFile(path.join(__dirname, 'dist', 'index.html'), tray ? { hash: 'tray' } : {})
+}
+/** Resolves once the window shows the whole app and listens (an app loaded from the tray gets the same 1.5 s as at start). */
+function showWindow() {
+  if (!win) return Promise.resolve()
+  const ready = light ? new Promise(r => { win.webContents.once('did-finish-load', () => setTimeout(r, 1500)); loadPage(false) }) : Promise.resolve()
+  win.show(); win.focus()
+  return ready
+}
 
 /**
  * Space, said out loud (SYNC_PLAN.md D3). Once a minute: what a storage drive that is plugged in could take off
@@ -444,7 +468,7 @@ function notify(applet, title, body, open = null, { actions, onAction } = {}) {
   } catch (e) { console.warn('[notify]', e.message) }
   if (!Notification.isSupported() || sync?.nas()) return null // a NAS: nobody sits at it; the list keeps it
   const n = new Notification({ title, body, icon: path.join(__dirname, 'public', 'icon.png'), ...(actions ? { actions } : {}) })
-  n.on('click', () => { showWindow(); if (open) open(); else if (offer) win?.webContents.send('offload-offer', offer.deviceId) })
+  n.on('click', () => showWindow().then(() => { if (open) open(); else if (offer) win?.webContents.send('offload-offer', offer.deviceId) }))
   if (onAction) n.on('action', (_, i) => onAction(i))
   // held until it closes: one nobody holds is collected, and its click does nothing (the user, 23 Oct)
   shownNotes.add(n); n.on('close', () => shownNotes.delete(n))
@@ -565,7 +589,7 @@ function updateTray() {
     { label: t('main.trayOpen'), click: showWindow },
     { label: status, enabled: false },
     { label: offer ? t('main.trayFree', { size: fmtBytes(offer.bytes), count: offer.count, n: offer.count.toLocaleString(), name: offer.name }) : '', visible: !!offer,
-      click: () => { showWindow(); win?.webContents.send('offload-offer', offer.deviceId) } },
+      click: () => showWindow().then(() => win?.webContents.send('offload-offer', offer.deviceId)) },
     analysis.running ? { label: t('main.trayPause'), click: () => { analysis.paused = true; analyzer?.postMessage({ type: 'pause' }) } }
       : { label: t('main.trayResume'), visible: analysis.paused, click: () => analyzeLibrary() },
     { label: t('main.traySend'), click: sendFilesToPhone },
@@ -583,8 +607,11 @@ async function sendFilesToPhone() {
 }
 
 /** `rescan` — 'faces' or 'documents' — reads photos that were read before, because the rules changed since. */
-function analyzeLibrary(rescan = null) {
+function analyzeLibrary(rescan = null, auto = false) {
   if (analysis.running) return
+  // on its own (after a scan), on a laptop's battery: it waits for the charger (on-ac); asked by the user, it runs
+  if (auto && powerMonitor.isOnBatteryPower()) { analysis.waitingPower = true; return }
+  analysis.waitingPower = false
   // the slow analysis runs on one computer: the server, or for a NAS the client holding the crown (sync.js crown); the
   // others get its results with the metadata
   if (sync?.nas() || (sync?.role() === 'client' && !sync.client?.pairing()?.crown)) return
@@ -722,7 +749,7 @@ app.whenReady().then(() => {
   // A client of another Tetra (client.js): its "sync now" is the nudge every change here already sends, plus a look
   // every 5 minutes and the server's own nudge. A server never runs it.
   const client = new SyncClient(sync, { onSynced: s => win?.webContents.send('client-synced', s), onNotes: () => win?.webContents.send('notes-changed'),
-    onCrown: crown => { if (crown) analyzeLibrary() } })
+    onCrown: crown => { if (crown) analyzeLibrary(null, true) } })
   if (!process.env.DRIVE_HIDDEN) setInterval(() => { if (sync.role() === 'client') client.soon(0) }, 5 * 60_000)
   // started: the devices are told at once, so what waited for this computer (Send to computer's outbox) goes now
   sync.start().then(() => { if (!process.env.DRIVE_HIDDEN) sync.nudge().catch(() => {}) }).catch(e => { sync.error = e.message })
@@ -2006,10 +2033,12 @@ app.whenReady().then(() => {
   watchPills()
   planPills()
   powerMonitor.on('resume', planTimer)
+  // the analysis is the heaviest thing Tetra does: it stops when the charger is pulled out and goes on when it is back
+  powerMonitor.on('on-battery', () => { if (analysis.running && !analysis.paused) { analysis.waitingPower = true; analyzer?.postMessage({ type: 'pause' }) } })
+  powerMonitor.on('on-ac', () => { if (analysis.waitingPower) analyzeLibrary() })
   powerMonitor.on('resume', planPills)
   powerMonitor.on('resume', planReminders) // a timer does not run while the computer sleeps
-  if (process.env.VITE_DEV_URL) win.loadURL(process.env.VITE_DEV_URL)
-  else win.loadFile(path.join(__dirname, 'dist', 'index.html'))
+  loadPage(!process.env.DRIVE_HIDDEN && process.argv.includes('--hidden')) // started in the tray at login: only the bells until opened
   // started as `tetra --assistant` (or --talk, --live): once the window listens
   // Mail's index (tens of MB) is read once the window has its first page, not before it: 0.3–0.8 s sooner on screen
   win.webContents.once('did-finish-load', () => setTimeout(() => {
@@ -2020,7 +2049,7 @@ app.whenReady().then(() => {
     if (!process.env.DRIVE_HIDDEN) require('./tbbridge').start(mail, {
       token: () => setting('thunderbirdToken') || null, save: v => setSetting('thunderbirdToken', v),
       // a box of its own, not attached to the window: attached, it never showed on KDE Wayland (8 Nov); unanswered in 2 minutes is a no
-      ask: async () => { win?.show(); win?.focus()
+      ask: async () => { await showWindow()
         const answer = new AbortController(), late = setTimeout(() => answer.abort(), 120_000)
         try {
           const r = await dialog.showMessageBox({ type: 'question', buttons: [t('mail.tbAllow'), t('common.cancel')], defaultId: 1, cancelId: 1, title: 'Tetra', message: t('mail.tbPairTitle'), detail: t('mail.tbPairText'), signal: answer.signal })
@@ -2040,7 +2069,7 @@ app.whenReady().then(() => {
       win.hide()
       // Hidden stays locked whenever nobody is looking: closing used to quit, and quitting locked it.
       vault?.lock()
-      win.webContents.reload()
+      loadPage(true) // the bells only: the app and its photos leave memory until the window is opened again
     })
   }
 })
@@ -2059,15 +2088,13 @@ const argMailto = argv => argv.find(a => /^mailto:/i.test(a)) ?? null
 function openMailto(url) {
   const fields = parseMailto(url)
   if (!fields || !win) return
-  showWindow()
-  win.webContents.send('mail-compose', fields)
+  showWindow().then(() => win?.webContents.send('mail-compose', fields))
 }
 /** A shortcut or `tetra --assistant`: open (or, when it is already in front, close) AI Assist, talk, or live. */
 function assistantCommand(what) {
   if (!win || !aiSwitch?.on()) return
   if (what === 'toggle' && win.isVisible() && win.isFocused()) { win.webContents.send('assistant-command', 'toggle'); return }
-  showWindow()
-  win.webContents.send('assistant-command', what === 'toggle' ? 'open' : what)
+  showWindow().then(() => win?.webContents.send('assistant-command', what === 'toggle' ? 'open' : what))
 }
 app.on('will-quit', () => globalShortcut.unregisterAll())
 app.on('window-all-closed', () => app.quit())
