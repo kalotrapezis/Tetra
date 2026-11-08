@@ -442,6 +442,7 @@
  "phone.recents": "Viimeisimmät",
  "phone.favourites": "Suosikit",
  "phone.recordings": "Tallenteet",
+ "phone.keypad": "Näppäimistö",
  "sync.errChanged": "Se muuttui matkalla; mitään ei säilytetty.",
  "sync.errNotPlugged": "{name} ei ole kytkettynä.",
  "sync.errPlugInFirst": "Kytke ensin {name}.",

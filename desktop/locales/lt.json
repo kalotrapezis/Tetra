@@ -464,6 +464,7 @@
  "phone.recents": "Naujausi",
  "phone.favourites": "Mėgstamiausi",
  "phone.recordings": "Įrašai",
+ "phone.keypad": "Klaviatūra",
  "sync.errChanged": "Jis pasikeitė kelyje; niekas nebuvo išsaugota.",
  "sync.errNotPlugged": "{name} neprijungtas.",
  "sync.errPlugInFirst": "Pirmiausia prijunkite {name}.",

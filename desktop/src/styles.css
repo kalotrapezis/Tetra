@@ -1232,6 +1232,11 @@ button.link.risk { color: #d8663f; font-weight: 600; }
 .ct-action > .ct-mark { background: none; padding: 0; width: 56px; height: 56px; }
 
 /* The Phone (Phone.tsx): Contacts' layout, its keypad at the right, the island centred */
+/* Phone (8 Nov): the list takes the room, the keypad keeps its own width; narrow, one page at a time, each the whole width */
+.ph .ct-list { width: auto; flex: 1; min-width: 380px; }
+.ph .ct-page { flex: none; width: 400px; }
+.ph.narrow .ct-list, .ph.narrow .ct-page { flex: 1; width: auto; min-width: 0; }
+.ph.narrow .ph-dock .island-item:not(.on) span { display: none; } /* five tabs: only the open one keeps its name */
 .ph-pad { max-width: 340px; margin: 24px auto 0; display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .ph-number { width: 100%; text-align: center; font-size: 30px; background: none; border: 0; border-bottom: 1px solid var(--border, #444); color: var(--text); outline: none; padding: 6px 0; }
 .ph-found { min-height: 36px; display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }

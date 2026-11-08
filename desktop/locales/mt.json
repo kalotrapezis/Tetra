@@ -464,6 +464,7 @@
  "phone.recents": "Reċenti",
  "phone.favourites": "Favoriti",
  "phone.recordings": "Reġistrazzjonijiet",
+ "phone.keypad": "Tastiera",
  "sync.errChanged": "Inbidel waqt it-trasferiment; xejn ma nżamm.",
  "sync.errNotPlugged": "{name} mhux konness.",
  "sync.errPlugInFirst": "Ikkonnettja {name} l-ewwel.",

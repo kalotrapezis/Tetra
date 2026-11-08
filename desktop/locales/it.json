@@ -453,6 +453,7 @@
  "phone.recents": "Recenti",
  "phone.favourites": "Preferiti",
  "phone.recordings": "Registrazioni",
+ "phone.keypad": "Tastierino",
  "sync.errChanged": "È cambiato durante il trasferimento; non è stato tenuto nulla.",
  "sync.errNotPlugged": "{name} non è collegata.",
  "sync.errPlugInFirst": "Prima collega {name}.",

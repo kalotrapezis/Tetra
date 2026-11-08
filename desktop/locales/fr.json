@@ -453,6 +453,7 @@
  "phone.recents": "Récents",
  "phone.favourites": "Favoris",
  "phone.recordings": "Enregistrements",
+ "phone.keypad": "Clavier",
  "sync.errChanged": "Il a changé en cours de route ; rien n’a été gardé.",
  "sync.errNotPlugged": "{name} n’est pas branché.",
  "sync.errPlugInFirst": "Branchez d’abord {name}.",

@@ -442,6 +442,7 @@
  "phone.recents": "Senaste",
  "phone.favourites": "Favoriter",
  "phone.recordings": "Inspelningar",
+ "phone.keypad": "Knappsats",
  "sync.errChanged": "Den ändrades på vägen; inget sparades.",
  "sync.errNotPlugged": "{name} är inte ansluten.",
  "sync.errPlugInFirst": "Anslut {name} först.",

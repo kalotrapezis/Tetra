@@ -442,6 +442,7 @@
  "phone.recents": "Viimased",
  "phone.favourites": "Lemmikud",
  "phone.recordings": "Salvestused",
+ "phone.keypad": "Klaviatuur",
  "sync.errChanged": "See muutus teel; midagi ei salvestatud.",
  "sync.errNotPlugged": "{name} pole ühendatud.",
  "sync.errPlugInFirst": "Ühendage kõigepealt {name}.",

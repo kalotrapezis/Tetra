@@ -442,6 +442,7 @@
  "phone.recents": "Recents",
  "phone.favourites": "Favourites",
  "phone.recordings": "Recordings",
+ "phone.keypad": "Keypad",
  "sync.errChanged": "It changed on the way; nothing was kept.",
  "sync.errNotPlugged": "{name} is not plugged in.",
  "sync.errPlugInFirst": "Plug in {name} first.",

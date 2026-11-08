@@ -453,6 +453,7 @@
  "phone.recents": "Nesenie",
  "phone.favourites": "Izlase",
  "phone.recordings": "Ieraksti",
+ "phone.keypad": "Tastatūra",
  "sync.errChanged": "Tas mainījās ceļā; nekas netika paturēts.",
  "sync.errNotPlugged": "{name} nav pieslēgts.",
  "sync.errPlugInFirst": "Vispirms pieslēdziet {name}.",

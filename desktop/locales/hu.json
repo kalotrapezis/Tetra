@@ -442,6 +442,7 @@
  "phone.recents": "Előzmények",
  "phone.favourites": "Kedvencek",
  "phone.recordings": "Felvételek",
+ "phone.keypad": "Billentyűzet",
  "sync.errChanged": "Útközben megváltozott; semmi sem maradt meg.",
  "sync.errNotPlugged": "{name} nincs csatlakoztatva.",
  "sync.errPlugInFirst": "Előbb csatlakoztasd ezt: {name}.",
