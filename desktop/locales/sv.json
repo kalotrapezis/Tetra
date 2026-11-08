@@ -2655,5 +2655,17 @@
  "memory.tidyBody": "{count} ändring(ar) i det AI Assist sparar om dig.",
  "memory.tidyMerged": "Sammanslaget: {from} → {to}",
  "memory.tidyRewritten": "Omskrivet: {from} → {to}",
- "memory.tidyDropped": "Borttaget: {fact}"
+ "memory.tidyDropped": "Borttaget: {fact}",
+ "dock.more": "Mer",
+ "dock.edit": "Redigera dockan",
+ "dock.editNote": "Markerade appar ligger i dockan; de andra väntar under ⋯. Pilarna ändrar ordningen.",
+ "dock.up": "Flytta upp",
+ "dock.down": "Flytta ned",
+ "dock.look": "Utseende",
+ "dock.iconsOnly": "Bara ikoner",
+ "dock.showing": "Visning",
+ "dock.mode.pinned": "Alltid synlig",
+ "dock.mode.autohide": "Dold; visas när musen når vänsterkanten",
+ "dock.mode.handle": "Dold bakom ett handtag vid vänsterkanten",
+ "dock.show": "Visa apparna"
 }

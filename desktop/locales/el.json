@@ -2655,5 +2655,17 @@
  "memory.tidyBody": "{count} αλλαγή(ές) σε όσα κρατά το AI Assist για σένα.",
  "memory.tidyMerged": "Ενώθηκαν: {from} → {to}",
  "memory.tidyRewritten": "Ξαναγράφτηκε: {from} → {to}",
- "memory.tidyDropped": "Αφαιρέθηκε: {fact}"
+ "memory.tidyDropped": "Αφαιρέθηκε: {fact}",
+ "dock.more": "Περισσότερα",
+ "dock.edit": "Επεξεργασία dock",
+ "dock.editNote": "Οι εφαρμογές με ✓ μένουν στο dock· οι άλλες περιμένουν στο ⋯. Τα βελάκια αλλάζουν τη σειρά.",
+ "dock.up": "Πάνω",
+ "dock.down": "Κάτω",
+ "dock.look": "Εμφάνιση",
+ "dock.iconsOnly": "Μόνο εικονίδια",
+ "dock.showing": "Πότε φαίνεται",
+ "dock.mode.pinned": "Πάντα ορατό",
+ "dock.mode.autohide": "Κρυφό· ανοίγει όταν το ποντίκι φτάσει στην αριστερή άκρη",
+ "dock.mode.handle": "Κρυφό πίσω από μια λαβή στην αριστερή άκρη",
+ "dock.show": "Εμφάνιση εφαρμογών"
 }

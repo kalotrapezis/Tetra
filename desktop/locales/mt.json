@@ -2839,5 +2839,17 @@
  "memory.tidyBody": "{count} bidla f'dak li AI Assist iżomm dwarek.",
  "memory.tidyMerged": "Magħqud: {from} → {to}",
  "memory.tidyRewritten": "Miktub mill-ġdid: {from} → {to}",
- "memory.tidyDropped": "Imneħħi: {fact}"
+ "memory.tidyDropped": "Imneħħi: {fact}",
+ "dock.more": "Aktar",
+ "dock.edit": "Editja d-dock",
+ "dock.editNote": "L-apps immarkati jinsabu fid-dock; l-oħrajn jistennew taħt ⋯. Il-vleġeġ ibiddlu l-ordni.",
+ "dock.up": "Fuq",
+ "dock.down": "Isfel",
+ "dock.look": "Dehra",
+ "dock.iconsOnly": "Ikoni biss",
+ "dock.showing": "Wiri",
+ "dock.mode.pinned": "Dejjem jidher",
+ "dock.mode.autohide": "Moħbi; jidher meta l-maws jilħaq it-tarf tax-xellug",
+ "dock.mode.handle": "Moħbi wara manku fit-tarf tax-xellug",
+ "dock.show": "Uri l-apps"
 }

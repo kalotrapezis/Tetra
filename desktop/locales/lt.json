@@ -2839,5 +2839,17 @@
  "memory.tidyBody": "Pakeitimai ({count}) tame, ką AI Assist apie jus saugo.",
  "memory.tidyMerged": "Sujungta: {from} → {to}",
  "memory.tidyRewritten": "Perrašyta: {from} → {to}",
- "memory.tidyDropped": "Pašalinta: {fact}"
+ "memory.tidyDropped": "Pašalinta: {fact}",
+ "dock.more": "Daugiau",
+ "dock.edit": "Redaguoti doką",
+ "dock.editNote": "Pažymėtos programos yra doke, kitos laukia po ⋯. Rodyklės keičia tvarką.",
+ "dock.up": "Aukštyn",
+ "dock.down": "Žemyn",
+ "dock.look": "Išvaizda",
+ "dock.iconsOnly": "Tik piktogramos",
+ "dock.showing": "Rodymas",
+ "dock.mode.pinned": "Visada matomas",
+ "dock.mode.autohide": "Paslėptas; atsiranda, kai pelė pasiekia kairįjį kraštą",
+ "dock.mode.handle": "Paslėptas už rankenėlės kairiajame krašte",
+ "dock.show": "Rodyti programas"
 }

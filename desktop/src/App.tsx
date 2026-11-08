@@ -16,6 +16,7 @@ import { PillsChime, PillsPage } from './Pills'
 import { ContactsPage, preloadContacts } from './Contacts'
 import { ImportDialog } from './Import'
 import { GuidePanel, guideFirstTime, type GuideGo } from './Guide'
+import { Dock, type DockApp } from './Dock'
 import { shownName } from './People'
 import { t, tr } from './i18n'
 
@@ -307,6 +308,24 @@ export function App() {
   const filesMode = page.kind === 'files' && !(page.mode === 'browse' && page.folder.startsWith('Trash')) ? page.mode : null
   const inFilesTrash = page.kind === 'files' && page.mode === 'browse' && page.folder.startsWith('Trash')
   const section = page.kind === 'files' ? 'files' : driveId ? 'drive' : ['photos', 'collections', 'collection', 'people', 'person', 'review', 'map', 'hidden', 'photoTrash'].includes(page.kind) ? 'photos' : null
+  // the dock's apps, in their default order; the person may reorder them or keep some under ⋯ (Dock.tsx)
+  const app = (key: string, target: Page, on: boolean, icon: IconName, label: string): DockApp => ({ key, icon, label, on, badge: unread[target.kind] ?? 0, open: () => setPage(target) })
+  const dockApps = [
+    app('photos', { kind: 'photos' }, section === 'photos', 'photos', t('app.photos')),
+    app('files', { kind: 'files', mode: 'browse', folder: '' }, section === 'files', 'drive', t('app.files')),
+    app('mail', { kind: 'mail' }, page.kind === 'mail', 'mail', t('app.mail')),
+    app('notes', { kind: 'notes' }, page.kind === 'notes', 'notes', t('app.notes')),
+    app('calendar', { kind: 'calendar' }, page.kind === 'calendar', 'calendar', t('app.calendar')),
+    app('timer', { kind: 'timer' }, page.kind === 'timer', 'timer', t('app.timer')),
+    app('pills', { kind: 'pills' }, page.kind === 'pills', 'pill', t('app.pills')),
+    app('maps', { kind: 'maps' }, page.kind === 'maps', 'map', t('app.maps')),
+    app('contacts', { kind: 'contacts' }, page.kind === 'contacts', 'person', t('app.contacts')),
+    app('phone', { kind: 'phone' }, page.kind === 'phone', 'call', t('app.phone')),
+    app('messages', { kind: 'messages' }, page.kind === 'messages', 'chat', t('app.sms')),
+    ...(aiOn ? [app('assistant', { kind: 'assistant' }, page.kind === 'assistant', 'sparkle', t('app.assistant'))] : []),
+    app('data', { kind: 'data' }, page.kind === 'data', 'dataUsage', t('app.data')),
+    app('sync', { kind: 'sync' }, page.kind === 'sync', 'refresh', t('app.devices')),
+  ]
   const item = (target: Page, on: boolean, icon: IconName, label: string) => (
     <button className={`island-item ${on ? 'on' : ''}`} onClick={() => setPage(target)}><Icon name={icon} size={20} /><span>{label}</span></button>
   )
@@ -433,42 +452,26 @@ export function App() {
 
   return (
     <div className="app">
-      <nav className="rail island">
-        <div className="brand"><img src="./icon.png" alt="" />Tetra<span className={alpha ? 'alpha-badge' : 'beta-badge'} title={t(alpha ? 'release.alphaNote' : 'release.betaNote')}>{t(alpha ? 'release.alpha' : 'release.beta')}</span></div>
-        {/* One entry each; their parts are an island at the bottom of the page (asked 2026-09-26). They scroll when the window is short (2 Nov). */}
-        <div className="rail-apps">
-        {nav({ kind: 'photos' }, section === 'photos', 'photos', t('app.photos'))}
-        {nav({ kind: 'files', mode: 'browse', folder: '' }, section === 'files', 'drive', t('app.files'))}
-        {nav({ kind: 'mail' }, page.kind === 'mail', 'mail', t('app.mail'))}
-        {nav({ kind: 'notes' }, page.kind === 'notes', 'notes', t('app.notes'))}
-        {nav({ kind: 'calendar' }, page.kind === 'calendar', 'calendar', t('app.calendar'))}
-        {nav({ kind: 'timer' }, page.kind === 'timer', 'timer', t('app.timer'))}
-        {nav({ kind: 'pills' }, page.kind === 'pills', 'pill', t('app.pills'))}
-        {nav({ kind: 'maps' }, page.kind === 'maps', 'map', t('app.maps'))}
-        {nav({ kind: 'contacts' }, page.kind === 'contacts', 'person', t('app.contacts'))}
-        {nav({ kind: 'phone' }, page.kind === 'phone', 'call', t('app.phone'))}
-        {nav({ kind: 'messages' }, page.kind === 'messages', 'chat', t('app.sms'))}
-        {aiOn && nav({ kind: 'assistant' }, page.kind === 'assistant', 'sparkle', t('app.assistant'))}
-        {nav({ kind: 'data' }, page.kind === 'data', 'dataUsage', t('app.data'))}
-        {nav({ kind: 'sync' }, page.kind === 'sync', 'refresh', t('app.devices'))}
-        </div>
-        {/* the drives are no longer listed under Devices (the user, 2 Nov: room for the apps); Devices opens them */}
-        {analysis?.running && (
-          <div className="rail-progress">
-            <span>{t('photos.analysing', { done: analysis.done.toLocaleString(), total: analysis.total.toLocaleString() })}</span>
-            <progress value={analysis.done} max={Math.max(analysis.total, 1)} />
+      <Dock apps={dockApps}
+        head={<div className="brand"><img src="./icon.png" alt="" /><span className="brand-name">Tetra</span><span className={alpha ? 'alpha-badge' : 'beta-badge'} title={t(alpha ? 'release.alphaNote' : 'release.betaNote')}>{t(alpha ? 'release.alpha' : 'release.beta')}</span></div>}
+        bottom={<>
+          {/* the drives are no longer listed under Devices (the user, 2 Nov: room for the apps); Devices opens them */}
+          {analysis?.running && (
+            <div className="rail-progress" title={t('photos.analysing', { done: analysis.done.toLocaleString(), total: analysis.total.toLocaleString() })}>
+              <span>{t('photos.analysing', { done: analysis.done.toLocaleString(), total: analysis.total.toLocaleString() })}</span>
+              <progress value={analysis.done} max={Math.max(analysis.total, 1)} />
+            </div>
+          )}
+          <div className="rail-bottom">
+            <button className={`nav-item ${page.kind === 'notifications' ? 'active' : ''}`} title={t('app.notifications')} onClick={() => setPage({ kind: 'notifications' })}>
+              <Icon name="bell" /><span>{t('app.notifications')}</span>{total > 0 && <span className="badge-count">{total}</span>}</button>
+            {nav({ kind: 'settings' }, page.kind === 'settings', 'settings', t('app.settings'))}
           </div>
-        )}
-        <div className="rail-bottom">
-          <button className={`nav-item ${page.kind === 'notifications' ? 'active' : ''}`} title={t('app.notifications')} onClick={() => setPage({ kind: 'notifications' })}>
-            <Icon name="bell" /><span>{t('app.notifications')}</span>{total > 0 && <span className="badge-count">{total}</span>}</button>
-          {nav({ kind: 'settings' }, page.kind === 'settings', 'settings', t('app.settings'))}
-        </div>
-        <div className="rail-foot">
+        </>}
+        foot={<div className="rail-foot">
           <span>{scan ?? t('photos.itemsTotal', { count: media?.length ?? 0 })}</span>
           <button className="round" title={t('photos.rescanLibrary')} disabled={!!scan} onClick={rescan}><Icon name="refresh" size={20} /></button>
-        </div>
-      </nav>
+        </div>} />
       <main className="content" data-app={page.kind}>
         <Suspense fallback={null}>{content}</Suspense>
         {section && section !== 'files' && ['photos', 'collections', 'collection'].includes(page.kind) && picked.length === 0 && dock}

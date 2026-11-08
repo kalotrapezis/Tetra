@@ -2655,5 +2655,17 @@
  "memory.tidyBody": "{count} wijziging(en) in wat AI Assist over je bewaart.",
  "memory.tidyMerged": "Samengevoegd: {from} → {to}",
  "memory.tidyRewritten": "Herschreven: {from} → {to}",
- "memory.tidyDropped": "Verwijderd: {fact}"
+ "memory.tidyDropped": "Verwijderd: {fact}",
+ "dock.more": "Meer",
+ "dock.edit": "Dock bewerken",
+ "dock.editNote": "Aangevinkte apps staan in het dock; de rest wacht onder ⋯. De pijlen veranderen de volgorde.",
+ "dock.up": "Omhoog",
+ "dock.down": "Omlaag",
+ "dock.look": "Uiterlijk",
+ "dock.iconsOnly": "Alleen pictogrammen",
+ "dock.showing": "Weergave",
+ "dock.mode.pinned": "Altijd zichtbaar",
+ "dock.mode.autohide": "Verborgen; verschijnt als de muis de linkerrand raakt",
+ "dock.mode.handle": "Verborgen achter een greep aan de linkerrand",
+ "dock.show": "Apps tonen"
 }

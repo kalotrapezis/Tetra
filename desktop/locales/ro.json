@@ -2747,5 +2747,17 @@
  "memory.tidyBody": "{count} modificare(ări) la ce păstrează AI Assist despre tine.",
  "memory.tidyMerged": "Unite: {from} → {to}",
  "memory.tidyRewritten": "Rescris: {from} → {to}",
- "memory.tidyDropped": "Eliminat: {fact}"
+ "memory.tidyDropped": "Eliminat: {fact}",
+ "dock.more": "Mai mult",
+ "dock.edit": "Editează dock-ul",
+ "dock.editNote": "Aplicațiile bifate stau în dock; celelalte așteaptă sub ⋯. Săgețile schimbă ordinea.",
+ "dock.up": "Sus",
+ "dock.down": "Jos",
+ "dock.look": "Aspect",
+ "dock.iconsOnly": "Doar pictograme",
+ "dock.showing": "Afișare",
+ "dock.mode.pinned": "Mereu vizibil",
+ "dock.mode.autohide": "Ascuns; apare când mouse-ul atinge marginea stângă",
+ "dock.mode.handle": "Ascuns după un mâner la marginea stângă",
+ "dock.show": "Arată aplicațiile"
 }

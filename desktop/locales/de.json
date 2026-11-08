@@ -2655,5 +2655,17 @@
  "memory.tidyBody": "{count} Änderung(en) an dem, was AI Assist über dich speichert.",
  "memory.tidyMerged": "Zusammengeführt: {from} → {to}",
  "memory.tidyRewritten": "Umformuliert: {from} → {to}",
- "memory.tidyDropped": "Entfernt: {fact}"
+ "memory.tidyDropped": "Entfernt: {fact}",
+ "dock.more": "Mehr",
+ "dock.edit": "Dock bearbeiten",
+ "dock.editNote": "Angehakte Apps stehen im Dock, die anderen warten unter ⋯. Die Pfeile ändern die Reihenfolge.",
+ "dock.up": "Nach oben",
+ "dock.down": "Nach unten",
+ "dock.look": "Aussehen",
+ "dock.iconsOnly": "Nur Symbole",
+ "dock.showing": "Anzeige",
+ "dock.mode.pinned": "Immer sichtbar",
+ "dock.mode.autohide": "Ausgeblendet; erscheint, wenn die Maus den linken Rand erreicht",
+ "dock.mode.handle": "Ausgeblendet hinter einem Griff am linken Rand",
+ "dock.show": "Apps zeigen"
 }

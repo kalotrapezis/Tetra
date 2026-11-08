@@ -2655,5 +2655,17 @@
  "memory.tidyBody": "{count} change(s) to what AI Assist keeps about you.",
  "memory.tidyMerged": "Merged: {from} → {to}",
  "memory.tidyRewritten": "Rewritten: {from} → {to}",
- "memory.tidyDropped": "Dropped: {fact}"
+ "memory.tidyDropped": "Dropped: {fact}",
+ "dock.more": "More",
+ "dock.edit": "Edit the dock",
+ "dock.editNote": "Ticked apps sit in the dock; the others wait under ⋯. Arrows change the order.",
+ "dock.up": "Move up",
+ "dock.down": "Move down",
+ "dock.look": "Look",
+ "dock.iconsOnly": "Icons only",
+ "dock.showing": "Showing",
+ "dock.mode.pinned": "Always shown",
+ "dock.mode.autohide": "Hide; show when the mouse reaches the left edge",
+ "dock.mode.handle": "Hide behind a handle at the left edge",
+ "dock.show": "Show the apps"
 }
