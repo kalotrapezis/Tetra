@@ -1471,6 +1471,13 @@ button.link.risk { color: #d8663f; font-weight: 600; }
 .mail-state { width: 8px; height: 8px; border-radius: 50%; flex: none; display: inline-block; }
 .mail-state.green, .mail-head-meta .green { background: #2e9e5b; }
 .mail-state.orange { background: #d9822b; }
+.mail-urgency { width: 10px; height: 10px; border-radius: 50%; flex: none; display: inline-block; margin-right: 6px; }
+.mail-urgency.tier1 { background: #8a9199; }
+.mail-urgency.tier2 { background: #e0a100; }
+.mail-urgency.tier3 { background: #d32f2f; }
+.mail-ai-why { display: flex; align-items: center; gap: 4px; margin: 8px 0; font-size: 0.92em; }
+.mail-ai-event { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 6px 0; padding: 6px 10px; border-radius: 10px; background: var(--island-2); }
+.mail-ai-event > span { flex: 1; min-width: 12em; }
 .mail-head-meta .green { background: none; color: #3fb27f; }
 .mail-head-meta .orange { color: #e0a43a; }
 .mail-list { padding: 4px 8px 16px; }

@@ -104,6 +104,7 @@
       "ai.js",
       "memory.js",
       "mailclean.js",
+      "mailai.js",
       "msauth.js",
       "tbbridge.js",
       "models/*.onnx",

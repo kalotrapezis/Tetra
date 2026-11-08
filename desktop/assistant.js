@@ -278,6 +278,8 @@ const SCHEMA = [
   fn('mail_new', 'New mail: what is unread in the Inbox of every account, newest first; a numbered list.', [], { days: p('integer', 'How many days back; 2 if not said.') }),
   fn('mail_important', 'Mail the user should look at or act on: from people and not answered yet, ♥ favourites, or speaking of a deadline, a payment, an appointment, a confirmation or a document to send; a numbered list. Then mail_read the ones that matter and say what each wants.', [],
     { days: p('integer', 'How many days back; 7 if not said.') }),
+  fn('mail_urgent', 'Unread mail Tetra\'s Mail AI scored as needing attention (2) or urgent (3), most urgent first, each with the reason; a numbered list for mail_read.', [],
+    { days: p('integer', 'How many days back; 3 if not said.') }),
   fn('mail_search', 'Find mail in the user\'s mail archive (every account) by words in the sender, subject or first lines, or from and to a contact; answers a numbered list, newest first.', [],
     { query: p('string', 'Words to look for; leave out to list the latest.'), contact: p('string', 'A contact\'s name or an email address: mail from or to them (their addresses come from Contacts).'),
       account: p('string', 'Only one of the user\'s accounts: its name (Work, Personal…) or address.'),
@@ -322,7 +324,7 @@ const TOOL_APP = {
   notes_search: 'notes', note_open: 'notes', note_new: 'notes', shopping_list: 'notes', files_find: 'files', file_open: 'files',
   contacts_find: 'contacts', relation_remember: 'contacts', relation_forget: 'contacts', my_card: 'contacts', contact_call: 'phone',
   navigate: 'maps', youtube: 'web', report_save: 'files', web_search: 'web', make_image: 'web', attachment_read: 'files', audio_make: 'files',
-  mail_new: 'mail', mail_important: 'mail', mail_search: 'mail', mail_read: 'mail', mail_needs_answer: 'mail', mail_send: 'mail', mail_status: 'mail', mail_find_local: 'mail', mail_export: 'mail',
+  mail_new: 'mail', mail_important: 'mail', mail_urgent: 'mail', mail_search: 'mail', mail_read: 'mail', mail_needs_answer: 'mail', mail_send: 'mail', mail_status: 'mail', mail_find_local: 'mail', mail_export: 'mail',
 }
 
 const pad = n => String(n).padStart(2, '0')
@@ -572,6 +574,14 @@ class Tools {
     const hits = this.mail.accountsMails().filter(e => e.folder === 'Inbox' && e.date >= since
       && (waiting.has(e.id) || e.flagged || todo.test(plain(`${e.subject} ${e.snippet}`)))).sort((x, y) => y.date - x.date).slice(0, 15)
     return this.mailList(hits, 'Nothing looks like it needs a look or an action.')
+  }
+  /** Read-only: the scores mailai.js wrote (ai/urgency.jsonl); none yet, said so, and mail_important is still there. */
+  mail_urgent(a) {
+    if (!this.mail) return { forModel: 'Mail is not set up in Tetra.' }
+    const hits = new (require('./mailai').MailAi)({ mail: this.mail, now: this.now }).urgent(Number(a.days) || 3)
+    const r = this.mailList(hits.map(h => h.e), 'No unread mail scored as needing attention.')
+    if (hits.length) r.forModel = r.forModel.split('\n').map((l, i) => `${l} {urgency ${hits[i].u.score}: ${hits[i].u.why}}`).join('\n')
+    return r
   }
   /** A contact's email addresses ("Μαρία Κ.", a relation saved on the user's card), or a typed address. */
   addressesFor(who) {
@@ -985,8 +995,9 @@ class Live {
  * The mail report (MAIL_PLAN §8): the prompt a scheduled brief (after the alarm, at a time) runs through the chat, the
  * same tools as any question. Kept here so the briefs and a "mail report" question say the same thing.
  */
-const MAIL_REPORT = `Give me my mail report. Call mail_status, then mail_new for the last day, then mail_important for the last 3 days.
-Read (mail_read) the ones that look important: from people, the school, the university, banks, deadlines.
+const MAIL_REPORT = `Give me my mail report. Call mail_status, then mail_new for the last day, then mail_urgent for the last 3 days
+(Tetra's own scores: 3 urgent, 2 needs attention, with the reason), then mail_important for the last 3 days for what was not scored.
+Read (mail_read) the urgent ones first, then those that look important: from people, the school, the university, banks, deadlines.
 Then say, briefly and in Greek: what came that matters, what needs an answer (who and about what), any deadline or date found in a mail,
 and any account that cannot sync or has mail not yet saved on this computer. No markdown; it may be read aloud.`
 

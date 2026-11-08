@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
-import type { MailAccount, MailAddress, MailCheck, MailCompose, MailLocalAccount, MailStorageInfo, MailCleanPlan, MailDraft, MailDraftKind, MailEntry, MailFilter, MailFolder, MailGarbage, MailOp, MailOpened, MailPrivacy, MailRole, MailServer, MailSignature, MailState } from './drive'
+import type { MailAccount, MailAddress, MailCheck, MailCompose, MailLocalAccount, MailStorageInfo, MailCleanPlan, MailDraft, MailDraftKind, MailEntry, MailFilter, MailFolder, MailAiEvent, MailGarbage, MailOp, MailOpened, MailPrivacy, MailRole, MailServer, MailSignature, MailState } from './drive'
 import { formatBytes } from './timeline'
 import { arrange, dayKey, DEFAULT_VIEW, type MailView } from './mailView'
 import { Confirm, Modal, errorText } from './Dialogs'
@@ -91,6 +91,7 @@ export function MailPage({ setDialog, say, compose }: { setDialog: (d: ReactNode
   const [locals, setLocals] = useState<MailLocalAccount[] | null>(null)
   const [expanded, setExpanded] = useState<Set<MailRole>>(() => new Set(['Inbox']))
   const [mails, setMails] = useState<MailEntry[]>([])
+  const [tiers, setTiers] = useState<Record<string, number>>({}) // Mail AI's urgency, 0-3 (mailai.js)
   const [openId, setOpenId] = useState<string | null>(null)
   const [draft, setDraft] = useState<MailDraft | null>(null) // the mail being written, in place of the open one
   const composer = useRef<ComposeApi | null>(null)
@@ -106,6 +107,7 @@ export function MailPage({ setDialog, say, compose }: { setDialog: (d: ReactNode
   const reload = () => {
     window.drive.mail.accounts().then(setData)
     window.drive.mail.list(whereRef.current.role, whereRef.current.account, whereRef.current.local).then(setMails)
+    window.drive.mail.aiTiers().then(setTiers, () => {})
     if (whereRef.current.local) window.drive.mail.localFolders().then(setLocals)
   }
   useEffect(() => { setLimit(PAGE); reload() }, [where])
@@ -258,7 +260,7 @@ export function MailPage({ setDialog, say, compose }: { setDialog: (d: ReactNode
             shown += rows.length
             return <section key={g.key}>
               <h4 className="mail-group">{view.group === 'day' ? dayText(g.key) : view.group === 'account' ? accounts.get(g.key)?.name ?? g.key : g.key}</h4>
-              {rows.map(m => <MailRow key={m.id} m={m} on={m.id === openId} color={where.account ? null : accounts.get(m.account)?.color ?? null} stored={where.local} onOpen={() => open(m)} onHeart={accounts.get(m.account)?.shadow || where.local ? undefined : () => act(m.flagged ? 'unfavorite' : 'favorite', [m.id])} />)}
+              {rows.map(m => <MailRow key={m.id} m={m} tier={tiers[m.id]} on={m.id === openId} color={where.account ? null : accounts.get(m.account)?.color ?? null} stored={where.local} onOpen={() => open(m)} onHeart={accounts.get(m.account)?.shadow || where.local ? undefined : () => act(m.flagged ? 'unfavorite' : 'favorite', [m.id])} />)}
             </section>
           })}
           {groups.reduce((n, g) => n + g.mails.length, 0) > limit && <button className="text-button mail-more" onClick={() => setLimit(l => l + PAGE)}>{t('mail.more')}</button>}
@@ -272,12 +274,13 @@ export function MailPage({ setDialog, say, compose }: { setDialog: (d: ReactNode
   )
 }
 
-function MailRow({ m, on, color, stored, onOpen, onHeart }: { m: MailEntry; on: boolean; color: string | null; stored?: boolean; onOpen: () => void; onHeart?: () => void }) {
+function MailRow({ m, tier, on, color, stored, onOpen, onHeart }: { m: MailEntry; tier?: number; on: boolean; color: string | null; stored?: boolean; onOpen: () => void; onHeart?: () => void }) {
   // a row holds the ♥ button, so it is not a <button> itself
   return (
     <div role="button" tabIndex={0} className={`mail-row ${on ? 'on' : ''} ${m.seen ? '' : 'unread'}`} onClick={onOpen} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onOpen() } }}
       style={color ? { borderLeftColor: color } : undefined}>
       <span className="mail-row-top">
+        {!m.seen && tier != null && tier > 0 && <span className={`mail-urgency tier${tier}`} title={t(`mail.urgency${tier}`)} />}
         <span className="mail-from">{m.from || m.fromAddress}</span>
         {m.attachments > 0 && <Icon name="attach" size={15} />}
         <span className="mail-time">{timeText(m.date)}</span>
@@ -297,6 +300,10 @@ const hostOf = (u: string) => { try { return new URL(/^https?:/i.test(u) ? u : `
 
 function Reader({ id, color, stored, say, setDialog }: { id: string; color?: string; stored?: boolean; say: (s: string, action?: () => void, label?: string) => void; setDialog: (d: ReactNode) => void }) {
   const [m, setM] = useState<MailOpened | null>(null)
+  const [ai, setAi] = useState<{ urgency: { score: number; why: string } | null; events: MailAiEvent[] }>({ urgency: null, events: [] })
+  const loadAi = () => window.drive.mail.aiFor(id).then(setAi, () => {})
+  useEffect(() => { loadAi() }, [id])
+  const suggestion = (e: MailAiEvent, add: boolean) => (add ? window.drive.mail.aiAdd(e.id) : window.drive.mail.aiDismiss(e.id)).then(() => { if (add) say(t('mail.aiAdded', { title: e.title })); loadAi() }, err => say(errorText(err)))
   const frame = useRef<HTMLIFrameElement>(null)
   const load = (images = false) => window.drive.mail.open(id, images).then(setM, e => say(errorText(e)))
   useEffect(() => { load() }, [id])
@@ -351,6 +358,13 @@ function Reader({ id, color, stored, say, setDialog }: { id: string; color?: str
             <span className={m.saved ? 'green' : 'orange'}>{m.saved ? t('mail.local') : t('mail.serverOnly')}</span>{m.gone && <> · <span className="mail-local-mark">{t('mail.localOnly')}</span></>}</div>
         </div>
       </div>
+      {ai.urgency && ai.urgency.score > 0 && <div className={`mail-ai-why tier${ai.urgency.score}`}><span className={`mail-urgency tier${ai.urgency.score}`} />{t(`mail.urgency${ai.urgency.score}`)}{ai.urgency.why && <> · {ai.urgency.why}</>}</div>}
+      {ai.events.map(e => <div key={e.id} className="mail-ai-event">
+        <Icon name="calendar" size={18} />
+        <span><strong>{e.title}</strong> · {new Date(e.allDay ? e.start + 'T00:00' : e.start).toLocaleString(locale(), e.allDay ? { dateStyle: 'medium' } : { dateStyle: 'medium', timeStyle: 'short' })}{e.place && <> · {e.place}</>}</span>
+        <button className="text-button" onClick={() => suggestion(e, true)}>{t('mail.aiAddCalendar')}</button>
+        <button className="text-button" onClick={() => suggestion(e, false)}>{t('mail.aiDismiss')}</button>
+      </div>)}
       {!m.missing && <div className="mail-exports">
         <button className="text-button" onClick={() => exportTo(null)}><Icon name="folderDocuments" size={18} />{t('mail.exportMail')}</button>
         <button className="text-button" onClick={() => saveAs(null)}><Icon name="save" size={18} />{t('mail.saveAs')}</button>
