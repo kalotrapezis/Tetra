@@ -2762,5 +2762,7 @@
  "passwords.weak": "weak",
  "passwords.wordCount": "Words: {n}",
  "passwords.words": "Words",
- "passwords.year": "Year"
+ "passwords.year": "Year",
+ "passwords.ffPairTitle": "Let Firefox use Tetra Passwords?",
+ "passwords.ffPairText": "Tetra's extension in Firefox asks to show your logins and 2FA codes there, fill them on sites, and save logins you type or change in Firefox. Allow it only if you just installed it."
 }

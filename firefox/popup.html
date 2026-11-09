@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8">
+  <style>
+    :root { color-scheme: light dark; --line: #8884; --dim: #888; --accent: #2a6df4; }
+    body { font: 13px system-ui, sans-serif; margin: 0; width: 340px; }
+    header { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+    header b { flex: 1; font-size: 14px; }
+    main { padding: 10px 12px; max-height: 460px; overflow-y: auto; }
+    p { margin: 6px 0; color: var(--dim); }
+    button { font: inherit; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--line); background: transparent; color: inherit; cursor: pointer; }
+    button.main { background: var(--accent); border-color: var(--accent); color: #fff; }
+    input[type=password], input[type=search] { font: inherit; width: 100%; box-sizing: border-box; padding: 6px 8px; border-radius: 6px; border: 1px solid var(--line); background: transparent; color: inherit; margin: 6px 0; }
+    .tabs { display: flex; gap: 4px; margin-bottom: 6px; }
+    .tabs button[aria-pressed=true] { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .row { display: flex; align-items: center; gap: 6px; padding: 7px 0; border-bottom: 1px solid var(--line); }
+    .row div { flex: 1; min-width: 0; }
+    .row div * { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .row small { color: var(--dim); }
+    .here b::after { content: " •"; color: var(--accent); }
+    .code { font: 600 18px ui-monospace, monospace; letter-spacing: 1px; }
+    .save { border: 1px solid var(--accent); border-radius: 8px; padding: 8px; margin-bottom: 8px; }
+    .gen { display: flex; gap: 6px; align-items: center; margin: 8px 0; }
+    .gen code { flex: 1; overflow-wrap: anywhere; font-size: 12px; }
+    label { display: flex; gap: 6px; align-items: center; color: var(--dim); }
+    #said { color: var(--accent); min-height: 1em; }
+  </style>
+</head>
+<body>
+  <header><b>Tetra Κωδικοί</b><button id="lock" hidden title="Κλείδωμα">🔒</button></header>
+  <main id="main"></main>
+  <script src="popup.js"></script>
+</body>
+</html>

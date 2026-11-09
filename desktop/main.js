@@ -2100,6 +2100,18 @@ app.whenReady().then(() => {
           return r.response === 0
         } finally { clearTimeout(late) } },
     }).catch(e => console.warn('[tbbridge] not started:', e.message))
+    // the door for Tetra's Firefox extension (pwbridge.js): logins and 2FA codes in Firefox, logins typed there saved here
+    if (!process.env.DRIVE_HIDDEN) require('./pwbridge').start(passwords, {
+      token: () => setting('firefoxToken') || null, save: v => setSetting('firefoxToken', v),
+      ask: async () => { await showWindow()
+        const answer = new AbortController(), late = setTimeout(() => answer.abort(), 120_000)
+        try {
+          const r = await dialog.showMessageBox({ type: 'question', buttons: [t('mail.tbAllow'), t('common.cancel')], defaultId: 1, cancelId: 1, title: 'Tetra', message: t('passwords.ffPairTitle'), detail: t('passwords.ffPairText'), signal: answer.signal })
+          return r.response === 0
+        } finally { clearTimeout(late) } },
+      touched: () => { if (!win?.isFocused()) goneAway() }, // used from Firefox, Tetra away: locks again 5 minutes after the last call
+      changed: () => win?.webContents.send('passwords-changed'),
+    }).catch(e => console.warn('[pwbridge] not started:', e.message))
   }, 1500))
   if (argCommand(process.argv)) win.webContents.once('did-finish-load', () => setTimeout(() => assistantCommand(argCommand(process.argv)), 1500))
   if (argMailto(process.argv)) win.webContents.once('did-finish-load', () => setTimeout(() => openMailto(argMailto(process.argv)), 1500))

@@ -2762,5 +2762,7 @@
  "passwords.weak": "αδύναμος",
  "passwords.wordCount": "Λέξεις: {n}",
  "passwords.words": "Λέξεις",
- "passwords.year": "Έτος"
+ "passwords.year": "Έτος",
+ "passwords.ffPairTitle": "Να χρησιμοποιεί το Firefox τους Κωδικούς του Tetra;",
+ "passwords.ffPairText": "Το πρόσθετο του Tetra στο Firefox ζητά να δείχνει εκεί τους κωδικούς και τους κωδικούς 2FA σου, να τους συμπληρώνει στις σελίδες, και να αποθηκεύει τους κωδικούς που γράφεις ή αλλάζεις στο Firefox. Επίτρεψέ το μόνο αν μόλις το εγκατέστησες."
 }
