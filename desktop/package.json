@@ -109,6 +109,7 @@
       "mailai.js",
       "msauth.js",
       "tbbridge.js",
+      "pwbridge.js",
       "models/*.onnx",
       "models/tessdata/*.traineddata",
       "dist/**",
