@@ -105,6 +105,10 @@ NEW = {
     'ai-brief': ('#FD6A04', [('d-brief-dark.png', 470, 'tablet', 690, 130), ('d-brief-light.png', 470, 'tablet', 1090, 170)]),
     'pills': ('#E5487A', [('p-pills-today.png', 270, 'phone', 680, 120), ('p-pills-medicines.png', 270, 'phone', 990, 170), ('p-pills-progress.png', 270, 'phone', 1300, 120)]),
     'pills-guide': ('#E5487A', [('p-pills-home.png', 270, 'phone', 680, 170), ('p-pills-look.png', 270, 'phone', 990, 120), ('p-pills-when.png', 270, 'phone', 1300, 170)]),
+    'ai-tv': ('#FD6A04', [('p-tv-hello.png', 310, 'phone', 760, 90), ('p-passwords-home.png', 310, 'phone', 1150, 150)]),
+    'car': ('#4A6A8A', [('t-car-media.png', 880, 'tablet', 660, 170)]),  # the car's own slate (#2B3A4A) is too dark to glow
+    'car-message': ('#4A6A8A', [('t-car-message.png', 690, 'tablet', 625, 230), ('p-car-settings.png', 225, 'phone', 1350, 170)]),
+    'passwords': ('#7E37ED', [('p-passwords-list.png', 270, 'phone', 680, 120), ('p-passwords-2fa.png', 270, 'phone', 990, 170), ('p-passwords-home.png', 270, 'phone', 1300, 120)]),
 }
 
 def make_new(shots):

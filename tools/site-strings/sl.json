@@ -218,5 +218,21 @@
  "Raise to answer, never in your pocket": "Dvignite za sprejem, nikoli v žepu",
  "Your pills, on time": "Vaše tablete, ob pravem času",
  "Add a medicine step by step, or say it": "Dodajte zdravilo korak za korakom ali ga povejte",
- "Pills": "Tablete"
+ "Pills": "Tablete",
+ "AI Assist on a little TV": "AI Assist na majhnem televizorju",
+ "Hold the power button and a pixel robot on an old TV listens, shows what it is doing and puts the answer on the screen. It rests on Home too. Switch the decorations off for a plain conversation.": "Pridržite gumb za vklop in pikselni robot na starem televizorju posluša, pokaže, kaj počne, in prikaže odgovor na zaslonu. Počiva tudi na zaslonu Domov. Za preprost pogovor izklopite okraske.",
+ "Tetra Car, instead of Android Auto": "Tetra Car namesto Android Auta",
+ "For a car's Android screen: the map and Media side by side, a dock, and AI Assist's mic. Media plays YouTube Music, YouTube, Spotify and Live24.gr radio. Say \"open Messages\" and it opens beside the map.": "Za zaslon Android v avtomobilu: zemljevid in Mediji drug ob drugem, dok in mikrofon AI Assista. Mediji predvajajo YouTube Music, YouTube, Spotify in radio Live24.gr. Recite „odpri Sporočila“ in se odprejo ob zemljevidu.",
+ "Messages read aloud, calls answered": "Sporočila prebrana na glas, klici sprejeti",
+ "In the car a message is read aloud and you answer by voice, and a call is answered after 2 seconds. Each takes the side pane while the map stays, the music pauses and other notifications wait. Pair your phone once with a QR code: the car's screen gets its calls and messages, with nothing synced.": "V avtomobilu se sporočilo prebere na glas in odgovorite z glasom, klic pa se sprejme po 2 sekundah. Vsak zasede stransko podokno, medtem ko zemljevid ostane, glasba se ustavi in druga obvestila počakajo. Telefon enkrat seznanite s kodo QR: zaslon avtomobila dobi njegove klice in sporočila, nič se ne sinhronizira.",
+ "Passwords and 2FA codes, on your own devices": "Gesla in kode 2FA, na vaših lastnih napravah",
+ "Logins, cards, addresses and 2FA codes, encrypted and synced only between your devices. Tetra fills them in other apps, and on websites with its Firefox extension. On Home, your ♥ logins and the next code wait behind your fingerprint.": "Prijave, kartice, naslovi in kode 2FA, šifrirani in sinhronizirani samo med vašimi napravami. Tetra jih izpolni v drugih aplikacijah, na spletnih mestih pa s svojo razširitvijo za Firefox. Na zaslonu Domov vaše ♥ prijave in naslednja koda čakajo za prstnim odtisom.",
+ "Passwords": "Gesla",
+ "Tetra Car": "Tetra Car",
+ "APK · 0.8.0 beta 11 · Android 11+": "APK · 0.8.0 beta 11 · Android 11+",
+ "0.8.0 beta 6 · most distros": "0.8.0 beta 6 · večina distribucij",
+ "0.8.0 beta 11": "0.8.0 beta 11",
+ "0.8.0 beta 6": "0.8.0 beta 6",
+ "Thunderbird extension": "Razširitev za Thunderbird",
+ "Tetra Mail, for accounts only Thunderbird opens": "Tetra Mail, za račune, ki jih odpre le Thunderbird"
 }

@@ -62,6 +62,8 @@ your own backups. Screenshots use invented sample data.
 ![Contacts and Phone](Assets/cards/card-people.jpg)
 ![Calls on your computer: the call bubble](Assets/cards/card-bubble.jpg)
 ![Notes, timers and files](Assets/cards/desktop-notes.jpg)
+![Pills: your pills, on time](Assets/cards/card-pills.jpg)
+![Passwords and 2FA codes, on your own devices](Assets/cards/card-passwords.jpg)
 ![More than one copy, no subscription](Assets/cards/card-safety.jpg)
 ![Files](Assets/cards/card-files.jpg)
 ![Files both ways: Send to computer on the phone, Send to phone on the computer](Assets/cards/card-send.jpg)

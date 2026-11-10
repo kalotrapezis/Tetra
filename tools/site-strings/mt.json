@@ -218,5 +218,21 @@
  "Raise to answer, never in your pocket": "Għolli biex twieġeb, qatt fil-but",
  "Your pills, on time": "Il-pilloli tiegħek, fil-ħin",
  "Add a medicine step by step, or say it": "Żid mediċina pass pass, jew għidha",
- "Pills": "Pilloli"
+ "Pills": "Pilloli",
+ "AI Assist on a little TV": "AI Assist fuq televiżjoni żgħira",
+ "Hold the power button and a pixel robot on an old TV listens, shows what it is doing and puts the answer on the screen. It rests on Home too. Switch the decorations off for a plain conversation.": "Żomm il-buttuna tal-power u robot tal-pixels fuq televiżjoni qadima jisma’, juri x’qed jagħmel u jpoġġi t-tweġiba fuq l-iskrin. Jistrieħ ukoll fuq Dar. Itfi d-dekorazzjonijiet għal konversazzjoni sempliċi.",
+ "Tetra Car, instead of Android Auto": "Tetra Car, minflok Android Auto",
+ "For a car's Android screen: the map and Media side by side, a dock, and AI Assist's mic. Media plays YouTube Music, YouTube, Spotify and Live24.gr radio. Say \"open Messages\" and it opens beside the map.": "Għall-iskrin Android tal-karozza: il-mappa u Midja ħdejn xulxin, dock, u l-mikrofonu ta’ AI Assist. Midja jdoqq YouTube Music, YouTube, Spotify u r-radju Live24.gr. Għid “iftaħ Messaġġi” u jinfetaħ ħdejn il-mappa.",
+ "Messages read aloud, calls answered": "Messaġġi moqrija b’leħen għoli, sejħiet imwieġba",
+ "In the car a message is read aloud and you answer by voice, and a call is answered after 2 seconds. Each takes the side pane while the map stays, the music pauses and other notifications wait. Pair your phone once with a QR code: the car's screen gets its calls and messages, with nothing synced.": "Fil-karozza messaġġ jinqara b’leħen għoli u twieġeb bil-leħen, u sejħa titwieġeb wara 2 sekondi. Kull wieħed jieħu l-pannell tal-ġenb waqt li l-mappa tibqa’, il-mużika tieqaf u notifiki oħra jistennew. Qabbad it-telefon tiegħek darba b’kodiċi QR: l-iskrin tal-karozza jirċievi s-sejħiet u l-messaġġi tiegħu, mingħajr ma jiġi sinkronizzat xejn.",
+ "Passwords and 2FA codes, on your own devices": "Passwords u kodiċijiet 2FA, fuq l-apparati tiegħek stess",
+ "Logins, cards, addresses and 2FA codes, encrypted and synced only between your devices. Tetra fills them in other apps, and on websites with its Firefox extension. On Home, your ♥ logins and the next code wait behind your fingerprint.": "Logins, karti, indirizzi u kodiċijiet 2FA, kriptati u sinkronizzati biss bejn l-apparati tiegħek. Tetra jimlihom f’apps oħra, u fuq is-siti web bl-estensjoni tiegħu għal Firefox. Fuq Dar, il-logins ♥ tiegħek u l-kodiċi li jmiss jistennew wara l-marka tas-saba’ tiegħek.",
+ "Passwords": "Passwords",
+ "Tetra Car": "Tetra Car",
+ "APK · 0.8.0 beta 11 · Android 11+": "APK · 0.8.0 beta 11 · Android 11+",
+ "0.8.0 beta 6 · most distros": "0.8.0 beta 6 · l-aktar distribuzzjonijiet",
+ "0.8.0 beta 11": "0.8.0 beta 11",
+ "0.8.0 beta 6": "0.8.0 beta 6",
+ "Thunderbird extension": "Estensjoni għal Thunderbird",
+ "Tetra Mail, for accounts only Thunderbird opens": "Tetra Mail, għal kontijiet li jiftaħ biss Thunderbird"
 }

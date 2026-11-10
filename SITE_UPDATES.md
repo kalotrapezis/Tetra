@@ -45,6 +45,9 @@ site shows it, in every language.
 - [ ] **Daily brief weather** (4 Nov): without a place set it uses where the phone is; the phone's Scheduled tab shows and sets it.
 - [x] **Pills** (7 Nov, Android 0.8.0 beta 7): a tab with two cards (Today · Medicines · Progress; the step-by-step guide,
       Home's icon) from `tools/site-cards.py` (`pills`, `pills-guide`), and a tile; English screenshots in Tetra-site-shots.
+- [x] **Tetra Car, Passwords, AI Assist's TV** (10 Nov): tabs Tetra Car (two cards: `car`, `car-message`) and Passwords
+      (`passwords`), a card `ai-tv` in AI Assist; `tools/site-cards.py`, screenshots in Tetra-site-shots (emulators, sample
+      data). The READMEs have them as Assets/cards/card-*.jpg (the site's card rendered by headless Chrome), with Pills.
 - [x] **AI Assist's quick button keeps the conversation**, **Browser: two fingers change tab**, **Raise to answer, never in
       your pocket**: a tile each (7 Nov).
 

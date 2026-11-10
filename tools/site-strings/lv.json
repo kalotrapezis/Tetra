@@ -218,5 +218,21 @@
  "Raise to answer, never in your pocket": "Pieceliet, lai atbildētu, nekad kabatā",
  "Your pills, on time": "Jūsu tabletes, laikā",
  "Add a medicine step by step, or say it": "Pievienojiet zāles soli pa solim vai pasakiet",
- "Pills": "Tabletes"
+ "Pills": "Tabletes",
+ "AI Assist on a little TV": "AI Assist mazā televizorā",
+ "Hold the power button and a pixel robot on an old TV listens, shows what it is doing and puts the answer on the screen. It rests on Home too. Switch the decorations off for a plain conversation.": "Turiet nospiestu barošanas pogu, un pikseļu robots vecā televizorā klausās, rāda, ko dara, un parāda atbildi ekrānā. Tas atpūšas arī Sākumā. Izslēdziet rotājumus vienkāršai sarunai.",
+ "Tetra Car, instead of Android Auto": "Tetra Car Android Auto vietā",
+ "For a car's Android screen: the map and Media side by side, a dock, and AI Assist's mic. Media plays YouTube Music, YouTube, Spotify and Live24.gr radio. Say \"open Messages\" and it opens beside the map.": "Automašīnas Android ekrānam: karte un Mediji blakus, doks un AI Assist mikrofons. Mediji atskaņo YouTube Music, YouTube, Spotify un Live24.gr radio. Sakiet „atver Ziņas”, un tās atveras blakus kartei.",
+ "Messages read aloud, calls answered": "Ziņas nolasītas skaļi, zvani atbildēti",
+ "In the car a message is read aloud and you answer by voice, and a call is answered after 2 seconds. Each takes the side pane while the map stays, the music pauses and other notifications wait. Pair your phone once with a QR code: the car's screen gets its calls and messages, with nothing synced.": "Automašīnā ziņa tiek nolasīta skaļi, un jūs atbildat balsī, bet uz zvanu tiek atbildēts pēc 2 sekundēm. Katrs aizņem sānu paneli, kamēr karte paliek, mūzika tiek pauzēta un citi paziņojumi gaida. Vienreiz savienojiet tālruni pārī ar QR kodu: automašīnas ekrāns saņem tā zvanus un ziņas, nekas netiek sinhronizēts.",
+ "Passwords and 2FA codes, on your own devices": "Paroles un 2FA kodi, jūsu pašu ierīcēs",
+ "Logins, cards, addresses and 2FA codes, encrypted and synced only between your devices. Tetra fills them in other apps, and on websites with its Firefox extension. On Home, your ♥ logins and the next code wait behind your fingerprint.": "Pieteikšanās dati, kartes, adreses un 2FA kodi, šifrēti un sinhronizēti tikai starp jūsu ierīcēm. Tetra tos aizpilda citās lietotnēs, bet tīmekļa vietnēs – ar savu Firefox paplašinājumu. Sākumā jūsu ♥ pieteikšanās dati un nākamais kods gaida aiz pirksta nospieduma.",
+ "Passwords": "Paroles",
+ "Tetra Car": "Tetra Car",
+ "APK · 0.8.0 beta 11 · Android 11+": "APK · 0.8.0 beta 11 · Android 11+",
+ "0.8.0 beta 6 · most distros": "0.8.0 beta 6 · vairums izplatījumu",
+ "0.8.0 beta 11": "0.8.0 beta 11",
+ "0.8.0 beta 6": "0.8.0 beta 6",
+ "Thunderbird extension": "Thunderbird paplašinājums",
+ "Tetra Mail, for accounts only Thunderbird opens": "Tetra Mail kontiem, ko atver tikai Thunderbird"
 }

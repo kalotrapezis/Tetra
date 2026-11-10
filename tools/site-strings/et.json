@@ -218,5 +218,21 @@
  "Raise to answer, never in your pocket": "Tõstke vastamiseks, mitte kunagi taskus",
  "Your pills, on time": "Teie tabletid, õigel ajal",
  "Add a medicine step by step, or say it": "Lisage ravim samm-sammult või öelge see",
- "Pills": "Tabletid"
+ "Pills": "Tabletid",
+ "AI Assist on a little TV": "AI Assist väikesel teleril",
+ "Hold the power button and a pixel robot on an old TV listens, shows what it is doing and puts the answer on the screen. It rests on Home too. Switch the decorations off for a plain conversation.": "Hoia toitenuppu all ja vana teleri pikslirobot kuulab, näitab, mida ta teeb, ja paneb vastuse ekraanile. Ta puhkab ka Avalehel. Lihtsaks vestluseks lülita kaunistused välja.",
+ "Tetra Car, instead of Android Auto": "Tetra Car, Android Auto asemel",
+ "For a car's Android screen: the map and Media side by side, a dock, and AI Assist's mic. Media plays YouTube Music, YouTube, Spotify and Live24.gr radio. Say \"open Messages\" and it opens beside the map.": "Auto Android-ekraanile: kaart ja Meedia kõrvuti, dokk ja AI Assisti mikrofon. Meedia mängib YouTube Musicut, YouTube’i, Spotifyd ja Live24.gr raadiot. Ütle „ava Sõnumid“ ja need avanevad kaardi kõrval.",
+ "Messages read aloud, calls answered": "Sõnumid ette loetud, kõnedele vastatud",
+ "In the car a message is read aloud and you answer by voice, and a call is answered after 2 seconds. Each takes the side pane while the map stays, the music pauses and other notifications wait. Pair your phone once with a QR code: the car's screen gets its calls and messages, with nothing synced.": "Autos loetakse sõnum ette ja sa vastad häälega ning kõnele vastatakse 2 sekundi pärast. Kumbki võtab külgpaneeli, kaart jääb alles, muusika peatub ja muud teavitused ootavad. Seo telefon üks kord QR-koodiga: auto ekraan saab selle kõned ja sõnumid, midagi ei sünkroonita.",
+ "Passwords and 2FA codes, on your own devices": "Paroolid ja 2FA-koodid, sinu enda seadmetes",
+ "Logins, cards, addresses and 2FA codes, encrypted and synced only between your devices. Tetra fills them in other apps, and on websites with its Firefox extension. On Home, your ♥ logins and the next code wait behind your fingerprint.": "Sisselogimisandmed, kaardid, aadressid ja 2FA-koodid, krüpteeritud ja sünkroonitud ainult sinu seadmete vahel. Tetra täidab need teistes rakendustes ning veebisaitidel oma Firefoxi laiendusega. Avalehel ootavad sinu ♥ sisselogimised ja järgmine kood sõrmejälje taga.",
+ "Passwords": "Paroolid",
+ "Tetra Car": "Tetra Car",
+ "APK · 0.8.0 beta 11 · Android 11+": "APK · 0.8.0 beta 11 · Android 11+",
+ "0.8.0 beta 6 · most distros": "0.8.0 beta 6 · enamik distributsioone",
+ "0.8.0 beta 11": "0.8.0 beta 11",
+ "0.8.0 beta 6": "0.8.0 beta 6",
+ "Thunderbird extension": "Thunderbirdi laiendus",
+ "Tetra Mail, for accounts only Thunderbird opens": "Tetra Mail, kontodele, mida avab ainult Thunderbird"
 }

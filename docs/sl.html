@@ -231,6 +231,8 @@
       <button role="tab" id="tab-data" aria-controls="panel-data" aria-selected="false" tabindex="-1" style="--c:#9AD01E;--on:#111">Podatki</button>
       <button role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1" style="--c:#FD6A04;--on:#111">AI Assist</button>
       <button role="tab" id="tab-pills" aria-controls="panel-pills" aria-selected="false" tabindex="-1" style="--c:#E5487A;--on:#fff">Tablete</button>
+      <button role="tab" id="tab-car" aria-controls="panel-car" aria-selected="false" tabindex="-1" style="--c:#2B3A4A;--on:#fff">Tetra Car</button>
+      <button role="tab" id="tab-passwords" aria-controls="panel-passwords" aria-selected="false" tabindex="-1" style="--c:#7E37ED;--on:#fff">Gesla</button>
       <button role="tab" id="tab-guide"aria-controls="panel-guide" aria-selected="false" tabindex="-1" style="--c:#8E99A6;--on:#111">Vodnik · Nastavitve</button>
     </div>
     <div role="tabpanel" id="panel-home" aria-labelledby="tab-home">
@@ -315,12 +317,24 @@
         <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>Stvari, ki jih naredi sam, ob pravem času</h3><p>Napišite ali recite „vsak ponedeljek ob 7., kaj imam ta teden“: enkrat, dnevno, tedensko, mesečno ali letno. Ko je opravljeno, odgovor zazvoni kot obvestilo.</p></figcaption></figure>
       <figure class="card" style="--c:#FD6A04"><div class="pic"><img src="img/art/ai-brief.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>Stran za vaše jutro</h3><p>Dnevni pregled zbere današnji koledar, pošto, ki vas potrebuje, vreme in odprte kontrolne sezname iz Zapiskov. Vi izberete, kaj je v njem.</p></figcaption></figure>
+      <figure class="card" style="--c:#FD6A04"><div class="pic"><img src="img/art/ai-tv.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>AI Assist na majhnem televizorju</h3><p>Pridržite gumb za vklop in pikselni robot na starem televizorju posluša, pokaže, kaj počne, in prikaže odgovor na zaslonu. Počiva tudi na zaslonu Domov. Za preprost pogovor izklopite okraske.</p></figcaption></figure>
     </div>
     <div role="tabpanel" id="panel-pills" aria-labelledby="tab-pills" hidden>
       <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Tablete</span><h3>Vaše tablete, ob pravem času</h3><p>Kartica za vsak del dneva, vsaka tableta narisana v svoji obliki in barvi ali prikazana s svojo fotografijo. „Vzeto“ je en dotik, tukaj ali na obvestilu, odmerek, ki ste ga sinoči pozabili, pa čaka na vrhu. Vsaka škatlica doda svoje tablete, Napredek pa pokaže, kaj pozabljate, in predlaga boljši čas.</p></figcaption></figure>
       <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills-guide.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Tablete</span><h3>Dodajte zdravilo korak za korakom ali ga povejte</h3><p>Pet korakov: ime, kako izgleda, kdaj jo jemljete, koliko jih imate in kdaj naročiti več. Ko je AI Assist vklopljen, vse povejte v enem stavku in koraki se izpolnijo; preverite jih in pritisnete Naprej. Ali pa AI Assist povejte „Dobil sem novo škatlico z 90“ in se preštejejo.</p></figcaption></figure>
+    </div>
+    <div role="tabpanel" id="panel-car" aria-labelledby="tab-car" hidden>
+      <figure class="card" style="--c:#2B3A4A;--on:#fff"><div class="pic"><img src="img/art/car.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/car.png" alt=""><span class="pill">Tetra Car</span><h3>Tetra Car namesto Android Auta</h3><p>Za zaslon Android v avtomobilu: zemljevid in Mediji drug ob drugem, dok in mikrofon AI Assista. Mediji predvajajo YouTube Music, YouTube, Spotify in radio Live24.gr. Recite „odpri Sporočila“ in se odprejo ob zemljevidu.</p></figcaption></figure>
+      <figure class="card" style="--c:#2B3A4A;--on:#fff"><div class="pic"><img src="img/art/car-message.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/car.png" alt=""><span class="pill">Tetra Car</span><h3>Sporočila prebrana na glas, klici sprejeti</h3><p>V avtomobilu se sporočilo prebere na glas in odgovorite z glasom, klic pa se sprejme po 2 sekundah. Vsak zasede stransko podokno, medtem ko zemljevid ostane, glasba se ustavi in druga obvestila počakajo. Telefon enkrat seznanite s kodo QR: zaslon avtomobila dobi njegove klice in sporočila, nič se ne sinhronizira.</p></figcaption></figure>
+    </div>
+    <div role="tabpanel" id="panel-passwords" aria-labelledby="tab-passwords" hidden>
+      <figure class="card" style="--c:#7E37ED;--on:#fff"><div class="pic"><img src="img/art/passwords.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/passwords.png" alt=""><span class="pill">Gesla</span><h3>Gesla in kode 2FA, na vaših lastnih napravah</h3><p>Prijave, kartice, naslovi in kode 2FA, šifrirani in sinhronizirani samo med vašimi napravami. Tetra jih izpolni v drugih aplikacijah, na spletnih mestih pa s svojo razširitvijo za Firefox. Na zaslonu Domov vaše ♥ prijave in naslednja koda čakajo za prstnim odtisom.</p></figcaption></figure>
     </div>
     <div role="tabpanel" id="panel-guide" aria-labelledby="tab-guide" hidden>
       <figure class="card" style="--c:#8E99A6"><div class="pic"><img src="img/art/guide.jpg" alt="" loading="lazy"></div>

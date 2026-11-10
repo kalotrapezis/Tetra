@@ -218,5 +218,21 @@
  "Raise to answer, never in your pocket": "Lyft för att svara, aldrig i fickan",
  "Your pills, on time": "Dina piller, i tid",
  "Add a medicine step by step, or say it": "Lägg till en medicin steg för steg, eller säg den",
- "Pills": "Piller"
+ "Pills": "Piller",
+ "AI Assist on a little TV": "AI Assist på en liten tv",
+ "Hold the power button and a pixel robot on an old TV listens, shows what it is doing and puts the answer on the screen. It rests on Home too. Switch the decorations off for a plain conversation.": "Håll in strömknappen så lyssnar en pixelrobot på en gammal tv, visar vad den gör och lägger svaret på skärmen. Den vilar på Start också. Stäng av dekorationerna för ett vanligt samtal.",
+ "Tetra Car, instead of Android Auto": "Tetra Car, i stället för Android Auto",
+ "For a car's Android screen: the map and Media side by side, a dock, and AI Assist's mic. Media plays YouTube Music, YouTube, Spotify and Live24.gr radio. Say \"open Messages\" and it opens beside the map.": "För bilens Android-skärm: kartan och Media sida vid sida, en docka och AI Assists mikrofon. Media spelar YouTube Music, YouTube, Spotify och Live24.gr-radio. Säg ”öppna Meddelanden” så öppnas den bredvid kartan.",
+ "Messages read aloud, calls answered": "Meddelanden lästa högt, samtal besvarade",
+ "In the car a message is read aloud and you answer by voice, and a call is answered after 2 seconds. Each takes the side pane while the map stays, the music pauses and other notifications wait. Pair your phone once with a QR code: the car's screen gets its calls and messages, with nothing synced.": "I bilen läses ett meddelande upp och du svarar med rösten, och ett samtal besvaras efter 2 sekunder. Vart och ett tar sidopanelen medan kartan stannar kvar, musiken pausas och andra aviseringar väntar. Parkoppla telefonen en gång med en QR-kod: bilens skärm får dess samtal och meddelanden, utan att något synkas.",
+ "Passwords and 2FA codes, on your own devices": "Lösenord och 2FA-koder, på dina egna enheter",
+ "Logins, cards, addresses and 2FA codes, encrypted and synced only between your devices. Tetra fills them in other apps, and on websites with its Firefox extension. On Home, your ♥ logins and the next code wait behind your fingerprint.": "Inloggningar, kort, adresser och 2FA-koder, krypterade och synkade bara mellan dina enheter. Tetra fyller i dem i andra appar, och på webbplatser med sitt Firefox-tillägg. På Start väntar dina ♥-inloggningar och nästa kod bakom ditt fingeravtryck.",
+ "Passwords": "Lösenord",
+ "Tetra Car": "Tetra Car",
+ "APK · 0.8.0 beta 11 · Android 11+": "APK · 0.8.0 beta 11 · Android 11+",
+ "0.8.0 beta 6 · most distros": "0.8.0 beta 6 · de flesta distributioner",
+ "0.8.0 beta 11": "0.8.0 beta 11",
+ "0.8.0 beta 6": "0.8.0 beta 6",
+ "Thunderbird extension": "Tillägg för Thunderbird",
+ "Tetra Mail, for accounts only Thunderbird opens": "Tetra Mail, för konton som bara Thunderbird öppnar"
 }

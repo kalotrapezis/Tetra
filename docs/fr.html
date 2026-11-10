@@ -231,6 +231,8 @@
       <button role="tab" id="tab-data" aria-controls="panel-data" aria-selected="false" tabindex="-1" style="--c:#9AD01E;--on:#111">Données</button>
       <button role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1" style="--c:#FD6A04;--on:#111">AI Assist</button>
       <button role="tab" id="tab-pills" aria-controls="panel-pills" aria-selected="false" tabindex="-1" style="--c:#E5487A;--on:#fff">Comprimés</button>
+      <button role="tab" id="tab-car" aria-controls="panel-car" aria-selected="false" tabindex="-1" style="--c:#2B3A4A;--on:#fff">Tetra Car</button>
+      <button role="tab" id="tab-passwords" aria-controls="panel-passwords" aria-selected="false" tabindex="-1" style="--c:#7E37ED;--on:#fff">Mots de passe</button>
       <button role="tab" id="tab-guide"aria-controls="panel-guide" aria-selected="false" tabindex="-1" style="--c:#8E99A6;--on:#111">Guide · Paramètres</button>
     </div>
     <div role="tabpanel" id="panel-home" aria-labelledby="tab-home">
@@ -315,12 +317,24 @@
         <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>Ce qu’il fait tout seul, à l’heure</h3><p>Écrivez ou dites « chaque lundi à 7 h, ce que j’ai cette semaine » : une fois, chaque jour, chaque semaine, chaque mois ou chaque année. Une fois la tâche faite, la réponse sonne en notification.</p></figcaption></figure>
       <figure class="card" style="--c:#FD6A04"><div class="pic"><img src="img/art/ai-brief.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>Une page pour votre matin</h3><p>Le résumé du jour réunit l’agenda d’aujourd’hui, les courriels qui vous attendent, la météo et les listes de contrôle ouvertes de Notes. Vous choisissez ce qu’il contient.</p></figcaption></figure>
+      <figure class="card" style="--c:#FD6A04"><div class="pic"><img src="img/art/ai-tv.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>AI Assist sur une petite télé</h3><p>Maintenez le bouton d’alimentation et un robot en pixels sur une vieille télé écoute, montre ce qu’il fait et affiche la réponse à l’écran. Il se repose aussi sur l’Accueil. Désactivez les décorations pour une conversation simple.</p></figcaption></figure>
     </div>
     <div role="tabpanel" id="panel-pills" aria-labelledby="tab-pills" hidden>
       <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Comprimés</span><h3>Vos comprimés, à l’heure</h3><p>Une carte pour chaque moment de la journée, chaque comprimé dessiné avec sa forme et sa couleur, ou montré par sa photo. « Pris » se fait d’une seule pression, ici ou sur la notification, et une prise oubliée hier soir attend tout en haut. Chaque boîte ajoute ses comprimés, et Progression montre ce que vous oubliez et suggère un meilleur moment.</p></figcaption></figure>
       <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills-guide.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Comprimés</span><h3>Ajoutez un médicament étape par étape, ou dites-le</h3><p>Cinq étapes : son nom, son apparence, quand vous le prenez, combien vous en avez et quand en commander d’autres. Avec AI Assist activé, dites tout en une phrase et les étapes se remplissent ; vous les vérifiez et appuyez sur Suivant. Ou dites à AI Assist « J’ai reçu une nouvelle boîte de 90 » et ils sont comptés.</p></figcaption></figure>
+    </div>
+    <div role="tabpanel" id="panel-car" aria-labelledby="tab-car" hidden>
+      <figure class="card" style="--c:#2B3A4A;--on:#fff"><div class="pic"><img src="img/art/car.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/car.png" alt=""><span class="pill">Tetra Car</span><h3>Tetra Car, à la place d’Android Auto</h3><p>Pour l’écran Android d’une voiture : la carte et Médias côte à côte, un dock et le micro d’AI Assist. Médias lit YouTube Music, YouTube, Spotify et la radio Live24.gr. Dites « ouvre Messages » et il s’ouvre à côté de la carte.</p></figcaption></figure>
+      <figure class="card" style="--c:#2B3A4A;--on:#fff"><div class="pic"><img src="img/art/car-message.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/car.png" alt=""><span class="pill">Tetra Car</span><h3>Messages lus à voix haute, appels décrochés</h3><p>En voiture, un message est lu à voix haute et vous répondez à la voix, et un appel est décroché au bout de 2 secondes. Chacun prend le panneau latéral : la carte reste, la musique se met en pause et les autres notifications attendent. Associez votre téléphone une fois avec un code QR : l’écran de la voiture reçoit ses appels et ses messages, sans rien synchroniser.</p></figcaption></figure>
+    </div>
+    <div role="tabpanel" id="panel-passwords" aria-labelledby="tab-passwords" hidden>
+      <figure class="card" style="--c:#7E37ED;--on:#fff"><div class="pic"><img src="img/art/passwords.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/passwords.png" alt=""><span class="pill">Mots de passe</span><h3>Mots de passe et codes 2FA, sur vos propres appareils</h3><p>Identifiants, cartes, adresses et codes 2FA, chiffrés et synchronisés uniquement entre vos appareils. Tetra les remplit dans d’autres apps, et sur les sites web avec son extension Firefox. Sur l’Accueil, vos identifiants ♥ et le prochain code attendent derrière votre empreinte.</p></figcaption></figure>
     </div>
     <div role="tabpanel" id="panel-guide" aria-labelledby="tab-guide" hidden>
       <figure class="card" style="--c:#8E99A6"><div class="pic"><img src="img/art/guide.jpg" alt="" loading="lazy"></div>

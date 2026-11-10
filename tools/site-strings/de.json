@@ -218,5 +218,21 @@
  "Raise to answer, never in your pocket": "Zum Antworten anheben, nie in der Tasche",
  "Your pills, on time": "Deine Tabletten, pünktlich",
  "Add a medicine step by step, or say it": "Ein Medikament Schritt für Schritt hinzufügen oder sagen",
- "Pills": "Tabletten"
+ "Pills": "Tabletten",
+ "AI Assist on a little TV": "AI Assist auf einem kleinen Fernseher",
+ "Hold the power button and a pixel robot on an old TV listens, shows what it is doing and puts the answer on the screen. It rests on Home too. Switch the decorations off for a plain conversation.": "Halte die Ein-/Aus-Taste gedrückt, und ein Pixel-Roboter auf einem alten Fernseher hört zu, zeigt, was er tut, und bringt die Antwort auf den Bildschirm. Er wartet auch auf Start. Schalte die Dekoration aus, und es bleibt ein schlichtes Gespräch.",
+ "Tetra Car, instead of Android Auto": "Tetra Car statt Android Auto",
+ "For a car's Android screen: the map and Media side by side, a dock, and AI Assist's mic. Media plays YouTube Music, YouTube, Spotify and Live24.gr radio. Say \"open Messages\" and it opens beside the map.": "Für den Android-Bildschirm im Auto: Karte und Medien nebeneinander, ein Dock und das Mikrofon von AI Assist. Medien spielt YouTube Music, YouTube, Spotify und Radio von Live24.gr. Sag „Öffne Nachrichten“, und es öffnet sich neben der Karte.",
+ "Messages read aloud, calls answered": "Nachrichten vorgelesen, Anrufe angenommen",
+ "In the car a message is read aloud and you answer by voice, and a call is answered after 2 seconds. Each takes the side pane while the map stays, the music pauses and other notifications wait. Pair your phone once with a QR code: the car's screen gets its calls and messages, with nothing synced.": "Im Auto wird eine Nachricht vorgelesen und du antwortest per Sprache, und ein Anruf wird nach 2 Sekunden angenommen. Beides erscheint im Seitenbereich, während die Karte bleibt, die Musik pausiert und andere Benachrichtigungen warten. Kopple dein Handy einmal per QR-Code: Der Bildschirm im Auto bekommt seine Anrufe und Nachrichten, ohne dass etwas synchronisiert wird.",
+ "Passwords and 2FA codes, on your own devices": "Passwörter und 2FA-Codes, auf deinen eigenen Geräten",
+ "Logins, cards, addresses and 2FA codes, encrypted and synced only between your devices. Tetra fills them in other apps, and on websites with its Firefox extension. On Home, your ♥ logins and the next code wait behind your fingerprint.": "Logins, Karten, Adressen und 2FA-Codes, verschlüsselt und nur zwischen deinen Geräten synchronisiert. Tetra füllt sie in anderen Apps aus, und auf Websites mit seiner Firefox-Erweiterung. Auf Start warten deine ♥-Logins und der nächste Code hinter deinem Fingerabdruck.",
+ "Passwords": "Passwörter",
+ "Tetra Car": "Tetra Car",
+ "APK · 0.8.0 beta 11 · Android 11+": "APK · 0.8.0 beta 11 · Android 11+",
+ "0.8.0 beta 6 · most distros": "0.8.0 beta 6 · die meisten Distributionen",
+ "0.8.0 beta 11": "0.8.0 beta 11",
+ "0.8.0 beta 6": "0.8.0 beta 6",
+ "Thunderbird extension": "Erweiterung für Thunderbird",
+ "Tetra Mail, for accounts only Thunderbird opens": "Tetra Mail, für Konten, die nur Thunderbird öffnet"
 }

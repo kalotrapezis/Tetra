@@ -231,6 +231,8 @@
       <button role="tab" id="tab-data" aria-controls="panel-data" aria-selected="false" tabindex="-1" style="--c:#9AD01E;--on:#111">Δεδομένα</button>
       <button role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1" style="--c:#FD6A04;--on:#111">AI Assist</button>
       <button role="tab" id="tab-pills" aria-controls="panel-pills" aria-selected="false" tabindex="-1" style="--c:#E5487A;--on:#fff">Χάπια</button>
+      <button role="tab" id="tab-car" aria-controls="panel-car" aria-selected="false" tabindex="-1" style="--c:#2B3A4A;--on:#fff">Tetra Car</button>
+      <button role="tab" id="tab-passwords" aria-controls="panel-passwords" aria-selected="false" tabindex="-1" style="--c:#7E37ED;--on:#fff">Κωδικοί</button>
       <button role="tab" id="tab-guide"aria-controls="panel-guide" aria-selected="false" tabindex="-1" style="--c:#8E99A6;--on:#111">Οδηγός · Ρυθμίσεις</button>
     </div>
     <div role="tabpanel" id="panel-home" aria-labelledby="tab-home">
@@ -315,12 +317,24 @@
         <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>Πράγματα που κάνει μόνο του, στην ώρα τους</h3><p>Γράψε ή πες «κάθε Δευτέρα στις 7, τι έχω αυτή την εβδομάδα»: μία φορά, κάθε μέρα, κάθε εβδομάδα, κάθε μήνα ή κάθε χρόνο. Όταν γίνει, η απάντηση έρχεται ως ειδοποίηση με ήχο.</p></figcaption></figure>
       <figure class="card" style="--c:#FD6A04"><div class="pic"><img src="img/art/ai-brief.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>Μια σελίδα για το πρωινό σου</h3><p>Η ενημέρωση της ημέρας μαζεύει το σημερινό ημερολόγιο, τα mail που θέλουν την προσοχή σου, τον καιρό και τις ανοιχτές λίστες από τις Σημειώσεις. Εσύ διαλέγεις τι μπαίνει.</p></figcaption></figure>
+      <figure class="card" style="--c:#FD6A04"><div class="pic"><img src="img/art/ai-tv.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>Το AI Assist σε μια μικρή τηλεόραση</h3><p>Κράτα πατημένο το κουμπί λειτουργίας και ένα ρομποτάκι από pixel σε μια παλιά τηλεόραση ακούει, δείχνει τι κάνει και βγάζει την απάντηση στην οθόνη. Κάθεται και στην Αρχική. Κλείσε τα διακοσμητικά για μια απλή συζήτηση.</p></figcaption></figure>
     </div>
     <div role="tabpanel" id="panel-pills" aria-labelledby="tab-pills" hidden>
       <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Χάπια</span><h3>Τα χάπια σας, στην ώρα τους</h3><p>Μια κάρτα για κάθε μέρος της ημέρας, κάθε χάπι σχεδιασμένο με το σχήμα και το χρώμα του ή εμφανισμένο με τη φωτογραφία του. Ένα άγγιγμα στο «Το πήρα», εδώ ή στην ειδοποίηση, και τελείωσε· μια δόση που ξεχάσατε χθες το βράδυ περιμένει στην κορυφή. Κάθε κουτί προσθέτει τα χάπια του και η Πορεία δείχνει τι ξεχνάτε και προτείνει καλύτερη ώρα.</p></figcaption></figure>
       <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills-guide.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Χάπια</span><h3>Προσθέστε ένα φάρμακο βήμα βήμα ή πείτε το</h3><p>Πέντε βήματα: το όνομα, πώς μοιάζει, πότε το παίρνετε, πόσα έχετε και πότε να παραγγείλετε κι άλλα. Με ενεργό το AI Assist, πείτε τα όλα σε μία πρόταση και τα βήματα συμπληρώνονται· τα ελέγχετε και πατάτε Επόμενο. Ή πείτε στο AI Assist «Πήρα καινούργιο κουτί με 90» και μετριούνται.</p></figcaption></figure>
+    </div>
+    <div role="tabpanel" id="panel-car" aria-labelledby="tab-car" hidden>
+      <figure class="card" style="--c:#2B3A4A;--on:#fff"><div class="pic"><img src="img/art/car.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/car.png" alt=""><span class="pill">Tetra Car</span><h3>Tetra Car, αντί για Android Auto</h3><p>Για την οθόνη Android του αυτοκινήτου: ο χάρτης και τα Πολυμέσα δίπλα δίπλα, μια μπάρα εφαρμογών και το μικρόφωνο του AI Assist. Τα Πολυμέσα παίζουν YouTube Music, YouTube, Spotify και ραδιόφωνο Live24.gr. Πες «άνοιξε τα Μηνύματα» και ανοίγουν δίπλα στον χάρτη.</p></figcaption></figure>
+      <figure class="card" style="--c:#2B3A4A;--on:#fff"><div class="pic"><img src="img/art/car-message.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/car.png" alt=""><span class="pill">Tetra Car</span><h3>Διαβάζει τα μηνύματα, απαντά στις κλήσεις</h3><p>Στο αυτοκίνητο ένα μήνυμα σού διαβάζεται δυνατά και απαντάς με τη φωνή σου, ενώ μια κλήση απαντιέται μετά από 2 δευτερόλεπτα. Το καθένα πιάνει το πλαϊνό πλαίσιο, ο χάρτης μένει, η μουσική κάνει παύση και οι άλλες ειδοποιήσεις περιμένουν. Σύνδεσε το κινητό σου μία φορά με έναν κωδικό QR: η οθόνη του αυτοκινήτου παίρνει τις κλήσεις και τα μηνύματά του, χωρίς να συγχρονίζεται τίποτα.</p></figcaption></figure>
+    </div>
+    <div role="tabpanel" id="panel-passwords" aria-labelledby="tab-passwords" hidden>
+      <figure class="card" style="--c:#7E37ED;--on:#fff"><div class="pic"><img src="img/art/passwords.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/passwords.png" alt=""><span class="pill">Κωδικοί</span><h3>Κωδικοί πρόσβασης και 2FA, στις δικές σου συσκευές</h3><p>Στοιχεία σύνδεσης, κάρτες, διευθύνσεις και κωδικοί 2FA, κρυπτογραφημένα και συγχρονισμένα μόνο ανάμεσα στις συσκευές σου. Το Tetra τα συμπληρώνει σε άλλες εφαρμογές, και σε ιστοσελίδες με το πρόσθετό του για τον Firefox. Στην Αρχική, οι συνδέσεις σου με ♥ και ο επόμενος κωδικός περιμένουν πίσω από το δακτυλικό σου αποτύπωμα.</p></figcaption></figure>
     </div>
     <div role="tabpanel" id="panel-guide" aria-labelledby="tab-guide" hidden>
       <figure class="card" style="--c:#8E99A6"><div class="pic"><img src="img/art/guide.jpg" alt="" loading="lazy"></div>

@@ -218,5 +218,21 @@
  "Raise to answer, never in your pocket": "Σηκώστε το για απάντηση, ποτέ στην τσέπη",
  "Your pills, on time": "Τα χάπια σας, στην ώρα τους",
  "Add a medicine step by step, or say it": "Προσθέστε ένα φάρμακο βήμα βήμα ή πείτε το",
- "Pills": "Χάπια"
+ "Pills": "Χάπια",
+ "AI Assist on a little TV": "Το AI Assist σε μια μικρή τηλεόραση",
+ "Hold the power button and a pixel robot on an old TV listens, shows what it is doing and puts the answer on the screen. It rests on Home too. Switch the decorations off for a plain conversation.": "Κράτα πατημένο το κουμπί λειτουργίας και ένα ρομποτάκι από pixel σε μια παλιά τηλεόραση ακούει, δείχνει τι κάνει και βγάζει την απάντηση στην οθόνη. Κάθεται και στην Αρχική. Κλείσε τα διακοσμητικά για μια απλή συζήτηση.",
+ "Tetra Car, instead of Android Auto": "Tetra Car, αντί για Android Auto",
+ "For a car's Android screen: the map and Media side by side, a dock, and AI Assist's mic. Media plays YouTube Music, YouTube, Spotify and Live24.gr radio. Say \"open Messages\" and it opens beside the map.": "Για την οθόνη Android του αυτοκινήτου: ο χάρτης και τα Πολυμέσα δίπλα δίπλα, μια μπάρα εφαρμογών και το μικρόφωνο του AI Assist. Τα Πολυμέσα παίζουν YouTube Music, YouTube, Spotify και ραδιόφωνο Live24.gr. Πες «άνοιξε τα Μηνύματα» και ανοίγουν δίπλα στον χάρτη.",
+ "Messages read aloud, calls answered": "Διαβάζει τα μηνύματα, απαντά στις κλήσεις",
+ "In the car a message is read aloud and you answer by voice, and a call is answered after 2 seconds. Each takes the side pane while the map stays, the music pauses and other notifications wait. Pair your phone once with a QR code: the car's screen gets its calls and messages, with nothing synced.": "Στο αυτοκίνητο ένα μήνυμα σού διαβάζεται δυνατά και απαντάς με τη φωνή σου, ενώ μια κλήση απαντιέται μετά από 2 δευτερόλεπτα. Το καθένα πιάνει το πλαϊνό πλαίσιο, ο χάρτης μένει, η μουσική κάνει παύση και οι άλλες ειδοποιήσεις περιμένουν. Σύνδεσε το κινητό σου μία φορά με έναν κωδικό QR: η οθόνη του αυτοκινήτου παίρνει τις κλήσεις και τα μηνύματά του, χωρίς να συγχρονίζεται τίποτα.",
+ "Passwords and 2FA codes, on your own devices": "Κωδικοί πρόσβασης και 2FA, στις δικές σου συσκευές",
+ "Logins, cards, addresses and 2FA codes, encrypted and synced only between your devices. Tetra fills them in other apps, and on websites with its Firefox extension. On Home, your ♥ logins and the next code wait behind your fingerprint.": "Στοιχεία σύνδεσης, κάρτες, διευθύνσεις και κωδικοί 2FA, κρυπτογραφημένα και συγχρονισμένα μόνο ανάμεσα στις συσκευές σου. Το Tetra τα συμπληρώνει σε άλλες εφαρμογές, και σε ιστοσελίδες με το πρόσθετό του για τον Firefox. Στην Αρχική, οι συνδέσεις σου με ♥ και ο επόμενος κωδικός περιμένουν πίσω από το δακτυλικό σου αποτύπωμα.",
+ "Passwords": "Κωδικοί",
+ "Tetra Car": "Tetra Car",
+ "APK · 0.8.0 beta 11 · Android 11+": "APK · 0.8.0 beta 11 · Android 11+",
+ "0.8.0 beta 6 · most distros": "0.8.0 beta 6 · οι περισσότερες διανομές",
+ "0.8.0 beta 11": "0.8.0 beta 11",
+ "0.8.0 beta 6": "0.8.0 beta 6",
+ "Thunderbird extension": "Πρόσθετο για το Thunderbird",
+ "Tetra Mail, for accounts only Thunderbird opens": "Tetra Mail, για λογαριασμούς που ανοίγει μόνο το Thunderbird"
 }

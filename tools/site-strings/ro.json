@@ -218,5 +218,21 @@
  "Raise to answer, never in your pocket": "Ridică pentru a răspunde, niciodată în buzunar",
  "Your pills, on time": "Pastilele tale, la timp",
  "Add a medicine step by step, or say it": "Adaugă un medicament pas cu pas sau spune-l",
- "Pills": "Pastile"
+ "Pills": "Pastile",
+ "AI Assist on a little TV": "AI Assist pe un televizor mic",
+ "Hold the power button and a pixel robot on an old TV listens, shows what it is doing and puts the answer on the screen. It rests on Home too. Switch the decorations off for a plain conversation.": "Ține apăsat butonul de pornire și un robot din pixeli pe un televizor vechi ascultă, arată ce face și pune răspunsul pe ecran. Stă și pe Acasă. Oprește decorațiunile pentru o conversație simplă.",
+ "Tetra Car, instead of Android Auto": "Tetra Car, în loc de Android Auto",
+ "For a car's Android screen: the map and Media side by side, a dock, and AI Assist's mic. Media plays YouTube Music, YouTube, Spotify and Live24.gr radio. Say \"open Messages\" and it opens beside the map.": "Pentru ecranul Android al mașinii: harta și Media una lângă alta, un dock și microfonul AI Assist. Media redă YouTube Music, YouTube, Spotify și radio Live24.gr. Spune „deschide Mesaje” și se deschide lângă hartă.",
+ "Messages read aloud, calls answered": "Mesaje citite cu voce tare, apeluri preluate",
+ "In the car a message is read aloud and you answer by voice, and a call is answered after 2 seconds. Each takes the side pane while the map stays, the music pauses and other notifications wait. Pair your phone once with a QR code: the car's screen gets its calls and messages, with nothing synced.": "În mașină un mesaj e citit cu voce tare și răspunzi prin voce, iar un apel e preluat după 2 secunde. Fiecare ocupă panoul lateral cât timp harta rămâne, muzica se oprește pe pauză și celelalte notificări așteaptă. Asociază telefonul o singură dată cu un cod QR: ecranul mașinii primește apelurile și mesajele lui, fără să se sincronizeze nimic.",
+ "Passwords and 2FA codes, on your own devices": "Parole și coduri 2FA, pe propriile tale dispozitive",
+ "Logins, cards, addresses and 2FA codes, encrypted and synced only between your devices. Tetra fills them in other apps, and on websites with its Firefox extension. On Home, your ♥ logins and the next code wait behind your fingerprint.": "Date de conectare, carduri, adrese și coduri 2FA, criptate și sincronizate doar între dispozitivele tale. Tetra le completează în alte aplicații, iar pe site-uri cu extensia sa pentru Firefox. Pe Acasă, conectările tale cu ♥ și următorul cod așteaptă în spatele amprentei tale.",
+ "Passwords": "Parole",
+ "Tetra Car": "Tetra Car",
+ "APK · 0.8.0 beta 11 · Android 11+": "APK · 0.8.0 beta 11 · Android 11+",
+ "0.8.0 beta 6 · most distros": "0.8.0 beta 6 · majoritatea distribuțiilor",
+ "0.8.0 beta 11": "0.8.0 beta 11",
+ "0.8.0 beta 6": "0.8.0 beta 6",
+ "Thunderbird extension": "Extensie pentru Thunderbird",
+ "Tetra Mail, for accounts only Thunderbird opens": "Tetra Mail, pentru conturile pe care le deschide doar Thunderbird"
 }

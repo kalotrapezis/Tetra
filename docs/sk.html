@@ -231,6 +231,8 @@
       <button role="tab" id="tab-data" aria-controls="panel-data" aria-selected="false" tabindex="-1" style="--c:#9AD01E;--on:#111">Dáta</button>
       <button role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1" style="--c:#FD6A04;--on:#111">AI Assist</button>
       <button role="tab" id="tab-pills" aria-controls="panel-pills" aria-selected="false" tabindex="-1" style="--c:#E5487A;--on:#fff">Tablety</button>
+      <button role="tab" id="tab-car" aria-controls="panel-car" aria-selected="false" tabindex="-1" style="--c:#2B3A4A;--on:#fff">Tetra Car</button>
+      <button role="tab" id="tab-passwords" aria-controls="panel-passwords" aria-selected="false" tabindex="-1" style="--c:#7E37ED;--on:#fff">Heslá</button>
       <button role="tab" id="tab-guide"aria-controls="panel-guide" aria-selected="false" tabindex="-1" style="--c:#8E99A6;--on:#111">Sprievodca · Nastavenia</button>
     </div>
     <div role="tabpanel" id="panel-home" aria-labelledby="tab-home">
@@ -315,12 +317,24 @@
         <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>Veci, ktoré robí sám, načas</h3><p>Napíšte alebo povedzte „každý pondelok o 7, čo mám tento týždeň“: raz, denne, týždenne, mesačne alebo ročne. Keď je hotovo, odpoveď zazvoní ako oznámenie.</p></figcaption></figure>
       <figure class="card" style="--c:#FD6A04"><div class="pic"><img src="img/art/ai-brief.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>Stránka pre vaše ráno</h3><p>Denný prehľad zhrnie dnešný kalendár, poštu, ktorá vás potrebuje, počasie a otvorené kontrolné zoznamy z Poznámok. Vy vyberáte, čo v ňom bude.</p></figcaption></figure>
+      <figure class="card" style="--c:#FD6A04"><div class="pic"><img src="img/art/ai-tv.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/assistant.png" alt=""><span class="pill">AI Assist</span><h3>AI Assist na malom televízore</h3><p>Podržte vypínač a pixelový robot na starom televízore počúva, ukazuje, čo robí, a zobrazí odpoveď na obrazovke. Odpočíva aj na obrazovke Domov. Pre obyčajný rozhovor vypnite ozdoby.</p></figcaption></figure>
     </div>
     <div role="tabpanel" id="panel-pills" aria-labelledby="tab-pills" hidden>
       <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Tablety</span><h3>Vaše tablety, načas</h3><p>Karta pre každú časť dňa, každá tableta nakreslená svojím tvarom a farbou alebo zobrazená na fotografii. „Užité“ je jedno klepnutie, tu alebo na oznámení, a dávka zabudnutá včera večer čaká hore. Každá škatuľka pridá svoje tablety a „Priebeh“ ukáže, na čo zabúdate, a navrhne lepší čas.</p></figcaption></figure>
       <figure class="card" style="--c:#E5487A;--on:#fff"><div class="pic"><img src="img/art/pills-guide.jpg" alt="" loading="lazy"></div>
         <figcaption><img class="icon" src="img/icons/pills.png" alt=""><span class="pill">Tablety</span><h3>Pridajte liek krok za krokom, alebo ho povedzte</h3><p>Päť krokov: názov, ako vyzerá, kedy ju užívate, koľko jej máte a kedy objednať ďalšie. So zapnutým AI Assist povedzte všetko jednou vetou a kroky sa vyplnia; skontrolujete ich a stlačíte „Ďalej“. Alebo povedzte AI Assist „Dostal som novú škatuľku s 90 kusmi“ a započítajú sa.</p></figcaption></figure>
+    </div>
+    <div role="tabpanel" id="panel-car" aria-labelledby="tab-car" hidden>
+      <figure class="card" style="--c:#2B3A4A;--on:#fff"><div class="pic"><img src="img/art/car.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/car.png" alt=""><span class="pill">Tetra Car</span><h3>Tetra Car namiesto Android Auto</h3><p>Pre obrazovku Android v aute: mapa a Médiá vedľa seba, dok a mikrofón AI Assist. Médiá prehrávajú YouTube Music, YouTube, Spotify a rádio Live24.gr. Povedzte „otvor Správy“ a otvoria sa vedľa mapy.</p></figcaption></figure>
+      <figure class="card" style="--c:#2B3A4A;--on:#fff"><div class="pic"><img src="img/art/car-message.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/car.png" alt=""><span class="pill">Tetra Car</span><h3>Správy čítané nahlas, hovory prijaté</h3><p>V aute sa správa prečíta nahlas a vy odpoviete hlasom, hovor sa prijme po 2 sekundách. Každé zaberie bočný panel, zatiaľ čo mapa zostane, hudba sa pozastaví a ostatné upozornenia počkajú. Spárujte telefón raz pomocou QR kódu: obrazovka auta dostáva jeho hovory a správy, nič sa nesynchronizuje.</p></figcaption></figure>
+    </div>
+    <div role="tabpanel" id="panel-passwords" aria-labelledby="tab-passwords" hidden>
+      <figure class="card" style="--c:#7E37ED;--on:#fff"><div class="pic"><img src="img/art/passwords.jpg" alt="" loading="lazy"></div>
+        <figcaption><img class="icon" src="img/icons/passwords.png" alt=""><span class="pill">Heslá</span><h3>Heslá a kódy 2FA, na vašich vlastných zariadeniach</h3><p>Prihlasovacie údaje, karty, adresy a kódy 2FA, šifrované a synchronizované len medzi vašimi zariadeniami. Tetra ich vypĺňa v iných aplikáciách a na webových stránkach vďaka svojmu rozšíreniu pre Firefox. Na obrazovke Domov čakajú vaše ♥ prihlasovacie údaje a ďalší kód za odtlačkom prsta.</p></figcaption></figure>
     </div>
     <div role="tabpanel" id="panel-guide" aria-labelledby="tab-guide" hidden>
       <figure class="card" style="--c:#8E99A6"><div class="pic"><img src="img/art/guide.jpg" alt="" loading="lazy"></div>

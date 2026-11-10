@@ -218,5 +218,21 @@
  "Raise to answer, never in your pocket": "Tóg chun freagairt, ná i do phóca choíche",
  "Your pills, on time": "Do phiollairí, in am",
  "Add a medicine step by step, or say it": "Cuir leigheas leis céim ar chéim, nó abair é",
- "Pills": "Piollairí"
+ "Pills": "Piollairí",
+ "AI Assist on a little TV": "AI Assist ar theilifís bheag",
+ "Hold the power button and a pixel robot on an old TV listens, shows what it is doing and puts the answer on the screen. It rests on Home too. Switch the decorations off for a plain conversation.": "Coinnigh an cnaipe cumhachta síos agus éisteann róbat picteilíní ar sheanteilifís, taispeánann sé cad atá á dhéanamh aige agus cuireann sé an freagra ar an scáileán. Bíonn sé ar Baile freisin. Múch na maisiúcháin le haghaidh comhrá simplí.",
+ "Tetra Car, instead of Android Auto": "Tetra Car, in áit Android Auto",
+ "For a car's Android screen: the map and Media side by side, a dock, and AI Assist's mic. Media plays YouTube Music, YouTube, Spotify and Live24.gr radio. Say \"open Messages\" and it opens beside the map.": "Do scáileán Android cairr: an léarscáil agus Meáin taobh le taobh, duga, agus micreafón AI Assist. Seinneann Meáin YouTube Music, YouTube, Spotify agus raidió Live24.gr. Abair “oscail Teachtaireachtaí” agus osclaítear in aice leis an léarscáil é.",
+ "Messages read aloud, calls answered": "Teachtaireachtaí léite os ard, glaonna freagartha",
+ "In the car a message is read aloud and you answer by voice, and a call is answered after 2 seconds. Each takes the side pane while the map stays, the music pauses and other notifications wait. Pair your phone once with a QR code: the car's screen gets its calls and messages, with nothing synced.": "Sa charr léitear teachtaireacht os ard agus freagraíonn tú le do ghuth, agus freagraítear glao tar éis 2 soicind. Tógann gach ceann acu an phána taoibh fad a fhanann an léarscáil, a chuirtear an ceol ar sos agus a fhanann fógraí eile. Péireáil do ghuthán uair amháin le cód QR: faigheann scáileán an chairr a ghlaonna agus a theachtaireachtaí, gan aon rud a shioncronú.",
+ "Passwords and 2FA codes, on your own devices": "Pasfhocail agus cóid 2FA, ar do ghléasanna féin",
+ "Logins, cards, addresses and 2FA codes, encrypted and synced only between your devices. Tetra fills them in other apps, and on websites with its Firefox extension. On Home, your ♥ logins and the next code wait behind your fingerprint.": "Logálacha isteach, cártaí, seoltaí agus cóid 2FA, criptithe agus sioncronaithe idir do ghléasanna amháin. Líonann Tetra iad in aipeanna eile, agus ar shuímh ghréasáin lena síneadh Firefox. Ar Baile, fanann do logálacha isteach ♥ agus an chéad chód eile taobh thiar de do mhéarlorg.",
+ "Passwords": "Pasfhocail",
+ "Tetra Car": "Tetra Car",
+ "APK · 0.8.0 beta 11 · Android 11+": "APK · 0.8.0 beta 11 · Android 11+",
+ "0.8.0 beta 6 · most distros": "0.8.0 beta 6 · formhór na ndáileachtaí",
+ "0.8.0 beta 11": "0.8.0 beta 11",
+ "0.8.0 beta 6": "0.8.0 beta 6",
+ "Thunderbird extension": "Síneadh do Thunderbird",
+ "Tetra Mail, for accounts only Thunderbird opens": "Tetra Mail, do chuntais nach n-osclaíonn ach Thunderbird"
 }

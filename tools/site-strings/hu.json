@@ -218,5 +218,21 @@
  "Raise to answer, never in your pocket": "Emeld fel a fogadáshoz, soha nem a zsebben",
  "Your pills, on time": "A tablettáid, időben",
  "Add a medicine step by step, or say it": "Adj hozzá gyógyszert lépésről lépésre, vagy mondd el",
- "Pills": "Tabletták"
+ "Pills": "Tabletták",
+ "AI Assist on a little TV": "AI Assist egy kis tévén",
+ "Hold the power button and a pixel robot on an old TV listens, shows what it is doing and puts the answer on the screen. It rests on Home too. Switch the decorations off for a plain conversation.": "Tartsd lenyomva a bekapcsológombot, és egy régi tévén ülő pixelrobot figyel, mutatja, mit csinál, és a képernyőre teszi a választ. A Kezdőlapon is pihen. Kapcsold ki a díszítéseket egy egyszerű beszélgetéshez.",
+ "Tetra Car, instead of Android Auto": "Tetra Car az Android Auto helyett",
+ "For a car's Android screen: the map and Media side by side, a dock, and AI Assist's mic. Media plays YouTube Music, YouTube, Spotify and Live24.gr radio. Say \"open Messages\" and it opens beside the map.": "Az autó Android-kijelzőjére: a térkép és a Média egymás mellett, egy dokk és az AI Assist mikrofonja. A Média YouTube Musicot, YouTube-ot, Spotifyt és Live24.gr rádiót játszik. Mondd: „nyisd meg az Üzeneteket”, és a térkép mellett nyílik meg.",
+ "Messages read aloud, calls answered": "Felolvasott üzenetek, fogadott hívások",
+ "In the car a message is read aloud and you answer by voice, and a call is answered after 2 seconds. Each takes the side pane while the map stays, the music pauses and other notifications wait. Pair your phone once with a QR code: the car's screen gets its calls and messages, with nothing synced.": "Az autóban az üzenetet felolvassa, te hanggal válaszolsz, a hívást pedig 2 másodperc után fogadja. Mindkettő az oldalsó panelt foglalja el, a térkép marad, a zene szünetel, a többi értesítés vár. Párosítsd a telefonod egyszer egy QR-kóddal: az autó kijelzője megkapja a hívásait és üzeneteit, semmi sem szinkronizálódik.",
+ "Passwords and 2FA codes, on your own devices": "Jelszavak és 2FA-kódok, a saját eszközeiden",
+ "Logins, cards, addresses and 2FA codes, encrypted and synced only between your devices. Tetra fills them in other apps, and on websites with its Firefox extension. On Home, your ♥ logins and the next code wait behind your fingerprint.": "Bejelentkezések, kártyák, címek és 2FA-kódok, titkosítva és csak az eszközeid között szinkronizálva. A Tetra kitölti őket más alkalmazásokban, weboldalakon pedig a Firefox-bővítményével. A Kezdőlapon a ♥ bejelentkezéseid és a következő kód az ujjlenyomatod mögött várnak.",
+ "Passwords": "Jelszavak",
+ "Tetra Car": "Tetra Car",
+ "APK · 0.8.0 beta 11 · Android 11+": "APK · 0.8.0 beta 11 · Android 11+",
+ "0.8.0 beta 6 · most distros": "0.8.0 beta 6 · a legtöbb disztribúció",
+ "0.8.0 beta 11": "0.8.0 beta 11",
+ "0.8.0 beta 6": "0.8.0 beta 6",
+ "Thunderbird extension": "Thunderbird-bővítmény",
+ "Tetra Mail, for accounts only Thunderbird opens": "Tetra Mail, csak Thunderbirddel nyíló fiókokhoz"
 }
