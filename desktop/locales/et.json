@@ -2762,5 +2762,7 @@
  "passwords.weak": "nõrk",
  "passwords.wordCount": "Sõnu: {n}",
  "passwords.words": "Sõnad",
- "passwords.year": "Aasta"
+ "passwords.year": "Aasta",
+ "passwords.ffPairTitle": "Kas lubada Firefoxil kasutada Tetra paroole?",
+ "passwords.ffPairText": "Tetra laiendus Firefoxis soovib seal näidata sinu paroole ja 2FA-koode, täita neid veebilehtedel ning salvestada paroole, mida Firefoxis sisestad või muudad. Luba see ainult siis, kui just paigaldasid selle."
 }

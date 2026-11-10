@@ -2946,5 +2946,7 @@
  "passwords.weak": "slabé",
  "passwords.wordCount": "Slova: {n}",
  "passwords.words": "Slova",
- "passwords.year": "Rok"
+ "passwords.year": "Rok",
+ "passwords.ffPairTitle": "Smí Firefox používat Hesla Tetry?",
+ "passwords.ffPairText": "Rozšíření Tetry ve Firefoxu chce zobrazovat tvá hesla a kódy 2FA, vyplňovat je na webech a ukládat hesla, která ve Firefoxu napíšeš nebo změníš. Povol to, jen pokud jsi ho právě nainstaloval."
 }

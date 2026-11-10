@@ -2854,5 +2854,7 @@
  "passwords.weak": "slabă",
  "passwords.wordCount": "Cuvinte: {n}",
  "passwords.words": "Cuvinte",
- "passwords.year": "Anul"
+ "passwords.year": "Anul",
+ "passwords.ffPairTitle": "Permiți Firefox să folosească Parolele Tetra?",
+ "passwords.ffPairText": "Extensia Tetra din Firefox cere să-ți arate acolo parolele și codurile 2FA, să le completeze pe site-uri și să salveze parolele pe care le scrii sau le schimbi în Firefox. Permite doar dacă tocmai ai instalat-o."
 }

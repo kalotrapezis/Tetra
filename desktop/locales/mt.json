@@ -2946,5 +2946,7 @@
  "passwords.weak": "dgħajfa",
  "passwords.wordCount": "Kliem: {n}",
  "passwords.words": "Kliem",
- "passwords.year": "Sena"
+ "passwords.year": "Sena",
+ "passwords.ffPairTitle": "Tħalli lil Firefox juża l-Passwords ta’ Tetra?",
+ "passwords.ffPairText": "L-estensjoni ta’ Tetra f’Firefox titlob li turi hemm il-passwords u l-kodiċijiet 2FA tiegħek, timlihom fuq is-siti u ssalva l-passwords li tikteb jew tibdel f’Firefox. Ħalliha biss jekk għadek kif installajtha."
 }

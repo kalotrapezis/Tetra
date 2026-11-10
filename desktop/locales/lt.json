@@ -2946,5 +2946,7 @@
  "passwords.weak": "silpnas",
  "passwords.wordCount": "Žodžių: {n}",
  "passwords.words": "Žodžiai",
- "passwords.year": "Metai"
+ "passwords.year": "Metai",
+ "passwords.ffPairTitle": "Leisti Firefox naudoti Tetra slaptažodžius?",
+ "passwords.ffPairText": "Tetra plėtinys Firefox prašo ten rodyti tavo slaptažodžius ir 2FA kodus, juos įrašyti svetainėse ir išsaugoti slaptažodžius, kuriuos įvedi ar pakeiti Firefox. Leisk tai tik jei ką tik jį įdiegei."
 }

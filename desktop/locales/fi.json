@@ -2762,5 +2762,7 @@
  "passwords.weak": "heikko",
  "passwords.wordCount": "Sanoja: {n}",
  "passwords.words": "Sanat",
- "passwords.year": "Vuosi"
+ "passwords.year": "Vuosi",
+ "passwords.ffPairTitle": "Saako Firefox käyttää Tetran salasanoja?",
+ "passwords.ffPairText": "Tetran laajennus Firefoxissa pyytää näyttämään siellä salasanasi ja 2FA-koodisi, täyttämään ne sivustoilla ja tallentamaan salasanat, jotka kirjoitat tai vaihdat Firefoxissa. Salli se vain, jos asensit sen juuri."
 }

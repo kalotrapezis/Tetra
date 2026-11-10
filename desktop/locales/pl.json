@@ -2946,5 +2946,7 @@
  "passwords.weak": "słabe",
  "passwords.wordCount": "Słów: {n}",
  "passwords.words": "Słowa",
- "passwords.year": "Rok"
+ "passwords.year": "Rok",
+ "passwords.ffPairTitle": "Pozwolić Firefoksowi używać Haseł Tetry?",
+ "passwords.ffPairText": "Rozszerzenie Tetry w Firefoksie prosi o pokazywanie tam twoich haseł i kodów 2FA, wpisywanie ich na stronach i zapisywanie haseł, które wpisujesz lub zmieniasz w Firefoksie. Zezwól tylko, jeśli dopiero je zainstalowałeś."
 }

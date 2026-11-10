@@ -2762,5 +2762,7 @@
  "passwords.weak": "слаба",
  "passwords.wordCount": "Думи: {n}",
  "passwords.words": "Думи",
- "passwords.year": "Година"
+ "passwords.year": "Година",
+ "passwords.ffPairTitle": "Да използва ли Firefox Паролите на Tetra?",
+ "passwords.ffPairText": "Разширението на Tetra във Firefox иска да показва там твоите пароли и 2FA кодове, да ги попълва в сайтовете и да запазва паролите, които пишеш или сменяш във Firefox. Разреши го, само ако току-що си го инсталирал."
 }

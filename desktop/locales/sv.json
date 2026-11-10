@@ -2762,5 +2762,7 @@
  "passwords.weak": "svagt",
  "passwords.wordCount": "Ord: {n}",
  "passwords.words": "Ord",
- "passwords.year": "År"
+ "passwords.year": "År",
+ "passwords.ffPairTitle": "Låta Firefox använda Tetras lösenord?",
+ "passwords.ffPairText": "Tetras tillägg i Firefox vill visa dina lösenord och 2FA-koder där, fylla i dem på webbplatser och spara lösenord du skriver eller ändrar i Firefox. Tillåt det bara om du nyss installerade det."
 }

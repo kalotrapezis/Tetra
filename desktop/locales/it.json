@@ -2854,5 +2854,7 @@
  "passwords.weak": "debole",
  "passwords.wordCount": "Parole: {n}",
  "passwords.words": "Parole",
- "passwords.year": "Anno"
+ "passwords.year": "Anno",
+ "passwords.ffPairTitle": "Consentire a Firefox di usare le Password di Tetra?",
+ "passwords.ffPairText": "L’estensione di Tetra in Firefox chiede di mostrare lì le tue password e i codici 2FA, di compilarli nei siti e di salvare le password che scrivi o cambi in Firefox. Consentilo solo se l’hai appena installata."
 }

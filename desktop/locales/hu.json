@@ -2762,5 +2762,7 @@
  "passwords.weak": "gyenge",
  "passwords.wordCount": "Szavak: {n}",
  "passwords.words": "Szavak",
- "passwords.year": "Év"
+ "passwords.year": "Év",
+ "passwords.ffPairTitle": "Használhatja a Firefox a Tetra jelszavait?",
+ "passwords.ffPairText": "A Tetra Firefox-bővítménye ott szeretné mutatni a jelszavaidat és 2FA-kódjaidat, kitölteni őket az oldalakon, és menteni a Firefoxban beírt vagy módosított jelszavakat. Csak akkor engedd, ha most telepítetted."
 }

@@ -2762,5 +2762,7 @@
  "passwords.weak": "zwak",
  "passwords.wordCount": "Woorden: {n}",
  "passwords.words": "Woorden",
- "passwords.year": "Jaar"
+ "passwords.year": "Jaar",
+ "passwords.ffPairTitle": "Firefox de Wachtwoorden van Tetra laten gebruiken?",
+ "passwords.ffPairText": "De extensie van Tetra in Firefox vraagt om daar je wachtwoorden en 2FA-codes te tonen, ze op sites in te vullen en wachtwoorden op te slaan die je in Firefox typt of wijzigt. Sta het alleen toe als je hem net hebt geïnstalleerd."
 }

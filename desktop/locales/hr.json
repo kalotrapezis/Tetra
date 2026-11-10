@@ -2853,5 +2853,7 @@
  "passwords.weak": "slaba",
  "passwords.wordCount": "Riječi: {n}",
  "passwords.words": "Riječi",
- "passwords.year": "Godina"
+ "passwords.year": "Godina",
+ "passwords.ffPairTitle": "Smije li Firefox koristiti Lozinke Tetre?",
+ "passwords.ffPairText": "Proširenje Tetre u Firefoxu traži da ondje prikazuje tvoje lozinke i 2FA kodove, upisuje ih na stranicama i sprema lozinke koje upišeš ili promijeniš u Firefoxu. Dopusti to samo ako si ga upravo instalirao."
 }

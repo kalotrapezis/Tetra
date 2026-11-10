@@ -2853,5 +2853,7 @@
  "passwords.weak": "vāja",
  "passwords.wordCount": "Vārdi: {n}",
  "passwords.words": "Vārdi",
- "passwords.year": "Gads"
+ "passwords.year": "Gads",
+ "passwords.ffPairTitle": "Ļaut Firefox izmantot Tetra paroles?",
+ "passwords.ffPairText": "Tetra paplašinājums Firefox lūdz tur rādīt tavas paroles un 2FA kodus, aizpildīt tās vietnēs un saglabāt paroles, ko ieraksti vai maini Firefox. Atļauj to tikai tad, ja tikko to instalēji."
 }

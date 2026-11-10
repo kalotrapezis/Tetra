@@ -3038,5 +3038,7 @@
  "passwords.weak": "lag",
  "passwords.wordCount": "Focail: {n}",
  "passwords.words": "Focail",
- "passwords.year": "Bliain"
+ "passwords.year": "Bliain",
+ "passwords.ffPairTitle": "Ligean do Firefox Pasfhocail Tetra a úsáid?",
+ "passwords.ffPairText": "Iarrann síneadh Tetra i Firefox do phasfhocail agus do chóid 2FA a thaispeáint ansin, iad a líonadh ar shuíomhanna agus pasfhocail a chlónn nó a athraíonn tú i Firefox a shábháil. Ceadaigh é ach amháin má shuiteáil tú é anois díreach."
 }

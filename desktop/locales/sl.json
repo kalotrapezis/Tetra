@@ -2946,5 +2946,7 @@
  "passwords.weak": "šibko",
  "passwords.wordCount": "Besed: {n}",
  "passwords.words": "Besede",
- "passwords.year": "Leto"
+ "passwords.year": "Leto",
+ "passwords.ffPairTitle": "Naj Firefox uporablja Gesla Tetre?",
+ "passwords.ffPairText": "Razširitev Tetre v Firefoxu želi tam prikazovati tvoja gesla in kode 2FA, jih izpolnjevati na straneh in shranjevati gesla, ki jih v Firefoxu vpišeš ali spremeniš. Dovoli le, če si jo pravkar namestil."
 }
