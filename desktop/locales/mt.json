@@ -2948,5 +2948,19 @@
  "passwords.words": "Kliem",
  "passwords.year": "Sena",
  "passwords.ffPairTitle": "Tħalli lil Firefox juża l-Passwords ta’ Tetra?",
- "passwords.ffPairText": "L-estensjoni ta’ Tetra f’Firefox titlob li turi hemm il-passwords u l-kodiċijiet 2FA tiegħek, timlihom fuq is-siti u ssalva l-passwords li tikteb jew tibdel f’Firefox. Ħalliha biss jekk għadek kif installajtha."
+ "passwords.ffPairText": "L-estensjoni ta’ Tetra f’Firefox titlob li turi hemm il-passwords u l-kodiċijiet 2FA tiegħek, timlihom fuq is-siti u ssalva l-passwords li tikteb jew tibdel f’Firefox. Ħalliha biss jekk għadek kif installajtha.",
+ "mapbuild.export": "Esporta",
+ "mapbuild.exportNote": "Il-mappa f'fajl .tetramap wieħed: ikkopjah b'kejbil fuq mowbajl jew tablet u iftħu f'Tetra › Settings › Mapep › Importa mappa",
+ "mapbuild.exportTitle": "Esporta l-mappa: {name}",
+ "mapbuild.exporting": "Qed tiġi esportata: {name}… {percent}%",
+ "mapbuild.exported": "{name} tinsab f'{file}",
+ "mapbuild.import": "Importa mappa…",
+ "mapbuild.importNote": "Fajl .tetramap, minn mowbajl jew kompjuter ieħor",
+ "mapbuild.importTitle": "Importa mappa",
+ "mapbuild.importing": "Qed tiġi importata: {name}… {percent}%",
+ "mapbuild.imported": "{name} tinsab hawn u tasal fuq il-mowbajl u t-tablet mas-sinkronizzazzjoni li jmiss",
+ "mapbuild.importBusy": "Qed issir mappa: importa meta tlesti",
+ "mapbuild.fileKind": "Mappa Tetra",
+ "mapbuild.allFiles": "Il-fajls kollha",
+ "mapbuild.noSuchMap": "M'hemmx mappa bħal din."
 }

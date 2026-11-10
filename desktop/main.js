@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, protocol, net, shell, Tray, Menu, Notification, nativeTheme, dialog, powerMonitor, safeStorage, globalShortcut, clipboard, nativeImage } = require('electron')
 const fs = require('node:fs')
 const path = require('node:path')
+const tetramap = require('./tetramap')
 const os = require('node:os')
 const crypto = require('node:crypto')
 const { pathToFileURL } = require('node:url')
@@ -1081,6 +1082,31 @@ app.whenReady().then(() => {
   ipcMain.handle('maps:building', () => mapBuilder.job?.id ?? null)
   ipcMain.handle('maps:packs', () => mapBuilder.packs())
   ipcMain.handle('maps:removePack', async (_, id) => { stopRouters(); await mapBuilder.remove(id, rel => files.trash(rel)); win?.webContents.send('maps-changed'); sync?.nudge().catch(() => {}) })
+  // a map as one .tetramap file, the phone's format (tetramap.js): to a phone by cable and back (the user, 10 Nov: "transfer maps by USB")
+  ipcMain.handle('maps:exportPack', async (_, id) => {
+    const pack = (await mapBuilder.packs()).find(p => p.id === id)
+    if (!pack) throw new Error(t('mapbuild.noSuchMap'))
+    const r = await dialog.showSaveDialog(win, { title: t('mapbuild.exportTitle', { name: pack.name }), defaultPath: path.join(app.getPath('downloads'), `${id}.tetramap`),
+      filters: [{ name: t('mapbuild.fileKind'), extensions: ['tetramap'] }] })
+    if (r.canceled || !r.filePath) return null
+    const meta = await fs.promises.readFile(path.join(maps.root, `${id}.json`), 'utf8').then(JSON.parse, () => ({}))
+    await tetramap.exportMap(maps.root, id, r.filePath, { name: pack.name, built: pack.built, bounds: meta.bounds },
+      done => win?.webContents.send('maps-archive', { kind: 'export', name: pack.name, done }))
+    console.log(`[maps] exported ${id} to ${r.filePath}`)
+    return r.filePath
+  })
+  ipcMain.handle('maps:importPack', async () => {
+    if (mapBuilder.job) throw new Error(t('mapbuild.importBusy'))
+    const r = await dialog.showOpenDialog(win, { title: t('mapbuild.importTitle'), properties: ['openFile'],
+      filters: [{ name: t('mapbuild.fileKind'), extensions: ['tetramap'] }, { name: t('mapbuild.allFiles'), extensions: ['*'] }] })
+    const file = r.filePaths?.[0]
+    if (r.canceled || !file) return null
+    stopRouters() // the routing graph about to be replaced is not held open
+    const m = await tetramap.importMap(maps.root, file, done => win?.webContents.send('maps-archive', { kind: 'import', name: path.basename(file), done }))
+    console.log(`[maps] imported ${m.id} (${m.name}, built ${m.built}) from ${file}`)
+    win?.webContents.send('maps-changed'); sync?.nudge().catch(() => {}) // and from here to the phone and tablet
+    return m.name
+  })
   // this computer has no GPS: the paired phone's fix — kept, since a PC rarely moves (the user, 26 Oct). The kept one is used
   // until it is older than Settings › Location says ('off': for good); Where I am asks the phone again whatever its age.
   const EVERY_MS = { '30m': 30 * 60_000, '1d': 86_400_000, '1w': 7 * 86_400_000 }

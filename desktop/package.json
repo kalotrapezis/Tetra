@@ -80,6 +80,7 @@
       "pills.js",
       "datacount.js",
       "maps.js",
+      "tetramap.js",
       "router.js",
       "client.js",
       "reset.js",

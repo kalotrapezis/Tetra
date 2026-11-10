@@ -2764,5 +2764,19 @@
  "passwords.words": "Λέξεις",
  "passwords.year": "Έτος",
  "passwords.ffPairTitle": "Να χρησιμοποιεί το Firefox τους Κωδικούς του Tetra;",
- "passwords.ffPairText": "Το πρόσθετο του Tetra στο Firefox ζητά να δείχνει εκεί τους κωδικούς και τους κωδικούς 2FA σου, να τους συμπληρώνει στις σελίδες, και να αποθηκεύει τους κωδικούς που γράφεις ή αλλάζεις στο Firefox. Επίτρεψέ το μόνο αν μόλις το εγκατέστησες."
+ "passwords.ffPairText": "Το πρόσθετο του Tetra στο Firefox ζητά να δείχνει εκεί τους κωδικούς και τους κωδικούς 2FA σου, να τους συμπληρώνει στις σελίδες, και να αποθηκεύει τους κωδικούς που γράφεις ή αλλάζεις στο Firefox. Επίτρεψέ το μόνο αν μόλις το εγκατέστησες.",
+ "mapbuild.export": "Εξαγωγή",
+ "mapbuild.exportNote": "Ο χάρτης σε ένα αρχείο .tetramap: αντιγράψτε το σε κινητό ή tablet με καλώδιο και ανοίξτε το στο Tetra › Ρυθμίσεις › Χάρτες › Εισαγωγή χάρτη",
+ "mapbuild.exportTitle": "Εξαγωγή του χάρτη: {name}",
+ "mapbuild.exporting": "Εξαγωγή: {name}… {percent}%",
+ "mapbuild.exported": "Ο χάρτης {name} είναι στο {file}",
+ "mapbuild.import": "Εισαγωγή χάρτη…",
+ "mapbuild.importNote": "Ένα αρχείο .tetramap, από κινητό ή άλλον υπολογιστή",
+ "mapbuild.importTitle": "Εισαγωγή χάρτη",
+ "mapbuild.importing": "Εισαγωγή: {name}… {percent}%",
+ "mapbuild.imported": "Ο χάρτης {name} είναι εδώ και πηγαίνει στο κινητό και το tablet με τον επόμενο συγχρονισμό",
+ "mapbuild.importBusy": "Φτιάχνεται ένας χάρτης: εισαγωγή όταν τελειώσει",
+ "mapbuild.fileKind": "Χάρτης Tetra",
+ "mapbuild.allFiles": "Όλα τα αρχεία",
+ "mapbuild.noSuchMap": "Δεν υπάρχει τέτοιος χάρτης."
 }

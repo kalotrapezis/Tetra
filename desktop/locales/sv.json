@@ -2764,5 +2764,19 @@
  "passwords.words": "Ord",
  "passwords.year": "År",
  "passwords.ffPairTitle": "Låta Firefox använda Tetras lösenord?",
- "passwords.ffPairText": "Tetras tillägg i Firefox vill visa dina lösenord och 2FA-koder där, fylla i dem på webbplatser och spara lösenord du skriver eller ändrar i Firefox. Tillåt det bara om du nyss installerade det."
+ "passwords.ffPairText": "Tetras tillägg i Firefox vill visa dina lösenord och 2FA-koder där, fylla i dem på webbplatser och spara lösenord du skriver eller ändrar i Firefox. Tillåt det bara om du nyss installerade det.",
+ "mapbuild.export": "Exportera",
+ "mapbuild.exportNote": "Kartan som en enda .tetramap-fil: kopiera den med kabel till en telefon eller surfplatta och öppna den i Tetra › Inställningar › Kartor › Importera en karta",
+ "mapbuild.exportTitle": "Exportera kartan över {name}",
+ "mapbuild.exporting": "Exporterar {name}… {percent} %",
+ "mapbuild.exported": "{name} finns i {file}",
+ "mapbuild.import": "Importera en karta…",
+ "mapbuild.importNote": "En .tetramap-fil från en telefon eller en annan dator",
+ "mapbuild.importTitle": "Importera en karta",
+ "mapbuild.importing": "Importerar {name}… {percent} %",
+ "mapbuild.imported": "{name} finns här och kommer till telefonen och surfplattan vid nästa synkronisering",
+ "mapbuild.importBusy": "En karta håller på att göras: importera när den är klar",
+ "mapbuild.fileKind": "Tetra-karta",
+ "mapbuild.allFiles": "Alla filer",
+ "mapbuild.noSuchMap": "Den kartan finns inte."
 }

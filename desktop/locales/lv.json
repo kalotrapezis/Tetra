@@ -2855,5 +2855,19 @@
  "passwords.words": "Vārdi",
  "passwords.year": "Gads",
  "passwords.ffPairTitle": "Ļaut Firefox izmantot Tetra paroles?",
- "passwords.ffPairText": "Tetra paplašinājums Firefox lūdz tur rādīt tavas paroles un 2FA kodus, aizpildīt tās vietnēs un saglabāt paroles, ko ieraksti vai maini Firefox. Atļauj to tikai tad, ja tikko to instalēji."
+ "passwords.ffPairText": "Tetra paplašinājums Firefox lūdz tur rādīt tavas paroles un 2FA kodus, aizpildīt tās vietnēs un saglabāt paroles, ko ieraksti vai maini Firefox. Atļauj to tikai tad, ja tikko to instalēji.",
+ "mapbuild.export": "Eksportēt",
+ "mapbuild.exportNote": "Karte vienā .tetramap failā: nokopējiet to ar kabeli uz tālruni vai planšetdatoru un atveriet Tetra › Iestatījumi › Kartes › Importēt karti",
+ "mapbuild.exportTitle": "Eksportēt karti: {name}",
+ "mapbuild.exporting": "Eksportē: {name}… {percent}%",
+ "mapbuild.exported": "Karte {name} ir failā {file}",
+ "mapbuild.import": "Importēt karti…",
+ "mapbuild.importNote": ".tetramap fails no tālruņa vai cita datora",
+ "mapbuild.importTitle": "Importēt karti",
+ "mapbuild.importing": "Importē: {name}… {percent}%",
+ "mapbuild.imported": "Karte {name} ir šeit un nākamajā sinhronizācijā nonāks tālrunī un planšetdatorā",
+ "mapbuild.importBusy": "Pašlaik tiek veidota karte: importējiet, kad tā būs gatava",
+ "mapbuild.fileKind": "Tetra karte",
+ "mapbuild.allFiles": "Visi faili",
+ "mapbuild.noSuchMap": "Šādas kartes nav."
 }

@@ -2764,5 +2764,19 @@
  "passwords.words": "Думи",
  "passwords.year": "Година",
  "passwords.ffPairTitle": "Да използва ли Firefox Паролите на Tetra?",
- "passwords.ffPairText": "Разширението на Tetra във Firefox иска да показва там твоите пароли и 2FA кодове, да ги попълва в сайтовете и да запазва паролите, които пишеш или сменяш във Firefox. Разреши го, само ако току-що си го инсталирал."
+ "passwords.ffPairText": "Разширението на Tetra във Firefox иска да показва там твоите пароли и 2FA кодове, да ги попълва в сайтовете и да запазва паролите, които пишеш или сменяш във Firefox. Разреши го, само ако току-що си го инсталирал.",
+ "mapbuild.export": "Експорт",
+ "mapbuild.exportNote": "Картата като един файл .tetramap: копирайте го на телефон или таблет с кабел и го отворете в Tetra › Настройки › Карти › Импортиране на карта",
+ "mapbuild.exportTitle": "Експорт на картата: {name}",
+ "mapbuild.exporting": "Експорт: {name}… {percent}%",
+ "mapbuild.exported": "Картата {name} е в {file}",
+ "mapbuild.import": "Импортиране на карта…",
+ "mapbuild.importNote": "Файл .tetramap от телефон или друг компютър",
+ "mapbuild.importTitle": "Импортиране на карта",
+ "mapbuild.importing": "Импортиране: {name}… {percent}%",
+ "mapbuild.imported": "Картата {name} е тук и ще отиде на телефона и таблета при следващата синхронизация",
+ "mapbuild.importBusy": "Създава се карта: импортирайте, когато приключи",
+ "mapbuild.fileKind": "Карта на Tetra",
+ "mapbuild.allFiles": "Всички файлове",
+ "mapbuild.noSuchMap": "Няма такава карта."
 }

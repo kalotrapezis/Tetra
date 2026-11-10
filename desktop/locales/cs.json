@@ -2948,5 +2948,19 @@
  "passwords.words": "Slova",
  "passwords.year": "Rok",
  "passwords.ffPairTitle": "Smí Firefox používat Hesla Tetry?",
- "passwords.ffPairText": "Rozšíření Tetry ve Firefoxu chce zobrazovat tvá hesla a kódy 2FA, vyplňovat je na webech a ukládat hesla, která ve Firefoxu napíšeš nebo změníš. Povol to, jen pokud jsi ho právě nainstaloval."
+ "passwords.ffPairText": "Rozšíření Tetry ve Firefoxu chce zobrazovat tvá hesla a kódy 2FA, vyplňovat je na webech a ukládat hesla, která ve Firefoxu napíšeš nebo změníš. Povol to, jen pokud jsi ho právě nainstaloval.",
+ "mapbuild.export": "Exportovat",
+ "mapbuild.exportNote": "Mapa jako jeden soubor .tetramap: zkopírujte ji kabelem do telefonu nebo tabletu a otevřete v Tetra › Nastavení › Mapy › Importovat mapu",
+ "mapbuild.exportTitle": "Export mapy: {name}",
+ "mapbuild.exporting": "Export: {name}… {percent} %",
+ "mapbuild.exported": "Mapa {name} je v {file}",
+ "mapbuild.import": "Importovat mapu…",
+ "mapbuild.importNote": "Soubor .tetramap z telefonu nebo jiného počítače",
+ "mapbuild.importTitle": "Importovat mapu",
+ "mapbuild.importing": "Import: {name}… {percent} %",
+ "mapbuild.imported": "Mapa {name} je tady a při příští synchronizaci se dostane do telefonu a tabletu",
+ "mapbuild.importBusy": "Vytváří se mapa: importujte, až bude hotová",
+ "mapbuild.fileKind": "Mapa Tetra",
+ "mapbuild.allFiles": "Všechny soubory",
+ "mapbuild.noSuchMap": "Taková mapa neexistuje."
 }

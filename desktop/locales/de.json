@@ -2764,5 +2764,19 @@
  "passwords.words": "Wörter",
  "passwords.year": "Jahr",
  "passwords.ffPairTitle": "Darf Firefox die Passwörter von Tetra nutzen?",
- "passwords.ffPairText": "Die Erweiterung von Tetra in Firefox möchte dort deine Passwörter und 2FA-Codes zeigen, sie auf Websites ausfüllen und Passwörter speichern, die du in Firefox eingibst oder änderst. Erlaube es nur, wenn du sie gerade installiert hast."
+ "passwords.ffPairText": "Die Erweiterung von Tetra in Firefox möchte dort deine Passwörter und 2FA-Codes zeigen, sie auf Websites ausfüllen und Passwörter speichern, die du in Firefox eingibst oder änderst. Erlaube es nur, wenn du sie gerade installiert hast.",
+ "mapbuild.export": "Exportieren",
+ "mapbuild.exportNote": "Die Karte als eine .tetramap-Datei: per Kabel auf ein Handy oder Tablet kopieren und in Tetra › Einstellungen › Karten › Karte importieren öffnen",
+ "mapbuild.exportTitle": "Karte exportieren: {name}",
+ "mapbuild.exporting": "{name} wird exportiert… {percent} %",
+ "mapbuild.exported": "{name} ist in {file}",
+ "mapbuild.import": "Karte importieren…",
+ "mapbuild.importNote": "Eine .tetramap-Datei von einem Handy oder einem anderen Computer",
+ "mapbuild.importTitle": "Karte importieren",
+ "mapbuild.importing": "{name} wird importiert… {percent} %",
+ "mapbuild.imported": "{name} ist da und kommt mit der nächsten Synchronisierung auf Handy und Tablet",
+ "mapbuild.importBusy": "Gerade wird eine Karte erstellt: importiere, wenn sie fertig ist",
+ "mapbuild.fileKind": "Tetra-Karte",
+ "mapbuild.allFiles": "Alle Dateien",
+ "mapbuild.noSuchMap": "Diese Karte gibt es nicht."
 }

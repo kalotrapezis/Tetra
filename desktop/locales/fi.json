@@ -2764,5 +2764,19 @@
  "passwords.words": "Sanat",
  "passwords.year": "Vuosi",
  "passwords.ffPairTitle": "Saako Firefox käyttää Tetran salasanoja?",
- "passwords.ffPairText": "Tetran laajennus Firefoxissa pyytää näyttämään siellä salasanasi ja 2FA-koodisi, täyttämään ne sivustoilla ja tallentamaan salasanat, jotka kirjoitat tai vaihdat Firefoxissa. Salli se vain, jos asensit sen juuri."
+ "passwords.ffPairText": "Tetran laajennus Firefoxissa pyytää näyttämään siellä salasanasi ja 2FA-koodisi, täyttämään ne sivustoilla ja tallentamaan salasanat, jotka kirjoitat tai vaihdat Firefoxissa. Salli se vain, jos asensit sen juuri.",
+ "mapbuild.export": "Vie",
+ "mapbuild.exportNote": "Kartta yhtenä .tetramap-tiedostona: kopioi se kaapelilla puhelimeen tai tablettiin ja avaa Tetra › Asetukset › Kartat › Tuo kartta",
+ "mapbuild.exportTitle": "Vie kartta: {name}",
+ "mapbuild.exporting": "Viedään: {name}… {percent} %",
+ "mapbuild.exported": "Kartta {name} on tiedostossa {file}",
+ "mapbuild.import": "Tuo kartta…",
+ "mapbuild.importNote": ".tetramap-tiedosto puhelimesta tai toiselta tietokoneelta",
+ "mapbuild.importTitle": "Tuo kartta",
+ "mapbuild.importing": "Tuodaan: {name}… {percent} %",
+ "mapbuild.imported": "Kartta {name} on täällä ja siirtyy puhelimeen ja tablettiin seuraavassa synkronoinnissa",
+ "mapbuild.importBusy": "Karttaa tehdään parhaillaan: tuo, kun se on valmis",
+ "mapbuild.fileKind": "Tetra-kartta",
+ "mapbuild.allFiles": "Kaikki tiedostot",
+ "mapbuild.noSuchMap": "Tällaista karttaa ei ole."
 }

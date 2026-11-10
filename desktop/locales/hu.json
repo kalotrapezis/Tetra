@@ -2764,5 +2764,19 @@
  "passwords.words": "Szavak",
  "passwords.year": "Év",
  "passwords.ffPairTitle": "Használhatja a Firefox a Tetra jelszavait?",
- "passwords.ffPairText": "A Tetra Firefox-bővítménye ott szeretné mutatni a jelszavaidat és 2FA-kódjaidat, kitölteni őket az oldalakon, és menteni a Firefoxban beírt vagy módosított jelszavakat. Csak akkor engedd, ha most telepítetted."
+ "passwords.ffPairText": "A Tetra Firefox-bővítménye ott szeretné mutatni a jelszavaidat és 2FA-kódjaidat, kitölteni őket az oldalakon, és menteni a Firefoxban beírt vagy módosított jelszavakat. Csak akkor engedd, ha most telepítetted.",
+ "mapbuild.export": "Exportálás",
+ "mapbuild.exportNote": "A térkép egyetlen .tetramap fájlként: másold kábellel telefonra vagy táblagépre, és nyisd meg a Tetra › Beállítások › Térképek › Térkép importálása menüben",
+ "mapbuild.exportTitle": "Térkép exportálása: {name}",
+ "mapbuild.exporting": "Exportálás: {name}… {percent}%",
+ "mapbuild.exported": "A(z) {name} térkép itt van: {file}",
+ "mapbuild.import": "Térkép importálása…",
+ "mapbuild.importNote": "Egy .tetramap fájl telefonról vagy másik számítógépről",
+ "mapbuild.importTitle": "Térkép importálása",
+ "mapbuild.importing": "Importálás: {name}… {percent}%",
+ "mapbuild.imported": "A(z) {name} térkép itt van, és a következő szinkronizáláskor a telefonra és a táblagépre is átkerül",
+ "mapbuild.importBusy": "Épp készül egy térkép: importálj, ha elkészült",
+ "mapbuild.fileKind": "Tetra-térkép",
+ "mapbuild.allFiles": "Minden fájl",
+ "mapbuild.noSuchMap": "Nincs ilyen térkép."
 }

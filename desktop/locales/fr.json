@@ -2856,5 +2856,19 @@
  "passwords.words": "Mots",
  "passwords.year": "Année",
  "passwords.ffPairTitle": "Laisser Firefox utiliser les Mots de passe de Tetra ?",
- "passwords.ffPairText": "L’extension de Tetra dans Firefox demande à y afficher tes mots de passe et codes 2FA, à les remplir sur les sites et à enregistrer les mots de passe que tu saisis ou changes dans Firefox. Autorise-la seulement si tu viens de l’installer."
+ "passwords.ffPairText": "L’extension de Tetra dans Firefox demande à y afficher tes mots de passe et codes 2FA, à les remplir sur les sites et à enregistrer les mots de passe que tu saisis ou changes dans Firefox. Autorise-la seulement si tu viens de l’installer.",
+ "mapbuild.export": "Exporter",
+ "mapbuild.exportNote": "La carte en un seul fichier .tetramap : copiez-le par câble sur un téléphone ou une tablette et ouvrez-le dans Tetra › Paramètres › Cartes › Importer une carte",
+ "mapbuild.exportTitle": "Exporter la carte de {name}",
+ "mapbuild.exporting": "Export de {name}… {percent} %",
+ "mapbuild.exported": "{name} est dans {file}",
+ "mapbuild.import": "Importer une carte…",
+ "mapbuild.importNote": "Un fichier .tetramap, venu d'un téléphone ou d'un autre ordinateur",
+ "mapbuild.importTitle": "Importer une carte",
+ "mapbuild.importing": "Import de {name}… {percent} %",
+ "mapbuild.imported": "{name} est là et rejoindra le téléphone et la tablette à la prochaine synchronisation",
+ "mapbuild.importBusy": "Une carte est en cours de création : importez quand elle sera prête",
+ "mapbuild.fileKind": "Carte Tetra",
+ "mapbuild.allFiles": "Tous les fichiers",
+ "mapbuild.noSuchMap": "Cette carte n'existe pas."
 }

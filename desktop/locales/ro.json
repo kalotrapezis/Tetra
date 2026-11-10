@@ -2856,5 +2856,19 @@
  "passwords.words": "Cuvinte",
  "passwords.year": "Anul",
  "passwords.ffPairTitle": "Permiți Firefox să folosească Parolele Tetra?",
- "passwords.ffPairText": "Extensia Tetra din Firefox cere să-ți arate acolo parolele și codurile 2FA, să le completeze pe site-uri și să salveze parolele pe care le scrii sau le schimbi în Firefox. Permite doar dacă tocmai ai instalat-o."
+ "passwords.ffPairText": "Extensia Tetra din Firefox cere să-ți arate acolo parolele și codurile 2FA, să le completeze pe site-uri și să salveze parolele pe care le scrii sau le schimbi în Firefox. Permite doar dacă tocmai ai instalat-o.",
+ "mapbuild.export": "Exportă",
+ "mapbuild.exportNote": "Harta ca un singur fișier .tetramap: copiază-l prin cablu pe un telefon sau o tabletă și deschide-l în Tetra › Setări › Hărți › Importă o hartă",
+ "mapbuild.exportTitle": "Exportă harta: {name}",
+ "mapbuild.exporting": "Se exportă {name}… {percent}%",
+ "mapbuild.exported": "{name} este în {file}",
+ "mapbuild.import": "Importă o hartă…",
+ "mapbuild.importNote": "Un fișier .tetramap, de pe un telefon sau alt computer",
+ "mapbuild.importTitle": "Importă o hartă",
+ "mapbuild.importing": "Se importă {name}… {percent}%",
+ "mapbuild.imported": "{name} este aici și ajunge pe telefon și tabletă la următoarea sincronizare",
+ "mapbuild.importBusy": "Se face o hartă: importă după ce se termină",
+ "mapbuild.fileKind": "Hartă Tetra",
+ "mapbuild.allFiles": "Toate fișierele",
+ "mapbuild.noSuchMap": "Nu există o astfel de hartă."
 }

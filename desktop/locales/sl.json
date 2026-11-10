@@ -2948,5 +2948,19 @@
  "passwords.words": "Besede",
  "passwords.year": "Leto",
  "passwords.ffPairTitle": "Naj Firefox uporablja Gesla Tetre?",
- "passwords.ffPairText": "Razširitev Tetre v Firefoxu želi tam prikazovati tvoja gesla in kode 2FA, jih izpolnjevati na straneh in shranjevati gesla, ki jih v Firefoxu vpišeš ali spremeniš. Dovoli le, če si jo pravkar namestil."
+ "passwords.ffPairText": "Razširitev Tetre v Firefoxu želi tam prikazovati tvoja gesla in kode 2FA, jih izpolnjevati na straneh in shranjevati gesla, ki jih v Firefoxu vpišeš ali spremeniš. Dovoli le, če si jo pravkar namestil.",
+ "mapbuild.export": "Izvozi",
+ "mapbuild.exportNote": "Zemljevid kot ena datoteka .tetramap: s kablom jo kopirajte na telefon ali tablico in jo odprite v Tetra › Nastavitve › Zemljevidi › Uvozi zemljevid",
+ "mapbuild.exportTitle": "Izvoz zemljevida: {name}",
+ "mapbuild.exporting": "Izvažanje: {name}… {percent} %",
+ "mapbuild.exported": "Zemljevid {name} je v {file}",
+ "mapbuild.import": "Uvozi zemljevid…",
+ "mapbuild.importNote": "Datoteka .tetramap s telefona ali drugega računalnika",
+ "mapbuild.importTitle": "Uvozi zemljevid",
+ "mapbuild.importing": "Uvažanje: {name}… {percent} %",
+ "mapbuild.imported": "Zemljevid {name} je tukaj in bo ob naslednji sinhronizaciji na telefonu in tablici",
+ "mapbuild.importBusy": "Zemljevid se ravno izdeluje: uvozite, ko bo končan",
+ "mapbuild.fileKind": "Zemljevid Tetra",
+ "mapbuild.allFiles": "Vse datoteke",
+ "mapbuild.noSuchMap": "Takega zemljevida ni."
 }

@@ -2856,5 +2856,19 @@
  "passwords.words": "Parole",
  "passwords.year": "Anno",
  "passwords.ffPairTitle": "Consentire a Firefox di usare le Password di Tetra?",
- "passwords.ffPairText": "L’estensione di Tetra in Firefox chiede di mostrare lì le tue password e i codici 2FA, di compilarli nei siti e di salvare le password che scrivi o cambi in Firefox. Consentilo solo se l’hai appena installata."
+ "passwords.ffPairText": "L’estensione di Tetra in Firefox chiede di mostrare lì le tue password e i codici 2FA, di compilarli nei siti e di salvare le password che scrivi o cambi in Firefox. Consentilo solo se l’hai appena installata.",
+ "mapbuild.export": "Esporta",
+ "mapbuild.exportNote": "La mappa in un solo file .tetramap: copialo via cavo su un telefono o un tablet e aprilo in Tetra › Impostazioni › Mappe › Importa una mappa",
+ "mapbuild.exportTitle": "Esporta la mappa di {name}",
+ "mapbuild.exporting": "Esportazione di {name}… {percent}%",
+ "mapbuild.exported": "{name} è in {file}",
+ "mapbuild.import": "Importa una mappa…",
+ "mapbuild.importNote": "Un file .tetramap, da un telefono o da un altro computer",
+ "mapbuild.importTitle": "Importa una mappa",
+ "mapbuild.importing": "Importazione di {name}… {percent}%",
+ "mapbuild.imported": "{name} è qui e arriverà su telefono e tablet con la prossima sincronizzazione",
+ "mapbuild.importBusy": "Si sta creando una mappa: importa quando ha finito",
+ "mapbuild.fileKind": "Mappa Tetra",
+ "mapbuild.allFiles": "Tutti i file",
+ "mapbuild.noSuchMap": "Questa mappa non esiste."
 }

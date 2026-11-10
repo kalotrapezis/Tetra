@@ -34,6 +34,14 @@ export function MapsCard() {
     return null
   })
   const [removing, setRemoving] = useState<MapPack | null>(null)
+  // a map as one .tetramap file (the phone's format): its progress, then what came of it
+  const [moving, setMoving] = useState<{ kind: 'export' | 'import'; name: string; done: number } | null>(null)
+  const [moved, setMoved] = useState<string | null>(null)
+  useEffect(() => window.drive.onMapsArchive(setMoving), [])
+  const exportPack = (p: MapPack) => { setMoved(null); setMoving({ kind: 'export', name: p.name, done: 0 })
+    window.drive.mapsExportPack(p.id).then(f => setMoved(f ? t('mapbuild.exported', { name: p.name, file: f }) : null), e => setMoved(errorText(e))).finally(() => setMoving(null)) }
+  const importPack = () => { setMoved(null)
+    window.drive.mapsImportPack().then(n => { if (n) { setMoved(t('mapbuild.imported', { name: n })); load() } }, e => setMoved(errorText(e))).finally(() => setMoving(null)) }
   const load = () => window.drive.mapsPacks().then(setPacks, () => setPacks([]))
   useEffect(() => {
     load()
@@ -62,13 +70,17 @@ export function MapsCard() {
         <span className="map-actions">
           {p.old && <span className="map-old" title={t('mapbuild.oldNote')}>{t('mapbuild.old')}</span>}
           <button className={p.old ? 'filled-button secondary' : 'text-button'} disabled={busy} onClick={() => update(p.region)}>{t('mapbuild.remake')}</button>
+          <button className="text-button" disabled={busy || !!moving} title={t('mapbuild.exportNote')} onClick={() => exportPack(p)}>{t('mapbuild.export')}</button>
           <button className="text-button" disabled={busy} onClick={() => setRemoving(p)}>{t('mapbuild.remove')}</button>
         </span>
       </div>)}</div>}
+      {moving && <p className="muted map-making"><span className="spinner" />{t(moving.kind === 'export' ? 'mapbuild.exporting' : 'mapbuild.importing', { name: moving.name, percent: Math.round(moving.done * 100) })}</p>}
+      {moved && !moving && <p className="muted">{moved}</p>}
       {busy && <p className="muted map-making"><span className="spinner" />{t('mapbuild.making', { name: progress.id, step: progress.step ? t(`mapbuild.step.${progress.step}`) : '…' })}</p>}
       <div className="dialog-actions" style={{ justifyContent: 'flex-start' }}>
         {busy ? <button className="filled-button secondary" onClick={() => setWizard('build')}>{t('mapbuild.show')}</button>
           : <button className="filled-button" onClick={() => setWizard('welcome')}>{t('mapbuild.add')}</button>}
+        {!busy && <button className="text-button" disabled={!!moving} title={t('mapbuild.importNote')} onClick={importPack}>{t('mapbuild.import')}</button>}
       </div>
       {wizard && <Wizard page={wizard} setPage={setWizard} progress={progress} start={update} onClose={() => setWizard(null)} />}
       {removing && <Confirm title={t('mapbuild.removeTitle', { name: removing.name })} body={t('mapbuild.removeBody')} action={t('mapbuild.remove')} danger

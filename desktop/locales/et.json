@@ -2764,5 +2764,19 @@
  "passwords.words": "Sõnad",
  "passwords.year": "Aasta",
  "passwords.ffPairTitle": "Kas lubada Firefoxil kasutada Tetra paroole?",
- "passwords.ffPairText": "Tetra laiendus Firefoxis soovib seal näidata sinu paroole ja 2FA-koode, täita neid veebilehtedel ning salvestada paroole, mida Firefoxis sisestad või muudad. Luba see ainult siis, kui just paigaldasid selle."
+ "passwords.ffPairText": "Tetra laiendus Firefoxis soovib seal näidata sinu paroole ja 2FA-koode, täita neid veebilehtedel ning salvestada paroole, mida Firefoxis sisestad või muudad. Luba see ainult siis, kui just paigaldasid selle.",
+ "mapbuild.export": "Ekspordi",
+ "mapbuild.exportNote": "Kaart ühe .tetramap-failina: kopeeri see kaabliga telefoni või tahvelarvutisse ja ava Tetra › Seaded › Kaardid › Impordi kaart",
+ "mapbuild.exportTitle": "Ekspordi kaart: {name}",
+ "mapbuild.exporting": "Eksportimine: {name}… {percent}%",
+ "mapbuild.exported": "Kaart {name} on failis {file}",
+ "mapbuild.import": "Impordi kaart…",
+ "mapbuild.importNote": "Telefonist või teisest arvutist pärit .tetramap-fail",
+ "mapbuild.importTitle": "Impordi kaart",
+ "mapbuild.importing": "Importimine: {name}… {percent}%",
+ "mapbuild.imported": "Kaart {name} on siin ja jõuab järgmise sünkroonimisega telefoni ja tahvelarvutisse",
+ "mapbuild.importBusy": "Kaarti tehakse praegu: impordi, kui see on valmis",
+ "mapbuild.fileKind": "Tetra kaart",
+ "mapbuild.allFiles": "Kõik failid",
+ "mapbuild.noSuchMap": "Sellist kaarti pole."
 }

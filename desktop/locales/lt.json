@@ -2948,5 +2948,19 @@
  "passwords.words": "Žodžiai",
  "passwords.year": "Metai",
  "passwords.ffPairTitle": "Leisti Firefox naudoti Tetra slaptažodžius?",
- "passwords.ffPairText": "Tetra plėtinys Firefox prašo ten rodyti tavo slaptažodžius ir 2FA kodus, juos įrašyti svetainėse ir išsaugoti slaptažodžius, kuriuos įvedi ar pakeiti Firefox. Leisk tai tik jei ką tik jį įdiegei."
+ "passwords.ffPairText": "Tetra plėtinys Firefox prašo ten rodyti tavo slaptažodžius ir 2FA kodus, juos įrašyti svetainėse ir išsaugoti slaptažodžius, kuriuos įvedi ar pakeiti Firefox. Leisk tai tik jei ką tik jį įdiegei.",
+ "mapbuild.export": "Eksportuoti",
+ "mapbuild.exportNote": "Žemėlapis vienu .tetramap failu: nukopijuokite jį laidu į telefoną ar planšetę ir atidarykite Tetra › Nustatymai › Žemėlapiai › Importuoti žemėlapį",
+ "mapbuild.exportTitle": "Eksportuoti žemėlapį: {name}",
+ "mapbuild.exporting": "Eksportuojama: {name}… {percent} %",
+ "mapbuild.exported": "Žemėlapis {name} yra faile {file}",
+ "mapbuild.import": "Importuoti žemėlapį…",
+ "mapbuild.importNote": ".tetramap failas iš telefono ar kito kompiuterio",
+ "mapbuild.importTitle": "Importuoti žemėlapį",
+ "mapbuild.importing": "Importuojama: {name}… {percent} %",
+ "mapbuild.imported": "Žemėlapis {name} jau čia ir per kitą sinchronizavimą pateks į telefoną ir planšetę",
+ "mapbuild.importBusy": "Kuriamas žemėlapis: importuokite, kai jis bus baigtas",
+ "mapbuild.fileKind": "Tetra žemėlapis",
+ "mapbuild.allFiles": "Visi failai",
+ "mapbuild.noSuchMap": "Tokio žemėlapio nėra."
 }

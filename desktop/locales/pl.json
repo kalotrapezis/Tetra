@@ -2948,5 +2948,19 @@
  "passwords.words": "Słowa",
  "passwords.year": "Rok",
  "passwords.ffPairTitle": "Pozwolić Firefoksowi używać Haseł Tetry?",
- "passwords.ffPairText": "Rozszerzenie Tetry w Firefoksie prosi o pokazywanie tam twoich haseł i kodów 2FA, wpisywanie ich na stronach i zapisywanie haseł, które wpisujesz lub zmieniasz w Firefoksie. Zezwól tylko, jeśli dopiero je zainstalowałeś."
+ "passwords.ffPairText": "Rozszerzenie Tetry w Firefoksie prosi o pokazywanie tam twoich haseł i kodów 2FA, wpisywanie ich na stronach i zapisywanie haseł, które wpisujesz lub zmieniasz w Firefoksie. Zezwól tylko, jeśli dopiero je zainstalowałeś.",
+ "mapbuild.export": "Eksportuj",
+ "mapbuild.exportNote": "Mapa jako jeden plik .tetramap: skopiuj go kablem na telefon lub tablet i otwórz w Tetra › Ustawienia › Mapy › Importuj mapę",
+ "mapbuild.exportTitle": "Eksport mapy: {name}",
+ "mapbuild.exporting": "Eksportowanie: {name}… {percent}%",
+ "mapbuild.exported": "Mapa {name} jest w {file}",
+ "mapbuild.import": "Importuj mapę…",
+ "mapbuild.importNote": "Plik .tetramap z telefonu lub innego komputera",
+ "mapbuild.importTitle": "Importuj mapę",
+ "mapbuild.importing": "Importowanie: {name}… {percent}%",
+ "mapbuild.imported": "Mapa {name} jest tutaj i przy następnej synchronizacji trafi na telefon i tablet",
+ "mapbuild.importBusy": "Trwa tworzenie mapy: zaimportuj, gdy się skończy",
+ "mapbuild.fileKind": "Mapa Tetra",
+ "mapbuild.allFiles": "Wszystkie pliki",
+ "mapbuild.noSuchMap": "Nie ma takiej mapy."
 }

@@ -477,6 +477,11 @@ declare global {
       mapsBuilding(): Promise<string | null>
       mapsPacks(): Promise<MapPack[]>
       mapsRemovePack(id: string): Promise<void>
+      /** The map as one .tetramap file, where the user picks; its path, or null when not saved. */
+      mapsExportPack(id: string): Promise<string | null>
+      /** A .tetramap file the user picks, checked and put in place; the map's name, or null when none was picked. */
+      mapsImportPack(): Promise<string | null>
+      onMapsArchive(cb: (p: { kind: 'export' | 'import'; name: string; done: number }) => void): () => void
       onMapsBuild(cb: (p: MapBuildProgress) => void): () => void
       mapsPlaces(): Promise<MapPlace[]>
       mapsLists(): Promise<MapList[]>

@@ -2855,5 +2855,19 @@
  "passwords.words": "Riječi",
  "passwords.year": "Godina",
  "passwords.ffPairTitle": "Smije li Firefox koristiti Lozinke Tetre?",
- "passwords.ffPairText": "Proširenje Tetre u Firefoxu traži da ondje prikazuje tvoje lozinke i 2FA kodove, upisuje ih na stranicama i sprema lozinke koje upišeš ili promijeniš u Firefoxu. Dopusti to samo ako si ga upravo instalirao."
+ "passwords.ffPairText": "Proširenje Tetre u Firefoxu traži da ondje prikazuje tvoje lozinke i 2FA kodove, upisuje ih na stranicama i sprema lozinke koje upišeš ili promijeniš u Firefoxu. Dopusti to samo ako si ga upravo instalirao.",
+ "mapbuild.export": "Izvezi",
+ "mapbuild.exportNote": "Karta kao jedna datoteka .tetramap: kopirajte je kabelom na telefon ili tablet i otvorite u Tetra › Postavke › Karte › Uvezi kartu",
+ "mapbuild.exportTitle": "Izvoz karte: {name}",
+ "mapbuild.exporting": "Izvoz: {name}… {percent} %",
+ "mapbuild.exported": "Karta {name} je u {file}",
+ "mapbuild.import": "Uvezi kartu…",
+ "mapbuild.importNote": "Datoteka .tetramap s telefona ili drugog računala",
+ "mapbuild.importTitle": "Uvezi kartu",
+ "mapbuild.importing": "Uvoz: {name}… {percent} %",
+ "mapbuild.imported": "Karta {name} je ovdje i stiže na telefon i tablet sljedećom sinkronizacijom",
+ "mapbuild.importBusy": "Karta se upravo izrađuje: uvezite kada bude gotova",
+ "mapbuild.fileKind": "Tetra karta",
+ "mapbuild.allFiles": "Sve datoteke",
+ "mapbuild.noSuchMap": "Takva karta ne postoji."
 }

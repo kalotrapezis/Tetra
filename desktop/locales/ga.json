@@ -3040,5 +3040,19 @@
  "passwords.words": "Focail",
  "passwords.year": "Bliain",
  "passwords.ffPairTitle": "Ligean do Firefox Pasfhocail Tetra a úsáid?",
- "passwords.ffPairText": "Iarrann síneadh Tetra i Firefox do phasfhocail agus do chóid 2FA a thaispeáint ansin, iad a líonadh ar shuíomhanna agus pasfhocail a chlónn nó a athraíonn tú i Firefox a shábháil. Ceadaigh é ach amháin má shuiteáil tú é anois díreach."
+ "passwords.ffPairText": "Iarrann síneadh Tetra i Firefox do phasfhocail agus do chóid 2FA a thaispeáint ansin, iad a líonadh ar shuíomhanna agus pasfhocail a chlónn nó a athraíonn tú i Firefox a shábháil. Ceadaigh é ach amháin má shuiteáil tú é anois díreach.",
+ "mapbuild.export": "Easpórtáil",
+ "mapbuild.exportNote": "An léarscáil mar chomhad .tetramap amháin: cóipeáil le cábla é chuig fón nó táibléad agus oscail é in Tetra › Socruithe › Léarscáileanna › Iompórtáil léarscáil",
+ "mapbuild.exportTitle": "Easpórtáil léarscáil: {name}",
+ "mapbuild.exporting": "Á easpórtáil: {name}… {percent}%",
+ "mapbuild.exported": "Tá {name} in {file}",
+ "mapbuild.import": "Iompórtáil léarscáil…",
+ "mapbuild.importNote": "Comhad .tetramap, ó fhón nó ó ríomhaire eile",
+ "mapbuild.importTitle": "Iompórtáil léarscáil",
+ "mapbuild.importing": "Á iompórtáil: {name}… {percent}%",
+ "mapbuild.imported": "Tá {name} anseo agus rachaidh sé chuig an bhfón agus an táibléad leis an gcéad sioncrónú eile",
+ "mapbuild.importBusy": "Tá léarscáil á déanamh: iompórtáil nuair a bheidh sí réidh",
+ "mapbuild.fileKind": "Léarscáil Tetra",
+ "mapbuild.allFiles": "Gach comhad",
+ "mapbuild.noSuchMap": "Níl a leithéid de léarscáil ann."
 }
