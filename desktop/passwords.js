@@ -255,8 +255,30 @@ function otpauth(uri) {
   return { issuer, account, secret, algorithm, digits, period }
 }
 
-/** The computer's own login password, checked by PAM's helper (what screen lockers use); false where there is none. */
+/**
+ * Windows' check of an account's password (advapi32's LogonUser, as runas does). The name and password come on stdin, each a
+ * line of base64 UTF-8, never on the command line where other programs could read them. The script itself goes encoded, as
+ * Node's quoting of its double quotes is not what Windows PowerShell undoes.
+ */
+const WIN_LOGON = 'Add-Type -Namespace TetraLogon -Name Api -MemberDefinition \'' +
+  '[DllImport("advapi32.dll", CharSet = CharSet.Unicode, SetLastError = true)] public static extern bool LogonUser(string u, string d, string p, int type, int provider, out IntPtr token); ' +
+  '[DllImport("kernel32.dll")] public static extern bool CloseHandle(IntPtr h);\'; ' +
+  '$line = { [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String([Console]::In.ReadLine().Trim())) }; ' +
+  '$u = & $line; $p = & $line; $t = [IntPtr]::Zero; ' +
+  'if ([TetraLogon.Api]::LogonUser($u, $env:USERDOMAIN, $p, 2, 0, [ref]$t)) { [void][TetraLogon.Api]::CloseHandle($t); exit 0 } else { exit 1 }'
+
+/** The computer's own login password, checked by PAM's helper (what screen lockers use) or Windows' LogonUser; false where neither is. */
 function systemPassword(user, password) {
+  if (process.platform === 'win32') {
+    if (!password) return Promise.resolve(false)
+    return new Promise(res => {
+      const p = spawn('powershell.exe', ['-NoProfile', '-NonInteractive', '-EncodedCommand', Buffer.from(WIN_LOGON, 'utf16le').toString('base64')], { stdio: ['pipe', 'ignore', 'ignore'], windowsHide: true })
+      p.on('error', () => res(false))
+      p.on('close', code => res(code === 0))
+      p.stdin.on('error', () => {})
+      p.stdin.end([user, password].map(x => Buffer.from(String(x)).toString('base64')).join('\n') + '\n')
+    })
+  }
   const bin = ['/usr/sbin/unix_chkpwd', '/sbin/unix_chkpwd'].find(f => fs.existsSync(f))
   if (!bin || !password) return Promise.resolve(false)
   return new Promise(res => {
@@ -358,4 +380,4 @@ class Passwords {
   }
 }
 
-module.exports = { Passwords, WrongPassphrase, merge, pruned, record, live, setJson, parseSet, sameSet, parseRecipe, recipeJson, recipe, derive, create, unlock, encrypt, decrypt, merged, keyed, vault, codes, base32, hotp, totp, otpauth, jstr, systemPassword }
+module.exports = { WIN_LOGON, Passwords, WrongPassphrase, merge, pruned, record, live, setJson, parseSet, sameSet, parseRecipe, recipeJson, recipe, derive, create, unlock, encrypt, decrypt, merged, keyed, vault, codes, base32, hotp, totp, otpauth, jstr, systemPassword }
