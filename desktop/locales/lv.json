@@ -2886,5 +2886,14 @@
  "settings.sum.dock": "Ikonu izmērs, nosaukumi un kā tas redzams lietotnē",
  "dock.size": "Ikonu izmērs",
  "dock.reset": "Atjaunot doku kā sākumā",
- "dock.default": "noklusējums"
+ "dock.default": "noklusējums",
+ "passwords.cvc": "Drošības kods (CVV)",
+ "passwords.cvcKeep": "Saglabāts; atstājiet tukšu, lai paturētu",
+ "passwords.cvcKept": "Glabājas šifrēts kopā ar parolēm; redzams tikai pēc atkārtotas paroles ievades.",
+ "passwords.fieldCopied": "Nokopēts: {name}",
+ "passwords.expiry": "Derīgums",
+ "passwords.cvcCopied": "Kods nokopēts; tiks dzēsts pēc 30 sekundēm",
+ "passwords.cvcAsk": "Jūsu parole, lai parādītu kodu",
+ "passwords.cvcShow": "Rādīt",
+ "passwords.cvcNone": "Šai kartei nav saglabāts drošības kods; Rediģēt to pievieno."
 }

@@ -166,3 +166,24 @@ test("the computer's password: a wrong one refused", async () => {
   assert.equal(await pw.systemPassword(os.userInfo().username, 'certainly-not-the-password-' + Math.random()), false)
   assert.equal(await pw.systemPassword(os.userInfo().username, ''), false)
 })
+
+test("a card's security code: kept, never in the list, kept through an edit, shown only after the password again", async () => {
+  const root = copy(), keep = keepIn()
+  const p = new pw.Passwords({ root, device: 'PC-000000', keep, user: 'nobody' })
+  await p.setPassphrase(PHRASE)
+  let l = p.change('passwords', null, { name: 'MARIA', number: '5500 0000 0000 0004', month: '12', year: '31', cvc: '1 2 3' })
+  const card = l.cards.find(c => c.number === '5500000000000004')
+  assert.equal(card.hasCvc, true); assert.equal('cvc' in card, false) // only that there is one
+  await assert.rejects(p.cvc(card.key, 'wrong'), pw.WrongPassphrase)
+  assert.equal(await p.cvc(card.key, PHRASE), '123')
+  l = p.change('passwords', card.key, { ...card, name: 'MARIA K' }) // the page never has the code: it stays
+  assert.equal(await p.cvc(l.cards.find(c => c.name === 'MARIA K').key, PHRASE), '123')
+  // a card without one is written as before (four values), as the phone writes it
+  l = p.change('passwords', null, { name: 'B', number: '4111111111111111', month: '01', year: '30' })
+  const r = pw.recipe(root), key = await pw.unlock(PHRASE, r)
+  const all = pw.live(pw.merged(root, 'passwords', 'Pixel 9-abc123', key, r, null, Date.now() + 1000).all)
+  assert.equal(JSON.parse(all['c|4111111111111111']).length, 4)
+  assert.equal(JSON.parse(all['c|5500000000000004'])[4], '123')
+  p.lock()
+  await assert.rejects(p.cvc(card.key, PHRASE), pw.WrongPassphrase) // locked: no code even with the password
+})

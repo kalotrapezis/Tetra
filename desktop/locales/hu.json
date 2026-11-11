@@ -2794,5 +2794,14 @@
  "settings.sum.dock": "Ikonméret, feliratok és megjelenés egy alkalmazásban",
  "dock.size": "Ikonméret",
  "dock.reset": "A dokk visszaállítása az eredetire",
- "dock.default": "alapértelmezett"
+ "dock.default": "alapértelmezett",
+ "passwords.cvc": "Biztonsági kód (CVV)",
+ "passwords.cvcKeep": "Mentve; hagyja üresen a megtartáshoz",
+ "passwords.cvcKept": "Titkosítva tárolva a jelszavaival; csak a jelszó ismételt megadása után látható.",
+ "passwords.fieldCopied": "Másolva: {name}",
+ "passwords.expiry": "Lejárat",
+ "passwords.cvcCopied": "Biztonsági kód másolva; 30 másodperc múlva törlődik",
+ "passwords.cvcAsk": "Az Ön jelszava a kód megjelenítéséhez",
+ "passwords.cvcShow": "Megjelenítés",
+ "passwords.cvcNone": "Ehhez a kártyához nincs mentett biztonsági kód; a Szerkesztés hozzáadja."
 }

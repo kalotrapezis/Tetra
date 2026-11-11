@@ -62,6 +62,7 @@ contextBridge.exposeInMainWorld('drive', {
     status: () => ipcRenderer.invoke('passwords:status'),
     passphrase: (pass, isNew) => ipcRenderer.invoke('passwords:passphrase', pass, isNew),
     open: secret => ipcRenderer.invoke('passwords:open', secret),
+    cvc: (key, secret) => ipcRenderer.invoke('passwords:cvc', key, secret),
     lock: () => ipcRenderer.invoke('passwords:lock'),
     forget: () => ipcRenderer.invoke('passwords:forget'),
     list: () => ipcRenderer.invoke('passwords:list'),

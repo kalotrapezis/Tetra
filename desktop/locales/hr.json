@@ -2886,5 +2886,14 @@
  "settings.sum.dock": "Veličina ikona, oznake i kako se prikazuje u aplikaciji",
  "dock.size": "Veličina ikona",
  "dock.reset": "Vrati dok kakav je bio na početku",
- "dock.default": "zadano"
+ "dock.default": "zadano",
+ "passwords.cvc": "Sigurnosni kod (CVV)",
+ "passwords.cvcKeep": "Spremljen; ostavite prazno da ostane",
+ "passwords.cvcKept": "Čuva se šifrirano s vašim lozinkama; prikazuje se tek nakon ponovnog unosa lozinke.",
+ "passwords.fieldCopied": "Kopirano: {name}",
+ "passwords.expiry": "Istek",
+ "passwords.cvcCopied": "Sigurnosni kod kopiran; briše se za 30 sekundi",
+ "passwords.cvcAsk": "Vaša lozinka za prikaz koda",
+ "passwords.cvcShow": "Prikaži",
+ "passwords.cvcNone": "Za ovu karticu nije spremljen sigurnosni kod; Uredi ga dodaje."
 }

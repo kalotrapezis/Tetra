@@ -2794,5 +2794,14 @@
  "settings.sum.dock": "Symbolgröße, Beschriftungen und wie es in einer App erscheint",
  "dock.size": "Symbolgröße",
  "dock.reset": "Dock wie am Anfang zurücksetzen",
- "dock.default": "Standard"
+ "dock.default": "Standard",
+ "passwords.cvc": "Sicherheitscode (CVV)",
+ "passwords.cvcKeep": "Gespeichert; leer lassen, um ihn zu behalten",
+ "passwords.cvcKept": "Verschlüsselt mit Ihren Passwörtern gespeichert; erst nach erneuter Passworteingabe sichtbar.",
+ "passwords.fieldCopied": "{name} kopiert",
+ "passwords.expiry": "Ablauf",
+ "passwords.cvcCopied": "Sicherheitscode kopiert; wird in 30 Sekunden gelöscht",
+ "passwords.cvcAsk": "Ihr Passwort, um den Code zu zeigen",
+ "passwords.cvcShow": "Anzeigen",
+ "passwords.cvcNone": "Für diese Karte ist kein Sicherheitscode gespeichert; Bearbeiten fügt ihn hinzu."
 }

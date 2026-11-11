@@ -125,7 +125,7 @@ export interface TimerItem { id: string; seconds: number; label: string; state: 
 /** Passwords (passwords.js): recipe = a passphrase chosen by some device; kept = its key kept here; need = asked (again); open = unlocked. */
 export interface PasswordsStatus { recipe: boolean; kept: boolean; need: boolean; open: boolean }
 export interface Login { key?: string; host: string; user: string; password: string; note: string; pinned: boolean }
-export interface Card { key?: string; name: string; number: string; month: string; year: string }
+export interface Card { key?: string; name: string; number: string; month: string; year: string; hasCvc?: boolean; cvc?: string }
 export interface Address { key: string; fields: Record<string, string> }
 export interface OtpCode { key?: string; issuer: string; account: string; secret: string; algorithm: string; digits: number; period: number; pinned: boolean }
 export interface PasswordsList { logins: Login[]; cards: Card[]; addresses: Address[]; codes: OtpCode[]; devices: number; unreadable: number }
@@ -313,6 +313,7 @@ declare global {
         status(): Promise<PasswordsStatus>
         passphrase(pass: string, isNew?: boolean): Promise<void>
         open(secret: string): Promise<void>
+        cvc(key: string, secret: string): Promise<string>
         lock(): Promise<void>
         forget(): Promise<void>
         list(): Promise<PasswordsList>

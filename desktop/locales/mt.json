@@ -2981,5 +2981,14 @@
  "settings.sum.dock": "Id-daqs tal-ikoni, it-tikketti u kif jidher f’app",
  "dock.size": "Daqs tal-ikoni",
  "dock.reset": "Erġa’ lura d-dock kif kien għall-ewwel",
- "dock.default": "default"
+ "dock.default": "default",
+ "passwords.cvc": "Kodiċi tas-sigurtà (CVV)",
+ "passwords.cvcKeep": "Miżmum; ħallih vojt biex jibqa’",
+ "passwords.cvcKept": "Jinżamm kriptat mal-passwords tiegħek; jidher biss wara li terġa’ tagħti l-password.",
+ "passwords.fieldCopied": "Ikkupjat: {name}",
+ "passwords.expiry": "Skadenza",
+ "passwords.cvcCopied": "Il-kodiċi ġie kkupjat; jitħassar f’30 sekonda",
+ "passwords.cvcAsk": "Il-password tiegħek, biex jidher il-kodiċi",
+ "passwords.cvcShow": "Uri",
+ "passwords.cvcNone": "M’hemmx kodiċi tas-sigurtà miżmum għal din il-karta; Editja jżidu."
 }

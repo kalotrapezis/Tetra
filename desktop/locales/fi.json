@@ -2794,5 +2794,14 @@
  "settings.sum.dock": "Kuvakkeiden koko, nimet ja miten se näkyy sovelluksessa",
  "dock.size": "Kuvakkeiden koko",
  "dock.reset": "Palauta telakka alkuperäiseksi",
- "dock.default": "oletus"
+ "dock.default": "oletus",
+ "passwords.cvc": "Turvakoodi (CVV)",
+ "passwords.cvcKeep": "Tallennettu; jätä tyhjäksi säilyttääksesi",
+ "passwords.cvcKept": "Säilytetään salattuna salasanojesi kanssa; näytetään vasta, kun annat salasanasi uudelleen.",
+ "passwords.fieldCopied": "Kopioitu: {name}",
+ "passwords.expiry": "Voimassa",
+ "passwords.cvcCopied": "Turvakoodi kopioitu; poistuu 30 sekunnin kuluttua",
+ "passwords.cvcAsk": "Salasanasi koodin näyttämiseksi",
+ "passwords.cvcShow": "Näytä",
+ "passwords.cvcNone": "Kortille ei ole tallennettu turvakoodia; Muokkaa lisää sen."
 }

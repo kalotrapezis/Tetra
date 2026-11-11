@@ -11,7 +11,7 @@ import { t } from './i18n'
 type Tab = 'logins' | 'cards' | 'addresses' | '2fa' | 'create'
 const TABS: [Tab, IconName, string][] = [['logins', 'key', 'app.passwords'], ['cards', 'storage', 'passwords.cards'], ['addresses', 'place', 'passwords.addresses'], ['2fa', 'dialpad', 'passwords.tab2fa'], ['create', 'sparkle', 'passwords.tabCreate']]
 const ADDRESS_FIELDS: [string, string][] = [['name', 'common.name'], ['email', 'passwords.email'], ['tel', 'passwords.phone'], ['organization', 'passwords.organization'], ['street-address', 'passwords.street'],
-  ['postal-code', 'passwords.postcode'], ['address-level2', 'passwords.city'], ['address-level1', 'passwords.region'], ['country-name', 'passwords.country']]
+  ['postal-code', 'passwords.postcode'], ['address-level2', 'passwords.city'], ['address-level1', 'passwords.region'], ['country-name', 'passwords.country'], ['note', 'passwords.note']]
 const fieldName = (k: string) => t(ADDRESS_FIELDS.find(([f]) => f === k)?.[1] ?? '') || k
 /** As the phone names an address: its name, else given and family names, else the email or street. */
 const addressLabel = (a: Address['fields']) => a.name || [a['given-name'], a['family-name']].filter(Boolean).join(' ') || a.email || a['street-address'] || Object.values(a)[0] || ''
@@ -26,6 +26,8 @@ export function PasswordsPage({ setDialog, say }: { setDialog: (d: ReactNode) =>
   const [tab, setTab] = useState<Tab>(() => { try { return (localStorage.getItem('passwordsTab') as Tab) || 'logins' } catch { return 'logins' } })
   const [query, setQuery] = useState('')
   const [edit, setEdit] = useState<{ kind: Tab; item: Login | Card | Address | OtpCode | null } | null>(null)
+  // an address or a card shown whole, each line with its copy (the user, 11 Nov: "to copy one by one and paste on PC")
+  const [view, setView] = useState<{ kind: 'cards'; item: Card } | { kind: 'addresses'; item: Address } | null>(null)
   const close = () => setDialog(null)
   const read = async () => {
     const s = await window.drive.passwords.status()
@@ -74,7 +76,7 @@ export function PasswordsPage({ setDialog, say }: { setDialog: (d: ReactNode) =>
           {list && tab === 'cards' && <Rows empty={list.cards.length ? t('passwords.noneFound') : t('passwords.addCard')}>
             {list.cards.filter(c => has(q, c.name, c.number.slice(-4))).map(c =>
               <div key={c.key} className="island pw-row">
-                <div className="pw-what"><b>{c.name || t('passwords.cardNumber')}</b><span className="muted">•••• {c.number.slice(-4)} · {c.month}/{c.year}</span></div>
+                <button className="pw-what pw-open" onClick={() => setView({ kind: 'cards', item: c })}><b>{c.name || t('passwords.cardNumber')}</b><span className="muted">•••• {c.number.slice(-4)} · {c.month}/{c.year}</span></button>
                 <button className="round flat" title={t('passwords.copyNumber')} onClick={() => copy(c.number, t('passwords.numberCopied'))}><Icon name="copy" /></button>
                 <button className="round flat" title={t('common.edit')} onClick={() => setEdit({ kind: 'cards', item: c })}><Icon name="edit" /></button>
                 <button className="round flat" title={t('common.delete')} onClick={() => remove('passwords', c.key!, `•••• ${c.number.slice(-4)}`)}><Icon name="trash" /></button>
@@ -83,7 +85,7 @@ export function PasswordsPage({ setDialog, say }: { setDialog: (d: ReactNode) =>
           {list && tab === 'addresses' && <Rows empty={list.addresses.length ? t('passwords.noneFound') : t('passwords.addAddress')}>
             {list.addresses.filter(a => has(q, ...Object.values(a.fields))).map(a =>
               <div key={a.key} className="island pw-row">
-                <div className="pw-what"><b>{addressLabel(a.fields)}</b><span className="muted">{Object.entries(a.fields).filter(([k]) => k !== 'name').map(([, v]) => v).join(' · ')}</span></div>
+                <button className="pw-what pw-open" onClick={() => setView({ kind: 'addresses', item: a })}><b>{addressLabel(a.fields)}</b><span className="muted">{Object.entries(a.fields).filter(([k]) => k !== 'name' && k !== 'note').map(([, v]) => v).join(' · ')}</span></button>
                 <button className="round flat" title={t('common.edit')} onClick={() => setEdit({ kind: 'addresses', item: a })}><Icon name="edit" /></button>
                 <button className="round flat" title={t('common.delete')} onClick={() => remove('passwords', a.key, addressLabel(a.fields))}><Icon name="trash" /></button>
               </div>)}
@@ -100,6 +102,7 @@ export function PasswordsPage({ setDialog, say }: { setDialog: (d: ReactNode) =>
         {tab !== 'create' && <button className="round island timer-action" title={t({ logins: 'passwords.addLogin', cards: 'passwords.addCard', addresses: 'passwords.addAddress', '2fa': 'passwords.addCode' }[tab])}
           onClick={() => setEdit({ kind: tab, item: null })}><Icon name="add" /></button>}
       </div>
+      {view && <Viewer view={view} copy={copy} close={() => setView(null)} edit={() => { setEdit({ kind: view.kind, item: view.item }); setView(null) }} />}
       {edit && <Editor kind={edit.kind} item={edit.item} close={() => setEdit(null)} save={(item, old) => change(edit.kind === '2fa' ? '2fa' : 'passwords', old, item).then(() => setEdit(null))} />}
     </div>
   )
@@ -182,7 +185,7 @@ function Gate({ status, done }: { status: PasswordsStatus; done: () => void }) {
 /** A new or changed login, card, address or 2FA code, in a dialog. */
 function Editor({ kind, item, close, save }: { kind: Tab; item: Login | Card | Address | OtpCode | null; close: () => void; save: (item: Login | Card | { fields: Record<string, string> } | OtpCode, old: string | null) => Promise<void> }) {
   const start: Record<string, string> = kind === 'addresses' ? { ...(item as Address | null)?.fields }
-    : Object.fromEntries(Object.entries(item ?? {}).map(([k, v]) => [k, String(v)]))
+    : Object.fromEntries(Object.entries(item ?? {}).filter(([k]) => k !== 'hasCvc').map(([k, v]) => [k, String(v)]))
   const [f, setF] = useState<Record<string, string>>(kind === '2fa' ? { algorithm: 'SHA1', digits: '6', period: '30', ...start } : start)
   const [error, setError] = useState('')
   const set = (k: string, v: string) => { setF(x => ({ ...x, [k]: v })); setError('') }
@@ -201,7 +204,7 @@ function Editor({ kind, item, close, save }: { kind: Tab; item: Login | Card | A
     e.preventDefault()
     const old = (item as { key?: string } | null)?.key ?? null
     if (kind === 'logins') { if (!f.host?.trim() || !f.password) return; return save({ host: f.host, user: f.user ?? '', password: f.password, note: f.note ?? '', pinned: f.pinned === 'true' }, old) }
-    if (kind === 'cards') { if (!/^\d{12,19}$/.test((f.number ?? '').replace(/\s/g, ''))) return setError(t('passwords.cardNumber')); return save({ name: f.name ?? '', number: f.number, month: f.month ?? '', year: f.year ?? '' }, old) }
+    if (kind === 'cards') { if (!/^\d{12,19}$/.test((f.number ?? '').replace(/\s/g, ''))) return setError(t('passwords.cardNumber')); return save({ name: f.name ?? '', number: f.number, month: f.month ?? '', year: f.year ?? '', cvc: f.cvc ?? '' }, old) }
     if (kind === 'addresses') { if (!Object.values(f).some(v => v.trim())) return; return save({ fields: f }, old) }
     if (!/^[A-Z2-7]+$/.test((f.secret ?? '').toUpperCase().replace(/[ =-]/g, ''))) return setError(t('passwords.badKey'))
     return save({ issuer: f.issuer ?? '', account: f.account ?? '', secret: f.secret, algorithm: f.algorithm, digits: +f.digits, period: +f.period, pinned: f.pinned === 'true' }, old)
@@ -222,7 +225,10 @@ function Editor({ kind, item, close, save }: { kind: Tab; item: Login | Card | A
           {field('name', t('passwords.cardName'))}
           {field('number', t('passwords.cardNumber'))}
           <div className="pw-two">{field('month', t('passwords.month'))}{field('year', t('passwords.year'))}</div>
-          <p className="muted">{t('passwords.cardNoCvc')}</p>
+          <label className="pw-field"><span>{t('passwords.cvc')}</span>
+            <input className="field" type="password" inputMode="numeric" maxLength={4} autoComplete="off" value={f.cvc ?? ''} onChange={e => set('cvc', e.target.value.replace(/\D/g, ''))}
+              placeholder={(item as Card | null)?.hasCvc ? t('passwords.cvcKeep') : ''} /></label>
+          <p className="muted">{t('passwords.cvcKept')}</p>
         </>}
         {kind === 'addresses' && [...new Set([...ADDRESS_FIELDS.map(([k]) => k), ...Object.keys(f)])].map(k => field(k, fieldName(k)))}
         {kind === '2fa' && <>
@@ -295,5 +301,53 @@ function Generator({ copy }: { copy: (text: string, said: string) => void }) {
         <button className="filled-button pw-filled" disabled={!made} onClick={() => copy(made, t('passwords.passwordCopied'))}><Icon name="copy" size={18} /> {t('common.copy')}</button>
       </div>
     </div>
+  )
+}
+
+/**
+ * An address or a card shown whole, a line each with its copy, to paste where a page wants it (the user, 11 Nov). A card's
+ * security code stays hidden until the password is asked again; the number and the code leave the clipboard after 30 s.
+ */
+function Viewer({ view, copy, close, edit }: {
+  view: { kind: 'cards'; item: Card } | { kind: 'addresses'; item: Address }; copy: (text: string, said: string) => void; close: () => void; edit: () => void
+}) {
+  const [cvc, setCvc] = useState<string | null>(null)
+  const [asking, setAsking] = useState(false)
+  const [secret, setSecret] = useState('')
+  const [error, setError] = useState('')
+  const line = (label: string, value: string, said = t('passwords.fieldCopied', { name: label }), shown = value) => value ? (
+    <div key={label} className="pw-line"><span className="muted">{label}</span><b>{shown}</b>
+      <button className="round flat" title={t('common.copy')} onClick={() => copy(value, said)}><Icon name="copy" /></button></div>) : null
+  async function show(e: React.FormEvent) {
+    e.preventDefault()
+    if (view.kind !== 'cards' || !view.item.key) return
+    try { setCvc(await window.drive.passwords.cvc(view.item.key, secret)); setAsking(false); setSecret('') } catch (err) { setError(errorText(err)) }
+  }
+  return (
+    <Modal onClose={close}>
+      <div className="pw-view">
+        {view.kind === 'addresses' ? <>
+          <h3>{addressLabel(view.item.fields)}</h3>
+          {[...new Set([...ADDRESS_FIELDS.map(([k]) => k), ...Object.keys(view.item.fields)])].map(k => line(fieldName(k), view.item.fields[k] ?? ''))}
+        </> : <>
+          <h3>{view.item.name || t('passwords.cardNumber')}</h3>
+          {line(t('passwords.cardName'), view.item.name)}
+          {line(t('passwords.cardNumber'), view.item.number, t('passwords.numberCopied'), view.item.number.replace(/(\d{4})(?=\d)/g, '$1 '))}
+          {line(t('passwords.expiry'), view.item.month && view.item.year ? `${view.item.month}/${view.item.year}` : '')}
+          {view.item.hasCvc ? (cvc !== null ? line(t('passwords.cvc'), cvc, t('passwords.cvcCopied'))
+            : asking ? <form className="pw-line pw-ask" onSubmit={show}><span className="muted">{t('passwords.cvcAsk')}</span>
+                <input className="field" type="password" autoFocus placeholder={t('passwords.secret')} value={secret} onChange={e => { setSecret(e.target.value); setError('') }} />
+                <button className="filled-button pw-filled" disabled={!secret}>{t('passwords.cvcShow')}</button>
+                {error && <p className="error">{error}</p>}</form>
+            : <div className="pw-line"><span className="muted">{t('passwords.cvc')}</span><b>•••</b>
+                <button className="text-button" onClick={() => setAsking(true)}><Icon name="lock" size={18} /> {t('passwords.cvcShow')}</button></div>)
+            : <p className="muted">{t('passwords.cvcNone')}</p>}
+        </>}
+        <div className="dialog-actions">
+          <button className="text-button" onClick={edit}><Icon name="edit" size={18} /> {t('common.edit')}</button>
+          <button className="filled-button pw-filled" onClick={close}>{t('common.done')}</button>
+        </div>
+      </div>
+    </Modal>
   )
 }

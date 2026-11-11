@@ -2980,5 +2980,14 @@
  "settings.sum.dock": "Rozmiar ikon, etykiety i wygląd w aplikacji",
  "dock.size": "Rozmiar ikon",
  "dock.reset": "Przywróć dok do stanu początkowego",
- "dock.default": "domyślny"
+ "dock.default": "domyślny",
+ "passwords.cvc": "Kod bezpieczeństwa (CVV)",
+ "passwords.cvcKeep": "Zapisany; zostaw puste, aby go zachować",
+ "passwords.cvcKept": "Przechowywany zaszyfrowany z hasłami; widoczny dopiero po ponownym podaniu hasła.",
+ "passwords.fieldCopied": "Skopiowano: {name}",
+ "passwords.expiry": "Ważność",
+ "passwords.cvcCopied": "Kod skopiowany; zniknie za 30 sekund",
+ "passwords.cvcAsk": "Twoje hasło, aby pokazać kod",
+ "passwords.cvcShow": "Pokaż",
+ "passwords.cvcNone": "Dla tej karty nie zapisano kodu bezpieczeństwa; Edytuj go dodaje."
 }

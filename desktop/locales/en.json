@@ -2746,7 +2746,7 @@
  "passwords.pin": "Pin to the top",
  "passwords.postcode": "Postcode",
  "passwords.random": "Characters",
- "passwords.region": "Region",
+ "passwords.region": "State / region",
  "passwords.search": "Search sites, users, notes",
  "passwords.searchCodes": "Search codes",
  "passwords.secret": "Computer password or sync passphrase",
@@ -2794,5 +2794,14 @@
  "settings.sum.dock": "Its icons' size, labels, and how it shows in an app",
  "dock.size": "Icon size",
  "dock.reset": "Put the dock back as at first",
- "dock.default": "default"
+ "dock.default": "default",
+ "passwords.cvc": "Security code (CVV)",
+ "passwords.cvcKeep": "Kept; leave empty to keep it",
+ "passwords.cvcKept": "Kept encrypted with your passwords; shown only after your password is asked again.",
+ "passwords.fieldCopied": "{name} copied",
+ "passwords.expiry": "Expiry",
+ "passwords.cvcCopied": "Security code copied; cleared in 30 seconds",
+ "passwords.cvcAsk": "Your password, to show the code",
+ "passwords.cvcShow": "Show",
+ "passwords.cvcNone": "No security code kept for this card; Edit adds it."
 }

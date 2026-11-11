@@ -2794,5 +2794,14 @@
  "settings.sum.dock": "Ikonstørrelse, navne og hvordan den vises i en app",
  "dock.size": "Ikonstørrelse",
  "dock.reset": "Sæt docken tilbage som fra start",
- "dock.default": "standard"
+ "dock.default": "standard",
+ "passwords.cvc": "Sikkerhedskode (CVV)",
+ "passwords.cvcKeep": "Gemt; lad feltet være tomt for at beholde den",
+ "passwords.cvcKept": "Gemmes krypteret med dine adgangskoder; vises kun, når du har givet din adgangskode igen.",
+ "passwords.fieldCopied": "Kopieret: {name}",
+ "passwords.expiry": "Udløb",
+ "passwords.cvcCopied": "Sikkerhedskoden er kopieret; slettes om 30 sekunder",
+ "passwords.cvcAsk": "Din adgangskode for at vise koden",
+ "passwords.cvcShow": "Vis",
+ "passwords.cvcNone": "Ingen sikkerhedskode gemt for kortet; Rediger tilføjer den."
 }

@@ -176,7 +176,9 @@ const loginKey = l => `l|${l.host}|${l.user}`
 // no note, no ♥: as before them, so older records read the same
 const loginValue = l => jarr([l.host, l.user, l.password, ...(l.note || l.pinned ? [l.note ?? ''] : []), ...(l.pinned ? ['1'] : [])])
 const cardKey = c => `c|${c.number}`
-const cardValue = c => jarr([c.name, c.number, c.month, c.year])
+// the security code fifth, only when there is one (the user, 11 Nov: "ask the password a second time to show the CVV"): a card
+// without one is written as before, so a phone that does not know it reads it all the same
+const cardValue = c => jarr([c.name, c.number, c.month, c.year, ...(c.cvc ? [c.cvc] : [])])
 const addressValue = fields => jarr(Object.keys(fields).sort().flatMap(k => [k, fields[k]]))
 const clean = s => String(s).toUpperCase().replace(/[ =-]/g, '')
 const codeKey = e => `${e.issuer.toLowerCase()}|${e.account.toLowerCase()}|${clean(e.secret)}`
@@ -189,7 +191,7 @@ function vault(values) {
     let a
     try { a = JSON.parse(v) } catch { continue }
     if (key.startsWith('l|')) out.logins.push({ key, host: a[0], user: a[1], password: a[2], note: a[3] ?? '', pinned: a[4] === '1' })
-    else if (key.startsWith('c|')) out.cards.push({ key, name: a[0], number: a[1], month: a[2], year: a[3] })
+    else if (key.startsWith('c|')) out.cards.push({ key, name: a[0], number: a[1], month: a[2], year: a[3], hasCvc: !!a[4] }) // the code itself never in the list
     else if (key.startsWith('a|')) { const fields = {}; for (let i = 0; i + 1 < a.length; i += 2) fields[a[i]] = a[i + 1]; out.addresses.push({ key, fields }) }
   }
   return out
@@ -205,7 +207,7 @@ function codes(values) {
 function keyed(kind, item) {
   if (kind === '2fa') { const e = { issuer: item.issuer.trim(), account: item.account.trim(), secret: clean(item.secret), algorithm: item.algorithm || 'SHA1', digits: +item.digits || 6, period: +item.period || 30, pinned: !!item.pinned }; return [codeKey(e), codeValue(e)] }
   if (item.fields) { const f = Object.fromEntries(Object.entries(item.fields).map(([k, v]) => [k, String(v).trim()]).filter(([, v]) => v)); const v = addressValue(f); return ['a|' + v, v] }
-  if ('number' in item) { const c = { name: item.name.trim(), number: item.number.replace(/\s/g, ''), month: item.month.trim(), year: item.year.trim() }; return [cardKey(c), cardValue(c)] }
+  if ('number' in item) { const c = { name: item.name.trim(), number: item.number.replace(/\s/g, ''), month: item.month.trim(), year: item.year.trim(), cvc: String(item.cvc ?? '').replace(/\D/g, '').slice(0, 4) }; return [cardKey(c), cardValue(c)] }
   const l = { host: item.host.trim(), user: item.user.trim(), password: item.password, note: (item.note ?? '').trim(), pinned: !!item.pinned }
   return [loginKey(l), loginValue(l)]
 }
@@ -335,6 +337,24 @@ class Passwords {
     this.opened = true
   }
 
+  /** The password asked again, the page staying as it is: the computer's login password, or the sync passphrase. */
+  async verify(secret) {
+    const mine = this.stored()
+    if (!mine || !this.status().open) throw new WrongPassphrase()
+    let ok = false
+    try { ok = crypto.timingSafeEqual(await derive(secret, mine.recipe), mine.key) } catch {}
+    if (!ok) ok = await systemPassword(this.user, secret)
+    if (!ok) throw new WrongPassphrase()
+  }
+
+  /** A card's security code, only after the password asked again (verify). */
+  async cvc(key, secret) {
+    await this.verify(secret)
+    const v = live(this.run('passwords').all)[key]
+    if (!v) throw new Error('No such card')
+    return JSON.parse(v)[4] ?? ''
+  }
+
   lock() { this.opened = false }
 
   /** Forgotten on this computer: the key and the bases; the files in ~/Tetra stay. */
@@ -363,6 +383,8 @@ class Passwords {
   change(kind, old, item) {
     this.run(kind, here => {
       const out = { ...here }
+      // a card changed without a new security code keeps the one it had (the page never has it)
+      if (item && 'number' in item && !item.cvc && old && out[old]) { try { item = { ...item, cvc: JSON.parse(out[old])[4] ?? '' } } catch {} }
       if (old) delete out[old]
       if (item) { const [k, v] = keyed(kind, item); out[k] = v }
       return out

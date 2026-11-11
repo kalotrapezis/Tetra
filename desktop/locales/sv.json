@@ -2794,5 +2794,14 @@
  "settings.sum.dock": "Ikonstorlek, namn och hur den visas i en app",
  "dock.size": "Ikonstorlek",
  "dock.reset": "Återställ dockan som från början",
- "dock.default": "standard"
+ "dock.default": "standard",
+ "passwords.cvc": "Säkerhetskod (CVV)",
+ "passwords.cvcKeep": "Sparad; lämna tomt för att behålla",
+ "passwords.cvcKept": "Sparas krypterad med dina lösenord; visas först när ditt lösenord frågats igen.",
+ "passwords.fieldCopied": "{name} kopierad",
+ "passwords.expiry": "Utgång",
+ "passwords.cvcCopied": "Säkerhetskoden kopierad; rensas om 30 sekunder",
+ "passwords.cvcAsk": "Ditt lösenord för att visa koden",
+ "passwords.cvcShow": "Visa",
+ "passwords.cvcNone": "Ingen säkerhetskod sparad för kortet; Redigera lägger till den."
 }

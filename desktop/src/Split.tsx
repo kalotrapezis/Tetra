@@ -52,7 +52,8 @@ export function LayoutButton({ layout, choose, single }: { layout: Layout; choos
 
 /**
  * Expose: over each pane, the apps to choose for it (the car's: a tap in each pane puts that app there; one already in another
- * pane changes places with it). The first pane takes any app, the others the ones that stand alone; Done or Esc closes it.
+ * pane changes places with it). The first pane takes any app, the others the ones that stand alone. A click and it is done (the
+ * user, 11 Nov: "no Done at the bottom, just click and boom"): it closes once every pane has its app; Esc or a click aside closes it.
  */
 export function Expose({ layout, apps, current, side, choose, done }: {
   layout: Layout; apps: DockApp[]; current: string[]; side: Set<string>; choose: (pane: number, key: string) => void; done: () => void
@@ -62,9 +63,9 @@ export function Expose({ layout, apps, current, side, choose, done }: {
     window.addEventListener('keydown', esc); return () => window.removeEventListener('keydown', esc)
   }, [done])
   return (
-    <div className="expose">
+    <div className="expose" onClick={e => { if (e.target === e.currentTarget) done() }}>
       {WEIGHTS[layout].map((w, i) => (
-        <div key={i} className="expose-pane island" style={{ flex: w }}>
+        <div key={i} className="expose-pane island" style={{ flex: w }} onClick={e => { if (e.target === e.currentTarget) done() }}>
           <div className="expose-grid">
             {apps.filter(a => i === 0 || side.has(a.key)).map(a => (
               <button key={a.key} className={`expose-app ${current[i] === a.key ? 'on' : ''}`} onClick={() => choose(i, a.key)} title={a.label}>
@@ -74,8 +75,6 @@ export function Expose({ layout, apps, current, side, choose, done }: {
           </div>
         </div>
       ))}
-      <button className="filled-button expose-done" onClick={done}>{t('common.done')}</button>
-      <p className="expose-hint">{t('layout.hint')}</p>
     </div>
   )
 }

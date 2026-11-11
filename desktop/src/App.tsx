@@ -382,6 +382,7 @@ export function App() {
     if (other >= 0) next[other] = other === 0 || (was && sideKeys.has(was)) ? was : null
     if (next[0] !== mainKey && next[0]) dockApps.find(a => a.key === next[0])?.open()
     setSplit(s => ({ ...s, panes: next.slice(1).map(k => k ?? '') }))
+    if (next.slice(1).every(k => k && sideKeys.has(k))) setExpose(false) // every pane has its app: done, at once
   }
   /** A side pane's app: the ones that stand alone (Photos needs the library's state here, so it stays in the first pane). */
   const paneContent = (k: string): ReactNode => {

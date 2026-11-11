@@ -2980,5 +2980,14 @@
  "settings.sum.dock": "Velikost ikon, popisky a jak se zobrazuje v aplikaci",
  "dock.size": "Velikost ikon",
  "dock.reset": "Vrátit dok do původního stavu",
- "dock.default": "výchozí"
+ "dock.default": "výchozí",
+ "passwords.cvc": "Bezpečnostní kód (CVV)",
+ "passwords.cvcKeep": "Uložen; nechte prázdné pro ponechání",
+ "passwords.cvcKept": "Uložen šifrovaně s vašimi hesly; zobrazí se až po opětovném zadání hesla.",
+ "passwords.fieldCopied": "Zkopírováno: {name}",
+ "passwords.expiry": "Platnost",
+ "passwords.cvcCopied": "Kód zkopírován; smaže se za 30 sekund",
+ "passwords.cvcAsk": "Vaše heslo pro zobrazení kódu",
+ "passwords.cvcShow": "Zobrazit",
+ "passwords.cvcNone": "U této karty není uložen bezpečnostní kód; Upravit ho přidá."
 }

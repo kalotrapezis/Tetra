@@ -3073,5 +3073,14 @@
  "settings.sum.dock": "Méid na ndeilbhíní, lipéid agus conas a thaispeántar é in aip",
  "dock.size": "Méid na ndeilbhíní",
  "dock.reset": "Cuir an duga ar ais mar a bhí ar dtús",
- "dock.default": "réamhshocrú"
+ "dock.default": "réamhshocrú",
+ "passwords.cvc": "Cód slándála (CVV)",
+ "passwords.cvcKeep": "Coinnithe; fág folamh lena choinneáil",
+ "passwords.cvcKept": "Coinnítear criptithe le do phasfhocail é; ní thaispeántar é ach tar éis do phasfhocal a iarraidh arís.",
+ "passwords.fieldCopied": "Cóipeáladh: {name}",
+ "passwords.expiry": "Dul in éag",
+ "passwords.cvcCopied": "Cóipeáladh an cód; glanfar é i gceann 30 soicind",
+ "passwords.cvcAsk": "Do phasfhocal, chun an cód a thaispeáint",
+ "passwords.cvcShow": "Taispeáin",
+ "passwords.cvcNone": "Níl cód slándála coinnithe don chárta seo; cuireann Cuir in eagar leis."
 }

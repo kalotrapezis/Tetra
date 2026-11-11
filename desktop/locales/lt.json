@@ -2980,5 +2980,14 @@
  "settings.sum.dock": "Piktogramų dydis, pavadinimai ir kaip jis rodomas programoje",
  "dock.size": "Piktogramų dydis",
  "dock.reset": "Grąžinti doką į pradinį",
- "dock.default": "numatytasis"
+ "dock.default": "numatytasis",
+ "passwords.cvc": "Saugos kodas (CVV)",
+ "passwords.cvcKeep": "Išsaugotas; palikite tuščią, kad liktų",
+ "passwords.cvcKept": "Laikomas užšifruotas su slaptažodžiais; rodomas tik dar kartą įvedus slaptažodį.",
+ "passwords.fieldCopied": "Nukopijuota: {name}",
+ "passwords.expiry": "Galiojimas",
+ "passwords.cvcCopied": "Kodas nukopijuotas; išsivalys po 30 sekundžių",
+ "passwords.cvcAsk": "Jūsų slaptažodis kodui parodyti",
+ "passwords.cvcShow": "Rodyti",
+ "passwords.cvcNone": "Šiai kortelei saugos kodas neišsaugotas; Redaguoti jį prideda."
 }

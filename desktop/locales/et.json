@@ -2794,5 +2794,14 @@
  "settings.sum.dock": "Ikoonide suurus, sildid ja kuidas see rakenduses paistab",
  "dock.size": "Ikoonide suurus",
  "dock.reset": "Taasta dokk algseks",
- "dock.default": "vaikimisi"
+ "dock.default": "vaikimisi",
+ "passwords.cvc": "Turvakood (CVV)",
+ "passwords.cvcKeep": "Salvestatud; jäta tühjaks, et see jääks",
+ "passwords.cvcKept": "Hoitakse krüptitult koos paroolidega; kuvatakse alles pärast parooli uuesti sisestamist.",
+ "passwords.fieldCopied": "Kopeeritud: {name}",
+ "passwords.expiry": "Kehtivus",
+ "passwords.cvcCopied": "Turvakood kopeeritud; kustub 30 sekundi pärast",
+ "passwords.cvcAsk": "Sinu parool koodi näitamiseks",
+ "passwords.cvcShow": "Näita",
+ "passwords.cvcNone": "Selle kaardi turvakoodi pole salvestatud; Muuda lisab selle."
 }

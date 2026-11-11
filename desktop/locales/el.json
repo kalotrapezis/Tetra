@@ -2746,7 +2746,7 @@
  "passwords.pin": "Καρφίτσωμα στην κορυφή",
  "passwords.postcode": "Ταχ. κώδικας",
  "passwords.random": "Χαρακτήρες",
- "passwords.region": "Περιοχή",
+ "passwords.region": "Περιφέρεια",
  "passwords.search": "Αναζήτηση ιστοτόπων, χρηστών, σημειώσεων",
  "passwords.searchCodes": "Αναζήτηση κωδικών",
  "passwords.secret": "Κωδικός υπολογιστή ή φράση συγχρονισμού",
@@ -2794,5 +2794,14 @@
  "settings.sum.dock": "Μέγεθος εικονιδίων, ετικέτες και πώς φαίνεται μέσα σε μια εφαρμογή",
  "dock.size": "Μέγεθος εικονιδίων",
  "dock.reset": "Επαναφορά του dock όπως ήταν στην αρχή",
- "dock.default": "προεπιλογή"
+ "dock.default": "προεπιλογή",
+ "passwords.cvc": "Κωδικός ασφαλείας (CVV)",
+ "passwords.cvcKeep": "Φυλάσσεται· αφήστε το κενό για να μείνει",
+ "passwords.cvcKept": "Φυλάσσεται κρυπτογραφημένος με τους κωδικούς σας· εμφανίζεται μόνο αφού ξαναδώσετε τον κωδικό σας.",
+ "passwords.fieldCopied": "Αντιγράφηκε: {name}",
+ "passwords.expiry": "Λήξη",
+ "passwords.cvcCopied": "Ο κωδικός ασφαλείας αντιγράφηκε· σβήνει σε 30 δευτερόλεπτα",
+ "passwords.cvcAsk": "Ο κωδικός σας, για να φανεί",
+ "passwords.cvcShow": "Εμφάνιση",
+ "passwords.cvcNone": "Δεν φυλάσσεται κωδικός ασφαλείας για την κάρτα· η Επεξεργασία τον προσθέτει."
 }

@@ -2887,5 +2887,14 @@
  "settings.sum.dock": "Dimensione delle icone, etichette e come appare in un’app",
  "dock.size": "Dimensione delle icone",
  "dock.reset": "Rimetti il dock com’era all’inizio",
- "dock.default": "predefinito"
+ "dock.default": "predefinito",
+ "passwords.cvc": "Codice di sicurezza (CVV)",
+ "passwords.cvcKeep": "Salvato; lascia vuoto per mantenerlo",
+ "passwords.cvcKept": "Conservato cifrato con le tue password; mostrato solo dopo aver richiesto di nuovo la password.",
+ "passwords.fieldCopied": "{name} copiato",
+ "passwords.expiry": "Scadenza",
+ "passwords.cvcCopied": "Codice copiato; cancellato tra 30 secondi",
+ "passwords.cvcAsk": "La tua password, per mostrare il codice",
+ "passwords.cvcShow": "Mostra",
+ "passwords.cvcNone": "Nessun codice di sicurezza salvato per questa carta; Modifica lo aggiunge."
 }

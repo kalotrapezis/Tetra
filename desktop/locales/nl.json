@@ -2794,5 +2794,14 @@
  "settings.sum.dock": "Pictogramgrootte, labels en hoe het in een app verschijnt",
  "dock.size": "Pictogramgrootte",
  "dock.reset": "Dock terugzetten zoals in het begin",
- "dock.default": "standaard"
+ "dock.default": "standaard",
+ "passwords.cvc": "Beveiligingscode (CVV)",
+ "passwords.cvcKeep": "Bewaard; laat leeg om te houden",
+ "passwords.cvcKept": "Versleuteld bewaard met je wachtwoorden; pas zichtbaar nadat je wachtwoord opnieuw is gevraagd.",
+ "passwords.fieldCopied": "{name} gekopieerd",
+ "passwords.expiry": "Vervaldatum",
+ "passwords.cvcCopied": "Beveiligingscode gekopieerd; gewist na 30 seconden",
+ "passwords.cvcAsk": "Je wachtwoord, om de code te tonen",
+ "passwords.cvcShow": "Tonen",
+ "passwords.cvcNone": "Geen beveiligingscode bewaard voor deze kaart; Bewerken voegt hem toe."
 }

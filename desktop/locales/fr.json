@@ -2887,5 +2887,14 @@
  "settings.sum.dock": "Taille des icônes, libellés et affichage dans une app",
  "dock.size": "Taille des icônes",
  "dock.reset": "Remettre le dock comme au début",
- "dock.default": "par défaut"
+ "dock.default": "par défaut",
+ "passwords.cvc": "Code de sécurité (CVV)",
+ "passwords.cvcKeep": "Gardé ; laissez vide pour le conserver",
+ "passwords.cvcKept": "Gardé chiffré avec vos mots de passe ; affiché seulement après avoir redemandé votre mot de passe.",
+ "passwords.fieldCopied": "{name} copié",
+ "passwords.expiry": "Expiration",
+ "passwords.cvcCopied": "Code de sécurité copié ; effacé dans 30 secondes",
+ "passwords.cvcAsk": "Votre mot de passe, pour afficher le code",
+ "passwords.cvcShow": "Afficher",
+ "passwords.cvcNone": "Aucun code de sécurité gardé pour cette carte ; Modifier l’ajoute."
 }

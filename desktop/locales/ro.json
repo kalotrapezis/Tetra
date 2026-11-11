@@ -2887,5 +2887,14 @@
  "settings.sum.dock": "Mărimea pictogramelor, etichete și cum apare într-o aplicație",
  "dock.size": "Mărimea pictogramelor",
  "dock.reset": "Readu dock-ul ca la început",
- "dock.default": "implicit"
+ "dock.default": "implicit",
+ "passwords.cvc": "Cod de securitate (CVV)",
+ "passwords.cvcKeep": "Păstrat; lăsați gol ca să rămână",
+ "passwords.cvcKept": "Păstrat criptat cu parolele dvs.; apare doar după ce parola e cerută din nou.",
+ "passwords.fieldCopied": "Copiat: {name}",
+ "passwords.expiry": "Expirare",
+ "passwords.cvcCopied": "Cod copiat; se șterge în 30 de secunde",
+ "passwords.cvcAsk": "Parola dvs., pentru a afișa codul",
+ "passwords.cvcShow": "Afișează",
+ "passwords.cvcNone": "Niciun cod de securitate păstrat pentru card; Editare îl adaugă."
 }

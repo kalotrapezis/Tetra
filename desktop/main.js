@@ -964,6 +964,7 @@ app.whenReady().then(() => {
   ipcMain.handle('passwords:status', () => passwords.status())
   ipcMain.handle('passwords:passphrase', pwSaid((_, pass, isNew) => passwords.setPassphrase(String(pass), !!isNew)))
   ipcMain.handle('passwords:open', pwSaid((_, secret) => passwords.open(String(secret))))
+  ipcMain.handle('passwords:cvc', pwSaid((_, key, secret) => passwords.cvc(String(key), String(secret))))
   ipcMain.handle('passwords:lock', () => passwords.lock())
   ipcMain.handle('passwords:forget', () => passwords.forget())
   ipcMain.handle('passwords:list', pwSaid(() => passwords.list()))
