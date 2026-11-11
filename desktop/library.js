@@ -8,6 +8,11 @@ const os = require('node:os')
 const { execFile } = require('node:child_process')
 const { DatabaseSync } = require('node:sqlite')
 const { t } = require('./i18n')
+/**
+ * ffmpeg, for a video's frame: the Windows installer's own (scripts/bundle-tools-win.sh), else the system's. Found beside the
+ * executable, as the analyzer's process may have no process.resourcesPath.
+ */
+const FFMPEG = process.platform === 'win32' ? path.join(path.dirname(process.execPath), 'resources', 'bundled', 'ffmpeg', 'ffmpeg.exe') : 'ffmpeg'
 
 const IMAGE = { '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.gif': 'image/gif', '.heic': 'image/heic', '.heif': 'image/heif', '.avif': 'image/avif', '.tif': 'image/tiff', '.tiff': 'image/tiff', '.bmp': 'image/bmp',
   // Camera raw. 83 .NEF sat in this library for months, verified and invisible, because they were not on this
@@ -197,8 +202,8 @@ async function makeThumb(file, isVideo, target) {
     await fsp.rename(target + '.part', target)
     return
   }
-  // ponytail: needs a system ffmpeg; bundle ffmpeg-static if packaged users lack it.
-  await new Promise((resolve, reject) => execFile('ffmpeg', ['-v', 'error', '-y', '-ss', '1', '-i', file, '-frames:v', '1', '-vf', 'scale=480:-2', '-f', 'webp', target],
+  // shortcut: Linux needs a system ffmpeg (Windows has the installer's); bundle one in the AppImage if users lack it.
+  await new Promise((resolve, reject) => execFile(FFMPEG, ['-v', 'error', '-y', '-ss', '1', '-i', file, '-frames:v', '1', '-vf', 'scale=480:-2', '-f', 'webp', target],
     err => err ? reject(err) : resolve()))
   if (!fs.existsSync(target)) throw new Error('no frame')
 }
@@ -538,4 +543,4 @@ function metadataSince(db, since) {
 /** A screenshot, by its name or folder — the same test the phone uses. */
 const isScreenshot = p => /screenshot|στιγμιοτυπο|screen[ _-]?shot|scrnshot/.test(p.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase())
 
-module.exports = { pairMotion, embeddedVideoOffset, motionStem, isVideoPath, dateFromName, fromMessenger, takenFrom, repairDatesFromNames, isScreenshot, open, scan, list, transaction, sha256, trash, image, preview, isHeic, isRaw, needsPreview, setFavorite, collectionName, collections, createCollection, deleteCollection, setMembership, members, setCollectionHidden, trashedPhotos, restoreTrashed, emptyPhotoTrash, applyFavorite, applyCollection, applyCollectionItem, applyLabels, metadataSince }
+module.exports = { FFMPEG, pairMotion, embeddedVideoOffset, motionStem, isVideoPath, dateFromName, fromMessenger, takenFrom, repairDatesFromNames, isScreenshot, open, scan, list, transaction, sha256, trash, image, preview, isHeic, isRaw, needsPreview, setFavorite, collectionName, collections, createCollection, deleteCollection, setMembership, members, setCollectionHidden, trashedPhotos, restoreTrashed, emptyPhotoTrash, applyFavorite, applyCollection, applyCollectionItem, applyLabels, metadataSince }

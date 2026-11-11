@@ -66,7 +66,7 @@ class Thumbs {
     else {
       // a video: a second in, past a fade from black; a shorter clip its first frame
       for (const at of ['1', '0']) {
-        const png = await run('ffmpeg', ['-v', 'error', '-ss', at, '-i', full, '-frames:v', '1', '-f', 'image2pipe', '-vcodec', 'png', '-']).catch(() => null)
+        const png = await run(require('./library').FFMPEG, ['-v', 'error', '-ss', at, '-i', full, '-frames:v', '1', '-f', 'image2pipe', '-vcodec', 'png', '-']).catch(() => null)
         if (png?.length) { source = sharp(png); break }
       }
     }
