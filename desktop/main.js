@@ -1685,12 +1685,25 @@ app.whenReady().then(() => {
     return p ? { name: [p.name, p.country].filter(Boolean).join(', '), lat: p.latitude, lon: p.longitude } : null
   })
   let voiceStop = null // the answer being read aloud
-  /** This computer's own voice, the free one: speech-dispatcher (Chromium's speechSynthesis finds no voices in Electron here). */
+  /**
+   * This computer's own voice, the free one (Chromium's speechSynthesis finds no voices in Electron here): speech-dispatcher, or
+   * Windows' own System.Speech, its Greek voice when one is installed. The text goes to PowerShell as base64 UTF-8 inside the
+   * script, as Windows PowerShell reads stdin in the console's code page and would garble Greek.
+   */
   const spdSay = (text, signal) => new Promise(resolve => {
     if (signal.aborted) return resolve()
-    const p = require('node:child_process').spawn('spd-say', ['-w', '-l', /[\u0370-\u03ff]/.test(text) ? 'el' : 'en', '--', text], { stdio: 'ignore' })
-    p.on('error', e => { console.warn('[assistant] spd-say', e.message); resolve() }); p.on('exit', resolve)
-    signal.addEventListener('abort', () => { p.kill(); require('node:child_process').spawn('spd-say', ['-C'], { stdio: 'ignore' }).on('error', () => {}) }, { once: true })
+    const lang = /[\u0370-\u03ff]/.test(text) ? 'el' : 'en'
+    const { spawn } = require('node:child_process')
+    const p = process.platform === 'win32'
+      ? spawn('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', 'Add-Type -AssemblyName System.Speech; ' +
+        '$s = New-Object System.Speech.Synthesis.SpeechSynthesizer; ' +
+        `$v = $s.GetInstalledVoices() | Where-Object { $_.Enabled -and $_.VoiceInfo.Culture.TwoLetterISOLanguageName -eq '${lang}' } | Select-Object -First 1; ` +
+        'if ($v) { $s.SelectVoice($v.VoiceInfo.Name) }; ' +
+        `$s.Speak([Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('${Buffer.from(text).toString('base64')}')))`], { stdio: 'ignore', windowsHide: true })
+      : spawn('spd-say', ['-w', '-l', lang, '--', text], { stdio: 'ignore' })
+    p.on('error', e => { console.warn('[assistant] voice', e.message); resolve() }); p.on('exit', resolve)
+    // PowerShell speaks in its own process: ending it ends the voice
+    signal.addEventListener('abort', () => { p.kill(); if (process.platform !== 'win32') spawn('spd-say', ['-C'], { stdio: 'ignore' }).on('error', () => {}) }, { once: true })
   })
   const hush = () => { voiceStop?.abort(); voiceStop = null }
   /** [text] cut into sentences and read, each as soon as it ends, by [voice]; the next made while one plays (the window queues the sound). */
