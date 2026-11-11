@@ -2975,5 +2975,9 @@
  "home.dockHint": "Přetáhněte aplikaci do doku, aby tam zůstala; přetáhněte ji z doku zpět sem, abyste ji odebrali.",
  "layout.name": "Rozvržení",
  "layout.button": "Rozvržení: kliknutím rozdělit obrazovku, pravým tlačítkem jeden panel",
- "layout.hint": "Vyberte aplikaci pro každý panel"
+ "layout.hint": "Vyberte aplikaci pro každý panel",
+ "dock.title": "Dok",
+ "settings.sum.dock": "Velikost ikon, popisky a jak se zobrazuje v aplikaci",
+ "dock.size": "Velikost ikon",
+ "dock.reset": "Vrátit dok do původního stavu"
 }

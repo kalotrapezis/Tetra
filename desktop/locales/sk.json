@@ -2975,5 +2975,9 @@
  "home.dockHint": "Presuňte aplikáciu do doku, aby tam zostala; presuňte ju z doku späť sem, aby ste ju odstránili.",
  "layout.name": "Rozloženie",
  "layout.button": "Rozloženie: kliknutím rozdeliť obrazovku, pravým tlačidlom jeden panel",
- "layout.hint": "Vyberte aplikáciu pre každý panel"
+ "layout.hint": "Vyberte aplikáciu pre každý panel",
+ "dock.title": "Dok",
+ "settings.sum.dock": "Veľkosť ikon, menovky a ako sa zobrazuje v aplikácii",
+ "dock.size": "Veľkosť ikon",
+ "dock.reset": "Vrátiť dok do pôvodného stavu"
 }

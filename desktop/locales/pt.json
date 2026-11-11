@@ -2882,5 +2882,9 @@
  "home.dockHint": "Arraste uma app para a dock para a manter lá; arraste-a da dock de volta para aqui para a retirar.",
  "layout.name": "Esquema",
  "layout.button": "Esquema: clique para ecrã dividido, clique direito para um só painel",
- "layout.hint": "Escolha uma app para cada painel"
+ "layout.hint": "Escolha uma app para cada painel",
+ "dock.title": "Dock",
+ "settings.sum.dock": "Tamanho dos ícones, etiquetas e como aparece numa app",
+ "dock.size": "Tamanho dos ícones",
+ "dock.reset": "Repor a dock como no início"
 }

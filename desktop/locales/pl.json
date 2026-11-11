@@ -2975,5 +2975,9 @@
  "home.dockHint": "Przeciągnij aplikację do doku, aby tam została; przeciągnij ją z doku z powrotem tutaj, aby ją usunąć.",
  "layout.name": "Układ",
  "layout.button": "Układ: kliknięcie – podzielony ekran, prawy przycisk – jeden panel",
- "layout.hint": "Wybierz aplikację dla każdego panelu"
+ "layout.hint": "Wybierz aplikację dla każdego panelu",
+ "dock.title": "Dok",
+ "settings.sum.dock": "Rozmiar ikon, etykiety i wygląd w aplikacji",
+ "dock.size": "Rozmiar ikon",
+ "dock.reset": "Przywróć dok do stanu początkowego"
 }

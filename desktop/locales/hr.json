@@ -2881,5 +2881,9 @@
  "home.dockHint": "Povucite aplikaciju na dok da ostane ondje; povucite je s doka natrag ovamo da je uklonite.",
  "layout.name": "Raspored",
  "layout.button": "Raspored: klik za podijeljeni prikaz, desni klik za jedno okno",
- "layout.hint": "Odaberite aplikaciju za svako okno"
+ "layout.hint": "Odaberite aplikaciju za svako okno",
+ "dock.title": "Dok",
+ "settings.sum.dock": "Veličina ikona, oznake i kako se prikazuje u aplikaciji",
+ "dock.size": "Veličina ikona",
+ "dock.reset": "Vrati dok kakav je bio na početku"
 }

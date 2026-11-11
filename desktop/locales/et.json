@@ -2789,5 +2789,9 @@
  "home.dockHint": "Lohista rakendus dokki, et see sinna jääks; lohista see dokist siia tagasi, et see eemaldada.",
  "layout.name": "Paigutus",
  "layout.button": "Paigutus: klõps jagatud vaate jaoks, paremklõps ühe paneeli jaoks",
- "layout.hint": "Vali igale paneelile rakendus"
+ "layout.hint": "Vali igale paneelile rakendus",
+ "dock.title": "Dokk",
+ "settings.sum.dock": "Ikoonide suurus, sildid ja kuidas see rakenduses paistab",
+ "dock.size": "Ikoonide suurus",
+ "dock.reset": "Taasta dokk algseks"
 }

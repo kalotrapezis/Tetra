@@ -2789,5 +2789,9 @@
  "home.dockHint": "Húzzon egy alkalmazást a dokkra, hogy ott maradjon; húzza vissza ide a dokkról, hogy levegye.",
  "layout.name": "Elrendezés",
  "layout.button": "Elrendezés: kattintás az osztott nézethez, jobb kattintás egy panelhez",
- "layout.hint": "Válasszon alkalmazást minden panelhez"
+ "layout.hint": "Válasszon alkalmazást minden panelhez",
+ "dock.title": "Dokk",
+ "settings.sum.dock": "Ikonméret, feliratok és megjelenés egy alkalmazásban",
+ "dock.size": "Ikonméret",
+ "dock.reset": "A dokk visszaállítása az eredetire"
 }

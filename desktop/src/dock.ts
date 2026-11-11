@@ -1,11 +1,13 @@
 // The dock's choices, kept on this computer (not the library, so not synced): the apps' order, the ones the person keeps
 // in the ⋯ menu, labels or icons only, and how it shows (the user, 8 Nov: "a dock, auto-hide at the screen's edge or a nipple").
 export type DockMode = 'pinned' | 'autohide' | 'handle'
-export type DockPrefs = { order: string[]; out: string[]; labels: boolean; mode: DockMode }
+export type DockPrefs = { order: string[]; out: string[]; labels: boolean; mode: DockMode; size: number }
+/** The art's size in px (Settings › Dock, the user, 11 Nov: "make the dock resizable"). */
+export const DOCK_SIZES = { min: 24, max: 48, standard: 28 }
 
 const KEY = 'dock'
 // the dock holds the everyday apps at first; the rest are on Home (an app is in one of the two, as GNOME's dash and grid)
-export const DEFAULT_DOCK: DockPrefs = { order: [], out: ['timer', 'pills', 'passwords', 'phone', 'messages', 'data', 'sync'], labels: true, mode: 'pinned' }
+export const DEFAULT_DOCK: DockPrefs = { order: [], out: ['timer', 'pills', 'passwords', 'phone', 'messages', 'data', 'sync'], labels: true, mode: 'autohide', size: DOCK_SIZES.standard }
 
 export function loadDock(): DockPrefs {
   try {
@@ -15,7 +17,8 @@ export function loadDock(): DockPrefs {
       order: Array.isArray(v.order) ? v.order.filter((k: unknown) => typeof k === 'string') : [],
       out: Array.isArray(v.out) ? v.out.filter((k: unknown) => typeof k === 'string') : [],
       labels: v.labels !== false,
-      mode: v.mode === 'autohide' || v.mode === 'handle' ? v.mode : 'pinned',
+      mode: v.mode === 'pinned' ? 'pinned' : 'autohide', // in an app: always there, or at the window's edge (the old handle: the edge)
+      size: Number.isFinite(v.size) ? Math.min(DOCK_SIZES.max, Math.max(DOCK_SIZES.min, Math.round(v.size))) : DOCK_SIZES.standard,
     }
   } catch { return DEFAULT_DOCK }
 }
@@ -63,3 +66,5 @@ export function move(keys: string[], key: string, by: -1 | 1): string[] {
   const next = [...keys];[next[i], next[j]] = [next[j], next[i]]
   return next
 }
+/** A change made in Settings › Dock: saved, and the dock and Home told. */
+export function setDock(p: DockPrefs) { saveDock(p); window.dispatchEvent(new Event(DOCK_CHANGED)) }

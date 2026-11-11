@@ -2976,5 +2976,9 @@
  "home.dockHint": "Kaxkar app fuq id-dock biex tibqa’ hemm; kaxkarha mid-dock lura hawn biex tneħħiha.",
  "layout.name": "Tqassim",
  "layout.button": "Tqassim: ikklikkja għal skrin maqsum, ikklikkja bil-lemin għal pannell wieħed",
- "layout.hint": "Agħżel app għal kull pannell"
+ "layout.hint": "Agħżel app għal kull pannell",
+ "dock.title": "Dock",
+ "settings.sum.dock": "Id-daqs tal-ikoni, it-tikketti u kif jidher f’app",
+ "dock.size": "Daqs tal-ikoni",
+ "dock.reset": "Erġa’ lura d-dock kif kien għall-ewwel"
 }

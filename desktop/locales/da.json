@@ -2789,5 +2789,9 @@
  "home.dockHint": "Træk en app hen på docken for at beholde den der; træk den fra docken tilbage hertil for at fjerne den.",
  "layout.name": "Layout",
  "layout.button": "Layout: klik for delt skærm, højreklik for ét panel",
- "layout.hint": "Vælg en app til hvert panel"
+ "layout.hint": "Vælg en app til hvert panel",
+ "dock.title": "Dock",
+ "settings.sum.dock": "Ikonstørrelse, navne og hvordan den vises i en app",
+ "dock.size": "Ikonstørrelse",
+ "dock.reset": "Sæt docken tilbage som fra start"
 }

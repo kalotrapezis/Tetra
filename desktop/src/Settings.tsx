@@ -1,3 +1,4 @@
+import { DockSettings } from './Dock'
 import { useEffect, useState } from 'react'
 import type { AiSettings, MemoryFact, AssistSettings, AssistShortcuts, CleanItem } from './drive'
 import { ScheduleList } from './Schedules'
@@ -16,9 +17,10 @@ import { PillsSettings } from './Pills'
 
 /** Each notification's applet (main.js notify()), by its icon in the rail; older ones, from before 4 Nov, keep the bell. */
 /** Settings' pages, as the phone's (SettingsScreen.SettingsPage): the general ones, then one an app in its colour. */
-type SettingsTab = 'appearance' | 'computer' | 'cleanUp' | 'photos' | 'mail' | 'maps' | 'phone' | 'pills' | 'assistant'
+type SettingsTab = 'appearance' | 'dock' | 'computer' | 'cleanUp' | 'photos' | 'mail' | 'maps' | 'phone' | 'pills' | 'assistant'
 const GENERAL: { id: SettingsTab; icon: IconName; title: string; summary: string }[] = [
   { id: 'appearance', icon: 'palette', title: 'settings.appearance', summary: 'settings.sum.appearance' },
+  { id: 'dock', icon: 'grid', title: 'dock.title', summary: 'settings.sum.dock' },
   { id: 'computer', icon: 'server', title: 'reset.title', summary: 'settings.sum.computer' },
   { id: 'cleanUp', icon: 'storage', title: 'clean.title', summary: 'settings.sum.cleanUp' },
 ]
@@ -68,6 +70,7 @@ export function SettingsPage({ onGuide, start }: { onGuide: () => void; start?: 
         <div className="settings-pane">
           <button className="text-button settings-back" onClick={() => setPicked(false)}><Icon name="back" size={20} />{t('common.back')}</button>
           {tab === 'appearance' && <><ThemeCard /><LanguageCard /></>}
+          {tab === 'dock' && <DockSettings />}
           {tab === 'computer' && <ResetCard />}
           {tab === 'cleanUp' && <CleanCard />}
           {tab === 'photos' && <MotionCard />}

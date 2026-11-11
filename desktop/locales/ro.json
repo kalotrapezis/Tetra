@@ -2882,5 +2882,9 @@
  "home.dockHint": "Trageți o aplicație pe dock ca să rămână acolo; trageți-o din dock înapoi aici ca s-o scoateți.",
  "layout.name": "Aspect",
  "layout.button": "Aspect: clic pentru ecran împărțit, clic dreapta pentru un singur panou",
- "layout.hint": "Alegeți o aplicație pentru fiecare panou"
+ "layout.hint": "Alegeți o aplicație pentru fiecare panou",
+ "dock.title": "Dock",
+ "settings.sum.dock": "Mărimea pictogramelor, etichete și cum apare într-o aplicație",
+ "dock.size": "Mărimea pictogramelor",
+ "dock.reset": "Readu dock-ul ca la început"
 }

@@ -2789,5 +2789,9 @@
  "home.dockHint": "Vedä sovellus telakkaan, niin se pysyy siellä; vedä se telakasta takaisin tänne poistaaksesi sen.",
  "layout.name": "Asettelu",
  "layout.button": "Asettelu: napsautus jaettuun näkymään, oikea napsautus yhteen ruutuun",
- "layout.hint": "Valitse jokaiseen ruutuun sovellus"
+ "layout.hint": "Valitse jokaiseen ruutuun sovellus",
+ "dock.title": "Telakka",
+ "settings.sum.dock": "Kuvakkeiden koko, nimet ja miten se näkyy sovelluksessa",
+ "dock.size": "Kuvakkeiden koko",
+ "dock.reset": "Palauta telakka alkuperäiseksi"
 }

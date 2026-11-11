@@ -2789,5 +2789,9 @@
  "home.dockHint": "Ziehen Sie eine App ins Dock, damit sie dort bleibt; ziehen Sie sie aus dem Dock hierher zurück, um sie zu entfernen.",
  "layout.name": "Layout",
  "layout.button": "Layout: Klick für geteilte Ansicht, Rechtsklick für einen Bereich",
- "layout.hint": "Wählen Sie für jeden Bereich eine App"
+ "layout.hint": "Wählen Sie für jeden Bereich eine App",
+ "dock.title": "Dock",
+ "settings.sum.dock": "Symbolgröße, Beschriftungen und wie es in einer App erscheint",
+ "dock.size": "Symbolgröße",
+ "dock.reset": "Dock wie am Anfang zurücksetzen"
 }

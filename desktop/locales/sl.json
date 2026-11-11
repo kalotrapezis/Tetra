@@ -2975,5 +2975,9 @@
  "home.dockHint": "Povlecite aplikacijo v dok, da ostane tam; povlecite jo iz doka nazaj sem, da jo odstranite.",
  "layout.name": "Postavitev",
  "layout.button": "Postavitev: klik za razdeljen pogled, desni klik za eno podokno",
- "layout.hint": "Izberite aplikacijo za vsako podokno"
+ "layout.hint": "Izberite aplikacijo za vsako podokno",
+ "dock.title": "Dok",
+ "settings.sum.dock": "Velikost ikon, oznake in kako se prikaže v aplikaciji",
+ "dock.size": "Velikost ikon",
+ "dock.reset": "Ponastavi dok, kot je bil na začetku"
 }

@@ -406,7 +406,8 @@ export function App() {
   }
   let content: ReactNode
   // Pages that do not depend on the photo library come first: an empty library must not hide Devices, Files or Hidden.
-  if (page.kind === 'home') content = <HomePage apps={dockApps} unread={total} notifications={() => setPage({ kind: 'notifications' })} />
+  if (page.kind === 'home') content = <HomePage apps={dockApps} unread={total} notifications={() => setPage({ kind: 'notifications' })}
+    library={scan ?? t('photos.itemsTotal', { count: media?.length ?? 0 })} scanning={!!scan} rescan={rescan} />
   else if (page.kind === 'files') content = <Files mode={page.mode} folder={page.folder} go={(mode, folder) => setPage({ kind: 'files', mode, folder })} setDialog={setDialog} say={say} dock={dock} />
   else if (page.kind === 'sync') content = <SyncPage setDialog={setDialog} />
   else if (page.kind === 'notes') content = <NotesPage key={page.open} openId={page.open} setDialog={setDialog} say={say} />
@@ -518,10 +519,7 @@ export function App() {
               single={() => { setSplit(s => ({ ...s, layout: 'full' })); setExpose(false) }} />
           </div>
         </>}
-        foot={<div className="rail-foot">
-          <span>{scan ?? t('photos.itemsTotal', { count: media?.length ?? 0 })}</span>
-          <button className="round" title={t('photos.rescanLibrary')} disabled={!!scan} onClick={rescan}><Icon name="refresh" size={20} /></button>
-        </div>} />
+        foot={null /* the library's count and its refresh are beside Home's bell (the user, 11 Nov: a Mac-like dock) */} />
       <div className="panes">
       <main className="content" data-app={page.kind} style={{ flex: WEIGHTS[split.layout][0] }}>
         <Suspense fallback={null}>{content}</Suspense>

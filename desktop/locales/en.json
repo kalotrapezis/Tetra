@@ -2789,5 +2789,9 @@
  "home.dockHint": "Drag an app onto the dock to keep it there; drag it from the dock back here to take it off.",
  "layout.name": "Layout",
  "layout.button": "Layout: a click for split view, a right click for one pane",
- "layout.hint": "Choose an app for each pane"
+ "layout.hint": "Choose an app for each pane",
+ "dock.title": "Dock",
+ "settings.sum.dock": "Its icons' size, labels, and how it shows in an app",
+ "dock.size": "Icon size",
+ "dock.reset": "Put the dock back as at first"
 }

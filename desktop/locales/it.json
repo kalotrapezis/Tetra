@@ -2882,5 +2882,9 @@
  "home.dockHint": "Trascina un’app sul dock per tenerla lì; trascinala dal dock di nuovo qui per toglierla.",
  "layout.name": "Layout",
  "layout.button": "Layout: clic per lo schermo diviso, clic destro per un solo riquadro",
- "layout.hint": "Scegli un’app per ogni riquadro"
+ "layout.hint": "Scegli un’app per ogni riquadro",
+ "dock.title": "Dock",
+ "settings.sum.dock": "Dimensione delle icone, etichette e come appare in un’app",
+ "dock.size": "Dimensione delle icone",
+ "dock.reset": "Rimetti il dock com’era all’inizio"
 }

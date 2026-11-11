@@ -1950,3 +1950,20 @@ button.assist-cost { cursor: pointer; border: 0; font: inherit; color: inherit; 
 /* Home's notifications, top right */
 .home-head .home-bell { margin-left: auto; position: relative; }
 .home-bell .home-badge { top: -2px; right: -2px; }
+/* a Mac-like dock (the user, 11 Nov): as tall as its apps, in the middle of the window's height, its art the size chosen */
+.rail { align-self: center; max-height: 100%; }
+.rail-apps { flex: 0 1 auto; }
+.rail-bottom { margin-top: 8px; }
+.rail.floating { top: 50%; bottom: auto; max-height: calc(100% - 24px); transform: translateY(-50%); }
+.rail.floating.away { transform: translate(calc(-100% - 24px), -50%); }
+.nav-item .dock-art { width: var(--art, 28px); height: var(--art, 28px); border-radius: calc(var(--art, 28px) * .28); }
+.rail.icons { width: calc(var(--art, 28px) + 44px); }
+/* Home's head: the library and its refresh, then the bell */
+.home-head .home-library { margin-left: auto; display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 14px; }
+.home-head .home-library + .home-bell { margin-left: 4px; }
+/* Settings › Dock */
+.dock-settings { display: grid; gap: 8px; }
+.dock-settings label { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.dock-size { display: flex; align-items: center; gap: 12px; }
+.dock-size input { flex: 1; }
+

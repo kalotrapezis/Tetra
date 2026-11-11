@@ -2789,5 +2789,9 @@
  "home.dockHint": "Dra en app till dockan för att ha den där; dra den från dockan tillbaka hit för att ta bort den.",
  "layout.name": "Layout",
  "layout.button": "Layout: klicka för delad vy, högerklicka för en ruta",
- "layout.hint": "Välj en app för varje ruta"
+ "layout.hint": "Välj en app för varje ruta",
+ "dock.title": "Docka",
+ "settings.sum.dock": "Ikonstorlek, namn och hur den visas i en app",
+ "dock.size": "Ikonstorlek",
+ "dock.reset": "Återställ dockan som från början"
 }

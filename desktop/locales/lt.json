@@ -2975,5 +2975,9 @@
  "home.dockHint": "Nuvilkite programą į doką, kad ji ten liktų; nuvilkite ją iš doko atgal čia, kad pašalintumėte.",
  "layout.name": "Išdėstymas",
  "layout.button": "Išdėstymas: spustelėkite padalytam vaizdui, dešiniuoju – vienam langui",
- "layout.hint": "Pasirinkite programą kiekvienam langui"
+ "layout.hint": "Pasirinkite programą kiekvienam langui",
+ "dock.title": "Dokas",
+ "settings.sum.dock": "Piktogramų dydis, pavadinimai ir kaip jis rodomas programoje",
+ "dock.size": "Piktogramų dydis",
+ "dock.reset": "Grąžinti doką į pradinį"
 }

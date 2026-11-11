@@ -2852,5 +2852,9 @@
  "home.dockHint": "Arrastra una app al dock para que se quede allí; arrástrala del dock de vuelta aquí para quitarla.",
  "layout.name": "Diseño",
  "layout.button": "Diseño: clic para pantalla dividida, clic derecho para un solo panel",
- "layout.hint": "Elige una app para cada panel"
+ "layout.hint": "Elige una app para cada panel",
+ "dock.title": "Dock",
+ "settings.sum.dock": "Tamaño de los iconos, etiquetas y cómo se muestra en una app",
+ "dock.size": "Tamaño de los iconos",
+ "dock.reset": "Dejar el dock como al principio"
 }

@@ -10,7 +10,9 @@ import { t } from './i18n'
  * thousands of pictures only when it is chosen). The apps not on the dock, in its order; a badge where something waits;
  * the notifications at the top right. A tile dragged onto the dock goes there; a dock icon dropped here comes off the dock.
  */
-export function HomePage({ apps, unread, notifications }: { apps: DockApp[]; unread: number; notifications: () => void }) {
+export function HomePage({ apps, unread, notifications, library, scanning, rescan }: {
+  apps: DockApp[]; unread: number; notifications: () => void; library: string; scanning: boolean; rescan: () => void
+}) {
   const [taking, setTaking] = useState(false) // a dock icon dragged over the grid
   // only the apps not on the dock (the user, 11 Nov: "like GNOME, the applets on the dock not at Home"): dragged onto the dock, an
   // app leaves Home; dragged back, it comes here again
@@ -26,6 +28,8 @@ export function HomePage({ apps, unread, notifications }: { apps: DockApp[]; unr
     <div className="home-page">
       <div className="home-head"><img src="./icon.png" alt="" /><h1>Tetra</h1>
         {/* notifications at the top right, as on the phone (the user, 11 Nov) */}
+        {/* the photo library's count and its refresh, with its words (the user, 11 Nov: "the sync refresh … with a label next to the bell") */}
+        <button className="text-button home-library" title={t('photos.rescanLibrary')} disabled={scanning} onClick={rescan}><Icon name="refresh" size={18} /><span>{library}</span></button>
         <button className="round home-bell" title={t('app.notifications')} onClick={notifications}><Icon name="bell" size={22} />{unread > 0 && <span className="home-badge">{unread > 99 ? '99+' : unread}</span>}</button>
       </div>
       <div className={`home-grid ${taking ? 'taking' : ''}`}
