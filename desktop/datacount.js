@@ -7,7 +7,7 @@ const fs = require('fs')
 const path = require('path')
 const { execFile } = require('child_process')
 
-const run = (cmd, args) => new Promise(res => execFile(cmd, args, { timeout: 3000 }, (e, out) => res(e ? '' : String(out))))
+const run = (cmd, args, timeout = 3000) => new Promise(res => execFile(cmd, args, { timeout, windowsHide: true }, (e, out) => res(e ? '' : String(out))))
 const pad = n => String(n).padStart(2, '0')
 const hourKey = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}`
 const localIso = d => { const o = -d.getTimezoneOffset(); return `${hourKey(d)}:${pad(d.getMinutes())}:${pad(d.getSeconds())}${o >= 0 ? '+' : '-'}${pad(Math.floor(Math.abs(o) / 60))}:${pad(Math.abs(o) % 60)}` }
@@ -17,6 +17,26 @@ function parseIw(text) {
   if (!/Connected to/.test(text)) return null
   const n = re => { const m = re.exec(text); return m ? Number(m[1]) : 0 }
   return { rssi: n(/signal:\s*(-?\d+)/), speed: Math.round(n(/tx bitrate:\s*([\d.]+)/)), mhz: Math.round(n(/freq:\s*([\d.]+)/)), ssid: (/SSID:\s*(.+)/.exec(text) || [])[1]?.trim() || '' }
+}
+
+/**
+ * Windows' physical adapters (no virtual ones, as readCounters leaves out on Linux), from WIN_ADAPTERS' JSON: the counters as
+ * readCounters gives them, and the cable as ethernet() does.
+ */
+const WIN_ADAPTERS = 'ConvertTo-Json -Compress -InputObject @(Get-NetAdapter -Physical | ForEach-Object { $s = $_ | Get-NetAdapterStatistics; ' +
+  "[pscustomobject]@{ n = $_.Name; rx = $s.ReceivedBytes; tx = $s.SentBytes; wifi = [bool]($_.PhysicalMediaType -match '802\\.11'); " +
+  "up = ($_.Status -eq 'Up'); speed = [int64]($_.ReceiveLinkSpeed / 1000000) } })"
+function parseWinAdapters(text) {
+  let list = []
+  try { list = [].concat(JSON.parse(text) ?? []) } catch {}
+  const ifaces = {}
+  let eth = null
+  for (const a of list) {
+    if (!a?.n) continue
+    ifaces[a.n] = { rx: Number(a.rx) || 0, tx: Number(a.tx) || 0, wireless: !!a.wifi }
+    if (!eth && !a.wifi && a.up) eth = { iface: a.n, speed: Math.max(0, Number(a.speed) || 0) }
+  }
+  return { ifaces, eth }
 }
 
 /** A program's name as people know it (ss gives the process's). */
@@ -155,8 +175,9 @@ class DataCounter {
   /** A sync connection closed: its bytes are Tetra's own, left out of what this computer used over the phone's hotspot. */
   own(n) { this.ownBytes += n }
 
-  /** Every interface but loopback and virtual ones: its bytes and whether it is Wi-Fi. */
+  /** Every interface but loopback and virtual ones: its bytes and whether it is Wi-Fi. Windows': read by [counters]. */
   readCounters() {
+    if (this.win) return this.win.ifaces
     const base = '/sys/class/net'
     const out = {}
     let names = []
@@ -174,6 +195,7 @@ class DataCounter {
 
   /** A cable plugged in: the first wired, physical interface that is up, and its speed (Mb/s) as the card says it. */
   ethernet() {
+    if (this.win) return this.win.eth
     const base = '/sys/class/net'
     let names = []
     try { names = fs.readdirSync(base) } catch { return null }
@@ -187,7 +209,7 @@ class DataCounter {
   }
 
   /** NetworkManager says a Wi-Fi is metered when it is an Android hotspot (it sends that over DHCP), so: on the phone's hotspot. */
-  async metered(iface) { return /yes/.test(await run('nmcli', ['-g', 'GENERAL.METERED', 'device', 'show', iface])) }
+  async metered(iface) { if (process.platform === 'win32') return false; return /yes/.test(await run('nmcli', ['-g', 'GENERAL.METERED', 'device', 'show', iface])) }
 
   month(key) {
     if (!this.pending.has(key)) {
@@ -217,9 +239,11 @@ class DataCounter {
 
   /** One look (each minute): the counters, the link, and drops off the Wi-Fi or the phone's hotspot. */
   async tick(now = new Date()) {
+    await this.counters()
     const ifaces = this.readCounters()
     const wifi = Object.keys(ifaces).find(n => ifaces[n].wireless)
-    const link = wifi ? parseIw(await run('iw', ['dev', wifi, 'link'])) : null
+    // shortcut: on Windows no Wi-Fi link (signal, network, drops) nor metered (the hotspot): netsh's words are in the user's language
+    const link = wifi && !this.win ? parseIw(await run('iw', ['dev', wifi, 'link'])) : null
     const metered = wifi ? await this.metered(wifi) : false
     if (this.last) {
       const deltas = Object.entries(ifaces).map(([n, c]) => {
@@ -318,10 +342,16 @@ class DataCounter {
   stop() { clearInterval(this.timer); clearInterval(this.appTimer); try { this.flush() } catch {} }
 
   /** What this computer's Wi-Fi is now, for the phone's "Phone as hotspot". */
+  /** On Windows, a fresh look at the adapters for readCounters and ethernet() (Linux reads its files as it goes). */
+  async counters() {
+    if (process.platform === 'win32') this.win = parseWinAdapters(await run('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', WIN_ADAPTERS], 20_000)) // PowerShell's first start is slow
+  }
+
   async wifi() {
+    await this.counters()
     const ifaces = this.readCounters()
     const w = Object.keys(ifaces).find(n => ifaces[n].wireless)
-    const link = w ? parseIw(await run('iw', ['dev', w, 'link'])) : null
+    const link = w && !this.win ? parseIw(await run('iw', ['dev', w, 'link'])) : null
     const ethernet = this.ethernet()
     if (!link && !ethernet) return { error: 'This computer is on neither Wi-Fi nor a cable.' }
     return { ...(link || {}), ...(ethernet ? { ethernet } : {}) }
@@ -337,4 +367,4 @@ class DataCounter {
   }
 }
 
-module.exports = { DataCounter, versions, plans, parseIw, parseMonth, monthText, hourKey, parseSs, programName, reach }
+module.exports = { DataCounter, parseWinAdapters, WIN_ADAPTERS, versions, plans, parseIw, parseMonth, monthText, hourKey, parseSs, programName, reach }

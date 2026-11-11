@@ -124,3 +124,19 @@ test('of two plans with one rev, the phone\'s wins, and takes plan.json\'s place
   assert.deepEqual(fs.readdirSync(root).sort(), ['plan.json', 'usage'])
   assert.equal(c.all().plan.carrier.offset, -7)
 })
+
+test('Windows adapters: counters by name, Wi-Fi apart, the first wired one that is up as the cable', () => {
+  const { parseWinAdapters } = require('../datacount')
+  const text = JSON.stringify([
+    { n: 'Wi-Fi', rx: 1000, tx: 200, wifi: true, up: true, speed: 433 },
+    { n: 'Ethernet 2', rx: 50, tx: 5, wifi: false, up: false, speed: 0 },
+    { n: 'Ethernet', rx: 7000, tx: 300, wifi: false, up: true, speed: 1000 },
+  ])
+  const { ifaces, eth } = parseWinAdapters(text)
+  assert.deepEqual(ifaces['Wi-Fi'], { rx: 1000, tx: 200, wireless: true })
+  assert.equal(Object.keys(ifaces).length, 3)
+  assert.deepEqual(eth, { iface: 'Ethernet', speed: 1000 })
+  // one adapter comes as one object if not wrapped; nothing at all (PowerShell failed) is no adapters
+  assert.deepEqual(parseWinAdapters(JSON.stringify({ n: 'Wi-Fi', rx: 1, tx: 2, wifi: true, up: true })).ifaces, { 'Wi-Fi': { rx: 1, tx: 2, wireless: true } })
+  assert.deepEqual(parseWinAdapters(''), { ifaces: {}, eth: null })
+})
