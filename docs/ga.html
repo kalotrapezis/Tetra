@@ -55,7 +55,7 @@
   .btn:hover { transform: translateY(-2px); filter: brightness(1.12); }
   .btn img { width: 52px; height: 52px; border-radius: 13px; }
   .btn b { display: block; font-size: 20px; } .btn span { font-size: 14px; opacity: .85; }
-  .android { background: var(--phone); } .appimage { background: var(--violet); } .deb { background: var(--blue); } .thunderbird { background: #0f8a7a; } .car { background: #2B3A4A; }
+  .android { background: var(--phone); } .appimage { background: var(--violet); } .windows { background: #0067B8; } .deb { background: var(--blue); } .thunderbird { background: #0f8a7a; } .car { background: #2B3A4A; }
   .hero { width: 100%; border-radius: 22px; display: block; border: 1px solid var(--line); }
   section { padding: 56px 0 8px; }
   h2 { font-size: clamp(28px, 4vw, 40px); margin: 0 0 8px; text-align: center; }
@@ -167,11 +167,13 @@
     <p class="lead">Superaip phríobháideach amháin do do ghuthán, do thábléad agus do ríomhaire. Bogearraí saor, gan cuntas, gan scamall: fanann do chuid comhad agus ríomhphost ar do ghléasanna.</p>
     <div class="buttons">
       <div class="group"><h3><img src="img/android.svg" alt="">Android</h3>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.14/Tetra-0.8.0-beta.14-arm64.apk"><img src="img/android.svg" alt=""><div><b>Íoslódáil don Android</b><span>APK · 0.8.0 beta 14 · Android 11+</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.15/Tetra-0.8.0-beta.15-arm64.apk"><img src="img/android.svg" alt=""><div><b>Íoslódáil don Android</b><span>APK · 0.8.0 beta 15 · Android 11+</span></div></a>
         <div class="qr"><img src="img/qr-android.svg" alt="Cód QR don íoslódáil Android"><p>Nó scan é le do ghuthán.<br><a href="#faq-install">Conas é a shuiteáil</a></p></div></div>
       <div class="group"><h3><img src="img/linux.svg" alt="">Linux</h3>
-        <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.8/Tetra-0.8.0-beta.8.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 8 · formhór na ndáileachtaí</span></div></a>
-        <a class="btn deb" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.8/local-drive-desktop_0.8.0-beta.8_amd64.deb"><img src="img/linux.svg" alt=""><div><b>Linux .deb</b><span>Debian, Ubuntu, Mint</span></div></a></div>
+        <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/Tetra-0.8.0-beta.9.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 9 · formhór na ndáileachtaí</span></div></a>
+        <a class="btn deb" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/local-drive-desktop_0.8.0-beta.9_amd64.deb"><img src="img/linux.svg" alt=""><div><b>Linux .deb</b><span>Debian, Ubuntu, Mint</span></div></a></div>
+      <div class="group"><h3><img src="img/windows.svg" alt="">Windows</h3>
+        <a class="btn windows" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/Tetra-Setup-0.8.0-beta.9.exe"><img src="img/windows.svg" alt=""><div><b>Windows</b><span>0.8.0 beta 9 · Windows 10, 11</span></div></a></div>
       <div class="group"><h3><img src="img/icons/car.png" alt="">Tetra Car</h3>
         <a class="btn car" href="https://github.com/kalotrapezis/Tetra-Auto/releases/download/v0.2.0/TetraAuto-0.2.0.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Auto</b><span>0.2 · scáileáin chairr, Android 10+</span></div></a></div>
     </div>
@@ -381,14 +383,15 @@
         <h3>Tetra don Android</h3>
         <p>Guthán agus táblaí, Android 11 nó níos nua.</p>
         <a href="https://github.com/kalotrapezis/Tetra-mobile">Foinse agus sonraí ar GitHub</a>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.14/Tetra-0.8.0-beta.14-arm64.apk"><img src="img/android.svg" alt=""><div><b>Íoslódáil APK</b><span>0.8.0 beta 14</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.15/Tetra-0.8.0-beta.15-arm64.apk"><img src="img/android.svg" alt=""><div><b>Íoslódáil APK</b><span>0.8.0 beta 15</span></div></a>
       </div>
       <div class="panel">
         <h3>Tetra don deasc</h3>
         <p>Linux: AppImage don chuid is mó de na dáileachtaí, nó .deb do Debian, Ubuntu agus Mint. Fanann sé sa tráidire do do ghuthán.</p>
         <a href="https://github.com/kalotrapezis/Tetra">Foinse agus sonraí ar GitHub</a>
-        <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.8/Tetra-0.8.0-beta.8.AppImage"><img src="img/linux.svg" alt=""><div><b>AppImage</b><span>0.8.0 beta 8</span></div></a>
-        <a class="btn deb" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.8/local-drive-desktop_0.8.0-beta.8_amd64.deb"><img src="img/linux.svg" alt=""><div><b>.deb</b><span>0.8.0 beta 8</span></div></a>
+        <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/Tetra-0.8.0-beta.9.AppImage"><img src="img/linux.svg" alt=""><div><b>AppImage</b><span>0.8.0 beta 9</span></div></a>
+        <a class="btn deb" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/local-drive-desktop_0.8.0-beta.9_amd64.deb"><img src="img/linux.svg" alt=""><div><b>.deb</b><span>0.8.0 beta 9</span></div></a>
+        <a class="btn windows" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/Tetra-Setup-0.8.0-beta.9.exe"><img src="img/windows.svg" alt=""><div><b>Windows</b><span>0.8.0 beta 9</span></div></a>
         <a class="btn thunderbird" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.6/tetra-mail-0.1.0.xpi"><img src="img/mail.svg" alt=""><div><b>Síneadh do Thunderbird</b><span>Tetra Mail, do chuntais nach n-osclaíonn ach Thunderbird</span></div></a>
       </div>
       <div class="panel">
