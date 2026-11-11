@@ -234,5 +234,12 @@
  "0.8.0 beta 11": "0.8.0 beta 11",
  "0.8.0 beta 6": "0.8.0 beta 6",
  "Thunderbird extension": "Extension pour Thunderbird",
- "Tetra Mail, for accounts only Thunderbird opens": "Tetra Mail, pour les comptes que seul Thunderbird ouvre"
+ "Tetra Mail, for accounts only Thunderbird opens": "Tetra Mail, pour les comptes que seul Thunderbird ouvre",
+ "<img src=\"img/icons/car.png\" alt=\"\">Tetra Car": "<img src=\"img/icons/car.png\" alt=\"\">Tetra Car",
+ "Tetra Auto, for the car": "Tetra Auto, pour la voiture",
+ "0.2 · car screens, Android 10+": "0.2 · écrans de voiture, Android 10+",
+ "For a car's own Android screen (Android 10 or newer), instead of Android Auto. Tetra on your phone runs Tetra Car and sends it to the car over Wi-Fi, so the phone needs Tetra for Android too.": "Pour l'écran Android de la voiture elle-même (Android 10 ou plus récent), à la place d'Android Auto. Tetra sur votre téléphone fait tourner Tetra Car et l'envoie à la voiture par Wi-Fi : le téléphone a donc aussi besoin de Tetra pour Android.",
+ "APK · 0.8.0 beta 13 · Android 11+": "APK · 0.8.0 beta 13 · Android 11+",
+ "0.8.0 beta 13": "0.8.0 beta 13",
+ "0.8.0 beta 7 · most distros": "0.8.0 beta 7 · la plupart des distributions"
 }

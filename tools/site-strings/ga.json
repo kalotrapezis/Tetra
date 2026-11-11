@@ -234,5 +234,12 @@
  "0.8.0 beta 11": "0.8.0 beta 11",
  "0.8.0 beta 6": "0.8.0 beta 6",
  "Thunderbird extension": "Síneadh do Thunderbird",
- "Tetra Mail, for accounts only Thunderbird opens": "Tetra Mail, do chuntais nach n-osclaíonn ach Thunderbird"
+ "Tetra Mail, for accounts only Thunderbird opens": "Tetra Mail, do chuntais nach n-osclaíonn ach Thunderbird",
+ "<img src=\"img/icons/car.png\" alt=\"\">Tetra Car": "<img src=\"img/icons/car.png\" alt=\"\">Tetra Car",
+ "Tetra Auto, for the car": "Tetra Auto, don charr",
+ "0.2 · car screens, Android 10+": "0.2 · scáileáin chairr, Android 10+",
+ "For a car's own Android screen (Android 10 or newer), instead of Android Auto. Tetra on your phone runs Tetra Car and sends it to the car over Wi-Fi, so the phone needs Tetra for Android too.": "Do scáileán Android an chairr féin (Android 10 nó níos nua), in áit Android Auto. Ritheann Tetra ar do ghuthán Tetra Car agus seolann sé chuig an gcarr é thar Wi-Fi, mar sin teastaíonn Tetra do Android ar an nguthán freisin.",
+ "APK · 0.8.0 beta 13 · Android 11+": "APK · 0.8.0 beta 13 · Android 11+",
+ "0.8.0 beta 13": "0.8.0 beta 13",
+ "0.8.0 beta 7 · most distros": "0.8.0 beta 7 · formhór na ndáileachtaí"
 }

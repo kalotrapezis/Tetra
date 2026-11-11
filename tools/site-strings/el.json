@@ -234,5 +234,12 @@
  "0.8.0 beta 11": "0.8.0 beta 11",
  "0.8.0 beta 6": "0.8.0 beta 6",
  "Thunderbird extension": "Πρόσθετο για το Thunderbird",
- "Tetra Mail, for accounts only Thunderbird opens": "Tetra Mail, για λογαριασμούς που ανοίγει μόνο το Thunderbird"
+ "Tetra Mail, for accounts only Thunderbird opens": "Tetra Mail, για λογαριασμούς που ανοίγει μόνο το Thunderbird",
+ "<img src=\"img/icons/car.png\" alt=\"\">Tetra Car": "<img src=\"img/icons/car.png\" alt=\"\">Tetra Car",
+ "Tetra Auto, for the car": "Tetra Auto, για το αυτοκίνητο",
+ "0.2 · car screens, Android 10+": "0.2 · οθόνες αυτοκινήτου, Android 10+",
+ "For a car's own Android screen (Android 10 or newer), instead of Android Auto. Tetra on your phone runs Tetra Car and sends it to the car over Wi-Fi, so the phone needs Tetra for Android too.": "Για την οθόνη Android του ίδιου του αυτοκινήτου (Android 10 ή νεότερο), στη θέση του Android Auto. Το Tetra στο κινητό τρέχει το Tetra Car και το στέλνει στο αυτοκίνητο μέσω Wi-Fi, οπότε στο κινητό χρειάζεται και το Tetra για Android.",
+ "APK · 0.8.0 beta 13 · Android 11+": "APK · 0.8.0 beta 13 · Android 11+",
+ "0.8.0 beta 13": "0.8.0 beta 13",
+ "0.8.0 beta 7 · most distros": "0.8.0 beta 7 · οι περισσότερες διανομές"
 }

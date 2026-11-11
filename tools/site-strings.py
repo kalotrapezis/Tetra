@@ -17,7 +17,7 @@ INNER = [rf'<{t}\b[^>]*>(.*?)</{t}>' for t in ('p', 'h1', 'h2', 'h3', 'li', 'sum
          r'\n\s*<a href="https://github.com/kalotrapezis/[^"#]*">([^<]*)</a>',
          r'<footer>\s*<div class="wrap">(.*?)</div>']
 ATTRS = r'\b(alt|aria-label|content)="([^"]+)"'
-KEEP = {'Tetra', 'Android', 'Linux', 'EN', 'Office'}  # names, the same in every language
+KEEP = {'Tetra', 'Tetra Auto', 'Android', 'Linux', 'EN', 'Office'}  # names, the same in every language
 
 def phrases(src):
     body = src.split('<body>')[1].split('<script>')[0]

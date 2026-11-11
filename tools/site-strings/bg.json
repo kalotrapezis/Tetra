@@ -234,5 +234,12 @@
  "0.8.0 beta 11": "0.8.0 beta 11",
  "0.8.0 beta 6": "0.8.0 beta 6",
  "Thunderbird extension": "Разширение за Thunderbird",
- "Tetra Mail, for accounts only Thunderbird opens": "Tetra Mail, за акаунти, които отваря само Thunderbird"
+ "Tetra Mail, for accounts only Thunderbird opens": "Tetra Mail, за акаунти, които отваря само Thunderbird",
+ "<img src=\"img/icons/car.png\" alt=\"\">Tetra Car": "<img src=\"img/icons/car.png\" alt=\"\">Tetra Car",
+ "Tetra Auto, for the car": "Tetra Auto, за колата",
+ "0.2 · car screens, Android 10+": "0.2 · екрани в колата, Android 10+",
+ "For a car's own Android screen (Android 10 or newer), instead of Android Auto. Tetra on your phone runs Tetra Car and sends it to the car over Wi-Fi, so the phone needs Tetra for Android too.": "За собствения Android екран на колата (Android 10 или по-нов), вместо Android Auto. Tetra на телефона пуска Tetra Car и я изпраща към колата през Wi-Fi, затова на телефона също трябва Tetra за Android.",
+ "APK · 0.8.0 beta 13 · Android 11+": "APK · 0.8.0 beta 13 · Android 11+",
+ "0.8.0 beta 13": "0.8.0 beta 13",
+ "0.8.0 beta 7 · most distros": "0.8.0 beta 7 · повечето дистрибуции"
 }

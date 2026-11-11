@@ -234,5 +234,12 @@
  "0.8.0 beta 11": "0.8.0 beta 11",
  "0.8.0 beta 6": "0.8.0 beta 6",
  "Thunderbird extension": "Estensjoni għal Thunderbird",
- "Tetra Mail, for accounts only Thunderbird opens": "Tetra Mail, għal kontijiet li jiftaħ biss Thunderbird"
+ "Tetra Mail, for accounts only Thunderbird opens": "Tetra Mail, għal kontijiet li jiftaħ biss Thunderbird",
+ "<img src=\"img/icons/car.png\" alt=\"\">Tetra Car": "<img src=\"img/icons/car.png\" alt=\"\">Tetra Car",
+ "Tetra Auto, for the car": "Tetra Auto, għall-karozza",
+ "0.2 · car screens, Android 10+": "0.2 · skrins tal-karozza, Android 10+",
+ "For a car's own Android screen (Android 10 or newer), instead of Android Auto. Tetra on your phone runs Tetra Car and sends it to the car over Wi-Fi, so the phone needs Tetra for Android too.": "Għall-iskrin Android tal-karozza stess (Android 10 jew aktar ġdid), minflok Android Auto. Tetra fuq il-mowbajl tiegħek iħaddem Tetra Car u jibagħtu lill-karozza fuq Wi-Fi, għalhekk il-mowbajl jeħtieġ ukoll Tetra għal Android.",
+ "APK · 0.8.0 beta 13 · Android 11+": "APK · 0.8.0 beta 13 · Android 11+",
+ "0.8.0 beta 13": "0.8.0 beta 13",
+ "0.8.0 beta 7 · most distros": "0.8.0 beta 7 · l-aktar distribuzzjonijiet"
 }
