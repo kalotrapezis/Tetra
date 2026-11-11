@@ -3072,5 +3072,6 @@
  "dock.title": "Duga",
  "settings.sum.dock": "Méid na ndeilbhíní, lipéid agus conas a thaispeántar é in aip",
  "dock.size": "Méid na ndeilbhíní",
- "dock.reset": "Cuir an duga ar ais mar a bhí ar dtús"
+ "dock.reset": "Cuir an duga ar ais mar a bhí ar dtús",
+ "dock.default": "réamhshocrú"
 }

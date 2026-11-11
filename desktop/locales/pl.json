@@ -2979,5 +2979,6 @@
  "dock.title": "Dok",
  "settings.sum.dock": "Rozmiar ikon, etykiety i wygląd w aplikacji",
  "dock.size": "Rozmiar ikon",
- "dock.reset": "Przywróć dok do stanu początkowego"
+ "dock.reset": "Przywróć dok do stanu początkowego",
+ "dock.default": "domyślny"
 }

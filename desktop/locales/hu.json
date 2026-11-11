@@ -2793,5 +2793,6 @@
  "dock.title": "Dokk",
  "settings.sum.dock": "Ikonméret, feliratok és megjelenés egy alkalmazásban",
  "dock.size": "Ikonméret",
- "dock.reset": "A dokk visszaállítása az eredetire"
+ "dock.reset": "A dokk visszaállítása az eredetire",
+ "dock.default": "alapértelmezett"
 }

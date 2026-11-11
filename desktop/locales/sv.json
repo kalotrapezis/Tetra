@@ -2793,5 +2793,6 @@
  "dock.title": "Docka",
  "settings.sum.dock": "Ikonstorlek, namn och hur den visas i en app",
  "dock.size": "Ikonstorlek",
- "dock.reset": "Återställ dockan som från början"
+ "dock.reset": "Återställ dockan som från början",
+ "dock.default": "standard"
 }

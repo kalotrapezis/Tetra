@@ -2856,5 +2856,6 @@
  "dock.title": "Dock",
  "settings.sum.dock": "Tamaño de los iconos, etiquetas y cómo se muestra en una app",
  "dock.size": "Tamaño de los iconos",
- "dock.reset": "Dejar el dock como al principio"
+ "dock.reset": "Dejar el dock como al principio",
+ "dock.default": "predeterminado"
 }

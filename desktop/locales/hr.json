@@ -2885,5 +2885,6 @@
  "dock.title": "Dok",
  "settings.sum.dock": "Veličina ikona, oznake i kako se prikazuje u aplikaciji",
  "dock.size": "Veličina ikona",
- "dock.reset": "Vrati dok kakav je bio na početku"
+ "dock.reset": "Vrati dok kakav je bio na početku",
+ "dock.default": "zadano"
 }

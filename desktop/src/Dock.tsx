@@ -101,6 +101,9 @@ export function Dock({ apps, home, head, bottom, foot }: { apps: DockApp[]; home
   </>
 }
 
+/** The size's stops, every 4px: the default (28) among them. */
+const STOPS = [24, 28, 32, 36, 40, 44, 48]
+
 /** Settings › Dock: the art's size, labels or icons only, how it shows in an app, and the dock as it was at first. */
 export function DockSettings() {
   const [p, setP] = useState<DockPrefs>(loadDock)
@@ -115,10 +118,20 @@ export function DockSettings() {
       <h3>{t('dock.title')}</h3>
       <p className="hint">{t('home.dockHint')}</p>
       <span className="menu-head">{t('dock.size')}</span>
+      {/* in pixels with its stops, the default marked, as Ubuntu's dock and KDE's panel have it (the user, 11 Nov) */}
       <div className="dock-size">
-        <img src="./apps/photos.png" alt="" style={{ width: DOCK_SIZES.min, height: DOCK_SIZES.min }} />
-        <input type="range" min={DOCK_SIZES.min} max={DOCK_SIZES.max} step={2} value={p.size} onChange={e => change({ ...p, size: Number(e.target.value) })} />
-        <img src="./apps/photos.png" alt="" style={{ width: DOCK_SIZES.max, height: DOCK_SIZES.max }} />
+        <img src={`./apps/photos.png`} alt="" style={{ width: p.size, height: p.size }} />
+        <div className="dock-size-track">
+          <input type="range" min={DOCK_SIZES.min} max={DOCK_SIZES.max} step={4} list="dock-stops" value={p.size}
+            onChange={e => change({ ...p, size: Number(e.target.value) })} aria-valuetext={`${p.size} px`} />
+          <datalist id="dock-stops">{STOPS.map(v => <option key={v} value={v} />)}</datalist>
+          <div className="dock-stops">
+            {STOPS.map(v => <button key={v} className={`${v === p.size ? 'on' : ''} ${v === DOCK_SIZES.standard ? 'standard' : ''}`}
+              style={{ left: `${(v - DOCK_SIZES.min) / (DOCK_SIZES.max - DOCK_SIZES.min) * 100}%` }} onClick={() => change({ ...p, size: v })}>
+              {v}{v === DOCK_SIZES.standard && <small>{t('dock.default')}</small>}</button>)}
+          </div>
+        </div>
+        <b className="dock-size-px">{p.size} px</b>
       </div>
       <span className="menu-head">{t('dock.look')}</span>
       <label><input type="checkbox" checked={!p.labels} onChange={e => change({ ...p, labels: !e.target.checked })} /> {t('dock.iconsOnly')}</label>

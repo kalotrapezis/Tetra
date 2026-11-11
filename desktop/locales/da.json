@@ -2793,5 +2793,6 @@
  "dock.title": "Dock",
  "settings.sum.dock": "Ikonstørrelse, navne og hvordan den vises i en app",
  "dock.size": "Ikonstørrelse",
- "dock.reset": "Sæt docken tilbage som fra start"
+ "dock.reset": "Sæt docken tilbage som fra start",
+ "dock.default": "standard"
 }

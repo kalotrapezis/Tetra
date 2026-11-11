@@ -2979,5 +2979,6 @@
  "dock.title": "Dokas",
  "settings.sum.dock": "Piktogramų dydis, pavadinimai ir kaip jis rodomas programoje",
  "dock.size": "Piktogramų dydis",
- "dock.reset": "Grąžinti doką į pradinį"
+ "dock.reset": "Grąžinti doką į pradinį",
+ "dock.default": "numatytasis"
 }

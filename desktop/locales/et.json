@@ -2793,5 +2793,6 @@
  "dock.title": "Dokk",
  "settings.sum.dock": "Ikoonide suurus, sildid ja kuidas see rakenduses paistab",
  "dock.size": "Ikoonide suurus",
- "dock.reset": "Taasta dokk algseks"
+ "dock.reset": "Taasta dokk algseks",
+ "dock.default": "vaikimisi"
 }

@@ -2979,5 +2979,6 @@
  "dock.title": "Dok",
  "settings.sum.dock": "Veľkosť ikon, menovky a ako sa zobrazuje v aplikácii",
  "dock.size": "Veľkosť ikon",
- "dock.reset": "Vrátiť dok do pôvodného stavu"
+ "dock.reset": "Vrátiť dok do pôvodného stavu",
+ "dock.default": "predvolené"
 }

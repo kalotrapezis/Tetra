@@ -2980,5 +2980,6 @@
  "dock.title": "Dock",
  "settings.sum.dock": "Id-daqs tal-ikoni, it-tikketti u kif jidher f’app",
  "dock.size": "Daqs tal-ikoni",
- "dock.reset": "Erġa’ lura d-dock kif kien għall-ewwel"
+ "dock.reset": "Erġa’ lura d-dock kif kien għall-ewwel",
+ "dock.default": "default"
 }

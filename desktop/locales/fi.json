@@ -2793,5 +2793,6 @@
  "dock.title": "Telakka",
  "settings.sum.dock": "Kuvakkeiden koko, nimet ja miten se näkyy sovelluksessa",
  "dock.size": "Kuvakkeiden koko",
- "dock.reset": "Palauta telakka alkuperäiseksi"
+ "dock.reset": "Palauta telakka alkuperäiseksi",
+ "dock.default": "oletus"
 }

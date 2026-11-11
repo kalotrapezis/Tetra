@@ -2793,5 +2793,6 @@
  "dock.title": "Dock",
  "settings.sum.dock": "Pictogramgrootte, labels en hoe het in een app verschijnt",
  "dock.size": "Pictogramgrootte",
- "dock.reset": "Dock terugzetten zoals in het begin"
+ "dock.reset": "Dock terugzetten zoals in het begin",
+ "dock.default": "standaard"
 }

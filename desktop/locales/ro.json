@@ -2886,5 +2886,6 @@
  "dock.title": "Dock",
  "settings.sum.dock": "Mărimea pictogramelor, etichete și cum apare într-o aplicație",
  "dock.size": "Mărimea pictogramelor",
- "dock.reset": "Readu dock-ul ca la început"
+ "dock.reset": "Readu dock-ul ca la început",
+ "dock.default": "implicit"
 }

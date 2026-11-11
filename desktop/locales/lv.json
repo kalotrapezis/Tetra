@@ -2885,5 +2885,6 @@
  "dock.title": "Doks",
  "settings.sum.dock": "Ikonu izmērs, nosaukumi un kā tas redzams lietotnē",
  "dock.size": "Ikonu izmērs",
- "dock.reset": "Atjaunot doku kā sākumā"
+ "dock.reset": "Atjaunot doku kā sākumā",
+ "dock.default": "noklusējums"
 }
