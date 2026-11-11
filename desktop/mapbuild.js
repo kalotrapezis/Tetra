@@ -29,7 +29,8 @@ const os = require('node:os')
 const path = require('node:path')
 const crypto = require('node:crypto')
 const { spawn, spawnSync } = require('node:child_process')
-const { PROFILES, JAR, BIN, BUNDLED, findJava } = require('./router')
+const { PROFILES, JAR, BIN, BUNDLED, EXE, findJava } = require('./router')
+const { unzipSync } = require('fflate')
 const { t } = require('./i18n')
 const system = require('./system')
 
@@ -42,13 +43,16 @@ const TEMP = system.dir('Maps', 'Temp')
 const INDEX = 'https://download.geofabrik.de/index-v1-nogeom.json'
 const PMTILES = '1.31.2'
 const URLS = {
-  pmtiles: `https://github.com/protomaps/go-pmtiles/releases/download/v${PMTILES}/go-pmtiles_${PMTILES}_Linux_${process.arch === 'arm64' ? 'arm64' : 'x86_64'}.tar.gz`,
+  pmtiles: `https://github.com/protomaps/go-pmtiles/releases/download/v${PMTILES}/go-pmtiles_${PMTILES}_${process.platform === 'win32' ? 'Windows' : 'Linux'}_${process.arch === 'arm64' ? 'arm64' : 'x86_64'}.${process.platform === 'win32' ? 'zip' : 'tar.gz'}`,
   jar: `https://github.com/graphhopper/graphhopper/releases/download/10.2/${JAR}`,
 }
 /** The system's packages the builder may ask for (Debian and Ubuntu names), each with why, for the wizard's page. */
 const PACKAGES = { 'openjdk-17-jre-headless': 'java', 'python3-pyosmium': 'osmium' }
-/** The AppImage's own Python with osmium (scripts/bundle-tools.sh), else the system's. */
-const PYTHON = [BUNDLED && path.join(BUNDLED, 'python', 'bin', 'python3'), '/usr/bin/python3'].find(p => p && fs.existsSync(p)) ?? '/usr/bin/python3'
+/** The AppImage's own Python with osmium (scripts/bundle-tools.sh), else the system's; the Windows installer's own (scripts/bundle-tools-win.sh). */
+const PYTHON = process.platform === 'win32' ? (BUNDLED && path.join(BUNDLED, 'python', 'python.exe')) || 'python'
+  : [BUNDLED && path.join(BUNDLED, 'python', 'bin', 'python3'), '/usr/bin/python3'].find(p => p && fs.existsSync(p)) ?? '/usr/bin/python3'
+/** pmtiles as fetched into Maps/Tools. */
+const PMTILES_BIN = path.join(BIN, 'pmtiles' + EXE)
 /** The steps as the wizard shows them, in order. */
 const STEPS = ['tools', 'map', 'osm', 'roads', 'search', 'phone', 'install', 'borders']
 const OSM = path.join(DATA, 'osm')
@@ -342,7 +346,7 @@ class MapBuilder {
         await fsp.writeFile(path.join(dir, 'region.geojson'), JSON.stringify(polyToGeoJson(poly)))
         const builds = await fetch('https://build-metadata.protomaps.dev/builds.json', { signal: job.abort.signal }).then(r => r.json())
         await fsp.rm(path.join(dir, `${id}.pmtiles.part`), { force: true })
-        await run(path.join(BIN, 'pmtiles'), ['extract', `https://build.protomaps.com/${builds[builds.length - 1].key}`, `${id}.pmtiles.part`,
+        await run(PMTILES_BIN, ['extract', `https://build.protomaps.com/${builds[builds.length - 1].key}`, `${id}.pmtiles.part`,
           '--region=region.geojson', '--maxzoom=15', '--download-threads=4'])
         await fsp.rename(path.join(dir, `${id}.pmtiles.part`), path.join(dir, `${id}.pmtiles`))
       }, 2)
@@ -415,11 +419,19 @@ class MapBuilder {
 
   /** pmtiles and GraphHopper, each fetched once into Maps/Tools (Java and osmium are the system's: [missing]); unpacked in the work folder `dir`. */
   async tools(get, run, dir) {
-    if (!fs.existsSync(path.join(BIN, 'pmtiles'))) {
-      await get(URLS.pmtiles, path.join(dir, 'pmtiles.tar.gz'))
-      await run('tar', ['xzf', 'pmtiles.tar.gz', 'pmtiles'])
+    if (!fs.existsSync(PMTILES_BIN)) {
+      const name = path.basename(PMTILES_BIN)
+      if (EXE) { // Windows' comes as a .zip, and Windows has no tar to rely on
+        await get(URLS.pmtiles, path.join(dir, 'pmtiles.zip'))
+        const exe = unzipSync(await fsp.readFile(path.join(dir, 'pmtiles.zip')), { filter: f => f.name === name })[name]
+        if (!exe) throw new Error(`${name} is not in the download`)
+        await fsp.writeFile(path.join(dir, name), exe)
+      } else {
+        await get(URLS.pmtiles, path.join(dir, 'pmtiles.tar.gz'))
+        await run('tar', ['xzf', 'pmtiles.tar.gz', 'pmtiles'])
+      }
       await fsp.mkdir(BIN, { recursive: true })
-      await fsp.rename(path.join(dir, 'pmtiles'), path.join(BIN, 'pmtiles'))
+      await fsp.rename(path.join(dir, name), PMTILES_BIN)
     }
     if (!fs.existsSync(path.join(BIN, JAR))) await get(URLS.jar, path.join(BIN, JAR))
   }

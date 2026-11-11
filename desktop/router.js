@@ -70,11 +70,21 @@ const BIN = system.dir('Maps', 'Tools')
 
 /** What the AppImage carries for the map builder (scripts/bundle-tools.sh): its own Java and Python, used before the system's. */
 const BUNDLED = process.resourcesPath ? path.join(process.resourcesPath, 'bundled') : null
+/** A program's file name here: Windows' end in .exe (the installer's bundled tools: scripts/bundle-tools-win.sh). */
+const EXE = process.platform === 'win32' ? '.exe' : ''
+
+/** [to] as [from] without copying it: a symlink; on Windows, which allows those only to admins, a hard link (same drive), else a copy. */
+function link(from, to) {
+  try { fs.symlinkSync(from, to) } catch (e) {
+    if (e.code !== 'EPERM') throw e
+    try { fs.linkSync(from, to) } catch (e2) { if (e2.code !== 'EXDEV') throw e2; fs.copyFileSync(from, to) }
+  }
+}
 
 /** A Java of 17 or newer, as GraphHopper 10.2 needs: the AppImage's own, else the system's (the builder asks for one when there is none). */
 function findJava() {
   const major = java => { try { const r = spawnSync(java, ['-version'], { timeout: 5000, encoding: 'utf8' }); return r.status === 0 ? +(/version "(\d+)/.exec(r.stderr)?.[1] ?? 0) : 0 } catch { return 0 } }
-  return [process.env.JAVA, BUNDLED && path.join(BUNDLED, 'jre', 'bin', 'java'), '/usr/lib/jvm/java-17-openjdk-amd64/bin/java', 'java'].find(j => j && major(j) >= 17) ?? null
+  return [process.env.JAVA, BUNDLED && path.join(BUNDLED, 'jre', 'bin', 'java' + EXE), '/usr/lib/jvm/java-17-openjdk-amd64/bin/java', 'java'].find(j => j && major(j) >= 17) ?? null
 }
 
 class Router {
@@ -98,7 +108,7 @@ class Router {
     const links = path.join(this.workDir, 'graph')
     fs.rmSync(this.workDir, { recursive: true, force: true })
     fs.mkdirSync(links, { recursive: true })
-    for (const f of fs.readdirSync(this.graphDir)) if (f !== 'gh.lock') fs.symlinkSync(path.join(this.graphDir, f), path.join(links, f))
+    for (const f of fs.readdirSync(this.graphDir)) if (f !== 'gh.lock') link(path.join(this.graphDir, f), path.join(links, f))
     this.port = await freePort()
     const admin = await freePort()
     fs.writeFileSync(path.join(this.workDir, 'config.yml'), `graphhopper:\n  graph.location: ${JSON.stringify(links)}\n  graph.dataaccess.default_type: MMAP_RO\n${PROFILES}` +
@@ -187,4 +197,4 @@ const freePort = () => new Promise((resolve, reject) => {
   s.on('error', reject)
 })
 
-module.exports = { Router, join, plain, ghLocale, MAIN_ROADS, PROFILES, JAR, BIN, BUNDLED, findJava }
+module.exports = { Router, join, plain, ghLocale, MAIN_ROADS, PROFILES, JAR, BIN, BUNDLED, EXE, findJava }

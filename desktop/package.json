@@ -9,7 +9,7 @@
     "check": "tsc -p .",
     "test": "node --test src/*.test.ts test/*.test.js",
     "dist": "node scripts/copy-skill.js && vite build && electron-builder --linux deb && scripts/bundle-tools.sh && electron-builder --linux AppImage --config electron-builder.appimage.cjs",
-    "dist:win": "node scripts/copy-skill.js && vite build && scripts/win-deps.sh && ELECTRON_BUILDER_WINE_TOOLSET_DIR=$PWD/scripts/bottles-wine electron-builder --win --config electron-builder.win.cjs"
+    "dist:win": "node scripts/copy-skill.js && vite build && scripts/win-deps.sh && scripts/bundle-tools-win.sh && ELECTRON_BUILDER_WINE_TOOLSET_DIR=$PWD/scripts/bottles-wine electron-builder --win --config electron-builder.win.cjs"
   },
   "author": "Theologos Kalotrapezis <kalotrapezis@gmail.com>",
   "devDependencies": {

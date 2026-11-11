@@ -3,4 +3,5 @@ dist/
 release/
 release-local/
 bundled/
+bundled-win/
 build-tools/
