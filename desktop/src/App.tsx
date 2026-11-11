@@ -17,6 +17,7 @@ import { ContactsPage, preloadContacts } from './Contacts'
 import { ImportDialog } from './Import'
 import { GuidePanel, guideFirstTime, type GuideGo } from './Guide'
 import { Dock, type DockApp } from './Dock'
+import { HomePage } from './Home'
 import { shownName } from './People'
 import { t, tr } from './i18n'
 
@@ -38,7 +39,7 @@ const NotificationsPage = later(() => import('./Center'), 'NotificationsPage')
 const SettingsPage = later(() => import('./Settings'), 'SettingsPage')
 const AssistantPage = later(() => import('./Assistant'), 'AssistantPage')
 
-type Page = { kind: 'photos' } | { kind: 'collections' } | { kind: 'collection'; id: string; name: string } | { kind: 'files'; mode: FilesMode; folder: string } | { kind: 'photoTrash' }
+type Page = { kind: 'home' } | { kind: 'photos' } | { kind: 'collections' } | { kind: 'collection'; id: string; name: string } | { kind: 'files'; mode: FilesMode; folder: string } | { kind: 'photoTrash' }
   | { kind: 'people' } | { kind: 'person'; id: string; name: string } | { kind: 'review' } | { kind: 'map'; focus?: string } | { kind: 'hidden' } | { kind: 'sync' } | { kind: 'notes'; open?: string } | { kind: 'calendar' } | { kind: 'mail' } | { kind: 'timer' } | { kind: 'pills' } | { kind: 'maps'; query?: string; at?: number } | { kind: 'assistant' } | { kind: 'contacts' } | { kind: 'phone' } | { kind: 'passwords' } | { kind: 'messages' } | { kind: 'data' } | { kind: 'notifications' } | { kind: 'settings'; start?: string; at?: number }
 
 const SYSTEM: { id: string; key: string; icon: IconName; test: (m: Media) => boolean }[] = [
@@ -59,7 +60,7 @@ export function App() {
   const [root, setRoot] = useState('')
   const [scan, setScan] = useState<string | null>(() => t('photos.looking'))
   // Settings › Language reloads the page; it opens again where it was
-  const [page, setPage] = useState<Page>(() => { const back = stored('reopen', sessionStorage); store('reopen', '', sessionStorage); return back === 'settings' ? { kind: 'settings' } : { kind: 'photos' } })
+  const [page, setPage] = useState<Page>(() => { const back = stored('reopen', sessionStorage); store('reopen', '', sessionStorage); return back === 'settings' ? { kind: 'settings' } : { kind: 'home' } }) // Home first: Photos draws its pictures only when chosen
   const [level, setLevel] = useState<Level>(() => (stored('level') as Level) || 'month')
   const [query, setQuery] = useState('')
   // These three describe the library, not this computer, so they come from the database and sync with the phone.
@@ -153,7 +154,7 @@ export function App() {
   // the AI switch (ai.js): off, AI Assist is not in the sidebar and nothing opens it
   const [aiOn, setAiOn] = useState(false)
   useEffect(() => { const read = () => window.drive.ai.get().then(a => setAiOn(a.enabled)); read(); return window.drive.ai.onChange(read) }, [])
-  useEffect(() => { if (!aiOn && page.kind === 'assistant') setPage({ kind: 'photos' }) }, [aiOn])
+  useEffect(() => { if (!aiOn && page.kind === 'assistant') setPage({ kind: 'home' }) }, [aiOn])
   useEffect(() => window.drive.assistant.onCommand(what => {
     if (what === 'toggle' && pageKind.current === 'assistant') { window.drive.assistant.hide(); return }
     setPage({ kind: 'assistant' })
@@ -361,7 +362,8 @@ export function App() {
   const loading = !media || (media.length === 0 && scan)
   let content: ReactNode
   // Pages that do not depend on the photo library come first: an empty library must not hide Devices, Files or Hidden.
-  if (page.kind === 'files') content = <Files mode={page.mode} folder={page.folder} go={(mode, folder) => setPage({ kind: 'files', mode, folder })} setDialog={setDialog} say={say} dock={dock} />
+  if (page.kind === 'home') content = <HomePage apps={dockApps} settings={() => setPage({ kind: 'settings' })} />
+  else if (page.kind === 'files') content = <Files mode={page.mode} folder={page.folder} go={(mode, folder) => setPage({ kind: 'files', mode, folder })} setDialog={setDialog} say={say} dock={dock} />
   else if (page.kind === 'sync') content = <SyncPage setDialog={setDialog} />
   else if (page.kind === 'notes') content = <NotesPage key={page.open} openId={page.open} setDialog={setDialog} say={say} />
   else if (page.kind === 'assistant') content = <AssistantPage command={assistCommand}
@@ -457,7 +459,7 @@ export function App() {
   return (
     <div className="app">
       <Dock apps={dockApps}
-        head={<div className="brand"><img src="./icon.png" alt="" /><span className="brand-name">Tetra</span><span className={alpha ? 'alpha-badge' : 'beta-badge'} title={t(alpha ? 'release.alphaNote' : 'release.betaNote')}>{t(alpha ? 'release.alpha' : 'release.beta')}</span></div>}
+        head={<div className="brand"><button className="brand-home" title={t('app.home')} onClick={() => setPage({ kind: 'home' })}><img src="./icon.png" alt={t('app.home')} /></button><span className="brand-name">Tetra</span><span className={alpha ? 'alpha-badge' : 'beta-badge'} title={t(alpha ? 'release.alphaNote' : 'release.betaNote')}>{t(alpha ? 'release.alpha' : 'release.beta')}</span></div>}
         bottom={<>
           {/* the drives are no longer listed under Devices (the user, 2 Nov: room for the apps); Devices opens them */}
           {analysis?.running && (

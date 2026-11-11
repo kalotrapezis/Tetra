@@ -2968,5 +2968,6 @@
  "maps.nPlaces_one": "{count} miesto",
  "maps.nPlaces_few": "{count} miesta",
  "maps.nPlaces_many": "{count} miesta",
- "maps.nPlaces_other": "{count} miest"
+ "maps.nPlaces_other": "{count} miest",
+ "app.home": "Domov"
 }

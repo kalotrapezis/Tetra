@@ -2782,5 +2782,6 @@
  "maps.allPlaces": "Minden hely",
  "maps.findInList": "Keresés ebben a listában",
  "maps.nPlaces_one": "{count} hely",
- "maps.nPlaces_other": "{count} hely"
+ "maps.nPlaces_other": "{count} hely",
+ "app.home": "Kezdőlap"
 }

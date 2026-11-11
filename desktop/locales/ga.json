@@ -3061,5 +3061,6 @@
  "maps.nPlaces_two": "{count} áit",
  "maps.nPlaces_few": "{count} áit",
  "maps.nPlaces_many": "{count} n-áit",
- "maps.nPlaces_other": "{count} áit"
+ "maps.nPlaces_other": "{count} áit",
+ "app.home": "Baile"
 }

@@ -2875,5 +2875,6 @@
  "maps.findInList": "Cerca in questo elenco",
  "maps.nPlaces_one": "{count} luogo",
  "maps.nPlaces_many": "{count} luoghi",
- "maps.nPlaces_other": "{count} luoghi"
+ "maps.nPlaces_other": "{count} luoghi",
+ "app.home": "Home"
 }

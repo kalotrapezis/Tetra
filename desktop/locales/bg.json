@@ -2782,5 +2782,6 @@
  "maps.allPlaces": "Всички места",
  "maps.findInList": "Търсене в този списък",
  "maps.nPlaces_one": "{count} място",
- "maps.nPlaces_other": "{count} места"
+ "maps.nPlaces_other": "{count} места",
+ "app.home": "Начало"
 }

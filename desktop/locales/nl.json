@@ -2782,5 +2782,6 @@
  "maps.allPlaces": "Alle plaatsen",
  "maps.findInList": "Zoeken in deze lijst",
  "maps.nPlaces_one": "{count} plaats",
- "maps.nPlaces_other": "{count} plaatsen"
+ "maps.nPlaces_other": "{count} plaatsen",
+ "app.home": "Start"
 }

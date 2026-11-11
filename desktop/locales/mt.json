@@ -2969,5 +2969,6 @@
  "maps.nPlaces_two": "{count} postijiet",
  "maps.nPlaces_few": "{count} postijiet",
  "maps.nPlaces_many": "{count} post",
- "maps.nPlaces_other": "{count} post"
+ "maps.nPlaces_other": "{count} post",
+ "app.home": "Il-paġna ewlenija"
 }

@@ -2782,5 +2782,6 @@
  "maps.allPlaces": "Alle Orte",
  "maps.findInList": "In dieser Liste suchen",
  "maps.nPlaces_one": "{count} Ort",
- "maps.nPlaces_other": "{count} Orte"
+ "maps.nPlaces_other": "{count} Orte",
+ "app.home": "Start"
 }

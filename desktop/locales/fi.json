@@ -2782,5 +2782,6 @@
  "maps.allPlaces": "Kaikki paikat",
  "maps.findInList": "Etsi tästä luettelosta",
  "maps.nPlaces_one": "{count} paikka",
- "maps.nPlaces_other": "{count} paikkaa"
+ "maps.nPlaces_other": "{count} paikkaa",
+ "app.home": "Aloitus"
 }

@@ -2968,5 +2968,6 @@
  "maps.nPlaces_one": "{count} miejsce",
  "maps.nPlaces_few": "{count} miejsca",
  "maps.nPlaces_many": "{count} miejsc",
- "maps.nPlaces_other": "{count} miejsca"
+ "maps.nPlaces_other": "{count} miejsca",
+ "app.home": "Start"
 }

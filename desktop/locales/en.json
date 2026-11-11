@@ -2782,5 +2782,6 @@
  "maps.allPlaces": "All places",
  "maps.findInList": "Find in this list",
  "maps.nPlaces_one": "{count} place",
- "maps.nPlaces_other": "{count} places"
+ "maps.nPlaces_other": "{count} places",
+ "app.home": "Home"
 }

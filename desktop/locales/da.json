@@ -2782,5 +2782,6 @@
  "maps.allPlaces": "Alle steder",
  "maps.findInList": "Find i denne liste",
  "maps.nPlaces_one": "{count} sted",
- "maps.nPlaces_other": "{count} steder"
+ "maps.nPlaces_other": "{count} steder",
+ "app.home": "Start"
 }

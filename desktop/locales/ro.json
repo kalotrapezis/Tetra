@@ -2875,5 +2875,6 @@
  "maps.findInList": "Caută în această listă",
  "maps.nPlaces_one": "{count} loc",
  "maps.nPlaces_few": "{count} locuri",
- "maps.nPlaces_other": "{count} de locuri"
+ "maps.nPlaces_other": "{count} de locuri",
+ "app.home": "Acasă"
 }

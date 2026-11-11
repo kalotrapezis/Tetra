@@ -2782,5 +2782,6 @@
  "maps.allPlaces": "Kõik kohad",
  "maps.findInList": "Otsi sellest loendist",
  "maps.nPlaces_one": "{count} koht",
- "maps.nPlaces_other": "{count} kohta"
+ "maps.nPlaces_other": "{count} kohta",
+ "app.home": "Avaleht"
 }

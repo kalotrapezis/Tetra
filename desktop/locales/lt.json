@@ -2968,5 +2968,6 @@
  "maps.nPlaces_one": "{count} vieta",
  "maps.nPlaces_few": "{count} vietos",
  "maps.nPlaces_many": "{count} vietos",
- "maps.nPlaces_other": "{count} vietų"
+ "maps.nPlaces_other": "{count} vietų",
+ "app.home": "Pradžia"
 }

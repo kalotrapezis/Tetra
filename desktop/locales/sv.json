@@ -2782,5 +2782,6 @@
  "maps.allPlaces": "Alla platser",
  "maps.findInList": "Sök i den här listan",
  "maps.nPlaces_one": "{count} plats",
- "maps.nPlaces_other": "{count} platser"
+ "maps.nPlaces_other": "{count} platser",
+ "app.home": "Start"
 }

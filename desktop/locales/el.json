@@ -2782,5 +2782,6 @@
  "maps.allPlaces": "Όλα τα μέρη",
  "maps.findInList": "Εύρεση σε αυτή τη λίστα",
  "maps.nPlaces_one": "{count} μέρος",
- "maps.nPlaces_other": "{count} μέρη"
+ "maps.nPlaces_other": "{count} μέρη",
+ "app.home": "Αρχική"
 }
