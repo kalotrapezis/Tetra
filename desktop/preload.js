@@ -1,6 +1,7 @@
 const { contextBridge, ipcRenderer, webUtils } = require('electron')
 
 contextBridge.exposeInMainWorld('drive', {
+  platform: process.platform, // 'win32': no phone there (the user, 11 Nov: "Tetra for Windows will have no phone")
   info: () => ipcRenderer.invoke('library:info'),
   list: () => ipcRenderer.invoke('library:list'),
   folders: {

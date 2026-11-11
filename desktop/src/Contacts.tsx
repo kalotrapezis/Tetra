@@ -269,7 +269,7 @@ function Page({ c, all, edit, openUid, openPerson, setDialog, setDefault, star, 
           <h2>{c.name}</h2>
           {job && <p className="hint">{job}</p>}
           <div className="ct-actions">
-            <button className="ct-action" disabled={!phone} onClick={() => choose(t('contacts.call'), nums.map(p => [`${labelText(p.label) || t('app.phone')} · ${p.value}`, () => dial(p.value)]))}><span><Icon name="call" /></span><small>{t('contacts.call')}</small></button>
+            {window.drive.platform !== 'win32' && <button className="ct-action" disabled={!phone} onClick={() => choose(t('contacts.call'), nums.map(p => [`${labelText(p.label) || t('app.phone')} · ${p.value}`, () => dial(p.value)]))}><span><Icon name="call" /></span><small>{t('contacts.call')}</small></button>}
             <button className="ct-action" disabled={!mail} onClick={() => choose(t('contacts.mail'), c.emails.map(e => [e.value, () => open('mail', e.value)]))}><span><Icon name="mail" /></span><small>{t('contacts.mail')}</small></button>
             <button className="ct-action" disabled={!phone} onClick={() => choose('WhatsApp', nums.map(p => [`${labelText(p.label) || t('app.phone')} · ${p.value}`, () => open('whatsapp', p.value)]))}><span className="ct-mark"><WhatsAppMark size={56} /></span><small>WhatsApp</small></button>
             <button className="ct-action" disabled={!phone} onClick={() => choose('Viber', nums.map(p => [`${labelText(p.label) || t('app.phone')} · ${p.value}`, () => open('viber', p.value)]))}><span className="ct-mark"><ViberMark size={56} /></span><small>Viber</small></button>
@@ -283,7 +283,7 @@ function Page({ c, all, edit, openUid, openPerson, setDialog, setDefault, star, 
       </nav>
       {(c.versions ?? 1) > 1 && <div className="ct-card"><Row icon="warning" label={t('contacts.versions', { n: c.versions ?? 1 })} value={t('contacts.thisIsNewer')} action={<button className="text-button" onClick={keep}>{t('contacts.keepThis')}</button>} /></div>}
       {c.phones.length > 0 && <div className="ct-card">{c.phones.map((p, k) => { const isDefault = c.phones.length > 1 && p.value === c.defaultPhone
-        return <Row key={k} icon="call" label={(labelText(p.label) || t('app.phone')) + (isDefault ? t('contacts.defaultSuffix') : '')} value={p.value} onClick={() => dial(p.value)}
+        return <Row key={k} icon="call" label={(labelText(p.label) || t('app.phone')) + (isDefault ? t('contacts.defaultSuffix') : '')} value={p.value} onClick={window.drive.platform === 'win32' ? undefined : () => dial(p.value)}
           action={<span className="ct-marks">
             {c.phones.length > 1 && <button className={`round flat ct-default ${isDefault ? 'on' : ''}`} title={isDefault ? t('contacts.defaultNumber') : t('contacts.makeDefault')} onClick={() => setDefault(isDefault ? null : p.value)}>{isDefault ? '★' : '☆'}</button>}
             <button className="round flat" title={`WhatsApp ${p.value}`} onClick={() => open('whatsapp', p.value)}><WhatsAppMark size={26} /></button>

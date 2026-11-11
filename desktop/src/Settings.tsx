@@ -30,7 +30,7 @@ const APPS: { id: SettingsTab; icon: IconName; cat: string; title: string; summa
   { id: 'pills', icon: 'pill', cat: 'pills', title: 'app.pills', summary: 'settings.sum.pills' },
   { id: 'assistant', icon: 'sparkle', cat: 'assistant', title: 'app.assistant', summary: 'settings.sum.assistant' },
 ]
-const TABS: SettingsTab[] = [...GENERAL, ...APPS].map(x => x.id)
+const TABS: SettingsTab[] = [...GENERAL, ...APPS].map(x => x.id).filter(id => id !== 'phone' || window.drive.platform !== 'win32') // Windows: no phone
 
 /**
  * Settings (the user, 27 Oct: "it needs a bit restructuring, some elements overflow, and the Android now has a dual pane

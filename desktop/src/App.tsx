@@ -322,7 +322,8 @@ export function App() {
     app('maps', { kind: 'maps' }, page.kind === 'maps', 'map', t('app.maps')),
     app('contacts', { kind: 'contacts' }, page.kind === 'contacts', 'person', t('app.contacts')),
     app('passwords', { kind: 'passwords' }, page.kind === 'passwords', 'lock', t('app.passwords')),
-    app('phone', { kind: 'phone' }, page.kind === 'phone', 'call', t('app.phone')),
+    // Windows has no phone (the user, 11 Nov: "remove it, just Contacts"): no Phone, no calls
+    ...(window.drive.platform === 'win32' ? [] : [app('phone', { kind: 'phone' }, page.kind === 'phone', 'call', t('app.phone'))]),
     app('messages', { kind: 'messages' }, page.kind === 'messages', 'chat', t('app.sms')),
     ...(aiOn ? [app('assistant', { kind: 'assistant' }, page.kind === 'assistant', 'sparkle', t('app.assistant'))] : []),
     app('data', { kind: 'data' }, page.kind === 'data', 'dataUsage', t('app.data')),

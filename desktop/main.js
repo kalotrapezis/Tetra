@@ -680,12 +680,13 @@ app.whenReady().then(() => {
   calendar = new Calendar(files.disk('Calendar'), files.disk('Trash'))
   try { fs.mkdirSync(calendar.root, { recursive: true }) } catch {}
   contacts = new Contacts(files.disk('Contacts'), files.disk('Trash'), calendar)
-  calls = new Calls({ contacts, act: what => sync.callAction(what), notify: (t, b) => notify('phone', t, b), recordings: files.disk('Phone/Recordings'),
+  // Windows has no phone (the user, 11 Nov): no calls, no call bubble, no Bluetooth for a call's sound
+  if (process.platform !== 'win32') calls = new Calls({ contacts, act: what => sync.callAction(what), notify: (t, b) => notify('phone', t, b), recordings: files.disk('Phone/Recordings'),
     me: () => sync.role() === 'client' ? sync.client?.pairing()?.id : 'server',
     early: () => sync.role() !== 'client' && !db.prepare("SELECT 1 FROM sync_devices WHERE kind = 'computer' AND volume_uuid IS NULL").get(),
     relayable: () => sync.role() === 'client' ? sync.client.soundThere() : false,
     relay: () => sync.client.callAudio((received, send) => callaudio.bridge(received, send)) })
-  calls.watch()
+  calls?.watch()
   contacts.chosen = setting('contactsBirthdays') || null // the calendar birthdays go into (Γενέθλια when none chosen)
   try { fs.mkdirSync(contacts.root, { recursive: true }) } catch {}
   timers = new timer.Timers(files.disk('Timer'), os.hostname() || 'Computer')
@@ -1378,12 +1379,12 @@ app.whenReady().then(() => {
   })
   ipcMain.handle('contacts:phoneCall', async (_, number, name) => {
     const r = await sync.callOnPhone(number, name)
-    if (!r.error) calls.outgoing(number, name, r.device) // the call bubble: Calling…, its time, End call
+    if (!r.error) calls?.outgoing(number, name, r.device) // the call bubble: Calling…, its time, End call
     return r
   })
   // the call bubble's buttons (calls.js), and Settings › Calls: Bluetooth for the call's sound
-  ipcMain.handle('call:press', (_, what) => calls.press(String(what)))
-  ipcMain.handle('call:height', (_, h) => calls.height(Math.max(150, Math.min(360, Number(h) || 150))))
+  ipcMain.handle('call:press', (_, what) => calls?.press(String(what)))
+  ipcMain.handle('call:height', (_, h) => calls?.height(Math.max(150, Math.min(360, Number(h) || 150))))
   // the Phone (Drive-Android Plan.md § Phone): the phone's call history as it sends it (Phone/calls-YYYY-MM.jsonl), and recordings
   // Messages: the phone's SMS, asked each time (sync.js smsOnPhone)
   ipcMain.handle('sms:list', () => sync.smsOnPhone('/sms/list'))
@@ -1400,9 +1401,9 @@ app.whenReady().then(() => {
     if (!phoneRecordings().some(r => r.name === name)) throw new Error('No such recording.')
     return shell.openPath(path.join(files.disk('Phone/Recordings'), name))
   })
-  ipcMain.handle('calls:bluetooth', () => ({ ...calls.bt, sound: calls.sound() }))
-  ipcMain.handle('calls:connect', (_, mac) => calls.connect(mac))
-  ipcMain.handle('calls:systemBluetooth', () => calls.openSystemBluetooth())
+  ipcMain.handle('calls:bluetooth', () => calls ? { ...calls.bt, sound: calls.sound() } : { phones: [], sound: null })
+  ipcMain.handle('calls:connect', (_, mac) => calls?.connect(mac))
+  ipcMain.handle('calls:systemBluetooth', () => calls?.openSystemBluetooth())
   // A face from Photos as a contact's photo: the face's box (fractions of the upright picture) × 1.8, square, 512 px — the phone's crop
   ipcMain.handle('contacts:facePhoto', (_, faceId) => contactFacePhoto(faceId))
   ipcMain.handle('contacts:settings', () => ({ birthdays: contacts.birthdayCalendar(false), calendars: calendar.calendars(), byLast: setting('contactsByLast') === '1' }))

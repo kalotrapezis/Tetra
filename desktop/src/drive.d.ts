@@ -176,6 +176,7 @@ export interface PhotoPlace { path: string; name: string; count: number }
 declare global {
   interface Window {
     drive: {
+      platform: string
       info(): Promise<{ photosRoot: string }>
       list(): Promise<Media[]>
       folders: {

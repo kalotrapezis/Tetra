@@ -48,7 +48,7 @@ export function NotificationsPage({ go, say }: { go: Go; say: (text: string) => 
           <BriefCard />
           <PillsCard go={go} say={say} />
           <TimerCard go={go} />
-          <CallsCard go={go} say={say} />
+          {window.drive.platform !== 'win32' && <CallsCard go={go} say={say} />}
           <SmsCard go={go} say={say} />
           <DataCard go={go} />
           <ListsCard go={go} say={say} />

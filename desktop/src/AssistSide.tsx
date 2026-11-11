@@ -26,7 +26,7 @@ export const APP = { photos: '#95DF6B', calendar: '#F41879', mail: '#FD0DA4', no
 
 /** What the assistant can do here, from its own tools (assistant.js); one whose app the AI switch keeps out is not shown. No alarms: they are the phone's. */
 const CAPS: [string, string, string, string | null][] = [
-  ['cap.call', 'cap.callPrompt', APP.phone, 'phone'], ['cap.email', 'cap.emailPrompt', APP.mail, 'mail'], ['cap.search', 'cap.searchPrompt', APP.maps, 'web'],
+  ...(window.drive.platform === 'win32' ? [] : [['cap.call', 'cap.callPrompt', APP.phone, 'phone'] as [string, string, string, string | null]]), ['cap.email', 'cap.emailPrompt', APP.mail, 'mail'], ['cap.search', 'cap.searchPrompt', APP.maps, 'web'],
   ['cap.meeting', 'cap.meetingPrompt', APP.calendar, 'calendar'], ['chip.timer', 'chip.timer', APP.timer, 'timer'], ['cap.remind', 'cap.remindPrompt', APP.calendar, 'calendar'],
   ['cap.note', 'cap.notePrompt', APP.notes, 'notes'], ['chip.notes', 'chip.notes', APP.notes, 'notes'], ['chip.image', 'chip.imagePrompt', APP.photos, 'web'],
   ['chip.research', 'chip.researchPrompt', APP.assistant, 'web'], ['chip.brief', 'chip.briefPrompt', APP.calendar, null], ['chip.repeat', 'chip.repeatPrompt', APP.mail, null],
