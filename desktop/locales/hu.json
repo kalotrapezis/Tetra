@@ -2783,5 +2783,8 @@
  "maps.findInList": "Keresés ebben a listában",
  "maps.nPlaces_one": "{count} hely",
  "maps.nPlaces_other": "{count} hely",
- "app.home": "Kezdőlap"
+ "app.home": "Kezdőlap",
+ "maps.offHome": "{name} lekerült az Otthonról",
+ "maps.removeFromHome": "Eltávolítás az Otthonról",
+ "home.dockHint": "Húzzon egy alkalmazást a dokkra, hogy ott maradjon; húzza vissza ide a dokkról, hogy levegye."
 }

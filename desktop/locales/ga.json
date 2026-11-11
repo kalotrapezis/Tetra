@@ -3062,5 +3062,8 @@
  "maps.nPlaces_few": "{count} áit",
  "maps.nPlaces_many": "{count} n-áit",
  "maps.nPlaces_other": "{count} áit",
- "app.home": "Baile"
+ "app.home": "Baile",
+ "maps.offHome": "Níl {name} ar an mBaile a thuilleadh",
+ "maps.removeFromHome": "Bain den Bhaile",
+ "home.dockHint": "Tarraing aip ar an duga chun í a choinneáil ann; tarraing ón duga ar ais anseo í chun í a bhaint."
 }

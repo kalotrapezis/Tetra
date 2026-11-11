@@ -2783,5 +2783,8 @@
  "maps.findInList": "Εύρεση σε αυτή τη λίστα",
  "maps.nPlaces_one": "{count} μέρος",
  "maps.nPlaces_other": "{count} μέρη",
- "app.home": "Αρχική"
+ "app.home": "Αρχική",
+ "maps.offHome": "Το {name} βγήκε από την Αρχική",
+ "maps.removeFromHome": "Αφαίρεση από την Αρχική",
+ "home.dockHint": "Σύρετε μια εφαρμογή στο dock για να μείνει εκεί· σύρετέ την από το dock πίσω εδώ για να βγει."
 }

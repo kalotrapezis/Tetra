@@ -2875,5 +2875,8 @@
  "maps.nPlaces_one": "{count} mjesto",
  "maps.nPlaces_few": "{count} mjesta",
  "maps.nPlaces_other": "{count} mjesta",
- "app.home": "Početna"
+ "app.home": "Početna",
+ "maps.offHome": "{name} više nije na Početnoj",
+ "maps.removeFromHome": "Ukloni s Početne",
+ "home.dockHint": "Povucite aplikaciju na dok da ostane ondje; povucite je s doka natrag ovamo da je uklonite."
 }

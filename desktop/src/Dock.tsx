@@ -1,118 +1,74 @@
-import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode } from 'react'
-import { createPortal } from 'react-dom'
-import { Modal } from './Dialogs'
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type DragEvent, type ReactNode } from 'react'
 import { Icon, type IconName } from './Icon'
-import { t } from './i18n'
-import { loadDock, move, ordered, saveDock, split, type DockMode, type DockPrefs } from './dock'
+import { changeDock, DOCK_CHANGED, DRAG_APP, DRAG_DOCK, loadDock, ordered, type DockPrefs } from './dock'
 
 export type DockApp = { key: string; icon: IconName; label: string; on: boolean; badge: number; open: () => void }
 
-/** The side dock: apps that fit, the rest under ⋯, ✎ to choose; pinned, hidden until the mouse reaches the window's edge,
- *  or behind a small handle (the user, 8 Nov). */
-export function Dock({ apps, head, bottom, foot }: { apps: DockApp[]; head: ReactNode; bottom: ReactNode; foot: ReactNode }) {
+/**
+ * The side dock, a normal dock (the user, 11 Nov): on Home always there, so it is seen; in an app hidden until the mouse
+ * reaches the window's edge. What it holds is dragged: an app from Home's grid onto it, one of its own up or down, or back
+ * onto Home's grid to take it off. Everything is on Home, so there is no ⋯; more than fit make the rows lower.
+ */
+export function Dock({ apps, home, head, bottom, foot }: { apps: DockApp[]; home: boolean; head: ReactNode; bottom: ReactNode; foot: ReactNode }) {
   const [prefs, setPrefs] = useState<DockPrefs>(loadDock)
-  const [fit, setFit] = useState(99)
-  const [open, setOpen] = useState(false) // shown, in the auto-hide and handle modes
-  const [editing, setEditing] = useState(false)
-  const [menu, setMenu] = useState<{ left: number; bottom: number; maxHeight: number } | null>(null) // ⋯ open: beside the dock, from its own row up
-  const box = useRef<HTMLDivElement>(null), nav = useRef<HTMLElement>(null), moreBody = useRef<HTMLDivElement>(null)
+  const [open, setOpen] = useState(false) // shown, in an app
+  const [over, setOver] = useState<string | null>(null) // an app dragged over the dock: the item it would go before ('' the end)
+  const nav = useRef<HTMLElement>(null), box = useRef<HTMLDivElement>(null)
+  const [room, setRoom] = useState(0) // the apps' height: more apps than fit make their rows lower, as a dock's icons shrink
   const hide = useRef<number>(undefined)
-  const update = (p: DockPrefs) => { setPrefs(p); saveDock(p) }
-  const floating = prefs.mode !== 'pinned'
+  const floating = !home
   const later = () => { clearTimeout(hide.current); hide.current = window.setTimeout(() => setOpen(false), 350) }
 
-  // how many apps fit in the window's height; an item's height is read from the dock itself
+  useEffect(() => {
+    const changed = () => setPrefs(loadDock())
+    window.addEventListener(DOCK_CHANGED, changed)
+    return () => window.removeEventListener(DOCK_CHANGED, changed)
+  }, [])
+  useEffect(() => { if (home) setOpen(false) }, [home])
+
+  const shown = ordered(apps, prefs.order).filter(a => !prefs.out.includes(a.key))
   useLayoutEffect(() => {
     const el = box.current
     if (!el) return
-    const measure = () => {
-      const item = el.querySelector<HTMLElement>('.nav-item')
-      const h = (item?.offsetHeight ?? 48) + 4
-      setFit(Math.max(1, Math.floor((el.clientHeight + 4) / h)))
-    }
-    const ro = new ResizeObserver(measure)
-    ro.observe(el); measure()
+    const ro = new ResizeObserver(() => setRoom(el.clientHeight))
+    ro.observe(el); setRoom(el.clientHeight)
     return () => ro.disconnect()
-  }, [prefs.labels])
-
-  // a click outside closes ⋯, and the dock behind its handle
-  useEffect(() => {
-    if (!menu && !(prefs.mode === 'handle' && open)) return
-    const away = (e: MouseEvent) => {
-      const el = e.target as Element
-      if (moreBody.current?.contains(el) || el.closest?.('.dock-more, .dock-nipple, dialog')) return
-      setMenu(null)
-      if (prefs.mode === 'handle' && !nav.current?.contains(el)) setOpen(false)
-    }
-    document.addEventListener('mousedown', away)
-    return () => document.removeEventListener('mousedown', away)
-  }, [menu, prefs.mode, open])
-
-  const { shown, more: rest } = split(apps, prefs, fit)
-  const pick = (a: DockApp) => { a.open(); setMenu(null); if (floating) setOpen(false) }
+  }, [])
+  // a row is its padding twice, the 22px icon and the 4px gap: the padding shrinks (to 4px) until they all fit
+  const pad = room ? Math.max(4, Math.min(12, Math.floor((room / Math.max(1, shown.length) - 4 - 22) / 2))) : 12
+  const keys = apps.map(a => a.key)
+  const pick = (a: DockApp) => { a.open(); if (floating) setOpen(false) }
+  const dragged = (e: DragEvent) => e.dataTransfer.types.includes(DRAG_APP) || e.dataTransfer.types.includes(DRAG_DOCK)
+  const drop = (e: DragEvent, before: string | null) => {
+    if (!dragged(e)) return
+    e.preventDefault(); e.stopPropagation()
+    const key = e.dataTransfer.getData(DRAG_APP) || e.dataTransfer.getData(DRAG_DOCK)
+    setOver(null)
+    if (key && key !== before) changeDock(keys, key, true, before)
+  }
   const item = (a: DockApp) => (
-    <button key={a.key} className={`nav-item ${a.on ? 'active' : ''}`} title={a.label} onClick={() => pick(a)}>
+    <button key={a.key} className={`nav-item ${a.on ? 'active' : ''} ${over === a.key ? 'drop-before' : ''}`} title={a.label} onClick={() => pick(a)}
+      draggable onDragStart={e => { e.dataTransfer.setData(DRAG_DOCK, a.key); e.dataTransfer.effectAllowed = 'move' }}
+      onDragOver={e => { if (dragged(e)) { e.preventDefault(); e.stopPropagation(); setOver(a.key) } }}
+      onDrop={e => drop(e, a.key)}>
       <Icon name={a.icon} /><span>{a.label}</span>{!a.on && a.badge > 0 && <span className="badge-count">{a.badge}</span>}</button>
   )
-  const restBadge = rest.reduce((n, a) => n + (a.on ? 0 : a.badge), 0)
-  const toggleMenu = (e: ReactMouseEvent<HTMLButtonElement>) => {
-    if (menu) return setMenu(null)
-    const r = e.currentTarget.getBoundingClientRect()
-    const bottom = Math.max(12, innerHeight - r.bottom)
-    setMenu({ left: r.right + 16, bottom, maxHeight: innerHeight - bottom - 12 })
-  }
 
   return <>
-    {prefs.mode === 'autohide' && <div className="dock-edge" onMouseEnter={() => { clearTimeout(hide.current); setOpen(true) }} />}
-    {prefs.mode === 'handle' && !open && <button className="dock-nipple" title={t('dock.show')} onClick={() => setOpen(true)} />}
-    <nav ref={nav} className={`rail island ${prefs.labels ? '' : 'icons'} ${floating ? 'floating' : ''} ${floating && !open ? 'away' : ''}`}
+    {floating && <div className="dock-edge" onMouseEnter={() => { clearTimeout(hide.current); setOpen(true) }} />}
+    <nav ref={nav} className={`rail island ${prefs.labels ? '' : 'icons'} ${floating ? 'floating' : ''} ${floating && !open ? 'away' : ''} ${over !== null ? 'drop-on' : ''}`}
       onMouseEnter={() => clearTimeout(hide.current)}
-      onMouseLeave={() => { if (prefs.mode === 'autohide' && !editing && !menu) later() }}>
+      onMouseLeave={() => { if (floating) later() }}
+      onDragOver={e => { if (dragged(e)) { e.preventDefault(); setOver(o => o ?? '') } }}
+      onDragLeave={e => { if (!nav.current?.contains(e.relatedTarget as Node)) setOver(null) }}
+      onDrop={e => drop(e, null)}>
       {head}
-      <div className="rail-apps" ref={box}>
+      <div className="rail-apps" ref={box} style={{ '--item-pad': `${pad}px` } as CSSProperties}>
         {shown.map(item)}
-        <button className={`nav-item dock-more ${rest.some(a => a.on) ? 'active' : ''} ${menu ? 'open' : ''}`} title={t('dock.more')} onClick={toggleMenu}>
-          <Icon name="more" /><span>{t('dock.more')}</span>{restBadge > 0 && <span className="badge-count">{restBadge}</span>}</button>
+        {over === '' && <div className="dock-drop-end" />}
       </div>
       {bottom}
       {foot}
     </nav>
-    {/* in <body>, not the dock: its blur would make it the frame of anything fixed inside it */}
-    {menu && createPortal(
-      <div ref={moreBody} className={`island menu-body dock-more-body ${prefs.labels ? '' : 'icons'}`} style={menu}
-        onMouseEnter={() => clearTimeout(hide.current)} onMouseLeave={() => { if (prefs.mode === 'autohide' && !nav.current?.matches(':hover')) { setMenu(null); later() } }}>
-        {rest.map(item)}
-        <button className="nav-item" onClick={() => { setMenu(null); setEditing(true) }}><Icon name="edit" /><span>{t('dock.edit')}</span></button>
-      </div>, document.body)}
-    {editing && <DockEditor apps={apps} prefs={prefs} onChange={update} onClose={() => { setEditing(false); if (prefs.mode === 'autohide') later() }} />}
   </>
-}
-
-function DockEditor({ apps, prefs, onChange, onClose }: { apps: DockApp[]; prefs: DockPrefs; onChange: (p: DockPrefs) => void; onClose: () => void }) {
-  const list = ordered(apps, prefs.order), keys = list.map(a => a.key)
-  const mode = (m: DockMode) => <label><input type="radio" name="dock-mode" checked={prefs.mode === m} onChange={() => onChange({ ...prefs, mode: m })} /> {t(`dock.mode.${m}`)}</label>
-  return (
-    <Modal onClose={onClose}>
-      <h3>{t('dock.edit')}</h3>
-      <small className="hint">{t('dock.editNote')}</small>
-      <div className="dock-edit-list">
-        {list.map((a, i) => (
-          <div key={a.key} className="dock-edit-row">
-            <label><input type="checkbox" checked={!prefs.out.includes(a.key)}
-              onChange={e => onChange({ ...prefs, out: e.target.checked ? prefs.out.filter(k => k !== a.key) : [...prefs.out, a.key] })} />
-              <Icon name={a.icon} size={20} />{a.label}</label>
-            <button className="round" title={t('dock.up')} disabled={i === 0} onClick={() => onChange({ ...prefs, order: move(keys, a.key, -1) })}><Icon name="arrowUp" size={18} /></button>
-            <button className="round flip" title={t('dock.down')} disabled={i === list.length - 1} onClick={() => onChange({ ...prefs, order: move(keys, a.key, 1) })}><Icon name="arrowUp" size={18} /></button>
-          </div>
-        ))}
-      </div>
-      <div className="dock-edit-opts">
-      <span className="menu-head">{t('dock.look')}</span>
-      <label><input type="checkbox" checked={!prefs.labels} onChange={e => onChange({ ...prefs, labels: !e.target.checked })} /> {t('dock.iconsOnly')}</label>
-      <span className="menu-head">{t('dock.showing')}</span>
-      {mode('pinned')}{mode('autohide')}{mode('handle')}
-      </div>
-      <div className="dialog-actions"><button className="text-button" onClick={onClose}>{t('common.done')}</button></div>
-    </Modal>
-  )
 }

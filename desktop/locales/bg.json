@@ -2783,5 +2783,8 @@
  "maps.findInList": "Търсене в този списък",
  "maps.nPlaces_one": "{count} място",
  "maps.nPlaces_other": "{count} места",
- "app.home": "Начало"
+ "app.home": "Начало",
+ "maps.offHome": "{name} е премахнато от Начало",
+ "maps.removeFromHome": "Премахване от Начало",
+ "home.dockHint": "Плъзнете приложение в дока, за да остане там; плъзнете го от дока обратно тук, за да го махнете."
 }

@@ -2969,5 +2969,8 @@
  "maps.nPlaces_few": "{count} miejsca",
  "maps.nPlaces_many": "{count} miejsc",
  "maps.nPlaces_other": "{count} miejsca",
- "app.home": "Start"
+ "app.home": "Start",
+ "maps.offHome": "{name} usunięto z sekcji Dom",
+ "maps.removeFromHome": "Usuń z sekcji Dom",
+ "home.dockHint": "Przeciągnij aplikację do doku, aby tam została; przeciągnij ją z doku z powrotem tutaj, aby ją usunąć."
 }

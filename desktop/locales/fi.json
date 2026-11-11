@@ -2783,5 +2783,8 @@
  "maps.findInList": "Etsi tästä luettelosta",
  "maps.nPlaces_one": "{count} paikka",
  "maps.nPlaces_other": "{count} paikkaa",
- "app.home": "Aloitus"
+ "app.home": "Aloitus",
+ "maps.offHome": "{name} poistettiin Kodista",
+ "maps.removeFromHome": "Poista Kodista",
+ "home.dockHint": "Vedä sovellus telakkaan, niin se pysyy siellä; vedä se telakasta takaisin tänne poistaaksesi sen."
 }

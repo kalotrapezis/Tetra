@@ -2783,5 +2783,8 @@
  "maps.findInList": "Sök i den här listan",
  "maps.nPlaces_one": "{count} plats",
  "maps.nPlaces_other": "{count} platser",
- "app.home": "Start"
+ "app.home": "Start",
+ "maps.offHome": "{name} är borttagen från Hem",
+ "maps.removeFromHome": "Ta bort från Hem",
+ "home.dockHint": "Dra en app till dockan för att ha den där; dra den från dockan tillbaka hit för att ta bort den."
 }

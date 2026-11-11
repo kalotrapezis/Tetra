@@ -2969,5 +2969,8 @@
  "maps.nPlaces_two": "{count} mesti",
  "maps.nPlaces_few": "{count} mesta",
  "maps.nPlaces_other": "{count} mest",
- "app.home": "Začetek"
+ "app.home": "Začetek",
+ "maps.offHome": "{name} ni več v razdelku Domov",
+ "maps.removeFromHome": "Odstrani iz razdelka Domov",
+ "home.dockHint": "Povlecite aplikacijo v dok, da ostane tam; povlecite jo iz doka nazaj sem, da jo odstranite."
 }

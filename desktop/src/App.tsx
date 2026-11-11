@@ -120,7 +120,10 @@ export function App() {
 
   useEffect(() => {
     window.drive.info().then(i => setRoot(i.photosRoot))
-    reload()
+    // the library's list once Home is drawn and the window is idle (the user, 11 Nov: "the photos load in the background so they
+    // don't burden the main thread"): Tetra answers at once, Photos finds its pictures there when opened
+    const idleOk = typeof requestIdleCallback === 'function'
+    const idle = idleOk ? requestIdleCallback(() => { reload() }, { timeout: 1500 }) : setTimeout(() => { reload() }, 200) as unknown as number
     const offSync = window.drive.sync.onReceived(() => reloadRef.current())
     const off = window.drive.onScanProgress(p => setScan(p.changed ? t('photos.adding', { n: p.changed }) : t('photos.checking', { n: p.done })))
     let wasRunning = false
@@ -131,7 +134,7 @@ export function App() {
       wasRunning = a.running
     })
     rescan()
-    return () => { off(); offPeople(); offSync() }
+    return () => { off(); offPeople(); offSync(); if (idleOk) cancelIdleCallback(idle); else clearTimeout(idle) }
   }, [])
 
   const reloadRef = useRef(reload)
@@ -458,7 +461,7 @@ export function App() {
 
   return (
     <div className="app">
-      <Dock apps={dockApps}
+      <Dock apps={dockApps} home={page.kind === 'home'}
         head={<div className="brand"><button className="brand-home" title={t('app.home')} onClick={() => setPage({ kind: 'home' })}><img src="./icon.png" alt={t('app.home')} /></button><span className="brand-name">Tetra</span><span className={alpha ? 'alpha-badge' : 'beta-badge'} title={t(alpha ? 'release.alphaNote' : 'release.betaNote')}>{t(alpha ? 'release.alpha' : 'release.beta')}</span></div>}
         bottom={<>
           {/* the drives are no longer listed under Devices (the user, 2 Nov: room for the apps); Devices opens them */}

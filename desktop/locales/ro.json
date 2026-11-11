@@ -2876,5 +2876,8 @@
  "maps.nPlaces_one": "{count} loc",
  "maps.nPlaces_few": "{count} locuri",
  "maps.nPlaces_other": "{count} de locuri",
- "app.home": "Acasă"
+ "app.home": "Acasă",
+ "maps.offHome": "{name} nu mai este pe Acasă",
+ "maps.removeFromHome": "Elimină de pe Acasă",
+ "home.dockHint": "Trageți o aplicație pe dock ca să rămână acolo; trageți-o din dock înapoi aici ca s-o scoateți."
 }

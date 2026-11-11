@@ -2969,5 +2969,8 @@
  "maps.nPlaces_few": "{count} místa",
  "maps.nPlaces_many": "{count} místa",
  "maps.nPlaces_other": "{count} míst",
- "app.home": "Domů"
+ "app.home": "Domů",
+ "maps.offHome": "{name} už není v sekci Domov",
+ "maps.removeFromHome": "Odebrat ze sekce Domov",
+ "home.dockHint": "Přetáhněte aplikaci do doku, aby tam zůstala; přetáhněte ji z doku zpět sem, abyste ji odebrali."
 }

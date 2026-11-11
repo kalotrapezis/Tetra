@@ -77,6 +77,18 @@ export function MapsPage({ say, onMakeMap, initial }: { say: (message: string) =
   // opened at a time — 'all', 'other' (in no list) or a list's id
   const [openList, setOpenList] = useState<string | null>(null)
   const [find, setFind] = useState('')
+  // Home's places edited (the user, 11 Nov: "right click or long click the home favorites … show an X and remove"): ✕ takes one
+  // off Home, the place stays saved
+  const [slotEdit, setSlotEdit] = useState(false)
+  const held = useRef<number>(undefined), heldFired = useRef(false)
+  useEffect(() => {
+    if (!slotEdit) return
+    const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') setSlotEdit(false) }
+    window.addEventListener('keydown', esc); return () => window.removeEventListener('keydown', esc)
+  }, [slotEdit])
+  async function offHome(p: MapPlace) {
+    try { await window.drive.mapsSavePlace({ ...p, slot: 0 }); say(t('maps.offHome', { name: p.label || p.name })); reload() } catch (e) { say(errorText(e)) }
+  }
   const [query, setQuery] = useState(initial ?? '')
   const [kind, setKind] = useState<string | null>(null)
   const [allPills, setAllPills] = useState(false)
@@ -388,10 +400,18 @@ export function MapsPage({ say, onMakeMap, initial }: { say: (message: string) =
                 lists={lists} shown={openList} here={here} find={find} setFind={setFind} onBack={() => setOpenList(null)} onOpen={p => open({ kind: 'place', place: p })} />
             ) : tab === 'saved' ? (
               <section>
-                <h3>{t('maps.home')}</h3>
-                <div className="maps-slots">
+                <h3 className="maps-home-head">{t('maps.home')}{slotEdit && <button className="text-button" onClick={() => setSlotEdit(false)}>{t('common.done')}</button>}</h3>
+                <div className={`maps-slots ${slotEdit ? 'editing' : ''}`}>
                   {slots.map((p, i) => p
-                    ? <button key={i} className="maps-slot" title={p.name} onClick={() => open({ kind: 'place', place: p })}><span className="map-place static"><Emblem icon={p.icon} /></span><span>{p.label || p.name}</span></button>
+                    ? <div key={i} className="maps-slot-wrap">
+                        <button className="maps-slot" title={p.name}
+                          onClick={() => { if (heldFired.current) { heldFired.current = false; return } if (!slotEdit) open({ kind: 'place', place: p }) }}
+                          onContextMenu={e => { e.preventDefault(); setSlotEdit(true) }}
+                          onPointerDown={() => { heldFired.current = false; clearTimeout(held.current); held.current = window.setTimeout(() => { heldFired.current = true; setSlotEdit(true) }, 550) }}
+                          onPointerUp={() => clearTimeout(held.current)} onPointerLeave={() => clearTimeout(held.current)}>
+                          <span className="map-place static"><Emblem icon={p.icon} /></span><span>{p.label || p.name}</span></button>
+                        {slotEdit && <button className="maps-slot-x" title={t('maps.removeFromHome')} onClick={() => offHome(p)}><Icon name="close" size={14} /></button>}
+                      </div>
                     : <div key={i} className="maps-slot empty">{i + 1}</div>)}
                 </div>
                 {places.length > 0 && <>

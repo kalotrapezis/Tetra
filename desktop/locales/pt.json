@@ -2876,5 +2876,8 @@
  "maps.nPlaces_one": "{count} local",
  "maps.nPlaces_many": "{count} locais",
  "maps.nPlaces_other": "{count} locais",
- "app.home": "Início"
+ "app.home": "Início",
+ "maps.offHome": "{name} saiu de Casa",
+ "maps.removeFromHome": "Remover de Casa",
+ "home.dockHint": "Arraste uma app para a dock para a manter lá; arraste-a da dock de volta para aqui para a retirar."
 }

@@ -20,6 +20,27 @@ export function loadDock(): DockPrefs {
 }
 export function saveDock(p: DockPrefs) { try { localStorage.setItem(KEY, JSON.stringify(p)) } catch {} }
 
+/** Home and the dock change the same choices (drag and drop): this event tells the other one. */
+export const DOCK_CHANGED = 'tetra-dock-changed'
+/** The drag's data types: an app from Home's grid, an app from the dock. */
+export const DRAG_APP = 'application/x-tetra-app', DRAG_DOCK = 'application/x-tetra-dock'
+
+/**
+ * An app put on the dock (before [before], or last) or taken off it ([on] false): the whole new choice, as the dock is
+ * dragged (the user, 11 Nov: "just drag and drop what apps the user wants on the dock like a normal dock").
+ */
+export function placed(p: DockPrefs, keys: string[], key: string, on: boolean, before?: string | null): DockPrefs {
+  if (!on) return { ...p, out: p.out.includes(key) ? p.out : [...p.out, key] }
+  const order = ordered(keys.map(k => ({ key: k })), p.order).map(a => a.key).filter(k => k !== key)
+  const at = before ? order.indexOf(before) : -1
+  order.splice(at < 0 ? order.length : at, 0, key)
+  return { ...p, order, out: p.out.filter(k => k !== key) }
+}
+export function changeDock(keys: string[], key: string, on: boolean, before?: string | null) {
+  saveDock(placed(loadDock(), keys, key, on, before))
+  window.dispatchEvent(new Event(DOCK_CHANGED))
+}
+
 /** The apps in the person's order (new ones last, in their own order). */
 export function ordered<T extends { key: string }>(apps: T[], order: string[]): T[] {
   const at = (k: string) => { const i = order.indexOf(k); return i < 0 ? order.length : i }

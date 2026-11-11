@@ -2969,5 +2969,8 @@
  "maps.nPlaces_few": "{count} vietos",
  "maps.nPlaces_many": "{count} vietos",
  "maps.nPlaces_other": "{count} vietų",
- "app.home": "Pradžia"
+ "app.home": "Pradžia",
+ "maps.offHome": "{name} pašalinta iš Namų",
+ "maps.removeFromHome": "Pašalinti iš Namų",
+ "home.dockHint": "Nuvilkite programą į doką, kad ji ten liktų; nuvilkite ją iš doko atgal čia, kad pašalintumėte."
 }

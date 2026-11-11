@@ -2875,5 +2875,8 @@
  "maps.nPlaces_zero": "{count} vietu",
  "maps.nPlaces_one": "{count} vieta",
  "maps.nPlaces_other": "{count} vietas",
- "app.home": "Sākums"
+ "app.home": "Sākums",
+ "maps.offHome": "{name} vairs nav sākumā",
+ "maps.removeFromHome": "Noņemt no sākuma",
+ "home.dockHint": "Velciet lietotni uz doku, lai tā tur paliktu; velciet to no doka atpakaļ šeit, lai to noņemtu."
 }

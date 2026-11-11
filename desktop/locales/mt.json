@@ -2970,5 +2970,8 @@
  "maps.nPlaces_few": "{count} postijiet",
  "maps.nPlaces_many": "{count} post",
  "maps.nPlaces_other": "{count} post",
- "app.home": "Il-paġna ewlenija"
+ "app.home": "Il-paġna ewlenija",
+ "maps.offHome": "{name} m’għadux f’Dar",
+ "maps.removeFromHome": "Neħħi minn Dar",
+ "home.dockHint": "Kaxkar app fuq id-dock biex tibqa’ hemm; kaxkarha mid-dock lura hawn biex tneħħiha."
 }

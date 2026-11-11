@@ -2783,5 +2783,8 @@
  "maps.findInList": "Zoeken in deze lijst",
  "maps.nPlaces_one": "{count} plaats",
  "maps.nPlaces_other": "{count} plaatsen",
- "app.home": "Start"
+ "app.home": "Start",
+ "maps.offHome": "{name} staat niet meer op Start",
+ "maps.removeFromHome": "Verwijderen van Start",
+ "home.dockHint": "Sleep een app naar het dock om hem daar te houden; sleep hem van het dock terug hierheen om hem te verwijderen."
 }
