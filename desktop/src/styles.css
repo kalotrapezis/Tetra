@@ -1975,4 +1975,8 @@ button.assist-cost { cursor: pointer; border: 0; font: inherit; color: inherit; 
 .dock-stops button.on { color: var(--text); font-weight: 600; }
 .dock-stops button.standard small { font-size: 10px; color: var(--accent, #7aa2ff); }
 .dock-size-px { min-width: 52px; text-align: right; font-variant-numeric: tabular-nums; }
+/* the dock's Home: a tile as the apps' art, Tetra's blue with a white house, a line under it */
+.rail .dock-home-item { margin-bottom: 6px; position: relative; }
+.rail .dock-home-item::after { content: ''; position: absolute; left: 14px; right: 14px; bottom: -5px; height: 1px; background: color-mix(in srgb, var(--text) 14%, transparent); }
+.rail.icons .dock-home-item { justify-content: center; padding: 8px 10px; }
 

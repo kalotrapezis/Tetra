@@ -3,7 +3,7 @@
 export type DockMode = 'pinned' | 'autohide' | 'handle'
 export type DockPrefs = { order: string[]; out: string[]; labels: boolean; mode: DockMode; size: number }
 /** The art's size in px (Settings › Dock, the user, 11 Nov: "make the dock resizable"). */
-export const DOCK_SIZES = { min: 24, max: 48, standard: 28 }
+export const DOCK_SIZES = { min: 24, max: 48, standard: 36 } // 36 the default (the user, 11 Nov: "36 is good")
 
 const KEY = 'dock'
 // the dock holds the everyday apps at first; the rest are on Home (an app is in one of the two, as GNOME's dash and grid)
