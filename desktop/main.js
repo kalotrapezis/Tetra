@@ -251,11 +251,15 @@ function watchCalendar() {
     })
   } catch (e) { console.warn('[calendar] cannot watch', e.message) }
 }
-// Start at login (Linux autostart): Tetra in the tray, so reminders ring and the phone can sync whenever the computer is on.
+// Start at login (Linux autostart, Windows' login items): Tetra in the tray, so reminders ring and the phone can sync whenever the computer is on.
 const AUTOSTART = path.join(os.homedir(), '.config', 'autostart', 'tetra.desktop')
 /** The command that starts this Tetra (the AppImage, the installed one, or this source): autostart's, and AI Assist's --assistant. */
 const launchCommand = () => process.env.APPIMAGE ? `"${process.env.APPIMAGE}"` : app.isPackaged ? `"${process.execPath}"` : `"${process.execPath}" "${app.getAppPath()}"`
+/** Windows keeps it in the registry's Run key; it finds the entry only when asked with the same args. */
+const LOGIN_ITEM = { args: ['--hidden'] }
+const autostartOn = () => process.platform === 'win32' ? app.getLoginItemSettings(LOGIN_ITEM).openAtLogin : fs.existsSync(AUTOSTART)
 function setAutostart(on) {
+  if (process.platform === 'win32') return app.setLoginItemSettings({ ...LOGIN_ITEM, openAtLogin: on })
   if (!on) { try { fs.unlinkSync(AUTOSTART) } catch {} return }
   const exec = launchCommand()
   fs.mkdirSync(path.dirname(AUTOSTART), { recursive: true })
@@ -1444,7 +1448,7 @@ app.whenReady().then(() => {
     for (const n of files) fs.copyFileSync(path.join(skillDir(name), n), path.join(to, n))
     return to
   })
-  ipcMain.handle('calendar:settings', () => ({ reminders: setting('calendarReminders') !== 'off', autostart: fs.existsSync(AUTOSTART) }))
+  ipcMain.handle('calendar:settings', () => ({ reminders: setting('calendarReminders') !== 'off', autostart: autostartOn() }))
   ipcMain.handle('calendar:setReminders', (_, on) => { setSetting('calendarReminders', on ? 'on' : 'off'); planReminders() })
   ipcMain.handle('calendar:setAutostart', (_, on) => setAutostart(!!on))
   ipcMain.handle('notes:call', (_, method, ...args) => {
