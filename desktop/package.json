@@ -8,7 +8,8 @@
     "start": "node scripts/copy-skill.js && vite build && electron .",
     "check": "tsc -p .",
     "test": "node --test src/*.test.ts test/*.test.js",
-    "dist": "node scripts/copy-skill.js && vite build && electron-builder --linux deb && scripts/bundle-tools.sh && electron-builder --linux AppImage --config electron-builder.appimage.cjs"
+    "dist": "node scripts/copy-skill.js && vite build && electron-builder --linux deb && scripts/bundle-tools.sh && electron-builder --linux AppImage --config electron-builder.appimage.cjs",
+    "dist:win": "node scripts/copy-skill.js && vite build && scripts/win-deps.sh && ELECTRON_BUILDER_WINE_TOOLSET_DIR=$PWD/scripts/bottles-wine electron-builder --win --config electron-builder.win.cjs"
   },
   "author": "Theologos Kalotrapezis <kalotrapezis@gmail.com>",
   "devDependencies": {
@@ -117,6 +118,7 @@
       "public/icon.png",
       "!node_modules/onnxruntime-node/bin/napi-v6/darwin/**",
       "!node_modules/onnxruntime-node/bin/napi-v6/win32/**",
+      "!node_modules/@img/sharp-win32*/**",
       "!node_modules/onnxruntime-node/bin/napi-v6/linux/arm64/**",
       "!node_modules/onnxruntime-node/bin/napi-v6/linux/x64/libonnxruntime_providers_cuda.so",
       "!node_modules/onnxruntime-node/bin/napi-v6/linux/x64/libonnxruntime_providers_tensorrt.so",

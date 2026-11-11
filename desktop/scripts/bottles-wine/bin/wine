@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# The wine electron-builder runs the Windows installer with once, to write its uninstaller (npm run dist:win points
+# ELECTRON_BUILDER_WINE_TOOLSET_DIR here). Bottles' runner only works inside the Bottles flatpak, built against its
+# libraries, so it runs there with desktop/ shared. electron-builder's own wine (toolsets.wine 1.0.1) ships no Windows DLLs.
+set -euo pipefail
+DESKTOP=$(cd "$(dirname "$(readlink -f "$0")")/../../.." && pwd)
+DATA=$HOME/.var/app/com.usebottles.bottles/data
+RUNNER=$(ls -d "$DATA"/bottles/runners/soda-* 2>/dev/null | sort -V | tail -1)
+[ -n "$RUNNER" ] || { echo "Bottles with a soda runner is needed (flatpak com.usebottles.bottles)" >&2; exit 1; }
+exec flatpak run --filesystem="$DESKTOP" --env=WINEPREFIX="$DATA/tetra-build-prefix" --env=WINEDEBUG=-all \
+  --env=WINEDLLOVERRIDES='mscoree,mshtml=;winemenubuilder.exe=d' --env=__COMPAT_LAYER=RunAsInvoker \
+  --command="$RUNNER/bin/wine64" com.usebottles.bottles "$@"
