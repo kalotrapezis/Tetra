@@ -34,11 +34,22 @@ function roots(home, { migrate = true } = {}) {
   }
 }
 
+/** A .ico holding one PNG (256 px or smaller), as Windows reads them since Vista: a 6-byte header and one 16-byte entry. */
+function pngIco(png, size) {
+  const head = Buffer.alloc(22)
+  head.writeUInt16LE(1, 2); head.writeUInt16LE(1, 4) // an icon, one image
+  head[6] = head[7] = size >= 256 ? 0 : size // 0 is 256
+  head.writeUInt16LE(1, 10); head.writeUInt16LE(32, 12); head.writeUInt32LE(png.length, 14); head.writeUInt32LE(22, 18)
+  return Buffer.concat([head, png])
+}
+
 /**
  * The folder wears the app's icon: a .directory file for KDE's Dolphin, and GNOME's custom-icon attribute where
- * `gio` exists. The icon is copied next to the database, because the app's own copy may be inside a package.
+ * `gio` exists; on Windows a desktop.ini, which Explorer reads in a read-only folder. The icon is copied next to the database,
+ * because the app's own copy may be inside a package.
  */
 function markFolder(root, iconSource, dataDir) {
+  if (process.platform === 'win32') return markWindowsFolder(root, iconSource, dataDir)
   try {
     const icon = path.join(dataDir, 'tetra-folder.png')
     fs.mkdirSync(dataDir, { recursive: true })
@@ -50,4 +61,20 @@ function markFolder(root, iconSource, dataDir) {
   } catch {}
 }
 
-module.exports = { roots, markFolder }
+/** Written once: Node cannot write over a hidden file on Windows, and the icon's place does not change. */
+async function markWindowsFolder(root, iconSource, dataDir) {
+  const ini = path.join(root, 'desktop.ini')
+  if (fs.existsSync(ini)) return
+  try {
+    const ico = path.join(dataDir, 'tetra-folder.ico')
+    fs.mkdirSync(dataDir, { recursive: true })
+    fs.writeFileSync(ico, pngIco(await require('sharp')(iconSource).resize(256, 256).png().toBuffer(), 256))
+    // UTF-16 with its BOM: the path may have a Greek user name in it
+    fs.writeFileSync(ini, Buffer.from(`\ufeff[.ShellClassInfo]\r\nIconResource=${ico},0\r\n`, 'utf16le'))
+    const attrib = (...a) => new Promise(r => require('node:child_process').execFile('attrib', a, { windowsHide: true }, () => r()))
+    await attrib('+h', '+s', ini)
+    await attrib('+r', root)
+  } catch (e) { console.warn('[home] folder icon', e.message) }
+}
+
+module.exports = { roots, markFolder, pngIco }

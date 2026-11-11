@@ -69,3 +69,14 @@ test('a missing or empty Photos folder is never read as "every photo was deleted
   db.close()
   fs.rmSync(tmp, { recursive: true })
 })
+
+test('pngIco: one PNG behind an icon header, 256 written as 0', () => {
+  const { pngIco } = require('../home')
+  const png = Buffer.from([0x89, 0x50, 0x4e, 0x47, 1, 2, 3])
+  const ico = pngIco(png, 256)
+  assert.equal(ico.readUInt16LE(0), 0); assert.equal(ico.readUInt16LE(2), 1); assert.equal(ico.readUInt16LE(4), 1)
+  assert.equal(ico[6], 0); assert.equal(ico[7], 0)
+  assert.equal(ico.readUInt32LE(14), png.length); assert.equal(ico.readUInt32LE(18), 22)
+  assert.deepEqual(ico.subarray(22), png)
+  assert.equal(pngIco(png, 48)[6], 48)
+})
