@@ -4,8 +4,8 @@
 Photos, files, notes, calendar, timers, maps, contacts, calls and data on Linux, in sync with your phone and tablet, with nothing uploaded anywhere.</p>
 
 <p align="center">
-  <a href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.7/Tetra-0.8.0-beta.7.AppImage"><img src="Assets/buttons/download-appimage.png" alt="Download the AppImage" width="420"></a>
-  <a href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.7/local-drive-desktop_0.8.0-beta.7_amd64.deb"><img src="Assets/buttons/download-deb.png" alt="Download the .deb" width="420"></a>
+  <a href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.8/Tetra-0.8.0-beta.8.AppImage"><img src="Assets/buttons/download-appimage.png" alt="Download the AppImage" width="420"></a>
+  <a href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.8/local-drive-desktop_0.8.0-beta.8_amd64.deb"><img src="Assets/buttons/download-deb.png" alt="Download the .deb" width="420"></a>
 </p>
 <p align="center">
   <a href="https://github.com/kalotrapezis/Tetra-mobile"><img src="Assets/buttons/get-android.png" alt="Tetra for Android" width="420"></a>
@@ -17,7 +17,7 @@ The computer half of [Tetra for Android](https://github.com/kalotrapezis/Tetra-m
 Calendar, Timer, Maps, Contacts, Phone, Data and Mail on Linux, in sync with your phone and tablet over your own Wi-Fi.
 Faces, documents and search labels are analysed on this computer.
 
-**0.8.0 Beta 7** ([what's new](https://github.com/kalotrapezis/Tetra/releases/tag/desktop-v0.8.0-beta.7)). A beta: keep
+**0.8.0 Beta 8** ([what's new](https://github.com/kalotrapezis/Tetra/releases/tag/desktop-v0.8.0-beta.8)). A beta: keep
 your own backups. Screenshots use invented sample data.
 
 ## What Tetra does for you
@@ -112,10 +112,10 @@ address, so it is found again after a network change. Every rule and its reason 
 On Debian, Ubuntu or Mint:
 
 ```bash
-sudo apt install ./local-drive-desktop_0.8.0-beta.7_amd64.deb
+sudo apt install ./local-drive-desktop_0.8.0-beta.8_amd64.deb
 ```
 
-Or make the AppImage executable and run it (`chmod +x Tetra-0.8.0-beta.7.AppImage`); it needs nothing else,
+Or make the AppImage executable and run it (`chmod +x Tetra-0.8.0-beta.8.AppImage`); it needs nothing else,
 not even `libfuse2`. Tetra keeps running in the tray when its window is closed, so phones can sync at any time.
 
 Then install [Tetra for Android](https://github.com/kalotrapezis/Tetra-mobile) on your phone or tablet and pair it
