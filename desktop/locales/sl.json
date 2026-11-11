@@ -2972,5 +2972,8 @@
  "app.home": "Začetek",
  "maps.offHome": "{name} ni več v razdelku Domov",
  "maps.removeFromHome": "Odstrani iz razdelka Domov",
- "home.dockHint": "Povlecite aplikacijo v dok, da ostane tam; povlecite jo iz doka nazaj sem, da jo odstranite."
+ "home.dockHint": "Povlecite aplikacijo v dok, da ostane tam; povlecite jo iz doka nazaj sem, da jo odstranite.",
+ "layout.name": "Postavitev",
+ "layout.button": "Postavitev: klik za razdeljen pogled, desni klik za eno podokno",
+ "layout.hint": "Izberite aplikacijo za vsako podokno"
 }

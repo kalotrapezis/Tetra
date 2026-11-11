@@ -2973,5 +2973,8 @@
  "app.home": "Il-paġna ewlenija",
  "maps.offHome": "{name} m’għadux f’Dar",
  "maps.removeFromHome": "Neħħi minn Dar",
- "home.dockHint": "Kaxkar app fuq id-dock biex tibqa’ hemm; kaxkarha mid-dock lura hawn biex tneħħiha."
+ "home.dockHint": "Kaxkar app fuq id-dock biex tibqa’ hemm; kaxkarha mid-dock lura hawn biex tneħħiha.",
+ "layout.name": "Tqassim",
+ "layout.button": "Tqassim: ikklikkja għal skrin maqsum, ikklikkja bil-lemin għal pannell wieħed",
+ "layout.hint": "Agħżel app għal kull pannell"
 }

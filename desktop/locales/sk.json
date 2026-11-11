@@ -2972,5 +2972,8 @@
  "app.home": "Domov",
  "maps.offHome": "{name} už nie je na Domov",
  "maps.removeFromHome": "Odstrániť z Domov",
- "home.dockHint": "Presuňte aplikáciu do doku, aby tam zostala; presuňte ju z doku späť sem, aby ste ju odstránili."
+ "home.dockHint": "Presuňte aplikáciu do doku, aby tam zostala; presuňte ju z doku späť sem, aby ste ju odstránili.",
+ "layout.name": "Rozloženie",
+ "layout.button": "Rozloženie: kliknutím rozdeliť obrazovku, pravým tlačidlom jeden panel",
+ "layout.hint": "Vyberte aplikáciu pre každý panel"
 }

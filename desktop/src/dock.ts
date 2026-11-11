@@ -4,7 +4,8 @@ export type DockMode = 'pinned' | 'autohide' | 'handle'
 export type DockPrefs = { order: string[]; out: string[]; labels: boolean; mode: DockMode }
 
 const KEY = 'dock'
-export const DEFAULT_DOCK: DockPrefs = { order: [], out: [], labels: true, mode: 'pinned' }
+// the dock holds the everyday apps at first; the rest are on Home (an app is in one of the two, as GNOME's dash and grid)
+export const DEFAULT_DOCK: DockPrefs = { order: [], out: ['timer', 'pills', 'passwords', 'phone', 'messages', 'data', 'sync'], labels: true, mode: 'pinned' }
 
 export function loadDock(): DockPrefs {
   try {

@@ -2786,5 +2786,8 @@
  "app.home": "Start",
  "maps.offHome": "{name} ist nicht mehr unter Zuhause",
  "maps.removeFromHome": "Aus Zuhause entfernen",
- "home.dockHint": "Ziehen Sie eine App ins Dock, damit sie dort bleibt; ziehen Sie sie aus dem Dock hierher zurück, um sie zu entfernen."
+ "home.dockHint": "Ziehen Sie eine App ins Dock, damit sie dort bleibt; ziehen Sie sie aus dem Dock hierher zurück, um sie zu entfernen.",
+ "layout.name": "Layout",
+ "layout.button": "Layout: Klick für geteilte Ansicht, Rechtsklick für einen Bereich",
+ "layout.hint": "Wählen Sie für jeden Bereich eine App"
 }

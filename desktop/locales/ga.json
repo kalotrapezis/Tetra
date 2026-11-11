@@ -3065,5 +3065,8 @@
  "app.home": "Baile",
  "maps.offHome": "Níl {name} ar an mBaile a thuilleadh",
  "maps.removeFromHome": "Bain den Bhaile",
- "home.dockHint": "Tarraing aip ar an duga chun í a choinneáil ann; tarraing ón duga ar ais anseo í chun í a bhaint."
+ "home.dockHint": "Tarraing aip ar an duga chun í a choinneáil ann; tarraing ón duga ar ais anseo í chun í a bhaint.",
+ "layout.name": "Leagan amach",
+ "layout.button": "Leagan amach: cliceáil le haghaidh scáileáin roinnte, deaschliceáil le haghaidh pána amháin",
+ "layout.hint": "Roghnaigh aip do gach pána"
 }

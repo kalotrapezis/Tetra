@@ -2879,5 +2879,8 @@
  "app.home": "Accueil",
  "maps.offHome": "{name} n’est plus dans Domicile",
  "maps.removeFromHome": "Retirer de Domicile",
- "home.dockHint": "Faites glisser une app sur le dock pour l’y garder ; ramenez-la ici depuis le dock pour l’en retirer."
+ "home.dockHint": "Faites glisser une app sur le dock pour l’y garder ; ramenez-la ici depuis le dock pour l’en retirer.",
+ "layout.name": "Disposition",
+ "layout.button": "Disposition : un clic pour l’écran partagé, un clic droit pour un seul volet",
+ "layout.hint": "Choisissez une app pour chaque volet"
 }

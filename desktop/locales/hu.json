@@ -2786,5 +2786,8 @@
  "app.home": "Kezdőlap",
  "maps.offHome": "{name} lekerült az Otthonról",
  "maps.removeFromHome": "Eltávolítás az Otthonról",
- "home.dockHint": "Húzzon egy alkalmazást a dokkra, hogy ott maradjon; húzza vissza ide a dokkról, hogy levegye."
+ "home.dockHint": "Húzzon egy alkalmazást a dokkra, hogy ott maradjon; húzza vissza ide a dokkról, hogy levegye.",
+ "layout.name": "Elrendezés",
+ "layout.button": "Elrendezés: kattintás az osztott nézethez, jobb kattintás egy panelhez",
+ "layout.hint": "Válasszon alkalmazást minden panelhez"
 }

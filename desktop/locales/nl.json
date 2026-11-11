@@ -2786,5 +2786,8 @@
  "app.home": "Start",
  "maps.offHome": "{name} staat niet meer op Start",
  "maps.removeFromHome": "Verwijderen van Start",
- "home.dockHint": "Sleep een app naar het dock om hem daar te houden; sleep hem van het dock terug hierheen om hem te verwijderen."
+ "home.dockHint": "Sleep een app naar het dock om hem daar te houden; sleep hem van het dock terug hierheen om hem te verwijderen.",
+ "layout.name": "Indeling",
+ "layout.button": "Indeling: klik voor gesplitst scherm, rechtsklik voor één paneel",
+ "layout.hint": "Kies een app voor elk paneel"
 }

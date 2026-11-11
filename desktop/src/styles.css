@@ -1905,8 +1905,6 @@ button.assist-cost { cursor: pointer; border: 0; font: inherit; color: inherit; 
 .home-grid.taking { outline: 2px dashed var(--muted); outline-offset: 8px; border-radius: 22px; }
 /* the dock takes a dragged app: a line where it would go */
 .rail.drop-on { outline: 2px dashed var(--accent, #7aa2ff); outline-offset: -4px; }
-.rail .nav-item.drop-before { box-shadow: 0 -3px 0 var(--accent, #7aa2ff); }
-.dock-drop-end { height: 3px; margin: 2px 8px; border-radius: 2px; background: var(--accent, #7aa2ff); }
 .rail-apps { overflow-y: auto; scrollbar-width: none; }
 /* Maps' Home places being edited: a ✕ on each */
 .maps-home-head { display: flex; align-items: center; justify-content: space-between; }
@@ -1918,3 +1916,37 @@ button.assist-cost { cursor: pointer; border: 0; font: inherit; color: inherit; 
   background: #e5484d; color: #fff; cursor: pointer; z-index: 1; }
 .rail-apps > .nav-item { padding-top: var(--item-pad, 12px); padding-bottom: var(--item-pad, 12px); }
 .rail.icons .rail-apps > .nav-item { padding: var(--item-pad, 12px) 12px; }
+/* a drag over the dock: the rows slide to where they will be, the dragged one faded, room for one more when it comes from Home */
+.rail-apps > .nav-item { transition: transform .18s ease; }
+.rail-apps > .nav-item.dragging { opacity: .35; }
+.rail.adding .rail-apps { padding-bottom: var(--row, 50px); }
+/* the dock's apps in Home's art (the user, 11 Nov: "the dock icons the same icons as the home") */
+.nav-item .dock-art { width: 28px; height: 28px; flex: none; border-radius: 8px; object-fit: contain; pointer-events: none; }
+.rail.icons .rail-apps > .nav-item { padding: var(--item-pad, 10px) 10px; }
+
+
+/* split view (Split.tsx): the panes side by side, as Tetra Car's */
+.panes { flex: 1; min-width: 0; display: flex; gap: 12px; position: relative; }
+.panes > .content { min-width: 0; }
+.side-pane { overflow: hidden; border-radius: 22px; }
+.side-pane-empty { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  color: var(--muted); border: 2px dashed color-mix(in srgb, var(--text) 18%, transparent); border-radius: 22px; cursor: pointer; }
+.side-pane-empty:hover { color: var(--text); background: var(--hover); }
+.expose { position: absolute; inset: 0; z-index: 30; display: flex; gap: 12px; padding: 0 0 64px; background: color-mix(in srgb, var(--bg, #121212) 70%, transparent); backdrop-filter: blur(6px); }
+.expose-pane { min-width: 0; overflow: auto; padding: 22px 14px; border-radius: 22px; }
+.expose-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 14px 8px; }
+.expose-app { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 10px 4px; border-radius: 18px; color: var(--text); cursor: pointer; }
+.expose-app img { width: 64px; height: 64px; object-fit: contain; transition: transform .15s ease; }
+.expose-app span { font-size: 13px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.expose-app:hover { background: var(--hover); } .expose-app:hover img { transform: scale(1.06); }
+.expose-app.on { background: color-mix(in srgb, var(--accent, #7aa2ff) 26%, transparent); outline: 2px solid var(--accent, #7aa2ff); }
+.expose-done { position: absolute; bottom: 10px; right: 12px; }
+.expose-hint { position: absolute; bottom: 14px; left: 16px; margin: 0; color: var(--muted); font-size: 13px; }
+.layout-menu.menu-body { position: fixed; z-index: 50; display: flex; gap: 8px; padding: 10px; top: auto; right: auto; width: auto; height: auto; max-height: none; overflow: visible; }
+.layout-choice { padding: 8px; border-radius: 12px; cursor: pointer; }
+.layout-choice:hover, .layout-choice.on { background: var(--hover); }
+.layout-shape { display: flex; gap: 3px; width: 64px; height: 40px; }
+.layout-shape i { border-radius: 4px; background: color-mix(in srgb, var(--text) 55%, transparent); }
+/* Home's notifications, top right */
+.home-head .home-bell { margin-left: auto; position: relative; }
+.home-bell .home-badge { top: -2px; right: -2px; }

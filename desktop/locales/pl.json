@@ -2972,5 +2972,8 @@
  "app.home": "Start",
  "maps.offHome": "{name} usunięto z sekcji Dom",
  "maps.removeFromHome": "Usuń z sekcji Dom",
- "home.dockHint": "Przeciągnij aplikację do doku, aby tam została; przeciągnij ją z doku z powrotem tutaj, aby ją usunąć."
+ "home.dockHint": "Przeciągnij aplikację do doku, aby tam została; przeciągnij ją z doku z powrotem tutaj, aby ją usunąć.",
+ "layout.name": "Układ",
+ "layout.button": "Układ: kliknięcie – podzielony ekran, prawy przycisk – jeden panel",
+ "layout.hint": "Wybierz aplikację dla każdego panelu"
 }

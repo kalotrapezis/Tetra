@@ -2786,5 +2786,8 @@
  "app.home": "Aloitus",
  "maps.offHome": "{name} poistettiin Kodista",
  "maps.removeFromHome": "Poista Kodista",
- "home.dockHint": "Vedä sovellus telakkaan, niin se pysyy siellä; vedä se telakasta takaisin tänne poistaaksesi sen."
+ "home.dockHint": "Vedä sovellus telakkaan, niin se pysyy siellä; vedä se telakasta takaisin tänne poistaaksesi sen.",
+ "layout.name": "Asettelu",
+ "layout.button": "Asettelu: napsautus jaettuun näkymään, oikea napsautus yhteen ruutuun",
+ "layout.hint": "Valitse jokaiseen ruutuun sovellus"
 }

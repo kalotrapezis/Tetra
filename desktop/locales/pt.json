@@ -2879,5 +2879,8 @@
  "app.home": "Início",
  "maps.offHome": "{name} saiu de Casa",
  "maps.removeFromHome": "Remover de Casa",
- "home.dockHint": "Arraste uma app para a dock para a manter lá; arraste-a da dock de volta para aqui para a retirar."
+ "home.dockHint": "Arraste uma app para a dock para a manter lá; arraste-a da dock de volta para aqui para a retirar.",
+ "layout.name": "Esquema",
+ "layout.button": "Esquema: clique para ecrã dividido, clique direito para um só painel",
+ "layout.hint": "Escolha uma app para cada painel"
 }

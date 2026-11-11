@@ -28,7 +28,7 @@ test('move swaps with a neighbour and stops at the ends', () => {
 
 test('dock: an app dragged on goes where it is dropped, one dragged off leaves it, the rest keep their order', () => {
   const keys = ['photos', 'files', 'mail', 'notes']
-  const off = placed(DEFAULT_DOCK, keys, 'files', false)
+  const off = placed({ ...DEFAULT_DOCK, out: [] }, keys, 'files', false) // every app on the dock to start with
   assert.deepEqual(off.out, ['files'])
   const back = placed(off, keys, 'files', true, 'notes')
   assert.deepEqual(back.out, [])

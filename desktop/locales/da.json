@@ -2786,5 +2786,8 @@
  "app.home": "Start",
  "maps.offHome": "{name} er fjernet fra Hjem",
  "maps.removeFromHome": "Fjern fra Hjem",
- "home.dockHint": "Træk en app hen på docken for at beholde den der; træk den fra docken tilbage hertil for at fjerne den."
+ "home.dockHint": "Træk en app hen på docken for at beholde den der; træk den fra docken tilbage hertil for at fjerne den.",
+ "layout.name": "Layout",
+ "layout.button": "Layout: klik for delt skærm, højreklik for ét panel",
+ "layout.hint": "Vælg en app til hvert panel"
 }

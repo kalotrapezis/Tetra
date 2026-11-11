@@ -2786,5 +2786,8 @@
  "app.home": "Home",
  "maps.offHome": "{name} is off Home",
  "maps.removeFromHome": "Remove from Home",
- "home.dockHint": "Drag an app onto the dock to keep it there; drag it from the dock back here to take it off."
+ "home.dockHint": "Drag an app onto the dock to keep it there; drag it from the dock back here to take it off.",
+ "layout.name": "Layout",
+ "layout.button": "Layout: a click for split view, a right click for one pane",
+ "layout.hint": "Choose an app for each pane"
 }

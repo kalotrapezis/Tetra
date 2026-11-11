@@ -18,6 +18,7 @@ import { ImportDialog } from './Import'
 import { GuidePanel, guideFirstTime, type GuideGo } from './Guide'
 import { Dock, type DockApp } from './Dock'
 import { HomePage } from './Home'
+import { Expose, LayoutButton, loadSplit, saveSplit, WEIGHTS, type Layout } from './Split'
 import { shownName } from './People'
 import { t, tr } from './i18n'
 
@@ -307,6 +308,10 @@ export function App() {
   }
 
   const total = Object.values(unread).reduce((a, b) => a + b, 0)
+  // split view (Split.tsx): the main page in the first pane, the side panes' apps beside it
+  const [split, setSplit] = useState(loadSplit)
+  const [expose, setExpose] = useState(false)
+  useEffect(() => saveSplit(split.layout, split.panes), [split])
   const nav = (target: Page, active: boolean, icon: IconName, label: string) => (
     <button className={`nav-item ${active ? 'active' : ''}`} title={label} onClick={() => setPage(target)}><Icon name={icon} /><span>{label}</span>{!active && unread[target.kind] > 0 && <span className="badge-count">{unread[target.kind]}</span>}</button>
   )
@@ -332,6 +337,8 @@ export function App() {
     ...(aiOn ? [app('assistant', { kind: 'assistant' }, page.kind === 'assistant', 'sparkle', t('app.assistant'))] : []),
     app('data', { kind: 'data' }, page.kind === 'data', 'dataUsage', t('app.data')),
     app('sync', { kind: 'sync' }, page.kind === 'sync', 'refresh', t('app.devices')),
+    // Settings a dock app as the others: dragged off, it is on Home (the user, 11 Nov)
+    app('settings', { kind: 'settings' }, page.kind === 'settings', 'settings', t('app.settings')),
   ]
   const item = (target: Page, on: boolean, icon: IconName, label: string) => (
     <button className={`island-item ${on ? 'on' : ''}`} onClick={() => setPage(target)}><Icon name={icon} size={20} /><span>{label}</span></button>
@@ -363,9 +370,43 @@ export function App() {
   )
 
   const loading = !media || (media.length === 0 && scan)
+  const mainKey = section === 'photos' ? 'photos' : page.kind
+  const sideKeys = new Set(SIDE.filter(k => k !== 'phone' || window.drive.platform !== 'win32'))
+  const paneCount = WEIGHTS[split.layout].length
+  const sideApps = Array.from({ length: paneCount - 1 }, (_, i) => split.panes[i] ?? null)
+  /** An app chosen in expose for a pane: one already in another pane changes places with it. */
+  function choosePane(pane: number, key: string) {
+    const now: (string | null)[] = [mainKey, ...sideApps]
+    const was = now[pane], other = now.findIndex((k, i) => i !== pane && k === key)
+    const next = [...now]; next[pane] = key
+    if (other >= 0) next[other] = other === 0 || (was && sideKeys.has(was)) ? was : null
+    if (next[0] !== mainKey && next[0]) dockApps.find(a => a.key === next[0])?.open()
+    setSplit(s => ({ ...s, panes: next.slice(1).map(k => k ?? '') }))
+  }
+  /** A side pane's app: the ones that stand alone (Photos needs the library's state here, so it stays in the first pane). */
+  const paneContent = (k: string): ReactNode => {
+    switch (k) {
+      case 'files': return <SideFiles setDialog={setDialog} say={say} />
+      case 'mail': return <MailPage setDialog={setDialog} say={say} />
+      case 'notes': return <NotesPage setDialog={setDialog} say={say} />
+      case 'calendar': return <CalendarPage setDialog={setDialog} say={say} />
+      case 'timer': return <TimerPage say={say} />
+      case 'pills': return <PillsPage say={say} openSettings={() => setPage({ kind: 'settings', start: 'pills', at: Date.now() })} />
+      case 'maps': return <MapsPage say={say} onMakeMap={() => setPage({ kind: 'settings' })} />
+      case 'phone': return <PhonePage say={say} />
+      case 'messages': return <MessagesPage say={say} />
+      case 'data': return <DataPage />
+      case 'passwords': return <PasswordsPage setDialog={setDialog} say={say} />
+      case 'contacts': return <ContactsPage setDialog={setDialog} say={say} openPerson={(id, name) => setPage({ kind: 'person', id, name })} />
+      case 'assistant': return <AssistantPage command={assistCommand} go={g => setPage(g.usage ? { kind: 'settings', start: 'assistant', at: Date.now() } : g.note ? { kind: 'notes', open: g.note } : { kind: 'maps', query: g.maps, at: Date.now() })} />
+      case 'sync': return <SyncPage setDialog={setDialog} />
+      case 'settings': return <SettingsPage onGuide={() => setGuide(true)} />
+    }
+    return null
+  }
   let content: ReactNode
   // Pages that do not depend on the photo library come first: an empty library must not hide Devices, Files or Hidden.
-  if (page.kind === 'home') content = <HomePage apps={dockApps} settings={() => setPage({ kind: 'settings' })} />
+  if (page.kind === 'home') content = <HomePage apps={dockApps} unread={total} notifications={() => setPage({ kind: 'notifications' })} />
   else if (page.kind === 'files') content = <Files mode={page.mode} folder={page.folder} go={(mode, folder) => setPage({ kind: 'files', mode, folder })} setDialog={setDialog} say={say} dock={dock} />
   else if (page.kind === 'sync') content = <SyncPage setDialog={setDialog} />
   else if (page.kind === 'notes') content = <NotesPage key={page.open} openId={page.open} setDialog={setDialog} say={say} />
@@ -461,7 +502,7 @@ export function App() {
 
   return (
     <div className="app">
-      <Dock apps={dockApps} home={page.kind === 'home'}
+      <Dock apps={dockApps} home={page.kind === 'home' || expose /* expose: the dock stays, so the panes do not move under the mouse */}
         head={<div className="brand"><button className="brand-home" title={t('app.home')} onClick={() => setPage({ kind: 'home' })}><img src="./icon.png" alt={t('app.home')} /></button><span className="brand-name">Tetra</span><span className={alpha ? 'alpha-badge' : 'beta-badge'} title={t(alpha ? 'release.alphaNote' : 'release.betaNote')}>{t(alpha ? 'release.alpha' : 'release.beta')}</span></div>}
         bottom={<>
           {/* the drives are no longer listed under Devices (the user, 2 Nov: room for the apps); Devices opens them */}
@@ -472,16 +513,17 @@ export function App() {
             </div>
           )}
           <div className="rail-bottom">
-            <button className={`nav-item ${page.kind === 'notifications' ? 'active' : ''}`} title={t('app.notifications')} onClick={() => setPage({ kind: 'notifications' })}>
-              <Icon name="bell" /><span>{t('app.notifications')}</span>{total > 0 && <span className="badge-count">{total}</span>}</button>
-            {nav({ kind: 'settings' }, page.kind === 'settings', 'settings', t('app.settings'))}
+            {/* notifications at Home's top right, as on the phone; Settings among the dock's apps (the user, 11 Nov) */}
+            <LayoutButton layout={split.layout} choose={l => { setSplit(s => ({ ...s, layout: l })); setExpose(true) }}
+              single={() => { setSplit(s => ({ ...s, layout: 'full' })); setExpose(false) }} />
           </div>
         </>}
         foot={<div className="rail-foot">
           <span>{scan ?? t('photos.itemsTotal', { count: media?.length ?? 0 })}</span>
           <button className="round" title={t('photos.rescanLibrary')} disabled={!!scan} onClick={rescan}><Icon name="refresh" size={20} /></button>
         </div>} />
-      <main className="content" data-app={page.kind}>
+      <div className="panes">
+      <main className="content" data-app={page.kind} style={{ flex: WEIGHTS[split.layout][0] }}>
         <Suspense fallback={null}>{content}</Suspense>
         {section && section !== 'files' && ['photos', 'collections', 'collection'].includes(page.kind) && picked.length === 0 && dock}
         {page.kind === 'person' && person && picked.length === 0 && (
@@ -517,6 +559,15 @@ export function App() {
           </div>
         )}
       </main>
+      {sideApps.map((k, i) => (
+        <section key={i} className="content side-pane" data-app={k ?? ''} style={{ flex: WEIGHTS[split.layout][i + 1] }}>
+          {k && sideKeys.has(k) ? <Suspense fallback={null}>{paneContent(k)}</Suspense>
+            : <button className="side-pane-empty" onClick={() => setExpose(true)}><Icon name="add" size={28} /><span>{t('layout.hint')}</span></button>}
+        </section>
+      ))}
+      {expose && split.layout !== 'full' && <Expose layout={split.layout} apps={dockApps} current={[mainKey, ...sideApps.map(k => k ?? '')]} side={sideKeys}
+        choose={choosePane} done={() => setExpose(false)} />}
+      </div>
       {guide && <GuidePanel onClose={() => setGuide(false)} go={(to: GuideGo) => setPage(to === 'files' ? { kind: 'files', mode: 'browse', folder: '' } : { kind: to === 'sync' ? 'sync' : 'settings' })} />}
       {open !== null && items[open] && (
         <Viewer media={scoped ? scoped.map(i => items[i]) : items} index={scoped ? Math.max(0, scoped.indexOf(open)) : open}
@@ -535,4 +586,13 @@ export function App() {
         {toast.undo && <button className="text-button" onClick={() => { const u = toast.undo!; setToast(null); u() }}>{toast.label ?? t('common.undo')}</button>}</div>}
     </div>
   )
+}
+
+/** The apps a side pane can hold (paneContent). */
+const SIDE = ['files', 'mail', 'notes', 'calendar', 'timer', 'pills', 'maps', 'phone', 'messages', 'data', 'passwords', 'contacts', 'assistant', 'sync', 'settings']
+
+/** Files in a side pane: its own folder, moved within the pane. */
+function SideFiles({ setDialog, say }: { setDialog: (d: ReactNode) => void; say: (s: string) => void }) {
+  const [at, setAt] = useState<{ mode: FilesMode; folder: string }>({ mode: 'browse', folder: '' })
+  return <Files mode={at.mode} folder={at.folder} go={(mode, folder) => setAt({ mode, folder })} setDialog={setDialog} say={say} dock={null} />
 }

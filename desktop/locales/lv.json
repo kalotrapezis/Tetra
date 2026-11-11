@@ -2878,5 +2878,8 @@
  "app.home": "Sākums",
  "maps.offHome": "{name} vairs nav sākumā",
  "maps.removeFromHome": "Noņemt no sākuma",
- "home.dockHint": "Velciet lietotni uz doku, lai tā tur paliktu; velciet to no doka atpakaļ šeit, lai to noņemtu."
+ "home.dockHint": "Velciet lietotni uz doku, lai tā tur paliktu; velciet to no doka atpakaļ šeit, lai to noņemtu.",
+ "layout.name": "Izkārtojums",
+ "layout.button": "Izkārtojums: klikšķis dalītam skatam, labais klikšķis vienam panelim",
+ "layout.hint": "Izvēlieties lietotni katram panelim"
 }

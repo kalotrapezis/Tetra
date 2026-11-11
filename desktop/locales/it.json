@@ -2879,5 +2879,8 @@
  "app.home": "Home",
  "maps.offHome": "{name} non è più nella Home",
  "maps.removeFromHome": "Togli dalla Home",
- "home.dockHint": "Trascina un’app sul dock per tenerla lì; trascinala dal dock di nuovo qui per toglierla."
+ "home.dockHint": "Trascina un’app sul dock per tenerla lì; trascinala dal dock di nuovo qui per toglierla.",
+ "layout.name": "Layout",
+ "layout.button": "Layout: clic per lo schermo diviso, clic destro per un solo riquadro",
+ "layout.hint": "Scegli un’app per ogni riquadro"
 }

@@ -2972,5 +2972,8 @@
  "app.home": "Pradžia",
  "maps.offHome": "{name} pašalinta iš Namų",
  "maps.removeFromHome": "Pašalinti iš Namų",
- "home.dockHint": "Nuvilkite programą į doką, kad ji ten liktų; nuvilkite ją iš doko atgal čia, kad pašalintumėte."
+ "home.dockHint": "Nuvilkite programą į doką, kad ji ten liktų; nuvilkite ją iš doko atgal čia, kad pašalintumėte.",
+ "layout.name": "Išdėstymas",
+ "layout.button": "Išdėstymas: spustelėkite padalytam vaizdui, dešiniuoju – vienam langui",
+ "layout.hint": "Pasirinkite programą kiekvienam langui"
 }

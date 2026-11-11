@@ -2786,5 +2786,8 @@
  "app.home": "Start",
  "maps.offHome": "{name} är borttagen från Hem",
  "maps.removeFromHome": "Ta bort från Hem",
- "home.dockHint": "Dra en app till dockan för att ha den där; dra den från dockan tillbaka hit för att ta bort den."
+ "home.dockHint": "Dra en app till dockan för att ha den där; dra den från dockan tillbaka hit för att ta bort den.",
+ "layout.name": "Layout",
+ "layout.button": "Layout: klicka för delad vy, högerklicka för en ruta",
+ "layout.hint": "Välj en app för varje ruta"
 }

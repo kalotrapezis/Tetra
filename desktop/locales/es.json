@@ -2849,5 +2849,8 @@
  "app.home": "Inicio",
  "maps.offHome": "{name} ya no está en Inicio",
  "maps.removeFromHome": "Quitar de Inicio",
- "home.dockHint": "Arrastra una app al dock para que se quede allí; arrástrala del dock de vuelta aquí para quitarla."
+ "home.dockHint": "Arrastra una app al dock para que se quede allí; arrástrala del dock de vuelta aquí para quitarla.",
+ "layout.name": "Diseño",
+ "layout.button": "Diseño: clic para pantalla dividida, clic derecho para un solo panel",
+ "layout.hint": "Elige una app para cada panel"
 }

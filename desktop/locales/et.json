@@ -2786,5 +2786,8 @@
  "app.home": "Avaleht",
  "maps.offHome": "{name} pole enam Kodus",
  "maps.removeFromHome": "Eemalda Kodust",
- "home.dockHint": "Lohista rakendus dokki, et see sinna jääks; lohista see dokist siia tagasi, et see eemaldada."
+ "home.dockHint": "Lohista rakendus dokki, et see sinna jääks; lohista see dokist siia tagasi, et see eemaldada.",
+ "layout.name": "Paigutus",
+ "layout.button": "Paigutus: klõps jagatud vaate jaoks, paremklõps ühe paneeli jaoks",
+ "layout.hint": "Vali igale paneelile rakendus"
 }
