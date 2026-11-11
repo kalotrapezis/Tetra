@@ -2778,5 +2778,9 @@
  "mapbuild.importBusy": "Създава се карта: импортирайте, когато приключи",
  "mapbuild.fileKind": "Карта на Tetra",
  "mapbuild.allFiles": "Всички файлове",
- "mapbuild.noSuchMap": "Няма такава карта."
+ "mapbuild.noSuchMap": "Няма такава карта.",
+ "maps.allPlaces": "Всички места",
+ "maps.findInList": "Търсене в този списък",
+ "maps.nPlaces_one": "{count} място",
+ "maps.nPlaces_other": "{count} места"
 }

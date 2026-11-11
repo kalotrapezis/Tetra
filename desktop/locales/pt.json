@@ -2870,5 +2870,10 @@
  "mapbuild.importBusy": "Está a ser feito um mapa: importe quando terminar",
  "mapbuild.fileKind": "Mapa Tetra",
  "mapbuild.allFiles": "Todos os ficheiros",
- "mapbuild.noSuchMap": "Esse mapa não existe."
+ "mapbuild.noSuchMap": "Esse mapa não existe.",
+ "maps.allPlaces": "Todos os locais",
+ "maps.findInList": "Procurar nesta lista",
+ "maps.nPlaces_one": "{count} local",
+ "maps.nPlaces_many": "{count} locais",
+ "maps.nPlaces_other": "{count} locais"
 }

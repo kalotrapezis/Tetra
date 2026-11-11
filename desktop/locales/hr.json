@@ -2869,5 +2869,10 @@
  "mapbuild.importBusy": "Karta se upravo izrađuje: uvezite kada bude gotova",
  "mapbuild.fileKind": "Tetra karta",
  "mapbuild.allFiles": "Sve datoteke",
- "mapbuild.noSuchMap": "Takva karta ne postoji."
+ "mapbuild.noSuchMap": "Takva karta ne postoji.",
+ "maps.allPlaces": "Sva mjesta",
+ "maps.findInList": "Traži na ovom popisu",
+ "maps.nPlaces_one": "{count} mjesto",
+ "maps.nPlaces_few": "{count} mjesta",
+ "maps.nPlaces_other": "{count} mjesta"
 }

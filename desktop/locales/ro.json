@@ -2870,5 +2870,10 @@
  "mapbuild.importBusy": "Se face o hartă: importă după ce se termină",
  "mapbuild.fileKind": "Hartă Tetra",
  "mapbuild.allFiles": "Toate fișierele",
- "mapbuild.noSuchMap": "Nu există o astfel de hartă."
+ "mapbuild.noSuchMap": "Nu există o astfel de hartă.",
+ "maps.allPlaces": "Toate locurile",
+ "maps.findInList": "Caută în această listă",
+ "maps.nPlaces_one": "{count} loc",
+ "maps.nPlaces_few": "{count} locuri",
+ "maps.nPlaces_other": "{count} de locuri"
 }

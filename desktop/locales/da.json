@@ -2778,5 +2778,9 @@
  "mapbuild.importBusy": "Et kort er ved at blive lavet: importér, når det er færdigt",
  "mapbuild.fileKind": "Tetra-kort",
  "mapbuild.allFiles": "Alle filer",
- "mapbuild.noSuchMap": "Det kort findes ikke."
+ "mapbuild.noSuchMap": "Det kort findes ikke.",
+ "maps.allPlaces": "Alle steder",
+ "maps.findInList": "Find i denne liste",
+ "maps.nPlaces_one": "{count} sted",
+ "maps.nPlaces_other": "{count} steder"
 }

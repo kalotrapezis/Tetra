@@ -2778,5 +2778,9 @@
  "mapbuild.importBusy": "Φτιάχνεται ένας χάρτης: εισαγωγή όταν τελειώσει",
  "mapbuild.fileKind": "Χάρτης Tetra",
  "mapbuild.allFiles": "Όλα τα αρχεία",
- "mapbuild.noSuchMap": "Δεν υπάρχει τέτοιος χάρτης."
+ "mapbuild.noSuchMap": "Δεν υπάρχει τέτοιος χάρτης.",
+ "maps.allPlaces": "Όλα τα μέρη",
+ "maps.findInList": "Εύρεση σε αυτή τη λίστα",
+ "maps.nPlaces_one": "{count} μέρος",
+ "maps.nPlaces_other": "{count} μέρη"
 }

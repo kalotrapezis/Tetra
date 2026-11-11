@@ -2962,5 +2962,12 @@
  "mapbuild.importBusy": "Qed issir mappa: importa meta tlesti",
  "mapbuild.fileKind": "Mappa Tetra",
  "mapbuild.allFiles": "Il-fajls kollha",
- "mapbuild.noSuchMap": "M'hemmx mappa bħal din."
+ "mapbuild.noSuchMap": "M'hemmx mappa bħal din.",
+ "maps.allPlaces": "Il-postijiet kollha",
+ "maps.findInList": "Fittex f'din il-lista",
+ "maps.nPlaces_one": "{count} post",
+ "maps.nPlaces_two": "{count} postijiet",
+ "maps.nPlaces_few": "{count} postijiet",
+ "maps.nPlaces_many": "{count} post",
+ "maps.nPlaces_other": "{count} post"
 }

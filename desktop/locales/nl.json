@@ -2778,5 +2778,9 @@
  "mapbuild.importBusy": "Er wordt een kaart gemaakt: importeer als die klaar is",
  "mapbuild.fileKind": "Tetra-kaart",
  "mapbuild.allFiles": "Alle bestanden",
- "mapbuild.noSuchMap": "Die kaart bestaat niet."
+ "mapbuild.noSuchMap": "Die kaart bestaat niet.",
+ "maps.allPlaces": "Alle plaatsen",
+ "maps.findInList": "Zoeken in deze lijst",
+ "maps.nPlaces_one": "{count} plaats",
+ "maps.nPlaces_other": "{count} plaatsen"
 }

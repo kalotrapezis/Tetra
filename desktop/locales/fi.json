@@ -2778,5 +2778,9 @@
  "mapbuild.importBusy": "Karttaa tehdään parhaillaan: tuo, kun se on valmis",
  "mapbuild.fileKind": "Tetra-kartta",
  "mapbuild.allFiles": "Kaikki tiedostot",
- "mapbuild.noSuchMap": "Tällaista karttaa ei ole."
+ "mapbuild.noSuchMap": "Tällaista karttaa ei ole.",
+ "maps.allPlaces": "Kaikki paikat",
+ "maps.findInList": "Etsi tästä luettelosta",
+ "maps.nPlaces_one": "{count} paikka",
+ "maps.nPlaces_other": "{count} paikkaa"
 }

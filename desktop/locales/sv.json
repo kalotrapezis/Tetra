@@ -2778,5 +2778,9 @@
  "mapbuild.importBusy": "En karta håller på att göras: importera när den är klar",
  "mapbuild.fileKind": "Tetra-karta",
  "mapbuild.allFiles": "Alla filer",
- "mapbuild.noSuchMap": "Den kartan finns inte."
+ "mapbuild.noSuchMap": "Den kartan finns inte.",
+ "maps.allPlaces": "Alla platser",
+ "maps.findInList": "Sök i den här listan",
+ "maps.nPlaces_one": "{count} plats",
+ "maps.nPlaces_other": "{count} platser"
 }

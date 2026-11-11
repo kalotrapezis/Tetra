@@ -2869,5 +2869,10 @@
  "mapbuild.importBusy": "Pašlaik tiek veidota karte: importējiet, kad tā būs gatava",
  "mapbuild.fileKind": "Tetra karte",
  "mapbuild.allFiles": "Visi faili",
- "mapbuild.noSuchMap": "Šādas kartes nav."
+ "mapbuild.noSuchMap": "Šādas kartes nav.",
+ "maps.allPlaces": "Visas vietas",
+ "maps.findInList": "Meklēt šajā sarakstā",
+ "maps.nPlaces_zero": "{count} vietu",
+ "maps.nPlaces_one": "{count} vieta",
+ "maps.nPlaces_other": "{count} vietas"
 }

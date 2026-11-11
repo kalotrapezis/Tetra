@@ -2778,5 +2778,9 @@
  "mapbuild.importBusy": "A map is being made: import when it is done",
  "mapbuild.fileKind": "Tetra map",
  "mapbuild.allFiles": "All files",
- "mapbuild.noSuchMap": "There is no such map."
+ "mapbuild.noSuchMap": "There is no such map.",
+ "maps.allPlaces": "All places",
+ "maps.findInList": "Find in this list",
+ "maps.nPlaces_one": "{count} place",
+ "maps.nPlaces_other": "{count} places"
 }

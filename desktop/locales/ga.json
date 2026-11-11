@@ -3054,5 +3054,12 @@
  "mapbuild.importBusy": "Tá léarscáil á déanamh: iompórtáil nuair a bheidh sí réidh",
  "mapbuild.fileKind": "Léarscáil Tetra",
  "mapbuild.allFiles": "Gach comhad",
- "mapbuild.noSuchMap": "Níl a leithéid de léarscáil ann."
+ "mapbuild.noSuchMap": "Níl a leithéid de léarscáil ann.",
+ "maps.allPlaces": "Gach áit",
+ "maps.findInList": "Aimsigh sa liosta seo",
+ "maps.nPlaces_one": "{count} áit",
+ "maps.nPlaces_two": "{count} áit",
+ "maps.nPlaces_few": "{count} áit",
+ "maps.nPlaces_many": "{count} n-áit",
+ "maps.nPlaces_other": "{count} áit"
 }

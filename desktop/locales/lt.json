@@ -2962,5 +2962,11 @@
  "mapbuild.importBusy": "Kuriamas žemėlapis: importuokite, kai jis bus baigtas",
  "mapbuild.fileKind": "Tetra žemėlapis",
  "mapbuild.allFiles": "Visi failai",
- "mapbuild.noSuchMap": "Tokio žemėlapio nėra."
+ "mapbuild.noSuchMap": "Tokio žemėlapio nėra.",
+ "maps.allPlaces": "Visos vietos",
+ "maps.findInList": "Ieškoti šiame sąraše",
+ "maps.nPlaces_one": "{count} vieta",
+ "maps.nPlaces_few": "{count} vietos",
+ "maps.nPlaces_many": "{count} vietos",
+ "maps.nPlaces_other": "{count} vietų"
 }

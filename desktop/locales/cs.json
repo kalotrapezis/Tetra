@@ -2962,5 +2962,11 @@
  "mapbuild.importBusy": "Vytváří se mapa: importujte, až bude hotová",
  "mapbuild.fileKind": "Mapa Tetra",
  "mapbuild.allFiles": "Všechny soubory",
- "mapbuild.noSuchMap": "Taková mapa neexistuje."
+ "mapbuild.noSuchMap": "Taková mapa neexistuje.",
+ "maps.allPlaces": "Všechna místa",
+ "maps.findInList": "Hledat v tomto seznamu",
+ "maps.nPlaces_one": "{count} místo",
+ "maps.nPlaces_few": "{count} místa",
+ "maps.nPlaces_many": "{count} místa",
+ "maps.nPlaces_other": "{count} míst"
 }

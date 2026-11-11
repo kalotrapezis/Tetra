@@ -2778,5 +2778,9 @@
  "mapbuild.importBusy": "Épp készül egy térkép: importálj, ha elkészült",
  "mapbuild.fileKind": "Tetra-térkép",
  "mapbuild.allFiles": "Minden fájl",
- "mapbuild.noSuchMap": "Nincs ilyen térkép."
+ "mapbuild.noSuchMap": "Nincs ilyen térkép.",
+ "maps.allPlaces": "Minden hely",
+ "maps.findInList": "Keresés ebben a listában",
+ "maps.nPlaces_one": "{count} hely",
+ "maps.nPlaces_other": "{count} hely"
 }

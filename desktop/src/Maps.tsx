@@ -73,6 +73,10 @@ export function MapsPage({ say, onMakeMap, initial }: { say: (message: string) =
   const [lists, setLists] = useState<MapList[]>([])
   const [trips, setTrips] = useState<MapTrip[]>([])
   const [tab, setTab] = useState<'saved' | 'trips'>('saved')
+  // Saved as the phone has it (the user, 11 Nov: "the desktop still has a wall of text for the favorites"): the lists first, one
+  // opened at a time — 'all', 'other' (in no list) or a list's id
+  const [openList, setOpenList] = useState<string | null>(null)
+  const [find, setFind] = useState('')
   const [query, setQuery] = useState(initial ?? '')
   const [kind, setKind] = useState<string | null>(null)
   const [allPills, setAllPills] = useState(false)
@@ -328,6 +332,7 @@ export function MapsPage({ say, onMakeMap, initial }: { say: (message: string) =
   })
 
   // ---- the panel ----
+  const goList = (id: string) => { setFind(''); setOpenList(id) }
 
   const here = centre()
   const slots = Array.from({ length: 12 }, (_, i) => places.find(p => p.slot === i + 1) ?? null)
@@ -376,7 +381,12 @@ export function MapsPage({ say, onMakeMap, initial }: { say: (message: string) =
               <button className={tab === 'saved' ? 'on' : ''} onClick={() => setTab('saved')}>{t('maps.tabSaved')}</button>
               <button className={tab === 'trips' ? 'on' : ''} onClick={() => setTab('trips')}>{t('maps.tabTrips')}</button>
             </div>
-            {tab === 'saved' ? (
+            {tab === 'saved' && openList ? (
+              <SavedList title={openList === 'all' ? `📍 ${t('maps.allPlaces')}` : openList === 'other' ? `📌 ${t('maps.otherPlaces')}`
+                  : (l => `${l?.emoji ?? ''} ${l?.name ?? ''}`.trim())(lists.find(l => l.id === openList))}
+                places={openList === 'all' ? places : openList === 'other' ? places.filter(p => !listed.has(p.id)) : places.filter(p => p.lists.includes(openList))}
+                lists={lists} shown={openList} here={here} find={find} setFind={setFind} onBack={() => setOpenList(null)} onOpen={p => open({ kind: 'place', place: p })} />
+            ) : tab === 'saved' ? (
               <section>
                 <h3>{t('maps.home')}</h3>
                 <div className="maps-slots">
@@ -384,11 +394,12 @@ export function MapsPage({ say, onMakeMap, initial }: { say: (message: string) =
                     ? <button key={i} className="maps-slot" title={p.name} onClick={() => open({ kind: 'place', place: p })}><span className="map-place static"><Emblem icon={p.icon} /></span><span>{p.label || p.name}</span></button>
                     : <div key={i} className="maps-slot empty">{i + 1}</div>)}
                 </div>
-                {lists.map(l => {
-                  const inList = places.filter(p => p.lists.includes(l.id))
-                  return inList.length ? <div key={l.id}><h3>{l.emoji} {l.name} · {inList.length}</h3>{inList.map(p => <PlaceRow key={p.id} p={p} onOpen={() => open({ kind: 'place', place: p })} />)}</div> : null
-                })}
-                {places.some(p => !listed.has(p.id)) && <><h3>{t('maps.otherPlaces')}</h3>{places.filter(p => !listed.has(p.id)).map(p => <PlaceRow key={p.id} p={p} onOpen={() => open({ kind: 'place', place: p })} />)}</>}
+                {places.length > 0 && <>
+                  <h3>{t('maps.lists')}</h3>
+                  <ListRow emoji="📍" name={t('maps.allPlaces')} n={places.length} onOpen={() => goList('all')} />
+                  {lists.map(l => <ListRow key={l.id} emoji={l.emoji || '📌'} name={l.name} n={places.filter(p => p.lists.includes(l.id)).length} onOpen={() => goList(l.id)} />)}
+                  {places.some(p => !listed.has(p.id)) && <ListRow emoji="📌" name={t('maps.otherPlaces')} n={places.filter(p => !listed.has(p.id)).length} onOpen={() => goList('other')} />}
+                </>}
                 {!places.length && <p className="hint">{t('maps.savedHint')}</p>}
               </section>
             ) : (
@@ -465,8 +476,47 @@ function RouteSummary({ stops, legs, note, mode, setMode, main, setMain }: {
   )
 }
 
-function PlaceRow({ p, onOpen }: { p: MapPlace; onOpen: () => void }) {
-  return <button className="maps-row" onClick={onOpen}><span className="map-place static"><Emblem icon={p.icon} /></span><span className="maps-row-text"><b>{p.name}</b></span></button>
+/** A list in Saved: its emoji in a circle, its name, how many places; a click goes in (the phone's Saved). */
+function ListRow({ emoji, name, n, onOpen }: { emoji: string; name: string; n: number; onOpen: () => void }) {
+  return <button className="maps-row roomy" onClick={onOpen}>
+    <span className="maps-badge">{emoji}</span>
+    <span className="maps-row-text"><b>{name}</b><small>{t('maps.nPlaces', { count: n })}</small></span>
+    <span className="maps-go-in"><Icon name="back" size={18} /></span>
+  </button>
+}
+
+/**
+ * One list opened: ‹ and its name, a find line when it is long, its places nearest first (from the map's centre) as roomy
+ * two-line rows; the words many names start with («Δημοτικό Σχολείο …») quieter, so what tells them apart stands out.
+ */
+function SavedList({ title, places, lists, shown, here, find, setFind, onBack, onOpen }: {
+  title: string; places: MapPlace[]; lists: MapList[]; shown: string; here: { lat: number; lng: number }
+  find: string; setFind: (s: string) => void; onBack: () => void; onOpen: (p: MapPlace) => void
+}) {
+  const fold = (s: string) => s.toLowerCase().normalize('NFD').replace(/\p{Mn}+/gu, '')
+  const short = (p: MapPlace) => p.label || p.name
+  const found = (find.trim() ? places.filter(p => fold(`${p.name} ${p.label}`).includes(fold(find.trim()))) : places)
+    .map(p => ({ p, m: metres(here.lat, here.lng, p.lat, p.lng) })).sort((a, b) => a.m - b.m)
+  const counts = new Map<string, number>()
+  for (const { p } of found) { const w = short(p).split(' ').slice(0, 2).join(' '); if (w.includes(' ')) counts.set(w, (counts.get(w) ?? 0) + 1) }
+  const lead = [...counts].filter(([, n]) => n >= 3).map(([w]) => w)
+  return <section>
+    <div className="maps-list-head">
+      <button className="round flat" title={t('common.back')} onClick={onBack}><Icon name="back" size={20} /></button>
+      <span className="maps-row-text"><b className="big">{title}</b><small>{t('maps.nPlaces', { count: places.length })}</small></span>
+    </div>
+    {places.length > 15 && <input className="field" placeholder={t('maps.findInList')} value={find} onChange={e => setFind(e.target.value)} autoFocus />}
+    {found.map(({ p, m }) => {
+      const name = short(p), dim = lead.find(w => name.startsWith(`${w} `))
+      const more = [p.label && fold(p.label).replace(/ /g, '') !== fold(p.name).replace(/ /g, '') ? p.name : '', p.slot > 0 ? `${t('maps.home')} ${p.slot}` : '',
+        lists.filter(l => p.lists.includes(l.id) && l.id !== shown).map(l => l.emoji).join('')].filter(Boolean).join(' · ')
+      return <button key={p.id} className="maps-row roomy" onClick={() => onOpen(p)}>
+        <span className="map-place static"><Emblem icon={p.icon} /></span>
+        <span className="maps-row-text"><b className="two">{dim ? <><span className="dim">{dim}</span>{name.slice(dim.length)}</> : name}</b>{more && <small>{more}</small>}</span>
+        <small>{metresText(m)}</small>
+      </button>
+    })}
+  </section>
 }
 
 function PlaceCard({ card, address, places, draft, onClose, onSave, onDelete, onStop, onNearby }: {

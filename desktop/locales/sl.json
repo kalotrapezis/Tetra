@@ -2962,5 +2962,11 @@
  "mapbuild.importBusy": "Zemljevid se ravno izdeluje: uvozite, ko bo končan",
  "mapbuild.fileKind": "Zemljevid Tetra",
  "mapbuild.allFiles": "Vse datoteke",
- "mapbuild.noSuchMap": "Takega zemljevida ni."
+ "mapbuild.noSuchMap": "Takega zemljevida ni.",
+ "maps.allPlaces": "Vsa mesta",
+ "maps.findInList": "Išči na tem seznamu",
+ "maps.nPlaces_one": "{count} mesto",
+ "maps.nPlaces_two": "{count} mesti",
+ "maps.nPlaces_few": "{count} mesta",
+ "maps.nPlaces_other": "{count} mest"
 }
