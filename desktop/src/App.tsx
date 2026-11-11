@@ -504,9 +504,9 @@ export function App() {
   return (
     <div className="app">
       <Dock apps={dockApps} home={page.kind === 'home' || expose /* expose: the dock stays, so the panes do not move under the mouse */}
-        // Home as a tile in the apps' style (the user, 11 Nov: "remove the logo from the dock, make it a home icon")
+        // Home, with Tetra's own icon, as a dock item (the user, 11 Nov: a Home item in the dock, the app's icon kept)
         head={<button className={`nav-item dock-home-item ${page.kind === 'home' ? 'active' : ''}`} title={t('app.home')} onClick={() => setPage({ kind: 'home' })}>
-          <img className="dock-art" src="./apps/home.png" alt="" draggable={false} /><span>{t('app.home')}</span></button>}
+          <img className="dock-art" src="./icon.png" alt="" draggable={false} /><span>{t('app.home')}</span></button>}
         bottom={<>
           {/* the drives are no longer listed under Devices (the user, 2 Nov: room for the apps); Devices opens them */}
           {analysis?.running && (
