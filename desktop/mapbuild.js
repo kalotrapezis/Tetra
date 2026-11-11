@@ -8,6 +8,7 @@
  *   <id>.pmtiles        the map: Protomaps' newest world build, cut to the region's border
  *   <id>-gh/            the roads: GraphHopper 10.2's graph for car, foot, bike and wheelchair (router.js's PROFILES)
  *   <id>-places.tsv, <id>-addresses.tsv, <id>-streets.tsv   search (maps-tools/maps-places.py)
+ *   <id>-regions.tsv    the regions (Βοιωτία, Στερεά Ελλάδα) with their borders, for search (maps-tools/maps-regions.py)
  *   <id>-lanes.tsv      lane arrows (maps-tools/maps-lanes.py)
  *   <id>-phone.tsv      the country's area codes with their places, for the Phone (maps-tools/maps-phone.py, libphonenumber's data)
  *   <id>.json           {"name","region","built","bounds":[w,s,e,n],"drive":"right"|"left"}, written last: a pack without it is half there
@@ -57,7 +58,7 @@ const PMTILES_BIN = path.join(BIN, 'pmtiles' + EXE)
 const STEPS = ['tools', 'map', 'osm', 'roads', 'search', 'phone', 'install', 'borders']
 const OSM = path.join(DATA, 'osm')
 /** What a pack is in .System/Maps/Shared besides its graph and manifest; -phone.tsv only where libphonenumber names area codes. */
-const packFiles = id => [`${id}.pmtiles`, `${id}-places.tsv`, `${id}-addresses.tsv`, `${id}-streets.tsv`, `${id}-lanes.tsv`, `${id}-phone.tsv`]
+const packFiles = id => [`${id}.pmtiles`, `${id}-places.tsv`, `${id}-addresses.tsv`, `${id}-streets.tsv`, `${id}-lanes.tsv`, `${id}-phone.tsv`, `${id}-regions.tsv`]
 /** File `f`'s MD5, or null when there is none. */
 const md5Of = f => new Promise(resolve => {
   const h = crypto.createHash('md5')
@@ -368,9 +369,10 @@ class MapBuilder {
       await stage('roads', () => graph(pbf, `${id}-gh`))
 
       await stage('search', async () => {
-        for (const s of ['maps-places.py', 'maps-lanes.py', 'maps-phone.py']) await fsp.writeFile(path.join(dir, s), await fsp.readFile(path.join(__dirname, 'maps-tools', s)))
+        for (const s of ['maps-places.py', 'maps-lanes.py', 'maps-phone.py', 'maps-regions.py']) await fsp.writeFile(path.join(dir, s), await fsp.readFile(path.join(__dirname, 'maps-tools', s)))
         await run(PYTHON, ['-I', 'maps-places.py', pbf, `${id}-places.tsv`, `${id}-addresses.tsv`, `${id}-streets.tsv`])
         await run(PYTHON, ['-I', 'maps-lanes.py', pbf, `${id}-lanes.tsv`])
+        await run(PYTHON, ['-I', 'maps-regions.py', pbf, `${id}-regions.tsv`])
       })
 
       // a step of its own (the user, 27 Oct: "the call regions numbers make it part of that process")
