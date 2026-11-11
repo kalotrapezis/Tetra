@@ -190,9 +190,12 @@ test('mail: a phone\'s requests are carried out oldest first and removed; one th
     fs.writeFileSync(path.join(req, 'phone-1.json'), JSON.stringify({ op: 'favorite', ids: ['me@sch.gr/Inbox/7/1'], at: 1 }))
     fs.writeFileSync(path.join(req, 'phone-3.json'), JSON.stringify({ op: 'explode', ids: [], at: 3 }))
     fs.writeFileSync(path.join(req, 'phone-4.json'), '{"op":"rea') // still arriving
+    fs.writeFileSync(path.join(req, 'phone-5.json'), JSON.stringify({ op: 'rename', account: 'me@sch.gr', name: '  Δουλειά  ', at: 5 })) // named on a phone
+    fs.writeFileSync(path.join(req, 'phone-6.json'), JSON.stringify({ op: 'rename', account: 'nobody@x.gr', name: 'X', at: 6 }))
     await mail.requests()
     assert.deepEqual(fs.readdirSync(req), ['phone-4.json'])
     assert.equal(mail.index.get('me@sch.gr/Inbox/7/1').flagged, false, 'the later one wins')
+    assert.deepEqual(mail.accounts().map(a => a.name), ['Δουλειά'])
     mail.index.flush()
   } finally { fs.rmSync(dir, { recursive: true, force: true }) }
 })

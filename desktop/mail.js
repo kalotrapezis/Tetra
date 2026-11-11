@@ -800,7 +800,8 @@ class Mail extends EventEmitter {
       const jobs = []
       for (const n of names) try { jobs.push({ file: path.join(dir, n), r: JSON.parse(fs.readFileSync(path.join(dir, n), 'utf8')) }) } catch {} // half-arrived: the next look
       for (const { file, r } of jobs.sort((a, b) => (Number(a.r?.at) || 0) - (Number(b.r?.at) || 0))) {
-        try { await this.act(r) } catch (e) {
+        // a PC account named on a phone (the user, 11 Nov: the university's, kept by Thunderbird, could not be named there)
+        try { if (r?.op === 'rename') this.setAccount(String(r.account), { name: r.name }); else await this.act(r) } catch (e) {
           if (['unreachable', 'auth'].includes(e.reason)) continue
           console.warn('[mail] request dropped', path.basename(file), e.message)
         }
