@@ -5,3 +5,4 @@ release-local/
 bundled/
 bundled-win/
 build-tools/
+release-*/
