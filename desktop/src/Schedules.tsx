@@ -1,5 +1,5 @@
 import { useEffect, useState, type CSSProperties } from 'react'
-import type { BriefSettings, Repeat, Schedule } from './drive'
+import type { Allow, BriefSettings, Repeat, Schedule } from './drive'
 import { Icon } from './Icon'
 import { locale, t } from './i18n'
 import { errorText } from './Dialogs'
@@ -11,7 +11,9 @@ import { errorText } from './Dialogs'
  */
 const REPEATS: Repeat[] = ['once', 'daily', 'weekly', 'monthly', 'yearly']
 const BRIEF_SECTIONS: [string, string][] = [['calendar', 'app.calendar'], ['mail', 'app.mail'], ['weather', 'brief.weather'], ['notes', 'brief.lists']]
-type Draft = Pick<Schedule, 'title' | 'prompt' | 'time' | 'repeat' | 'days' | 'date'> & { id?: string; kind?: Schedule['kind'] }
+type Draft = Pick<Schedule, 'title' | 'prompt' | 'time' | 'repeat' | 'days' | 'date' | 'allow'> & { id?: string; kind?: Schedule['kind'] }
+/** What one may do on its own after mail or the web (schedule.js ALLOW_GROUPS). */
+const ALLOWS: Allow[] = ['calendar', 'notes', 'timers', 'files']
 const fresh = (): Draft => ({ title: '', prompt: '', time: '08:00', repeat: 'daily', days: [1], date: null })
 
 export function ScheduleList({ dictate, past = false, offer }: { dictate?: () => Promise<string | null>; past?: boolean; offer?: (prompt: string) => void }) {
@@ -32,10 +34,10 @@ export function ScheduleList({ dictate, past = false, offer }: { dictate?: () =>
   const change = (id: string, x: Partial<Schedule>) => window.drive.schedules.change(id, x).then(load, fail(id))
   const save = () => {
     if (!editing) return
-    const { id, title, prompt, time, repeat, days, date } = editing
+    const { id, title, prompt, time, repeat, days, date } = editing, allow = editing.allow ?? []
     const done = () => { setEditing(null); load() }
-    if (id) change(id, { title, prompt, time, repeat, days, date }).then(() => setEditing(null))
-    else window.drive.schedules.add({ title, prompt, time, repeat, days, date }).then(done, fail('new'))
+    if (id) change(id, { title, prompt, time, repeat, days, date, ...(editing.kind !== 'brief' ? { allow } : {}) }).then(() => setEditing(null))
+    else window.drive.schedules.add({ title, prompt, time, repeat, days, date, allow }).then(done, fail('new'))
   }
   const run = (id: string) => { setBusy(id); setSaid(null); window.drive.schedules.run(id).then(file => setSaid({ id, file: file ?? undefined }), fail(id)).finally(() => { setBusy(''); load() }) }
   const setBrief = (x: Partial<BriefSettings>) => window.drive.schedules.setBrief(x).then(brief => setO({ ...o, brief }))
@@ -58,6 +60,12 @@ export function ScheduleList({ dictate, past = false, offer }: { dictate?: () =>
     </div>
     {d.repeat === 'weekly' && <div className="chips wrap">{[1, 2, 3, 4, 5, 6, 0].map(n =>
       <button key={n} className={`chip${d.days.includes(n) ? ' on' : ''}`} onClick={() => setEditing({ ...d, days: d.days.includes(n) ? d.days.filter(x => x !== n) : [...d.days, n] })}>{weekday(n)}</button>)}</div>}
+    {d.kind !== 'brief' && <>
+      <h4>{t('sched.allow')}</h4>
+      <p className="muted">{t('sched.allowHow')}</p>
+      <div className="ai-apps">{ALLOWS.map(g =>
+        <label key={g} className="cal-switch"><input type="checkbox" checked={!!d.allow?.includes(g)} onChange={e => setEditing({ ...d, allow: e.target.checked ? [...(d.allow ?? []), g] : (d.allow ?? []).filter(x => x !== g) })} /><span>{t(`sched.allow.${g}`)}</span></label>)}</div>
+    </>}
     {d.kind === 'brief' && <>
       <h4>{t('brief.sections')}</h4>
       <div className="ai-apps">{BRIEF_SECTIONS.map(([id, key]) =>

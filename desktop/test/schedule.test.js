@@ -132,3 +132,11 @@ test('schedule: two versions changed on both sides merge by id, never a copy bes
   s.remove('brief')
   assert.deepEqual(JSON.parse(fs.readFileSync(path.join(dir, 's.json'), 'utf8')).removed, { brief: 42 })
 })
+
+test('allow keeps only the known groups', () => {
+  const fs = require('node:fs'), os = require('node:os'), path = require('node:path')
+  const { Schedules } = require('../schedule')
+  const s = new Schedules(path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'sch-')), 'schedules.json'))
+  const a = s.add({ prompt: 'x', time: '08:00', allow: ['calendar', 'mail_send', 'calendar', 'files'] })
+  require('node:assert/strict').deepEqual(a.allow, ['calendar', 'files'])
+})
