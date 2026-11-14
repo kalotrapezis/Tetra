@@ -113,6 +113,8 @@
   .panel { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 22px; }
   .panel h3 { margin: 0 0 6px; font-size: 24px; } .panel p { color: var(--muted); margin: 0 0 6px; }
   .panel .btn { min-width: 0; margin-top: 12px; }
+  .panel ul { color: var(--muted); margin: 10px 0 0; padding-left: 20px; } .panel li { margin: 6px 0; }
+  .which { margin: 0; font-size: 14px; text-align: center; }
   .lang { position: absolute; top: 16px; right: 16px; z-index: 2; text-align: left; }
   .lang summary { list-style: none; cursor: pointer; background: rgba(0, 0, 0, .55); border: 1px solid var(--line); border-radius: 999px;
                   padding: 6px 14px; font-size: 14px; font-weight: 700; }
@@ -167,15 +169,17 @@
     <p class="lead">Un'unica super app privata per telefono, tablet e computer. Software libero, senza account, senza cloud: i tuoi file e le email restano sui tuoi dispositivi.</p>
     <div class="buttons">
       <div class="group"><h3><img src="img/android.svg" alt="">Android</h3>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.19/Tetra-0.8.0-beta.19-arm64.apk"><img src="img/android.svg" alt=""><div><b>Scarica per Android</b><span>APK · 0.8.0 beta 19 · Android 11+</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.20/Tetra-0.8.0-beta.20-arm64.apk"><img src="img/android.svg" alt=""><div><b>Scarica per Android</b><span>APK · 0.8.0 beta 20 · Android 11+</span></div></a>
         <div class="qr"><img src="img/qr-android.svg" alt="Codice QR del download per Android"><p>Oppure inquadralo con il telefono.<br><a href="#faq-install">Come installarlo</a></p></div></div>
       <div class="group"><h3><img src="img/linux.svg" alt="">Linux</h3>
-        <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/Tetra-0.8.0-beta.9.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 9 · la maggior parte delle distribuzioni</span></div></a>
-        <a class="btn deb" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/local-drive-desktop_0.8.0-beta.9_amd64.deb"><img src="img/linux.svg" alt=""><div><b>Linux .deb</b><span>Debian, Ubuntu, Mint</span></div></a></div>
+        <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/Tetra-0.8.0-beta.10.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 10 · la maggior parte delle distribuzioni</span></div></a>
+        <a class="btn deb" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/local-drive-desktop_0.8.0-beta.9_amd64.deb"><img src="img/linux.svg" alt=""><div><b>Linux .deb</b><span>Debian, Ubuntu, Mint</span></div></a></div>
       <div class="group"><h3><img src="img/windows.svg" alt="">Windows</h3>
-        <a class="btn windows" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/Tetra-Setup-0.8.0-beta.9.exe"><img src="img/windows.svg" alt=""><div><b>Windows</b><span>0.8.0 beta 9 · Windows 10, 11</span></div></a></div>
+        <a class="btn windows" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/Tetra-Setup-0.8.0-beta.10.exe"><img src="img/windows.svg" alt=""><div><b>Windows</b><span>0.8.0 beta 10 · Windows 10, 11</span></div></a></div>
       <div class="group"><h3><img src="img/icons/car.png" alt="">Tetra Car</h3>
-        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-Auto/releases/download/v0.2.0/TetraAuto-0.2.0.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Auto</b><span>0.2 · schermi dell'auto, Android 10+</span></div></a></div>
+        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-Auto/releases/download/v0.2.0/TetraAuto-0.2.0.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Car</b><span>0.2 · dal tuo telefono</span></div></a>
+        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.20/Tetra-Auto-SE-0.8.0-beta.20-arm64.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Car SE</b><span>0.8.0 beta 20 · sull'auto stessa</span></div></a>
+        <p class="which"><a href="#car">Quale scegliere?</a></p></div>
     </div>
     <img class="hero" src="img/tetra-devices.jpg" alt="Tetra su un computer, un tablet e un telefono">
   </div>
@@ -383,22 +387,53 @@
         <h3>Tetra per Android</h3>
         <p>Telefoni e tablet, Android 11 o successivo.</p>
         <a href="https://github.com/kalotrapezis/Tetra-mobile">Sorgente e dettagli su GitHub</a>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.19/Tetra-0.8.0-beta.19-arm64.apk"><img src="img/android.svg" alt=""><div><b>Scarica APK</b><span>0.8.0 beta 19</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.20/Tetra-0.8.0-beta.20-arm64.apk"><img src="img/android.svg" alt=""><div><b>Scarica APK</b><span>0.8.0 beta 20</span></div></a>
       </div>
       <div class="panel">
         <h3>Tetra per il desktop</h3>
         <p>Linux: un AppImage per la maggior parte delle distribuzioni, o un .deb per Debian, Ubuntu e Mint. Resta nell'area di notifica in attesa del telefono.</p>
         <a href="https://github.com/kalotrapezis/Tetra">Sorgente e dettagli su GitHub</a>
-        <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/Tetra-0.8.0-beta.9.AppImage"><img src="img/linux.svg" alt=""><div><b>AppImage</b><span>0.8.0 beta 9</span></div></a>
-        <a class="btn deb" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/local-drive-desktop_0.8.0-beta.9_amd64.deb"><img src="img/linux.svg" alt=""><div><b>.deb</b><span>0.8.0 beta 9</span></div></a>
-        <a class="btn windows" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/Tetra-Setup-0.8.0-beta.9.exe"><img src="img/windows.svg" alt=""><div><b>Windows</b><span>0.8.0 beta 9</span></div></a>
+        <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/Tetra-0.8.0-beta.10.AppImage"><img src="img/linux.svg" alt=""><div><b>AppImage</b><span>0.8.0 beta 10</span></div></a>
+        <a class="btn deb" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/local-drive-desktop_0.8.0-beta.9_amd64.deb"><img src="img/linux.svg" alt=""><div><b>.deb</b><span>0.8.0 beta 10</span></div></a>
+        <a class="btn windows" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/Tetra-Setup-0.8.0-beta.10.exe"><img src="img/windows.svg" alt=""><div><b>Windows</b><span>0.8.0 beta 10</span></div></a>
         <a class="btn thunderbird" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.6/tetra-mail-0.1.0.xpi"><img src="img/mail.svg" alt=""><div><b>Estensione per Thunderbird</b><span>Tetra Mail, per gli account che apre solo Thunderbird</span></div></a>
       </div>
       <div class="panel">
-        <h3>Tetra Auto, per l'auto</h3>
-        <p>Per lo schermo Android dell'auto stessa (Android 10 o successivo), al posto di Android Auto. Tetra sul telefono esegue Tetra Car e lo invia all'auto via Wi-Fi, quindi sul telefono serve anche Tetra per Android.</p>
+        <h3>Tetra Car, per l'auto</h3>
+        <p>Per lo schermo Android dell'auto stessa (Android 10 o successivo), al posto di Android Auto. Sul telefono serve anche Tetra per Android.</p>
         <a href="https://github.com/kalotrapezis/Tetra-Auto">Sorgente e dettagli su GitHub</a>
-        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-Auto/releases/download/v0.2.0/TetraAuto-0.2.0.apk"><img src="img/icons/car.png" alt=""><div><b>Scarica APK</b><span>0.2</span></div></a>
+        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-Auto/releases/download/v0.2.0/TetraAuto-0.2.0.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Car</b><span>0.2</span></div></a>
+        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.20/Tetra-Auto-SE-0.8.0-beta.20-arm64.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Car SE</b><span>0.8.0 beta 20</span></div></a>
+        <p class="which"><a href="#car">Quale scegliere?</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="car">
+  <div class="wrap">
+    <h2>Tetra Car o Tetra Car SE?</h2>
+    <p class="sub">Entrambe portano Tetra Car sullo schermo Android dell'auto stessa (Android 10 o successivo), al posto di Android Auto: mappe, musica, chiamate, messaggi e AI Assist. La differenza è dove gira Tetra. Entrambe vogliono Tetra per Android sul telefono, e si installano una accanto all'altra.</p>
+    <div class="two">
+      <div class="panel">
+        <h3>Tetra Car</h3>
+        <p>Lo esegue il tuo telefono; l'auto lo mostra soltanto.</p>
+        <ul>
+          <li>Tetra sul telefono disegna Tetra Car e invia l'immagine via Wi-Fi; l'auto rimanda ogni tocco.</li>
+          <li>Sempre il GPS, le app e l'ultima versione del telefono. L'app dell'auto è piccola e cambia di rado.</li>
+          <li>Musica e chiamate arrivano agli altoparlanti dell'auto via Bluetooth.</li>
+          <li>Funziona su qualsiasi autoradio, anche lento.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Tetra Car SE</h3>
+        <p>Tetra stesso, che gira sull'auto.</p>
+        <ul>
+          <li>L'auto esegue Tetra Car da sola, riproduce il proprio audio e può usare il proprio GPS.</li>
+          <li>Il telefono dà solo il suo hotspot e invia mappe, messaggi, chiamate e la sua batteria: niente audio Bluetooth, niente Android Auto.</li>
+          <li>La voce di una chiamata richiede ancora il vivavoce Bluetooth dell'auto, perché Android non lascia che un'app la trasporti.</li>
+          <li>Serve un autoradio abbastanza veloce. Una beta iniziale.</li>
+        </ul>
       </div>
     </div>
   </div>

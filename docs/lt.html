@@ -113,6 +113,8 @@
   .panel { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 22px; }
   .panel h3 { margin: 0 0 6px; font-size: 24px; } .panel p { color: var(--muted); margin: 0 0 6px; }
   .panel .btn { min-width: 0; margin-top: 12px; }
+  .panel ul { color: var(--muted); margin: 10px 0 0; padding-left: 20px; } .panel li { margin: 6px 0; }
+  .which { margin: 0; font-size: 14px; text-align: center; }
   .lang { position: absolute; top: 16px; right: 16px; z-index: 2; text-align: left; }
   .lang summary { list-style: none; cursor: pointer; background: rgba(0, 0, 0, .55); border: 1px solid var(--line); border-radius: 999px;
                   padding: 6px 14px; font-size: 14px; font-weight: 700; }
@@ -167,15 +169,17 @@
     <p class="lead">Viena privati superprograma jūsų telefonui, planšetei ir kompiuteriui. Laisva programinė įranga, be paskyros, be debesies: jūsų failai ir paštas lieka jūsų įrenginiuose.</p>
     <div class="buttons">
       <div class="group"><h3><img src="img/android.svg" alt="">Android</h3>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.19/Tetra-0.8.0-beta.19-arm64.apk"><img src="img/android.svg" alt=""><div><b>Atsisiųsti Android</b><span>APK · 0.8.0 beta 19 · Android 11+</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.20/Tetra-0.8.0-beta.20-arm64.apk"><img src="img/android.svg" alt=""><div><b>Atsisiųsti Android</b><span>APK · 0.8.0 beta 20 · Android 11+</span></div></a>
         <div class="qr"><img src="img/qr-android.svg" alt="QR kodas Android atsisiuntimui"><p>Arba nuskaitykite ją telefonu.<br><a href="#faq-install">Kaip ją įdiegti</a></p></div></div>
       <div class="group"><h3><img src="img/linux.svg" alt="">Linux</h3>
-        <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/Tetra-0.8.0-beta.9.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 9 · dauguma platinimų</span></div></a>
-        <a class="btn deb" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/local-drive-desktop_0.8.0-beta.9_amd64.deb"><img src="img/linux.svg" alt=""><div><b>Linux .deb</b><span>Debian, Ubuntu, Mint</span></div></a></div>
+        <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/Tetra-0.8.0-beta.10.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 10 · dauguma platinimų</span></div></a>
+        <a class="btn deb" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/local-drive-desktop_0.8.0-beta.9_amd64.deb"><img src="img/linux.svg" alt=""><div><b>Linux .deb</b><span>Debian, Ubuntu, Mint</span></div></a></div>
       <div class="group"><h3><img src="img/windows.svg" alt="">Windows</h3>
-        <a class="btn windows" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/Tetra-Setup-0.8.0-beta.9.exe"><img src="img/windows.svg" alt=""><div><b>Windows</b><span>0.8.0 beta 9 · Windows 10, 11</span></div></a></div>
+        <a class="btn windows" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/Tetra-Setup-0.8.0-beta.10.exe"><img src="img/windows.svg" alt=""><div><b>Windows</b><span>0.8.0 beta 10 · Windows 10, 11</span></div></a></div>
       <div class="group"><h3><img src="img/icons/car.png" alt="">Tetra Car</h3>
-        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-Auto/releases/download/v0.2.0/TetraAuto-0.2.0.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Auto</b><span>0.2 · automobilių ekranai, Android 10+</span></div></a></div>
+        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-Auto/releases/download/v0.2.0/TetraAuto-0.2.0.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Car</b><span>0.2 · iš jūsų telefono</span></div></a>
+        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.20/Tetra-Auto-SE-0.8.0-beta.20-arm64.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Car SE</b><span>0.8.0 beta 20 · pačiame automobilyje</span></div></a>
+        <p class="which"><a href="#car">Kurią rinktis?</a></p></div>
     </div>
     <img class="hero" src="img/tetra-devices.jpg" alt="Tetra kompiuteryje, planšetėje ir telefone">
   </div>
@@ -383,22 +387,53 @@
         <h3>Tetra, skirta Android</h3>
         <p>Telefonams ir planšetėms su Android 11 ar naujesne versija.</p>
         <a href="https://github.com/kalotrapezis/Tetra-mobile">Šaltinis ir daugiau informacijos GitHub</a>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.19/Tetra-0.8.0-beta.19-arm64.apk"><img src="img/android.svg" alt=""><div><b>Atsisiųsti APK</b><span>0.8.0 beta 19</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.20/Tetra-0.8.0-beta.20-arm64.apk"><img src="img/android.svg" alt=""><div><b>Atsisiųsti APK</b><span>0.8.0 beta 20</span></div></a>
       </div>
       <div class="panel">
         <h3>Tetra kompiuteriui</h3>
         <p>Linux: AppImage daugumai platinimų arba .deb Debian, Ubuntu ir Mint. Ji laukia sistemos dėkle, kol prisijungs jūsų telefonas.</p>
         <a href="https://github.com/kalotrapezis/Tetra">Šaltinis ir daugiau informacijos GitHub</a>
-        <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/Tetra-0.8.0-beta.9.AppImage"><img src="img/linux.svg" alt=""><div><b>AppImage</b><span>0.8.0 beta 9</span></div></a>
-        <a class="btn deb" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/local-drive-desktop_0.8.0-beta.9_amd64.deb"><img src="img/linux.svg" alt=""><div><b>.deb</b><span>0.8.0 beta 9</span></div></a>
-        <a class="btn windows" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/Tetra-Setup-0.8.0-beta.9.exe"><img src="img/windows.svg" alt=""><div><b>Windows</b><span>0.8.0 beta 9</span></div></a>
+        <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/Tetra-0.8.0-beta.10.AppImage"><img src="img/linux.svg" alt=""><div><b>AppImage</b><span>0.8.0 beta 10</span></div></a>
+        <a class="btn deb" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/local-drive-desktop_0.8.0-beta.9_amd64.deb"><img src="img/linux.svg" alt=""><div><b>.deb</b><span>0.8.0 beta 10</span></div></a>
+        <a class="btn windows" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/Tetra-Setup-0.8.0-beta.10.exe"><img src="img/windows.svg" alt=""><div><b>Windows</b><span>0.8.0 beta 10</span></div></a>
         <a class="btn thunderbird" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.6/tetra-mail-0.1.0.xpi"><img src="img/mail.svg" alt=""><div><b>Thunderbird plėtinys</b><span>Tetra Mail paskyroms, kurias atidaro tik Thunderbird</span></div></a>
       </div>
       <div class="panel">
-        <h3>Tetra Auto automobiliui</h3>
-        <p>Paties automobilio Android ekranui (Android 10 ar naujesnei), vietoj Android Auto. Telefone veikianti Tetra paleidžia Tetra Car ir per Wi-Fi siunčia jį į automobilį, todėl telefone taip pat reikia Tetra, skirtos Android.</p>
+        <h3>Tetra Car automobiliui</h3>
+        <p>Paties automobilio Android ekranui (Android 10 ar naujesnei), vietoj Android Auto. Telefone taip pat reikia Tetra, skirtos Android.</p>
         <a href="https://github.com/kalotrapezis/Tetra-Auto">Šaltinis ir daugiau informacijos GitHub</a>
-        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-Auto/releases/download/v0.2.0/TetraAuto-0.2.0.apk"><img src="img/icons/car.png" alt=""><div><b>Atsisiųsti APK</b><span>0.2</span></div></a>
+        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-Auto/releases/download/v0.2.0/TetraAuto-0.2.0.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Car</b><span>0.2</span></div></a>
+        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.20/Tetra-Auto-SE-0.8.0-beta.20-arm64.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Car SE</b><span>0.8.0 beta 20</span></div></a>
+        <p class="which"><a href="#car">Kurią rinktis?</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="car">
+  <div class="wrap">
+    <h2>Tetra Car ar Tetra Car SE?</h2>
+    <p class="sub">Abi perkelia Tetra Car į paties automobilio Android ekraną (Android 10 ar naujesnė), vietoj Android Auto: žemėlapius, muziką, skambučius, žinutes ir AI Assist. Skirtumas – kur veikia Tetra. Abiem telefone reikia Tetra, skirtos Android, ir jas galima įdiegti greta.</p>
+    <div class="two">
+      <div class="panel">
+        <h3>Tetra Car</h3>
+        <p>Ją vykdo jūsų telefonas, automobilis tik rodo.</p>
+        <ul>
+          <li>Telefone veikianti Tetra piešia Tetra Car ir siunčia vaizdą per Wi-Fi; automobilis grąžina kiekvieną prisilietimą.</li>
+          <li>Visada telefono GPS, programėlės ir naujausia versija. Automobilio programėlė maža ir retai keičiasi.</li>
+          <li>Muzika ir skambučiai pasiekia automobilio garsiakalbius per Bluetooth.</li>
+          <li>Veikia bet kuriame įrenginyje, net lėtame.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Tetra Car SE</h3>
+        <p>Pati Tetra, veikianti automobilyje.</p>
+        <ul>
+          <li>Automobilis pats vykdo Tetra Car, groja savo garsą ir gali naudoti savo GPS.</li>
+          <li>Telefonas duoda tik savo prieigos tašką ir siunčia žemėlapius, žinutes, skambučius ir baterijos būseną: be Bluetooth garso, be Android Auto.</li>
+          <li>Skambučio balsui vis tiek reikia automobilio Bluetooth laisvų rankų įrangos, nes Android neleidžia jokiai programėlei jo perduoti.</li>
+          <li>Reikia pakankamai greito įrenginio. Ankstyva beta versija.</li>
+        </ul>
       </div>
     </div>
   </div>

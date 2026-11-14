@@ -113,6 +113,8 @@
   .panel { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 22px; }
   .panel h3 { margin: 0 0 6px; font-size: 24px; } .panel p { color: var(--muted); margin: 0 0 6px; }
   .panel .btn { min-width: 0; margin-top: 12px; }
+  .panel ul { color: var(--muted); margin: 10px 0 0; padding-left: 20px; } .panel li { margin: 6px 0; }
+  .which { margin: 0; font-size: 14px; text-align: center; }
   .lang { position: absolute; top: 16px; right: 16px; z-index: 2; text-align: left; }
   .lang summary { list-style: none; cursor: pointer; background: rgba(0, 0, 0, .55); border: 1px solid var(--line); border-radius: 999px;
                   padding: 6px 14px; font-size: 14px; font-weight: 700; }
@@ -167,15 +169,17 @@
     <p class="lead">Viena privāta superlietotne jūsu tālrunim, planšetdatoram un datoram. Brīvā programmatūra, bez konta, bez mākoņa: jūsu faili un pasts paliek jūsu ierīcēs.</p>
     <div class="buttons">
       <div class="group"><h3><img src="img/android.svg" alt="">Android</h3>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.19/Tetra-0.8.0-beta.19-arm64.apk"><img src="img/android.svg" alt=""><div><b>Lejupielādēt Android</b><span>APK · 0.8.0 beta 19 · Android 11+</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.20/Tetra-0.8.0-beta.20-arm64.apk"><img src="img/android.svg" alt=""><div><b>Lejupielādēt Android</b><span>APK · 0.8.0 beta 20 · Android 11+</span></div></a>
         <div class="qr"><img src="img/qr-android.svg" alt="QR kods Android lejupielādei"><p>Vai noskenējiet to ar tālruni.<br><a href="#faq-install">Kā to instalēt</a></p></div></div>
       <div class="group"><h3><img src="img/linux.svg" alt="">Linux</h3>
-        <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/Tetra-0.8.0-beta.9.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 9 · vairums izplatījumu</span></div></a>
-        <a class="btn deb" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/local-drive-desktop_0.8.0-beta.9_amd64.deb"><img src="img/linux.svg" alt=""><div><b>Linux .deb</b><span>Debian, Ubuntu, Mint</span></div></a></div>
+        <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/Tetra-0.8.0-beta.10.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 10 · vairums izplatījumu</span></div></a>
+        <a class="btn deb" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/local-drive-desktop_0.8.0-beta.9_amd64.deb"><img src="img/linux.svg" alt=""><div><b>Linux .deb</b><span>Debian, Ubuntu, Mint</span></div></a></div>
       <div class="group"><h3><img src="img/windows.svg" alt="">Windows</h3>
-        <a class="btn windows" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/Tetra-Setup-0.8.0-beta.9.exe"><img src="img/windows.svg" alt=""><div><b>Windows</b><span>0.8.0 beta 9 · Windows 10, 11</span></div></a></div>
+        <a class="btn windows" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/Tetra-Setup-0.8.0-beta.10.exe"><img src="img/windows.svg" alt=""><div><b>Windows</b><span>0.8.0 beta 10 · Windows 10, 11</span></div></a></div>
       <div class="group"><h3><img src="img/icons/car.png" alt="">Tetra Car</h3>
-        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-Auto/releases/download/v0.2.0/TetraAuto-0.2.0.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Auto</b><span>0.2 · automašīnu ekrāni, Android 10+</span></div></a></div>
+        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-Auto/releases/download/v0.2.0/TetraAuto-0.2.0.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Car</b><span>0.2 · no jūsu tālruņa</span></div></a>
+        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.20/Tetra-Auto-SE-0.8.0-beta.20-arm64.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Car SE</b><span>0.8.0 beta 20 · pašā automašīnā</span></div></a>
+        <p class="which"><a href="#car">Kuru izvēlēties?</a></p></div>
     </div>
     <img class="hero" src="img/tetra-devices.jpg" alt="Tetra datorā, planšetdatorā un tālrunī">
   </div>
@@ -383,22 +387,53 @@
         <h3>Tetra Android ierīcēm</h3>
         <p>Tālruņi un planšetdatori ar Android 11 vai jaunāku versiju.</p>
         <a href="https://github.com/kalotrapezis/Tetra-mobile">Avots un sīkāka informācija GitHub</a>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.19/Tetra-0.8.0-beta.19-arm64.apk"><img src="img/android.svg" alt=""><div><b>Lejupielādēt APK</b><span>0.8.0 beta 19</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.20/Tetra-0.8.0-beta.20-arm64.apk"><img src="img/android.svg" alt=""><div><b>Lejupielādēt APK</b><span>0.8.0 beta 20</span></div></a>
       </div>
       <div class="panel">
         <h3>Tetra datoram</h3>
         <p>Linux: AppImage vairumam izplatījumu vai .deb Debian, Ubuntu un Mint. Tas gaida jūsu tālruni sistēmas teknē.</p>
         <a href="https://github.com/kalotrapezis/Tetra">Avots un sīkāka informācija GitHub</a>
-        <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/Tetra-0.8.0-beta.9.AppImage"><img src="img/linux.svg" alt=""><div><b>AppImage</b><span>0.8.0 beta 9</span></div></a>
-        <a class="btn deb" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/local-drive-desktop_0.8.0-beta.9_amd64.deb"><img src="img/linux.svg" alt=""><div><b>.deb</b><span>0.8.0 beta 9</span></div></a>
-        <a class="btn windows" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/Tetra-Setup-0.8.0-beta.9.exe"><img src="img/windows.svg" alt=""><div><b>Windows</b><span>0.8.0 beta 9</span></div></a>
+        <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/Tetra-0.8.0-beta.10.AppImage"><img src="img/linux.svg" alt=""><div><b>AppImage</b><span>0.8.0 beta 10</span></div></a>
+        <a class="btn deb" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/local-drive-desktop_0.8.0-beta.9_amd64.deb"><img src="img/linux.svg" alt=""><div><b>.deb</b><span>0.8.0 beta 10</span></div></a>
+        <a class="btn windows" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/Tetra-Setup-0.8.0-beta.10.exe"><img src="img/windows.svg" alt=""><div><b>Windows</b><span>0.8.0 beta 10</span></div></a>
         <a class="btn thunderbird" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.6/tetra-mail-0.1.0.xpi"><img src="img/mail.svg" alt=""><div><b>Thunderbird paplašinājums</b><span>Tetra Mail kontiem, ko atver tikai Thunderbird</span></div></a>
       </div>
       <div class="panel">
-        <h3>Tetra Auto automašīnai</h3>
-        <p>Automašīnas paša Android ekrānam (Android 10 vai jaunāka), Android Auto vietā. Tetra tālrunī darbina Tetra Car un pa Wi-Fi sūta to uz automašīnu, tāpēc tālrunī vajag arī Tetra Android ierīcēm.</p>
+        <h3>Tetra Car automašīnai</h3>
+        <p>Automašīnas paša Android ekrānam (Android 10 vai jaunāka), Android Auto vietā. Tālrunī vajag arī Tetra Android ierīcēm.</p>
         <a href="https://github.com/kalotrapezis/Tetra-Auto">Avots un sīkāka informācija GitHub</a>
-        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-Auto/releases/download/v0.2.0/TetraAuto-0.2.0.apk"><img src="img/icons/car.png" alt=""><div><b>Lejupielādēt APK</b><span>0.2</span></div></a>
+        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-Auto/releases/download/v0.2.0/TetraAuto-0.2.0.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Car</b><span>0.2</span></div></a>
+        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.20/Tetra-Auto-SE-0.8.0-beta.20-arm64.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Car SE</b><span>0.8.0 beta 20</span></div></a>
+        <p class="which"><a href="#car">Kuru izvēlēties?</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="car">
+  <div class="wrap">
+    <h2>Tetra Car vai Tetra Car SE?</h2>
+    <p class="sub">Abas liek Tetra Car uz automašīnas paša Android ekrāna (Android 10 vai jaunāka) Android Auto vietā: kartes, mūziku, zvanus, ziņas un AI Assist. Atšķirība ir tajā, kur darbojas Tetra. Abām tālrunī vajag Tetra Android ierīcēm, un tās var instalēt līdzās.</p>
+    <div class="two">
+      <div class="panel">
+        <h3>Tetra Car</h3>
+        <p>To darbina jūsu tālrunis, automašīna to tikai rāda.</p>
+        <ul>
+          <li>Tetra tālrunī zīmē Tetra Car un sūta attēlu pa Wi-Fi; automašīna sūta atpakaļ katru pieskārienu.</li>
+          <li>Vienmēr tālruņa GPS, lietotnes un jaunākā versija. Automašīnas lietotne ir maza un mainās reti.</li>
+          <li>Mūzika un zvani nonāk automašīnas skaļruņos pa Bluetooth.</li>
+          <li>Darbojas jebkurā ierīcē, pat lēnā.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Tetra Car SE</h3>
+        <p>Pati Tetra, kas darbojas automašīnā.</p>
+        <ul>
+          <li>Automašīna pati darbina Tetra Car, atskaņo savu skaņu un var izmantot savu GPS.</li>
+          <li>Tālrunis dod tikai savu tīklāju un sūta kartes, ziņas, zvanus un akumulatora stāvokli: bez Bluetooth skaņas, bez Android Auto.</li>
+          <li>Zvana balsij joprojām vajag automašīnas Bluetooth brīvroku sistēmu, jo Android neļauj nevienai lietotnei to pārnest.</li>
+          <li>Vajag pietiekami ātru ierīci. Agrīna beta.</li>
+        </ul>
       </div>
     </div>
   </div>

@@ -113,6 +113,8 @@
   .panel { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 22px; }
   .panel h3 { margin: 0 0 6px; font-size: 24px; } .panel p { color: var(--muted); margin: 0 0 6px; }
   .panel .btn { min-width: 0; margin-top: 12px; }
+  .panel ul { color: var(--muted); margin: 10px 0 0; padding-left: 20px; } .panel li { margin: 6px 0; }
+  .which { margin: 0; font-size: 14px; text-align: center; }
   .lang { position: absolute; top: 16px; right: 16px; z-index: 2; text-align: left; }
   .lang summary { list-style: none; cursor: pointer; background: rgba(0, 0, 0, .55); border: 1px solid var(--line); border-radius: 999px;
                   padding: 6px 14px; font-size: 14px; font-weight: 700; }
@@ -167,15 +169,17 @@
     <p class="lead">Superaip phríobháideach amháin do do ghuthán, do thábléad agus do ríomhaire. Bogearraí saor, gan cuntas, gan scamall: fanann do chuid comhad agus ríomhphost ar do ghléasanna.</p>
     <div class="buttons">
       <div class="group"><h3><img src="img/android.svg" alt="">Android</h3>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.19/Tetra-0.8.0-beta.19-arm64.apk"><img src="img/android.svg" alt=""><div><b>Íoslódáil don Android</b><span>APK · 0.8.0 beta 19 · Android 11+</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.20/Tetra-0.8.0-beta.20-arm64.apk"><img src="img/android.svg" alt=""><div><b>Íoslódáil don Android</b><span>APK · 0.8.0 beta 20 · Android 11+</span></div></a>
         <div class="qr"><img src="img/qr-android.svg" alt="Cód QR don íoslódáil Android"><p>Nó scan é le do ghuthán.<br><a href="#faq-install">Conas é a shuiteáil</a></p></div></div>
       <div class="group"><h3><img src="img/linux.svg" alt="">Linux</h3>
-        <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/Tetra-0.8.0-beta.9.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 9 · formhór na ndáileachtaí</span></div></a>
-        <a class="btn deb" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/local-drive-desktop_0.8.0-beta.9_amd64.deb"><img src="img/linux.svg" alt=""><div><b>Linux .deb</b><span>Debian, Ubuntu, Mint</span></div></a></div>
+        <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/Tetra-0.8.0-beta.10.AppImage"><img src="img/linux.svg" alt=""><div><b>Linux AppImage</b><span>0.8.0 beta 10 · formhór na ndáileachtaí</span></div></a>
+        <a class="btn deb" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/local-drive-desktop_0.8.0-beta.9_amd64.deb"><img src="img/linux.svg" alt=""><div><b>Linux .deb</b><span>Debian, Ubuntu, Mint</span></div></a></div>
       <div class="group"><h3><img src="img/windows.svg" alt="">Windows</h3>
-        <a class="btn windows" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/Tetra-Setup-0.8.0-beta.9.exe"><img src="img/windows.svg" alt=""><div><b>Windows</b><span>0.8.0 beta 9 · Windows 10, 11</span></div></a></div>
+        <a class="btn windows" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/Tetra-Setup-0.8.0-beta.10.exe"><img src="img/windows.svg" alt=""><div><b>Windows</b><span>0.8.0 beta 10 · Windows 10, 11</span></div></a></div>
       <div class="group"><h3><img src="img/icons/car.png" alt="">Tetra Car</h3>
-        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-Auto/releases/download/v0.2.0/TetraAuto-0.2.0.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Auto</b><span>0.2 · scáileáin chairr, Android 10+</span></div></a></div>
+        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-Auto/releases/download/v0.2.0/TetraAuto-0.2.0.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Car</b><span>0.2 · ó do ghuthán</span></div></a>
+        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.20/Tetra-Auto-SE-0.8.0-beta.20-arm64.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Car SE</b><span>0.8.0 beta 20 · sa charr féin</span></div></a>
+        <p class="which"><a href="#car">Cé acu?</a></p></div>
     </div>
     <img class="hero" src="img/tetra-devices.jpg" alt="Tetra ar ríomhaire, ar thábléad agus ar ghuthán">
   </div>
@@ -383,22 +387,53 @@
         <h3>Tetra don Android</h3>
         <p>Guthán agus táblaí, Android 11 nó níos nua.</p>
         <a href="https://github.com/kalotrapezis/Tetra-mobile">Foinse agus sonraí ar GitHub</a>
-        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.19/Tetra-0.8.0-beta.19-arm64.apk"><img src="img/android.svg" alt=""><div><b>Íoslódáil APK</b><span>0.8.0 beta 19</span></div></a>
+        <a class="btn android" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.20/Tetra-0.8.0-beta.20-arm64.apk"><img src="img/android.svg" alt=""><div><b>Íoslódáil APK</b><span>0.8.0 beta 20</span></div></a>
       </div>
       <div class="panel">
         <h3>Tetra don deasc</h3>
         <p>Linux: AppImage don chuid is mó de na dáileachtaí, nó .deb do Debian, Ubuntu agus Mint. Fanann sé sa tráidire do do ghuthán.</p>
         <a href="https://github.com/kalotrapezis/Tetra">Foinse agus sonraí ar GitHub</a>
-        <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/Tetra-0.8.0-beta.9.AppImage"><img src="img/linux.svg" alt=""><div><b>AppImage</b><span>0.8.0 beta 9</span></div></a>
-        <a class="btn deb" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/local-drive-desktop_0.8.0-beta.9_amd64.deb"><img src="img/linux.svg" alt=""><div><b>.deb</b><span>0.8.0 beta 9</span></div></a>
-        <a class="btn windows" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.9/Tetra-Setup-0.8.0-beta.9.exe"><img src="img/windows.svg" alt=""><div><b>Windows</b><span>0.8.0 beta 9</span></div></a>
+        <a class="btn appimage" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/Tetra-0.8.0-beta.10.AppImage"><img src="img/linux.svg" alt=""><div><b>AppImage</b><span>0.8.0 beta 10</span></div></a>
+        <a class="btn deb" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/local-drive-desktop_0.8.0-beta.9_amd64.deb"><img src="img/linux.svg" alt=""><div><b>.deb</b><span>0.8.0 beta 10</span></div></a>
+        <a class="btn windows" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.10/Tetra-Setup-0.8.0-beta.10.exe"><img src="img/windows.svg" alt=""><div><b>Windows</b><span>0.8.0 beta 10</span></div></a>
         <a class="btn thunderbird" href="https://github.com/kalotrapezis/Tetra/releases/download/desktop-v0.8.0-beta.6/tetra-mail-0.1.0.xpi"><img src="img/mail.svg" alt=""><div><b>Síneadh do Thunderbird</b><span>Tetra Mail, do chuntais nach n-osclaíonn ach Thunderbird</span></div></a>
       </div>
       <div class="panel">
-        <h3>Tetra Auto, don charr</h3>
-        <p>Do scáileán Android an chairr féin (Android 10 nó níos nua), in áit Android Auto. Ritheann Tetra ar do ghuthán Tetra Car agus seolann sé chuig an gcarr é thar Wi-Fi, mar sin teastaíonn Tetra do Android ar an nguthán freisin.</p>
+        <h3>Tetra Car, don charr</h3>
+        <p>Do scáileán Android an chairr féin (Android 10 nó níos nua), in áit Android Auto. Teastaíonn Tetra do Android ar an nguthán freisin.</p>
         <a href="https://github.com/kalotrapezis/Tetra-Auto">Foinse agus sonraí ar GitHub</a>
-        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-Auto/releases/download/v0.2.0/TetraAuto-0.2.0.apk"><img src="img/icons/car.png" alt=""><div><b>Íoslódáil APK</b><span>0.2</span></div></a>
+        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-Auto/releases/download/v0.2.0/TetraAuto-0.2.0.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Car</b><span>0.2</span></div></a>
+        <a class="btn car" href="https://github.com/kalotrapezis/Tetra-mobile/releases/download/v0.8.0-beta.20/Tetra-Auto-SE-0.8.0-beta.20-arm64.apk"><img src="img/icons/car.png" alt=""><div><b>Tetra Car SE</b><span>0.8.0 beta 20</span></div></a>
+        <p class="which"><a href="#car">Cé acu?</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="car">
+  <div class="wrap">
+    <h2>Tetra Car nó Tetra Car SE?</h2>
+    <p class="sub">Cuireann an dá cheann Tetra Car ar scáileán Android an chairr féin (Android 10 nó níos nua), in áit Android Auto: léarscáileanna, ceol, glaonna, teachtaireachtaí agus AI Assist. Is é an difríocht cá ritheann Tetra. Teastaíonn Tetra do Android ar an nguthán ón dá cheann, agus is féidir iad a shuiteáil taobh le taobh.</p>
+    <div class="two">
+      <div class="panel">
+        <h3>Tetra Car</h3>
+        <p>Ritheann do ghuthán é; ní dhéanann an carr ach é a thaispeáint.</p>
+        <ul>
+          <li>Tarraingíonn Tetra ar an nguthán Tetra Car agus seolann sé an pictiúr thar Wi-Fi; seolann an carr gach teagmháil ar ais.</li>
+          <li>GPS, aipeanna agus an leagan is déanaí den ghuthán i gcónaí. Tá aip an chairr beag agus is annamh a athraíonn sí.</li>
+          <li>Sroicheann ceol agus glaonna callairí an chairr thar Bluetooth.</li>
+          <li>Oibríonn sé ar aon aonad, fiú ceann mall.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Tetra Car SE</h3>
+        <p>Tetra féin, ag rith sa charr.</p>
+        <ul>
+          <li>Ritheann an carr Tetra Car leis féin, seinneann sé a fhuaim féin agus is féidir leis a GPS féin a úsáid.</li>
+          <li>Ní thugann an guthán ach a hotspot, agus seolann sé léarscáileanna, teachtaireachtaí, glaonna agus a cheallra: gan fuaim Bluetooth, gan Android Auto.</li>
+          <li>Teastaíonn córas lámh-saor Bluetooth an chairr fós do ghuth glao, mar ní ligeann Android d'aon aip é a iompar.</li>
+          <li>Teastaíonn aonad atá tapa go leor dó. Béite luath.</li>
+        </ul>
       </div>
     </div>
   </div>
