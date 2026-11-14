@@ -138,3 +138,45 @@ test('the weekly tidy: merges, rewrites, drops stale learnt facts; the user\'s o
     assert.deepEqual(await tidy({ complete: async () => 'nope' }, memory, now), [], 'a broken answer changes nothing')
   } finally { fs.rmSync(dir, { recursive: true, force: true }) }
 })
+
+// A scheduled action's permission (the user, 14 Nov: "can I save my permission, and have it report what it could and couldn't do")
+test('a scheduled action allowed "calendar" adds the event after mail; memory still waits; the log says which', async () => {
+  const { tools } = setup()
+  const added = []
+  tools.calendar = { calendars: () => [{ id: 'c1' }], newCalendar() {}, add: e => { added.push(e); return e } }
+  tools.calendar_add = a => { added.push(a.title); return { forModel: `Added ${a.title}.` } }
+  const { allowed } = require('../assistant')
+  const c = new Chat(fakeApi([
+    { content: '', tool_calls: [call('a', 'mail_read', { choice: 1 })] },
+    { content: '', tool_calls: [call('b', 'calendar_add', { title: 'Προθεσμία', start: '2026-11-20' }), call('c', 'memory_add', { text: 'x' }), call('d', 'timer_start', { minutes: 'oops' })] },
+    { content: 'Έτοιμο.' },
+  ]), tools, undefined, allowed(['calendar', 'timers']))
+  tools.timer_start = () => { throw new Error('no timers here') }
+  const r = await c.ask('Read the school mail')
+  assert.deepEqual(added, ['Προθεσμία'])
+  assert.equal(r.held.length, 1)
+  assert.match(r.held[0].what, /^memory_add/)
+  assert.deepEqual(c.log.map(e => [e.kind, e.name]), [['done', 'calendar_add'], ['held', 'memory_add'], ['failed', 'timer_start']])
+  assert.match(c.log[2].why, /no timers here/)
+})
+
+test('the report: done, waiting, could not; nothing to say, no report', () => {
+  const brief = require('../brief')
+  assert.equal(brief.report([], e => e.name), null)
+  const r = brief.report([{ kind: 'held', name: 'memory_add', what: 'x' }, { kind: 'done', name: 'calendar_add', what: 'y' }], e => `${e.name} ${e.what}`)
+  assert.ok(r.text.indexOf('calendar_add y') < r.text.indexOf('memory_add x'))
+  assert.match(r.html, /<li>calendar_add y<\/li>/)
+})
+
+test('a chat from the phone: its tool calls go, what they found comes inside the answer, turns alternate', () => {
+  const { foreignTurns } = require('../assistant')
+  const out = foreignTurns([
+    { role: 'user', content: 'Ψάξε προκηρύξεις' },
+    { role: 'assistant', content: '', tool_calls: [call('a', 'web_search', { query: 'x' })] },
+    { role: 'tool', name: 'web_search', tool_call_id: 'a', content: 'ΑΣΕΠ 3Κ/2026' },
+    { role: 'assistant', content: 'Βρήκα μία.' },
+  ])
+  assert.deepEqual(out.map(m => m.role), ['user', 'assistant'])
+  assert.match(out[1].content, /\[web_search\]\nΑΣΕΠ 3Κ\/2026[\s\S]*Βρήκα μία\.$/)
+  assert.ok(out.every(m => !m.tool_calls))
+})

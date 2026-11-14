@@ -83,7 +83,22 @@ async function make(ctx, title = t('brief.title')) {
   return { html: page(title, heading(ctx.now), parts), line: parts.map(p => p.line).filter(Boolean).join(' · ') }
 }
 
-/** A scheduled prompt's answer as a page of its own. */
-const answer = (title, now, text) => page(title, `${heading(now)} ${clock(now)}`, [{ title: t('app.assistant'), html: paragraphs(text) }])
+/** A scheduled prompt's answer as a page of its own; [more]: parts after it (its report). */
+const answer = (title, now, text, more = []) => page(title, `${heading(now)} ${clock(now)}`, [{ title: t('app.assistant'), html: paragraphs(text) }, ...more])
 
-module.exports = { SECTIONS, enabled, make, answer, page, dayKey }
+/**
+ * What a scheduled action did (the user, 14 Nov: "have it actually report back what it can and it couldn't do"), from its
+ * chat's log: done, waiting for the user's yes, could not. { title, html, text }, or null when it did none of these.
+ */
+function report(log, label) {
+  const lists = [['done', 'sched.done'], ['held', 'sched.waiting'], ['failed', 'sched.failed']].map(([k, key]) => [key, log.filter(e => e.kind === k)]).filter(([, l]) => l.length)
+  if (!lists.length) return null
+  const why = e => e.why ? String(e.why).slice(0, 200) : ''
+  return {
+    title: t('sched.report'),
+    html: lists.map(([key, l]) => `<h3>${esc(t(key))}</h3><ul>${l.map(e => `<li>${esc(label(e))}${why(e) ? ` <span class="muted">· ${esc(why(e))}</span>` : ''}</li>`).join('')}</ul>`).join(''),
+    text: lists.map(([key, l]) => `${t(key)}:\n${l.map(e => `• ${label(e)}${why(e) ? ` (${why(e)})` : ''}`).join('\n')}`).join('\n\n'),
+  }
+}
+
+module.exports = { SECTIONS, enabled, make, answer, report, page, dayKey }

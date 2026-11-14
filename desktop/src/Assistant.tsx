@@ -313,6 +313,7 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
     if (!command || !s) return
     if (command.what === 'talk') fns.current.mic()
     if (command.what === 'live') fns.current.toggleLive()
+    if (command.what.startsWith('chat:')) openChat(command.what.slice(5)).catch(() => {}) // a scheduled action's notification
   }, [command?.at, !!s]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const status = phase === 'listening' ? t(hearing ? 'assistant.hearing' : 'assistant.listening') : phase === 'thinking' ? t('assistant.thinking') : null

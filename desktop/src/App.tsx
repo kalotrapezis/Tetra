@@ -162,7 +162,7 @@ export function App() {
   useEffect(() => window.drive.assistant.onCommand(what => {
     if (what === 'toggle' && pageKind.current === 'assistant') { window.drive.assistant.hide(); return }
     setPage({ kind: 'assistant' })
-    if (what === 'talk' || what === 'live') setAssistCommand({ what, at: Date.now() })
+    if (what === 'talk' || what === 'live' || what.startsWith('chat:')) setAssistCommand({ what, at: Date.now() })
   }), [])
   useEffect(() => window.drive.sync.onOffer(id => setDialog(<OffloadDialog deviceId={id} onClose={() => setDialog(null)} />)), [])
   useEffect(() => { window.drive.viewSettings().then(v => { setHideScreenshots(v.hideScreenshots); setHideDocuments(v.hideDocuments) }) }, [])

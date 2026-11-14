@@ -66,7 +66,8 @@ export interface AssistHeld { id: string; what: string }
 export interface AssistReply { text: string; choices: AssistChoice[]; call: AssistCall | null; send: AssistSend | null; images: string[]; open: string | null; go: AssistGo | null; audio: AssistAudio | null; held: AssistHeld[]; spent: number }
 export interface AssistShortcuts { toggle: string; talk: string; live: string }
 export type Repeat = 'once' | 'daily' | 'weekly' | 'monthly' | 'yearly'
-export interface Schedule { id: string; kind: 'prompt' | 'brief'; title: string; prompt: string; time: string; repeat: Repeat; days: number[]; date: string | null; paused: boolean; last?: number; next: number | null }
+export type Allow = 'calendar' | 'notes' | 'timers' | 'files'
+export interface Schedule { id: string; kind: 'prompt' | 'brief'; title: string; prompt: string; time: string; repeat: Repeat; days: number[]; date: string | null; paused: boolean; allow?: Allow[]; last?: number; next: number | null }
 export interface Place { name: string; lat: number; lon: number }
 export interface BriefSettings { sections: Record<string, boolean>; place: Place | null }
 export interface AssistSettings {
@@ -422,7 +423,7 @@ declare global {
       schedules: {
         list(): Promise<{ list: Schedule[]; brief: BriefSettings; ready: boolean }>
         change(id: string, x: Partial<Omit<Schedule, 'id' | 'kind' | 'next'>>): Promise<void>
-        add(x: Pick<Schedule, 'title' | 'prompt' | 'time' | 'repeat' | 'days' | 'date'>): Promise<Schedule>
+        add(x: Pick<Schedule, 'title' | 'prompt' | 'time' | 'repeat' | 'days' | 'date' | 'allow'>): Promise<Schedule>
         results(): Promise<{ file: string; title: string; at: number }[]>
         remove(id: string): Promise<void>
         run(id: string): Promise<string | null>

@@ -8,7 +8,7 @@
  *   ~/Tetra/.System/Assistant/Shared/schedules.json   (synced as "AI Assist/schedules.json")
  *   { "list": [ { id, title, prompt, kind: "prompt" | "brief", time: "HH:MM", repeat: "once" | "daily" | "weekly" | "monthly" | "yearly",
  *                 days: [0-6] (weekly, 0 = Sunday), date: "YYYY-MM-DD" (once: the day; monthly: its day; yearly: its day and month),
- *                 paused, created, last, runNow } ],
+ *                 paused, created, last, runNow, allow: ["calendar" | "notes" | "timers" | "files"] (done without a yes after mail or the web) } ],
  *     "runner": the computer that runs them (its host name),
  *     "brief": { sections: { calendar: bool, … }, place: { name, lat, lon } } }
  */
@@ -17,6 +17,8 @@ const path = require('node:path')
 const crypto = require('node:crypto')
 
 const REPEATS = ['once', 'daily', 'weekly', 'monthly', 'yearly']
+/** What one may do on its own (assistant.js ALLOW): its "allow". */
+const ALLOW_GROUPS = ['calendar', 'notes', 'timers', 'files']
 const pad = n => String(n).padStart(2, '0')
 const dayKey = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
 const daysIn = d => new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate()
@@ -80,6 +82,7 @@ class Schedules {
     if (x.repeat != null) { if (!REPEATS.includes(x.repeat)) throw new Error(`Not a repetition: ${x.repeat}`); s.repeat = x.repeat }
     if (x.days != null) s.days = [...new Set((Array.isArray(x.days) ? x.days : [x.days]).map(Number).filter(n => Number.isInteger(n) && n >= 0 && n <= 6))].sort()
     if (x.date !== undefined) { if (x.date && !/^\d{4}-\d{2}-\d{2}$/.test(x.date)) throw new Error(`Not a date: ${x.date}`); s.date = x.date || null }
+    if (x.allow != null) s.allow = [...new Set((Array.isArray(x.allow) ? x.allow : []).map(String))].filter(g => ALLOW_GROUPS.includes(g))
     if (x.paused != null) s.paused = !!x.paused
     if (x.runNow != null) s.runNow = !!x.runNow
     if (s.repeat === 'weekly' && !s.days?.length) throw new Error('Say on which weekdays.')
@@ -134,4 +137,4 @@ function mergeSchedules(older, newer) {
   return JSON.stringify({ ...a, ...b, list, ...(Object.keys(removed).length ? { removed } : {}) }, null, 2)
 }
 
-module.exports = { Schedules, nextRun, due, mergeSchedules, REPEATS, BRIEF }
+module.exports = { Schedules, nextRun, due, mergeSchedules, REPEATS, ALLOW_GROUPS, BRIEF }

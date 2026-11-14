@@ -1574,6 +1574,29 @@ app.whenReady().then(() => {
   const assistTools = makeTools()
   const chat = new assistant.Chat(api, assistTools)
 
+  // History (the user, 1 Nov: "where is the history, the chats"): one file a chat, the newest 100. Synced since 14 Nov (the
+  // user: "sync the chats as well why not?"), as "AI Assist/Chats", so a chat goes on on the phone; [device] says whose turns.
+  const HOST = require('node:os').hostname()
+  const CHATS = path.join(system.dir('Assistant', 'Shared', files.system), 'Chats')
+  const chatFile = id => path.join(CHATS, `${String(id).replace(/[^\w-]/g, '').slice(0, 64) || 'x'}.json`)
+  try { // the chats kept before, on this computer only, go to the synced place once
+    const old = path.join(system.dir('Assistant', 'Data', files.system), 'chats')
+    if (fs.existsSync(old)) {
+      fs.mkdirSync(CHATS, { recursive: true })
+      for (const n of fs.readdirSync(old)) if (!fs.existsSync(path.join(CHATS, n))) fs.renameSync(path.join(old, n), path.join(CHATS, n))
+      fs.rmSync(old, { recursive: true, force: true })
+    }
+  } catch (e) { console.warn('[assistant] chats move', e.message) }
+  function writeChat(id, o) {
+    fs.mkdirSync(CHATS, { recursive: true })
+    const part = path.join(CHATS, `.${path.basename(chatFile(id))}.part`) // whole or not at all: the sync may read it any moment
+    fs.writeFileSync(part, JSON.stringify({ id, at: Date.now(), device: HOST, ...o })); fs.renameSync(part, chatFile(id))
+    const all = fs.readdirSync(CHATS).filter(n => n.endsWith('.json')).map(n => ({ n, at: fs.statSync(path.join(CHATS, n)).mtimeMs })).sort((x, y) => y.at - x.at)
+    for (const { n } of all.slice(100)) fs.rmSync(path.join(CHATS, n), { force: true })
+  }
+  /** A scheduled action's tool → its permission group (assistant.js ALLOW), for its report's words. */
+  const GROUP_OF = Object.fromEntries(Object.entries(assistant.ALLOW).flatMap(([g, ns]) => ns.map(n => [n, g])))
+
   // Scheduled actions (schedule.js, brief.js): one timer for the next, made again when they change, the AI switch changes, the
   // computer wakes or Tetra starts. One due while Tetra was closed or asleep runs once, if it is less than a day late. The
   // page goes to .System/Assistant/Shared/Briefs, which syncs, so the phone shows it too (latest.json says which).
@@ -1608,7 +1631,7 @@ app.whenReady().then(() => {
     if (!byHand) schedules.ran(s.id, Date.now()) // first, so a slow run is not started twice
     const title = s.kind === 'brief' ? t('brief.title') : s.title
     try {
-      const now = Date.now(), c = new assistant.Chat(api.as(s.kind === 'brief' ? 'brief' : 'schedule'), makeTools())
+      const now = Date.now(), c = new assistant.Chat(api.as(s.kind === 'brief' ? 'brief' : 'schedule'), makeTools(), undefined, assistant.allowed(s.allow))
       const ask = async prompt => (await c.ask(prompt)).text
       let html, line
       if (s.kind === 'brief') {
@@ -1620,12 +1643,20 @@ app.whenReady().then(() => {
           if (Number.isFinite(fix?.lat) && Number.isFinite(fix?.lng)) place = { name: t('brief.placePhone', { device: fix.device }), lat: fix.lat, lon: fix.lng }
         }
         ;({ html, line } = await brief.make({ now, calendar, notes, ask, fetch: globalThis.fetch, place, switches: b.sections, allowed: app => aiSwitch.allows(app) }, title))
-      } else { line = await ask(`${s.prompt}\n\n(This runs by itself on a schedule and the answer is shown as a page: it may be longer than usual, in short paragraphs.)`); html = brief.answer(title, now, line) }
-      const name = `${brief.dayKey(new Date(now))}${s.kind === 'brief' ? '' : '-' + s.id.slice(0, 8)}.html`, file = path.join(BRIEFS, name)
+      } else { line = await ask(`${s.prompt}\n\n(This runs by itself on a schedule and the answer is shown as a page: it may be longer than usual, in short paragraphs.)`) }
+      const base = `${brief.dayKey(new Date(now))}${s.kind === 'brief' ? '' : '-' + s.id.slice(0, 8)}`, name = `${base}.html`, file = path.join(BRIEFS, name)
+      let open = () => shell.openPath(file)
+      if (s.kind !== 'brief') {
+        const done = brief.report(c.log, e => `${GROUP_OF[e.name] ? t(`sched.allow.${GROUP_OF[e.name]}`) : e.name}: ${e.what.replace(/^[a-z_]+\((.*)\)$/s, '$1')}`)
+        html = brief.answer(title, now, line, done ? [done] : [])
+        // the run as a chat too (the user, 14 Nov: "an actual chat"), named as its page: the phone's page offers it, a click here opens it
+        writeChat(base, { title, bubbles: [{ mine: true, text: s.prompt }, { mine: false, text: [line, done?.text].filter(Boolean).join('\n\n') }], messages: c.messages })
+        open = () => assistantCommand(`chat:${base}`)
+      }
       fs.mkdirSync(BRIEFS, { recursive: true })
       fs.writeFileSync(file, html)
       fs.writeFileSync(path.join(BRIEFS, 'latest.json'), JSON.stringify({ at: now, title, text: String(line).slice(0, 300), file: name }))
-      notify('assistant', title, String(line).slice(0, 200) || t('brief.tapToOpen'), () => shell.openPath(file))
+      notify('assistant', title, String(line).slice(0, 200) || t('brief.tapToOpen'), open)
       sync?.nudge().catch(() => {})
       return file
     } catch (e) {
@@ -1756,18 +1787,14 @@ app.whenReady().then(() => {
     if (setting('assistantAutoMemory') !== '0' && aiSwitch.on()) assistant.learn(api.as('memory'), memory, String(text)).catch(e => console.warn('[assistant] learn', e.message))
     return { ...r, images: r.images.map(f => 'data:image/png;base64,' + fs.readFileSync(f.full).toString('base64')), spent: chat.bill.usd }
   })
-  // History (the user, 1 Nov: "where is the history, the chats"): each chat on this computer only, never synced, the newest 100
-  const CHATS = path.join(system.dir('Assistant', 'Data', files.system), 'chats')
-  const chatFile = id => path.join(CHATS, `${String(id).replace(/[^\w-]/g, '').slice(0, 64) || 'x'}.json`)
   ipcMain.handle('assistant:keep', (_, id, bubbles) => {
     const said = (Array.isArray(bubbles) ? bubbles : []).map(b => ({ mine: !!b?.mine, text: String(b?.text ?? '').slice(0, 20000), error: !!b?.error,
       ...(Array.isArray(b?.files) ? { files: b.files.map(f => ({ name: String(f.name), path: String(f.path), pages: Number(f.pages) || 0 })) } : {}),
       ...(b?.job ? { job: String(b.job) } : {}) }))
     if (!said.some(b => b.mine)) return
-    fs.mkdirSync(CHATS, { recursive: true })
-    fs.writeFileSync(chatFile(id), JSON.stringify({ id, at: Date.now(), title: said.find(b => b.mine).text.replace(/\s+/g, ' ').slice(0, 80), bubbles: said, messages: chat.messages }))
-    const all = fs.readdirSync(CHATS).filter(n => n.endsWith('.json')).map(n => ({ n, at: fs.statSync(path.join(CHATS, n)).mtimeMs })).sort((x, y) => y.at - x.at)
-    for (const { n } of all.slice(100)) fs.rmSync(path.join(CHATS, n), { force: true })
+    let title = said.find(b => b.mine).text.replace(/\s+/g, ' ').slice(0, 80)
+    try { title = JSON.parse(fs.readFileSync(chatFile(id), 'utf8')).title || title } catch {} // a scheduled action's chat keeps its name
+    writeChat(id, { title, bubbles: said, messages: chat.messages })
   })
   // each kept chat's title, read again only when its file changed: History read all 100 whole at every look (79 ms)
   const chatHeads = new Map()
@@ -1783,13 +1810,13 @@ app.whenReady().then(() => {
         chatHeads.set(n, { mtime: at, head })
         return head
       } catch { return null }
-    }).filter(Boolean).sort((x, y) => y.at - x.at)
+    }).filter(Boolean).sort((x, y) => y.at - x.at).filter((h, i, all) => all.findIndex(x => x.id === h.id) === i) // a sync's "(2)" copy: the newest only
   }
   ipcMain.handle('assistant:chats', () => chatList())
   /** Takes a kept chat back, to go on with it: the model gets its turns again; the window, its bubbles. */
   ipcMain.handle('assistant:openChat', (_, id) => {
     const o = JSON.parse(fs.readFileSync(chatFile(id), 'utf8'))
-    hush(); chat.clear(); chat.messages = Array.isArray(o.messages) ? o.messages : []
+    hush(); chat.clear(); chat.messages = !Array.isArray(o.messages) ? [] : o.device && o.device !== HOST ? assistant.foreignTurns(o.messages) : o.messages
     // its file is read again only if the chat asks for it
     const f = (o.bubbles ?? []).flatMap(b => b.files ?? []).at(-1)
     if (f && fs.existsSync(f.path)) assistTools.doc = { name: f.name, path: f.path }
