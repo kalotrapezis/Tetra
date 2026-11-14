@@ -1828,7 +1828,7 @@ app.whenReady().then(() => {
   async function runAudio(spec, doc, dir, progress, job) {
     if (usage.capped()) throw new Error(t('usage.capped'))
     const jobApi = api.as('audio', { file: doc.name, job })
-    const r = await require('./audio').make({ api: jobApi, doc, mode: spec.mode, minutes: spec.minutes, focus: spec.focus, style: spec.style, perSection: !!spec.perSection,
+    const r = await require('./audio').make({ api: jobApi, doc, mode: spec.mode, minutes: spec.minutes, length: spec.length, focus: spec.focus, style: spec.style, perSection: !!spec.perSection,
       voices: await showVoices(), dir, cache: path.join(AUDIO, 'cache'), progress })
     usage.add({ f: 'mp3', file: doc.name, title: r.title, s: Math.round(r.seconds), job, cost: jobApi.bill.usd, mode: spec.mode })
     return r

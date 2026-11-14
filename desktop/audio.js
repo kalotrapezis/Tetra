@@ -15,16 +15,19 @@ const LINE_GAP = 0.35, SECTION_GAP = 1.2 // seconds
 const CHARS_A_MINUTE = 900 // Greek read aloud: ~150 words of ~6 letters
 const WORDS_A_MINUTE = 150
 const PARALLEL = 3
-const SHOW_MODEL = 'mistral-medium-latest', SMALL = 'mistral-small-latest'
+// the show's script by the big model (the user, 14 Nov 2026: "when it creates a podcast can we use the bigger model")
+const SHOW_MODEL = 'mistral-large-latest', SMALL = 'mistral-small-latest'
 const TOKEN = 3.5 // letters a token, Greek
-const PRICE = { [SHOW_MODEL]: [0.4, 2.0], [SMALL]: [0.1, 0.3] }
+const PRICE = { [SHOW_MODEL]: [0.5, 1.5], [SMALL]: [0.1, 0.3] }
+/** A show's length, chosen on the card: half, the usual, twice. */
+const LENGTHS = { short: 0.5, medium: 1, long: 2 }
 const TTS_CHAR = 0.016 / 1000
 
 /** How long, how much, how soon: said to the user before anything is spent. */
-function estimate({ chars, mode, minutes }) {
-  const show = mode === 'show'
-  // a show runs about as long as one and a half readings of its source (tried: two pages made 2 minutes, not the 6 asked)
-  const min = show ? Math.max(3, Math.min(60, Math.round(chars / 600), Math.round(Number(minutes) || Math.min(20, Math.max(8, chars / 2500))))) : Math.max(1, Math.round(chars / CHARS_A_MINUTE))
+function estimate({ chars, mode, minutes, length = 'medium' }) {
+  const show = mode === 'show', f = LENGTHS[length] ?? 1
+  // a show runs about as long as one and a half readings of its source (tried: two pages made 2 minutes, not the 6 asked); a long one three
+  const min = show ? Math.max(3, Math.min(60, Math.round(chars / 600 * Math.max(1, f)), Math.round(Number(minutes) || f * Math.min(20, Math.max(8, chars / 2500))))) : Math.max(1, Math.round(chars / CHARS_A_MINUTE))
   const spoken = min * CHARS_A_MINUTE
   const tok = (model, inChars, outChars) => (inChars / TOKEN * PRICE[model][0] + outChars / TOKEN * PRICE[model][1]) / 1e6
   const usd = spoken * TTS_CHAR + (show ? tok(SHOW_MODEL, chars, spoken) + tok(SMALL, chars + spoken, 200) : tok(SMALL, chars, chars))
@@ -207,8 +210,8 @@ const safe = s => String(s).replace(/[\\/:*?"<>|\n\r\t]+/g, ' ').replace(/\s+/g,
  * The whole job: script, voices, mix, MP3 (and one MP3 a section when [perSection]) in [dir]. [voices]: [host, expert];
  * [progress] gets { stage, done, total }. Answers the file, the chapters and how long it is.
  */
-async function make({ api, doc, mode = 'narration', minutes, focus, style, perSection = false, voices, dir, cache, progress = () => {}, signal }) {
-  const est = estimate({ chars: doc.text.length, mode, minutes })
+async function make({ api, doc, mode = 'narration', minutes, length, focus, style, perSection = false, voices, dir, cache, progress = () => {}, signal }) {
+  const est = estimate({ chars: doc.text.length, mode, minutes, length })
   const { lines, dropped } = await script(api, doc, { mode, minutes: est.minutes, focus, style, signal, progress })
   if (!lines.length) throw new Error('No script came back.')
   let done = 0
@@ -238,4 +241,4 @@ async function make({ api, doc, mode = 'narration', minutes, focus, style, perSe
   return { file, files, title, seconds, chapters: chapters.map(c => ({ title: c.title, start: c.start })), dropped }
 }
 
-module.exports = { estimate, parseScript, pieces, mix, mp3, id3, readChapters, make, script, RATE, CHARS_A_MINUTE }
+module.exports = { estimate, LENGTHS, SHOW_MODEL, parseScript, pieces, mix, mp3, id3, readChapters, make, script, RATE, CHARS_A_MINUTE }

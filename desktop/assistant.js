@@ -11,7 +11,7 @@ const crypto = require('node:crypto')
 const { t } = require('./i18n')
 const { plain, nameOf } = require('./contacts')
 const attach = require('./attach')
-const { estimate } = require('./audio')
+const { estimate, LENGTHS, SHOW_MODEL } = require('./audio')
 const P = require('./pills')
 
 const API = 'https://api.mistral.ai/v1'
@@ -24,7 +24,7 @@ const OCR = 'mistral-ocr-latest'
 const RATE = 16000
 
 // shortcut: Mistral's list prices in $ as published Oct 2026 (tools' from price tables, not Mistral's page); update when they change
-const TOKENS = { [CHAT]: [0.1, 0.3], [BUILT_IN]: [0.4, 2.0] }
+const TOKENS = { [CHAT]: [0.1, 0.3], [BUILT_IN]: [0.4, 2.0], [SHOW_MODEL]: [0.5, 1.5] }
 const PER_MINUTE = { [TRANSCRIBE]: 0.004, [REALTIME]: 0.006 }
 const PER_CALL = { web_search: 0.03, image_generation: 0.10 }
 const PER_CHAR = 0.016 / 1000 // voxtral-mini-tts-3: $0.016 a thousand characters
@@ -312,7 +312,8 @@ const SCHEMA = [
   fn('attachment_read', 'Read more of the file attached in this chat: one part by its number, or the passages about something.', [],
     { part: p('integer', 'The part\'s number (1 = the start).'), query: p('string', 'What to look for in it, in its language.') }),
   fn('audio_make', 'Make an MP3 of the attached file (or of a file from the last files_find list): "narration" reads it whole with one voice; "show" is a radio show, a host and an expert talking it through with examples and recaps. It answers an estimate (minutes, cost, when ready): say it in one sentence and ask whether to start. It starts only on the user\'s yes, which Tetra hears; never say it has started or is done.', ['mode'],
-    { mode: { type: 'string', enum: ['narration', 'show'], description: '"narration": read it to me; "show": a radio show.' }, minutes: p('integer', 'For a show: how long, if the user said.'),
+    { mode: { type: 'string', enum: ['narration', 'show'], description: '"narration": read it to me; "show": a radio show.' }, minutes: p('integer', 'For a show: how many minutes, only if the user said a number.'),
+      length: { type: 'string', enum: Object.keys(LENGTHS), description: 'For a show: short («σύντομο»), medium or long («μεγάλο»), if the user said.' },
       focus: p('string', 'For a show: what to dwell on, if said.'), style: p('string', 'For a show: the tone, if said (e.g. "για εξετάσεις", "χαλαρό").'),
       per_section: p('boolean', 'Also one MP3 a section, if asked.'), choice: p('integer', 'A file from the last files_find list instead of the attached one.') }),
 ]
@@ -868,9 +869,11 @@ class Tools {
       d = await this.extract(this.files.resolve(f.path))
     } else d = await this.attached()
     if (!d) return { forModel: 'No file: the user attaches one (the paperclip), or files_find one first.' }
-    const mode = a.mode === 'show' ? 'show' : 'narration', est = estimate({ chars: d.text.length, mode, minutes: a.minutes })
-    return { forModel: `Estimate: ≈ ${est.minutes} minutes of audio, ≈ €${est.usd.toFixed(2)}, ready in ~${est.ready} minutes; it runs in the background and a notification says when it is ready. Say this in one sentence in the user's language and ask whether to start.`,
-      audio: { path: d.path, name: d.name, mode, minutes: est.minutes, focus: String(a.focus ?? ''), style: String(a.style ?? ''), perSection: !!a.per_section, estimate: est } }
+    const mode = a.mode === 'show' ? 'show' : 'narration', length = LENGTHS[a.length] ? a.length : 'medium'
+    // each length's estimate, so the card's short / medium / long shows its own without asking main; the minutes said go with the length said
+    const estimates = Object.fromEntries(Object.keys(LENGTHS).map(l => [l, estimate({ chars: d.text.length, mode, length: l, minutes: l === length ? a.minutes : undefined })])), est = estimates[length]
+    return { forModel: `Estimate: ≈ ${est.minutes} minutes of audio, ≈ €${est.usd.toFixed(2)}, ready in ~${est.ready} minutes; it runs in the background and a notification says when it is ready.${mode === 'show' ? ' The card lets the user make it short, medium or long.' : ''} Say this in one sentence in the user's language and ask whether to start.`,
+      audio: { path: d.path, name: d.name, mode, length, minutes: est.minutes, focus: String(a.focus ?? ''), style: String(a.style ?? ''), perSection: !!a.per_section, estimate: est, estimates } }
   }
 
   report_save(a) {

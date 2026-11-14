@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
-import type { AssistAudio, AssistCall, AssistChoice, AssistFile, AssistGo, AssistHeld, AssistJob, AssistSend, AssistSettings } from './drive'
+import type { AssistAudio, AudioLength, AssistCall, AssistChoice, AssistFile, AssistGo, AssistHeld, AssistJob, AssistSend, AssistSettings } from './drive'
 import { Icon } from './Icon'
 import { t } from './i18n'
 import { errorText } from './Dialogs'
@@ -372,7 +372,7 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
           <WordCloud offer={offer} hidden={!!typed || !!file} /></div>}
         {bubbles.map((b, i) => <BubbleView key={i} b={b} pending={i === bubbles.length - 1 ? pending : null} choose={choose} call={call} cancel={cancelCall}
           mail={i === bubbles.length - 1 ? pendingMail : null} sendMail={sendMail} keepMail={keepMail}
-          audio={i === bubbles.length - 1 ? pendingAudio : null} startAudio={startAudio} skipAudio={skipAudio} job={b.job ? jobs[b.job] ?? null : null}
+          audio={i === bubbles.length - 1 ? pendingAudio : null} setLength={l => setPendingAudio(a => a && { ...a, length: l, minutes: a.estimates[l].minutes, estimate: a.estimates[l] })} startAudio={startAudio} skipAudio={skipAudio} job={b.job ? jobs[b.job] ?? null : null}
           held={held.filter(h => b.held?.some(x => x.id === h.id))} doHeld={doHeld} skipHeld={skipHeld} />)}
         {draft != null && <div className="assist-bubble">{draft || '…'}</div>}
       </div>
@@ -445,8 +445,8 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
   )
 }
 
-function BubbleView({ b, pending, choose, call, cancel, mail, sendMail, keepMail, audio, startAudio, skipAudio, job, held, doHeld, skipHeld }: { b: Bubble; pending: AssistCall | null; choose: (c: AssistChoice) => void; call: (c: AssistCall) => void; cancel: () => void
-  mail: AssistSend | null; sendMail: (m: AssistSend) => void; keepMail: () => void; audio: AssistAudio | null; startAudio: (a: AssistAudio) => void; skipAudio: () => void; job: AssistJob | null
+function BubbleView({ b, pending, choose, call, cancel, mail, sendMail, keepMail, audio, setLength, startAudio, skipAudio, job, held, doHeld, skipHeld }: { b: Bubble; pending: AssistCall | null; choose: (c: AssistChoice) => void; call: (c: AssistCall) => void; cancel: () => void
+  mail: AssistSend | null; sendMail: (m: AssistSend) => void; keepMail: () => void; audio: AssistAudio | null; setLength: (l: AudioLength) => void; startAudio: (a: AssistAudio) => void; skipAudio: () => void; job: AssistJob | null
   held: AssistHeld[]; doHeld: (h: AssistHeld) => void; skipHeld: (h: AssistHeld) => void }) {
   return (
     <div className={`assist-bubble ${b.mine ? 'mine' : ''} ${b.error ? 'error' : ''}`}>
@@ -454,6 +454,8 @@ function BubbleView({ b, pending, choose, call, cancel, mail, sendMail, keepMail
       {b.text && <p>{b.text}</p>}
       {audio && <div className="assist-mail">
         <small>{t(audio.mode === 'show' ? 'attach.show' : 'attach.read')} · {audio.name}</small>
+        {audio.mode === 'show' && audio.estimates && <div className="assist-choices">{(['short', 'medium', 'long'] as const).map(l =>
+          <button key={l} className={`chip ${audio.length === l ? 'on' : ''}`} aria-pressed={audio.length === l} onClick={() => setLength(l)}>{t(`attach.length.${l}`)}</button>)}</div>}
         <p>{t('attach.estimate', { min: audio.estimate.minutes, usd: audio.estimate.usd.toFixed(2), ready: audio.estimate.ready })}</p>
         <div className="reset-actions">
           <button className="filled-button" onClick={() => startAudio(audio)}><Icon name="play" size={18} /> {t('attach.start')}</button>
