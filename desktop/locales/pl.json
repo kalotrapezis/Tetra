@@ -3002,5 +3002,9 @@
  "passwords.cvcCopied": "Kod skopiowany; zniknie za 30 sekund",
  "passwords.cvcAsk": "Twoje hasło, aby pokazać kod",
  "passwords.cvcShow": "Pokaż",
- "passwords.cvcNone": "Dla tej karty nie zapisano kodu bezpieczeństwa; Edytuj go dodaje."
+ "passwords.cvcNone": "Dla tej karty nie zapisano kodu bezpieczeństwa; Edytuj go dodaje.",
+ "commands.title": "Wiersz poleceń",
+ "commands.intro": "Każda aplikacja i polecenia, które nią sterują. W terminalu: tetra help, tetra <app> <command>. Używa ich też AI Assist.",
+ "commands.search": "Znajdź polecenie",
+ "commands.open": "Otwórz podręcznik"
 }

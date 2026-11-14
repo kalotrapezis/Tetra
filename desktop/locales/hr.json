@@ -2908,5 +2908,9 @@
  "passwords.cvcCopied": "Sigurnosni kod kopiran; briše se za 30 sekundi",
  "passwords.cvcAsk": "Vaša lozinka za prikaz koda",
  "passwords.cvcShow": "Prikaži",
- "passwords.cvcNone": "Za ovu karticu nije spremljen sigurnosni kod; Uredi ga dodaje."
+ "passwords.cvcNone": "Za ovu karticu nije spremljen sigurnosni kod; Uredi ga dodaje.",
+ "commands.title": "Naredbeni redak",
+ "commands.intro": "Svaka aplikacija i naredbe koje je upravljaju. U terminalu: tetra help, tetra <app> <command>. Koristi ih i AI Assist.",
+ "commands.search": "Pronađi naredbu",
+ "commands.open": "Otvori priručnik"
 }

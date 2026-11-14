@@ -2816,5 +2816,9 @@
  "passwords.cvcCopied": "Sikkerhedskoden er kopieret; slettes om 30 sekunder",
  "passwords.cvcAsk": "Din adgangskode for at vise koden",
  "passwords.cvcShow": "Vis",
- "passwords.cvcNone": "Ingen sikkerhedskode gemt for kortet; Rediger tilføjer den."
+ "passwords.cvcNone": "Ingen sikkerhedskode gemt for kortet; Rediger tilføjer den.",
+ "commands.title": "Kommandolinje",
+ "commands.intro": "Hver app og de kommandoer, der styrer den. I en terminal: tetra help, tetra <app> <command>. AI Assist bruger dem også.",
+ "commands.search": "Find en kommando",
+ "commands.open": "Åbn manualen"
 }

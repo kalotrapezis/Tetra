@@ -2908,5 +2908,9 @@
  "passwords.cvcCopied": "Kods nokopēts; tiks dzēsts pēc 30 sekundēm",
  "passwords.cvcAsk": "Jūsu parole, lai parādītu kodu",
  "passwords.cvcShow": "Rādīt",
- "passwords.cvcNone": "Šai kartei nav saglabāts drošības kods; Rediģēt to pievieno."
+ "passwords.cvcNone": "Šai kartei nav saglabāts drošības kods; Rediģēt to pievieno.",
+ "commands.title": "Komandrinda",
+ "commands.intro": "Katra lietotne un komandas, kas to vada. Terminālī: tetra help, tetra <app> <command>. Tās izmanto arī AI Assist.",
+ "commands.search": "Atrast komandu",
+ "commands.open": "Atvērt rokasgrāmatu"
 }

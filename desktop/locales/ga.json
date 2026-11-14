@@ -3095,5 +3095,9 @@
  "passwords.cvcCopied": "Cóipeáladh an cód; glanfar é i gceann 30 soicind",
  "passwords.cvcAsk": "Do phasfhocal, chun an cód a thaispeáint",
  "passwords.cvcShow": "Taispeáin",
- "passwords.cvcNone": "Níl cód slándála coinnithe don chárta seo; cuireann Cuir in eagar leis."
+ "passwords.cvcNone": "Níl cód slándála coinnithe don chárta seo; cuireann Cuir in eagar leis.",
+ "commands.title": "Líne na n-orduithe",
+ "commands.intro": "Gach aip agus na horduithe a rialaíonn í. I dteirminéal: tetra help, tetra <app> <command>. Úsáideann AI Assist iad freisin.",
+ "commands.search": "Aimsigh ordú",
+ "commands.open": "Oscail an lámhleabhar"
 }

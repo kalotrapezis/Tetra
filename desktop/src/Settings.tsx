@@ -78,7 +78,7 @@ export function SettingsPage({ onGuide, start }: { onGuide: () => void; start?: 
           {tab === 'maps' && <><MapsCard /><LocationCard /></>}
           {tab === 'phone' && <CallsCard />}
           {tab === 'pills' && <PillsSettings />}
-          {tab === 'assistant' && <><AiCard /><UsageCard /><MemoryCard /><section className="settings-card"><ScheduleList /></section><AssistCard /></>}
+          {tab === 'assistant' && <><AiCard /><UsageCard /><MemoryCard /><section className="settings-card"><ScheduleList /></section><AssistCard /><CommandsCard /></>}
         </div>
       </div>
     </div>
@@ -293,6 +293,17 @@ function MemoryCard() {
         <button className="filled-button" disabled={!text.trim()} onClick={add}>{t('common.add')}</button>
       </div>
       {said && <p className="muted">{said}</p>}
+    </section>
+  )
+}
+
+/** The command line (commands.js): its manual, a page of its own. */
+function CommandsCard() {
+  return (
+    <section className="settings-card island">
+      <h3>{t('commands.title')}</h3>
+      <p className="muted">{t('commands.intro')}</p>
+      <div className="reset-actions"><button className="outline-button" onClick={() => window.drive.commands.open('commands')}>{t('commands.open')}</button></div>
     </section>
   )
 }

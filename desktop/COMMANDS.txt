@@ -1,0 +1,1059 @@
+TETRA(1) — every app and the commands that control it
+
+  tetra help [app]                      this manual, or one app's page
+  tetra help --json                     every command as data
+  tetra <app> <command> [--param value …] [--yes] [--json]
+  tetra <app> <command> value value …   the parameters in order
+
+  Tags: [read] reads, changes nothing · [external] reads text others wrote · [side] changes something · [asks] needs your yes (--yes)
+  Types: time = YYYY-MM-DD or YYYY-MM-DDTHH:MM (local) or ms; strings = a,b,c or a JSON list; json = a JSON object or list.
+  Tetra must be running; the command line talks to it over a socket only this user can open.
+
+APPS
+  app           Tetra itself: show a page, read this manual. (2)
+  notifications What Tetra told the user. (3)
+  calendar      Calendars and their events (.System/Calendar). (22)
+  timer         Timers, alarms and the stopwatch. (11)
+  pills         Medicines: doses, times, stock. (10)
+  notes         Notes and checklists. (10)
+  files         Files in ~/Tetra: folders, tags, favourites, the Trash. (27)
+  photos        The photo library, its folders and its Trash. (22)
+  collections   Photo albums. (7)
+  people        Faces found in the photos. (19)
+  documents     Photos that are documents (receipts, scans). (5)
+  contacts      Contacts (.System/Contacts). (15)
+  phone         The paired phone: calls, recordings, spam numbers, data use. (12)
+  messages      SMS on the paired phone. (3)
+  mail          Mail accounts, folders, drafts, filters. (48)
+  maps          Places, lists, trips, routes and the offline maps. (31)
+  schedules     AI Assist's scheduled actions and the daily brief. (9)
+  memory        What AI Assist remembers about the user. (3)
+  assistant     AI Assist: chats, background jobs, voices. (14)
+  settings      Language, theme, the Trash's days, skills for Claude. (8)
+  cleaner       Space the computer can free. (2)
+  import        Bring photos and files in from disks and folders. (4)
+  history       What was deleted, moved and emptied, and when. (1)
+  devices       Sync: paired devices and backup drives. (17)
+  role          This computer's part: server, NAS or client. (5)
+  vault         Hidden photos (unlocking is done in Tetra). (5)
+  passwords     The password manager (only its lock from here). (2)
+  ai            The AI switch and which apps AI Assist may use. (2)
+  usage         What AI Assist cost. (3)
+
+APP — Tetra itself: show a page, read this manual.
+  tetra app open --page home|photos|collections|people|files|mail|calendar|notes|timer|pills|maps|contacts|phone|messages|data|assistant|notifications|sync|settings|commands   [side]
+      Show a page of Tetra (and bring its window up).
+      --page: The page.
+  tetra app manual [--app string]   [read]
+      This manual: every app, or one app's commands.
+      --app (optional): One app.
+
+NOTIFICATIONS — What Tetra told the user.
+  tetra notifications list   [external]
+      The last 500 notifications, newest first.
+  tetra notifications read [--applet string]   [side]
+      Mark notifications read: all, or one app's.
+      --applet (optional): Only this app's (mail, calendar…).
+  tetra notifications clear   [asks]
+      Delete every notification.
+
+CALENDAR — Calendars and their events (.System/Calendar). AI switch: calendar.
+  tetra calendar calendars   [read]
+      The calendars: id, name, colour.
+  tetra calendar events --from time --to time   [read]
+      Every event happening between two times (repeats unfolded).
+      --from: From.
+      --to: Until.
+  tetra calendar save [--file string] --calendar string --event json   [side]
+      Write an event: a new one (no file), or over an existing file.
+      --file (optional): The event's file (rel) to write over; leave out for a new event.
+      --calendar: The calendar's id.
+      --event: The event: {title, place, notes, allDay, start: {date, time}, end: {date, time}, rrule, alarms}.
+  tetra calendar save-day --file string --day time --event json   [side]
+      Change one day of a repeating event.
+      --file: The event's file.
+      --day: That day's start.
+      --event: The event: {title, place, notes, allDay, start: {date, time}, end: {date, time}, rrule, alarms}.
+  tetra calendar skip-day --file string --day time   [side]
+      Cancel one day of a repeating event.
+      --file: The event's file.
+      --day: That day's start.
+  tetra calendar end-before --file string --day time   [side]
+      End a repeat before a day ("this and following" deleted).
+      --file: The event's file.
+      --day: The first day it no longer happens.
+  tetra calendar split --file string --day time --calendar string --event json   [side]
+      Change a repeat from a day on ("this and following").
+      --file: The event's file.
+      --day: From this day.
+      --calendar: The calendar's id.
+      --event: The event: {title, place, notes, allDay, start: {date, time}, end: {date, time}, rrule, alarms}.
+  tetra calendar move --file string --calendar string   [side]
+      Move an event to another calendar.
+      --file: The event's file.
+      --calendar: The calendar's id.
+  tetra calendar trash --file string   [asks]
+      Move an event to the Trash.
+      --file: The event's file.
+  tetra calendar keep --file string   [asks]
+      Keep this copy of a doubled event; the other copies go to the Trash.
+      --file: The event's file.
+  tetra calendar trashed   [read]
+      The events in the Trash, newest first.
+  tetra calendar restore --name string --calendar string   [side]
+      Bring an event back from the Trash into a calendar.
+      --name: Its name in the Trash.
+      --calendar: The calendar's id.
+  tetra calendar new-calendar --name string [--color string]   [side]
+      Make a calendar.
+      --name: Its name.
+      --color (optional): A colour, #rrggbb.
+  tetra calendar set-calendar --id string --name string [--color string]   [side]
+      Rename or recolour a calendar.
+      --id: The calendar's id.
+      --name: Its name.
+      --color (optional): A colour, #rrggbb.
+  tetra calendar delete-calendar --id string   [asks]
+      Move a whole calendar to the Trash.
+      --id: The calendar's id.
+  tetra calendar refresh   [side]
+      Sync with the other devices now.
+  tetra calendar import-pick   [side]
+      Choose an .ics or .zip to import (a file dialog in Tetra); answers its calendars by index.
+  tetra calendar import --choices json   [side]
+      Import the picked calendars.
+      --choices: [{index, into}]: each picked calendar and the calendar id it goes into.
+  tetra calendar export [--id string]   [side]
+      Save a calendar, or all, as .ics/.zip (Tetra asks where).
+      --id (optional): The calendar's id; leave out for all.
+  tetra calendar settings   [read]
+      Reminders on this computer, and starting with the computer.
+  tetra calendar set-reminders --on true|false   [side]
+      Reminders on this computer on or off.
+      --on: On.
+  tetra calendar set-autostart --on true|false   [side]
+      Start Tetra with the computer, on or off.
+      --on: On.
+
+TIMER — Timers, alarms and the stopwatch. AI switch: timer.
+  tetra timer list   [read]
+      The timers: running, paused, ringing, pinned.
+  tetra timer last   [read]
+      The length last started, in seconds.
+  tetra timer start --seconds integer   [side]
+      Start a countdown.
+      --seconds: How long.
+  tetra timer change --id string --action pause|resume|stop|ok|restart|pin|unpin   [side]
+      Pause, resume, stop, restart, pin or unpin a timer, or OK a ringing one.
+      --id: The timer's id.
+      --action: What to do.
+  tetra timer delete --id string   [asks]
+      Delete a timer.
+      --id: The timer's id.
+  tetra timer alarms   [read]
+      The alarms.
+  tetra timer alarm-save [--id string] --time string [--days strings] [--label string]   [side]
+      Add an alarm, or change one.
+      --id (optional): The alarm's id to change; leave out for a new one.
+      --time: HH:MM.
+      --days (optional): Weekdays it repeats on: MO,TU,WE,TH,FR,SA,SU; none for once.
+      --label (optional): Its name.
+  tetra timer alarm-change --id string --action on|off|skip|snooze|dismiss   [side]
+      Switch an alarm on or off, skip its next time, snooze or dismiss it.
+      --id: The alarm's id.
+      --action: What to do.
+  tetra timer alarm-delete --id string   [asks]
+      Delete an alarm.
+      --id: The alarm's id.
+  tetra timer stopwatch   [read]
+      The stopwatch: running or not, its time and laps.
+  tetra timer watch --action start|hold|lap|reset   [side]
+      The stopwatch's buttons.
+      --action: What to press.
+
+PILLS — Medicines: doses, times, stock. AI switch: pills.
+  tetra pills today [--day time]   [read]
+      The medicines and a day's doses (taken, waiting, missed), stock and days left.
+      --day (optional): The day; today if left out.
+  tetra pills history --id string   [read]
+      A medicine's doses and stock changes.
+      --id: The medicine's id (pill-…).
+  tetra pills answer --id string [--due time] --action take|skip|undo   [side]
+      Mark a dose taken or skipped, or undo that.
+      --id: The medicine's id.
+      --due (optional): The dose's time; leave out for the nearest.
+      --action: What to mark.
+  tetra pills save --medicine json [--boxes integer] [--loose number]   [side]
+      Add or change a medicine; a new one can start with stock.
+      --medicine: {id: "pill-…", name, strength, dose, times: ["08:00"], days, until, perBox, …}.
+      --boxes (optional): New boxes (a new medicine only).
+      --loose (optional): Loose pills (a new medicine only).
+  tetra pills add-stock --id string [--boxes integer] [--loose number]   [side]
+      Add boxes or pills to a medicine's stock.
+      --id: The medicine's id.
+      --boxes (optional): Boxes.
+      --loose (optional): Loose pills.
+  tetra pills set-stock --id string --value number   [side]
+      Set how many pills are left.
+      --id: The medicine's id.
+      --value: Pills left.
+  tetra pills remove --id string   [asks]
+      Delete a medicine.
+      --id: The medicine's id.
+  tetra pills pick-photo --id string   [side]
+      Choose a photo of the box (a file dialog in Tetra).
+      --id: The medicine's id.
+  tetra pills settings   [read]
+      Whether this computer reminds.
+  tetra pills set-reminders --on true|false   [side]
+      Reminders on this computer on or off.
+      --on: On.
+
+NOTES — Notes and checklists. AI switch: notes.
+  tetra notes list   [read]
+      Every note, whole.
+  tetra notes create [--noteType TEXT|CHECKLIST] [--labels strings]   [side]
+      A new, empty note; answers it (with its id).
+      --noteType (optional): The kind; TEXT if left out.
+      --labels (optional): Its labels.
+  tetra notes save --id string --changes json   [side]
+      Change a note.
+      --id: The note's id.
+      --changes: Only what changes: {title, text, items: [{text, checked}], labels, color, pinned, archived}.
+  tetra notes snapshot --id string   [side]
+      Keep the note as it is now in its history.
+      --id: The note's id.
+  tetra notes history --id string   [read]
+      A note's kept versions.
+      --id: The note's id.
+  tetra notes restore-version --id string --version string   [side]
+      Bring an old version back (the current one is kept).
+      --id: The note's id.
+      --version: The version's name from history.
+  tetra notes remove --id string   [asks]
+      Delete a note for good (its history stays).
+      --id: The note's id.
+  tetra notes synced   [read]
+      When the notes last synced.
+  tetra notes export-all   [side]
+      Every note as Markdown into a new folder in Files.
+  tetra notes export-one --id string   [side]
+      One note as Markdown (Tetra asks where).
+      --id: The note's id.
+
+FILES — Files in ~/Tetra: folders, tags, favourites, the Trash. AI switch: files.
+  tetra files root   [read]
+      Where ~/Tetra is.
+  tetra files list [--folder string]   [read]
+      A folder's files and folders.
+      --folder (optional): The folder; the top if left out.
+  tetra files search --query string   [read]
+      Files and folders whose name or tags hold every word.
+      --query: The words.
+  tetra files with-tag --tag string   [read]
+      Files with a tag.
+      --tag: The tag.
+  tetra files destinations   [read]
+      Every folder a file can go to.
+  tetra files copy --path string --to string   [side]
+      Copy (verified, never over another).
+      --path: A path under ~/Tetra, as Files shows it ("Documents/a.pdf").
+      --to: The folder.
+  tetra files move --path string --to string   [side]
+      Move to a folder.
+      --path: A path under ~/Tetra, as Files shows it ("Documents/a.pdf").
+      --to: The folder.
+  tetra files rename --path string --name string   [side]
+      Rename.
+      --path: A path under ~/Tetra, as Files shows it ("Documents/a.pdf").
+      --name: The new name.
+  tetra files trash --path string   [asks]
+      Move to the Trash (Move brings it back).
+      --path: A path under ~/Tetra, as Files shows it ("Documents/a.pdf").
+  tetra files empty-trash   [asks]
+      Empty the Trash: deleted for good.
+  tetra files favorite --path string --on true|false   [side]
+      Mark or unmark a favourite.
+      --path: A path under ~/Tetra, as Files shows it ("Documents/a.pdf").
+      --on: Favourite.
+  tetra files color --path string [--color string]   [side]
+      Give a file or folder a colour.
+      --path: A path under ~/Tetra, as Files shows it ("Documents/a.pdf").
+      --color (optional): The colour; leave out for none.
+  tetra files favorites   [read]
+      The favourites.
+  tetra files recents   [read]
+      Files opened lately.
+  tetra files tags   [read]
+      Every tag.
+  tetra files create-tag --name string   [side]
+      Make a tag.
+      --name: The tag.
+  tetra files set-tags --path string --tags strings   [side]
+      Set a file's tags (the whole list).
+      --path: A path under ~/Tetra, as Files shows it ("Documents/a.pdf").
+      --tags: The tags.
+  tetra files properties --path string   [read]
+      Size, dates, where it is on disk.
+      --path: A path under ~/Tetra, as Files shows it ("Documents/a.pdf").
+  tetra files usage   [read]
+      Space used, by kind.
+  tetra files system-folders   [read]
+      The optional system folders chosen.
+  tetra files choose-system-folders --names strings [--contents out|trash]   [side]
+      Choose the optional system folders.
+      --names: The folders kept.
+      --contents (optional): Where a dropped folder's files go.
+  tetra files open --path string   [side]
+      Open with its app.
+      --path: A path under ~/Tetra, as Files shows it ("Documents/a.pdf").
+  tetra files reveal --path string   [side]
+      Show it in the file manager.
+      --path: A path under ~/Tetra, as Files shows it ("Documents/a.pdf").
+  tetra files send-to-phone --paths strings   [side]
+      Send files to the paired phone.
+      --paths: The files.
+  tetra files trash-settings   [read]
+      How long the Trash keeps things, and what it holds.
+  tetra files set-trash-days [--trashDays integer] [--purgatoryDays integer]   [side]
+      How long the Trash and the last-chance folder keep things.
+      --trashDays (optional): Days in the Trash.
+      --purgatoryDays (optional): Days in the last-chance folder.
+  tetra files trash-location [--drive string]   [side]
+      Keep the last-chance folder on a backup drive, or here.
+      --drive (optional): The drive's id; leave out for this computer.
+
+PHOTOS — The photo library, its folders and its Trash. AI switch: files.
+  tetra photos info   [read]
+      Where the photos are.
+  tetra photos list   [read]
+      Every photo and video (large).
+  tetra photos scan   [side]
+      Look for new photos now.
+  tetra photos favorite --shas strings --on true|false   [side]
+      Mark or unmark favourites.
+      --shas: The photos' sha256.
+      --on: Favourite.
+  tetra photos trash --ids json   [asks]
+      Move photos to the Trash.
+      --ids: The photos' ids (numbers).
+  tetra photos places   [read]
+      Folders photos can move to.
+  tetra photos move-to --ids json --to string   [side]
+      Move photos to a folder.
+      --ids: The photos' ids.
+      --to: The folder.
+  tetra photos show --id integer   [side]
+      Show a photo in the file manager.
+      --id: The photo's id.
+  tetra photos open-map --lat number --lon number   [side]
+      Open a place on OpenStreetMap in the browser.
+      --lat: Latitude.
+      --lon: Longitude.
+  tetra photos has-motion --id integer   [read]
+      Whether a photo has a motion clip.
+      --id: The photo's id.
+  tetra photos ask --id integer --what text|eyes   [external]
+      Read a photo's text (OCR), or describe it, with the AI.
+      --id: The photo's id.
+      --what: Text, or a description.
+  tetra photos folders   [read]
+      The photo folders and whether each is in the library.
+  tetra photos set-folder --name string --included true|false   [side]
+      Take a folder into the library or leave it out.
+      --name: The folder.
+      --included: In the library.
+  tetra photos trashed   [read]
+      Photos in the Trash.
+  tetra photos restore --ids json   [side]
+      Bring photos back from the Trash.
+      --ids: Their ids.
+  tetra photos empty-trash   [asks]
+      Empty the photos' Trash: deleted for good.
+  tetra photos view   [read]
+      Whether screenshots and documents are hidden from Photos.
+  tetra photos set-view --key hideScreenshots|hideDocuments --on true|false   [side]
+      Hide or show screenshots or documents in Photos.
+      --key: Which.
+      --on: Hidden.
+  tetra photos motion   [read]
+      What happens to motion photos' clips.
+  tetra photos set-motion --value one|remove   [side]
+      Keep motion clips in one file, or remove them.
+      --value: The choice.
+  tetra photos motion-autoplay   [read]
+      Whether motion photos play by themselves.
+  tetra photos set-motion-autoplay --on true|false   [side]
+      Motion photos play by themselves, on or off.
+      --on: On.
+
+COLLECTIONS — Photo albums. AI switch: files.
+  tetra collections list   [read]
+      The albums (and backup drives' albums).
+  tetra collections create --name string   [side]
+      Make an album.
+      --name: Its name.
+  tetra collections delete --id string   [asks]
+      Delete an album (the photos stay).
+      --id: The album's id.
+  tetra collections hide --id string --hidden true|false   [side]
+      Hide or show an album.
+      --id: The album's id.
+      --hidden: Hidden.
+  tetra collections members --id string   [read]
+      The photos in an album.
+      --id: The album's id.
+  tetra collections set --id string --shas strings --member true|false   [side]
+      Put photos in an album or take them out.
+      --id: The album's id.
+      --shas: The photos' sha256.
+      --member: In the album.
+  tetra collections delete-from-drive --drive string --shas strings   [asks]
+      Delete photos from a backup drive.
+      --drive: The drive's id.
+      --shas: The photos' sha256.
+
+PEOPLE — Faces found in the photos. AI switch: files.
+  tetra people status   [read]
+      Face and document finding: on, how far, paused.
+  tetra people start   [side]
+      Start finding faces.
+  tetra people rescan   [side]
+      Find faces again (unnamed ones forgotten).
+  tetra people pause   [side]
+      Pause finding faces and documents.
+  tetra people list   [read]
+      The people found.
+  tetra people forgotten   [read]
+      The people hidden.
+  tetra people set-hidden --id string --hidden true|false   [side]
+      Hide or show a person.
+      --id: The person's id.
+      --hidden: Hidden.
+  tetra people photos --id string   [read]
+      A person's photos (sha256).
+      --id: The person's id.
+  tetra people names   [read]
+      Who is in each photo.
+  tetra people rename --id string --name string   [side]
+      Name a person.
+      --id: The person's id.
+      --name: The name.
+  tetra people faces --id string   [read]
+      A person's faces.
+      --id: The person's id.
+  tetra people set-cover --id string --face string   [side]
+      Choose a person's cover face.
+      --id: The person's id.
+      --face: The face's id.
+  tetra people merge --source string --target string   [side]
+      Merge one person into another (undo-merge brings them back).
+      --source: The person merged away.
+      --target: The person kept.
+  tetra people detach --id string --shas strings   [side]
+      Take photos off a person.
+      --id: The person's id.
+      --shas: The photos.
+  tetra people undo-merge --undo json   [side]
+      Undo a merge.
+      --undo: What merge answered.
+  tetra people merge-history --id string   [read]
+      Who was merged into a person.
+      --id: The person's id.
+  tetra people restore-merge --id string   [side]
+      Split a merged person off again.
+      --id: The merge's id.
+  tetra people next-review   [read]
+      The next face to confirm.
+  tetra people answer --face string --person string --answer yes|no|skip   [side]
+      Confirm whether a face is that person.
+      --face: The face's id.
+      --person: The person's id.
+      --answer: The answer.
+
+DOCUMENTS — Photos that are documents (receipts, scans). AI switch: files.
+  tetra documents start   [side]
+      Start finding documents among the photos.
+  tetra documents rescan   [side]
+      Find documents again.
+  tetra documents next-review   [read]
+      The next photo to confirm as a document.
+  tetra documents answer --sha string --answer yes|no|skip   [side]
+      Confirm whether a photo is a document.
+      --sha: The photo's sha256.
+      --answer: The answer.
+  tetra documents set --sha string --on true|false   [side]
+      Mark a photo a document or not.
+      --sha: The photo's sha256.
+      --on: A document.
+
+CONTACTS — Contacts (.System/Contacts). AI switch: contacts.
+  tetra contacts list [--byLast true|false]   [read]
+      Every contact, sorted by first name (or last).
+      --byLast (optional): By last name.
+  tetra contacts save [--uid string] --contact json   [side]
+      Add or change a contact; answers its UID.
+      --uid (optional): The contact's UID to change; leave out for a new one.
+      --contact: The contact as list shows it: {first, last, phones: [{type, value}], emails, addresses, birthday, …}.
+  tetra contacts trash --uid string   [asks]
+      Move a contact to the Trash.
+      --uid: The contact's UID.
+  tetra contacts keep --uid string   [asks]
+      Keep this copy of a doubled contact; the others go to the Trash.
+      --uid: The contact's UID.
+  tetra contacts trashed   [read]
+      Contacts in the Trash.
+  tetra contacts restore --name string   [side]
+      Bring a contact back from the Trash.
+      --name: Its name in the Trash.
+  tetra contacts duplicates   [read]
+      Contacts that look like the same person.
+  tetra contacts merge --uid string --other string   [asks]
+      Merge the second contact into the first (the second goes to the Trash).
+      --uid: The contact kept.
+      --other: The contact merged in.
+  tetra contacts not-the-same --uid string --other string   [side]
+      Two contacts are different people: stop suggesting them.
+      --uid: One.
+      --other: The other.
+  tetra contacts import-pick   [side]
+      Import a .vcf (a file dialog in Tetra).
+  tetra contacts export [--uids strings] [--name string]   [side]
+      Save contacts as a .vcf (Tetra asks where).
+      --uids (optional): Only these; all if left out.
+      --name (optional): The file's name.
+  tetra contacts open --how mail|whatsapp|viber|web --value string   [side]
+      Write to someone: mail, WhatsApp, Viber, or open their web page.
+      --how: How.
+      --value: The address, number or link.
+  tetra contacts settings   [read]
+      The birthdays' calendar, sorting.
+  tetra contacts set-birthdays --calendar string   [side]
+      Which calendar birthdays go into.
+      --calendar: The calendar's id.
+  tetra contacts set-by-last --on true|false   [side]
+      Sort by last name, on or off.
+      --on: By last name.
+
+PHONE — The paired phone: calls, recordings, spam numbers, data use. AI switch: phone.
+  tetra phone call --number string [--name string]   [asks]
+      Call a number on the paired phone.
+      --number: The number.
+      --name (optional): Who it is.
+  tetra phone history   [read]
+      The phone's calls.
+  tetra phone recordings   [read]
+      Call recordings.
+  tetra phone open-recording --name string   [side]
+      Play a call recording.
+      --name: The recording.
+  tetra phone spam   [read]
+      Numbers marked spam.
+  tetra phone set-spam --number string --on true|false   [side]
+      Mark or unmark a number as spam.
+      --number: The number.
+      --on: Spam.
+  tetra phone country   [read]
+      The phone's country, for numbers.
+  tetra phone bluetooth   [read]
+      Phones over Bluetooth for calls' sound.
+  tetra phone connect --mac string   [side]
+      Connect a phone over Bluetooth.
+      --mac: Its address.
+  tetra phone system-bluetooth   [side]
+      Open the system's Bluetooth settings.
+  tetra phone data   [read]
+      Mobile data used, by app.
+  tetra phone wifi   [read]
+      Wi-Fi data used, by app.
+
+MESSAGES — SMS on the paired phone. AI switch: phone.
+  tetra messages list   [external]
+      The SMS conversations on the phone.
+  tetra messages read --thread integer   [external]
+      One conversation.
+      --thread: The conversation's id.
+  tetra messages send --to string --text string   [asks]
+      Send an SMS from the phone.
+      --to: The number.
+      --text: The message.
+
+MAIL — Mail accounts, folders, drafts, filters. AI switch: mail.
+  tetra mail accounts   [read]
+      The accounts, their folders and how syncing goes.
+  tetra mail list --folder Inbox|Drafts|Sent|Archive|Spam|Trash [--account string] [--local true|false]   [external]
+      A folder's mail, newest first.
+      --folder: The folder.
+      --account (optional): One account's id; all if left out.
+      --local (optional): The mail kept on this computer.
+  tetra mail local-folders   [read]
+      The folders kept on this computer.
+  tetra mail open --id string [--images true|false]   [external]
+      Read a mail: its text and attachments.
+      --id: The mail's id (from mail list).
+      --images (optional): Load its pictures too.
+  tetra mail export --id string [--attachment string]   [side]
+      Copy a mail (.eml) or an attachment to Files › Documents.
+      --id: The mail's id (from mail list).
+      --attachment (optional): The attachment's name.
+  tetra mail save-as --id string [--attachment string]   [side]
+      Save a mail or an attachment (Tetra asks where).
+      --id: The mail's id (from mail list).
+      --attachment (optional): The attachment's name.
+  tetra mail open-file --path string   [side]
+      Open a mail's saved attachment.
+      --path: Its path.
+  tetra mail open-link --url string   [side]
+      Open a link from a mail.
+      --url: The link (http, https, mailto).
+  tetra mail act --op archive|move|read|unread|favorite|unfavorite|spam|notSpam --ids strings [--to string]   [side]
+      Archive, move, mark read/unread, ♥ or (not) spam.
+      --op: What to do.
+      --ids: The mails' ids.
+      --to (optional): The folder, for move.
+  tetra mail delete --ids strings   [asks]
+      Move mail to the Trash (from the Trash: off the server).
+      --ids: The mails' ids.
+  tetra mail draft-for [--id string] --kind new|reply|replyAll|forward|forwardAttached [--account string]   [side]
+      Start a new mail, a reply or a forward; answers the draft.
+      --id (optional): The mail answered.
+      --kind: Which.
+      --account (optional): The account to send from.
+  tetra mail save-draft --draft json   [side]
+      Save a draft.
+      --draft: The draft: {account, to, cc, subject, text, …}.
+  tetra mail send --draft json   [asks]
+      Send a draft.
+      --draft: The draft.
+  tetra mail discard --draft json   [side]
+      Throw a draft away.
+      --draft: The draft.
+  tetra mail addresses   [read]
+      Addresses written to before.
+  tetra mail ai-for --id string   [external]
+      What Mail AI made of a mail: urgency, dates.
+      --id: The mail's id (from mail list).
+  tetra mail ai-tiers   [read]
+      How Mail AI sorts.
+  tetra mail ai-add --id string   [side]
+      Add the date Mail AI found to the calendar.
+      --id: The mail's id (from mail list).
+  tetra mail ai-dismiss --id string   [side]
+      Dismiss Mail AI's suggestion.
+      --id: The mail's id (from mail list).
+  tetra mail sync   [side]
+      Fetch mail now.
+  tetra mail check   [read]
+      How often mail is fetched.
+  tetra mail set-check --every push|5|15|30|manual   [side]
+      How often mail is fetched.
+      --every: Pushed, every 5/15/30 minutes, or by hand.
+  tetra mail storage   [read]
+      Where each account's mail is kept.
+  tetra mail open-folder --id string   [side]
+      Open an account's folder on disk.
+      --id: The account's id.
+  tetra mail signatures   [read]
+      Each address's signature.
+  tetra mail set-signature --address string --signature string   [side]
+      Set an address's signature.
+      --address: The address.
+      --signature: The signature.
+  tetra mail set-account --id string --changes json   [side]
+      Change an account: name, archiving.
+      --id: The account's id.
+      --changes: {name, archiveBy: year|month|none, …}.
+  tetra mail remove --id string   [asks]
+      Remove an account from Tetra.
+      --id: The account's id.
+  tetra mail detect --address string   [read]
+      The servers for an address.
+      --address: The address.
+  tetra mail add-microsoft --address string   [side]
+      Add an Outlook/Microsoft account (signs in in the browser).
+      --address: The address.
+  tetra mail ms-client   [read]
+      The Microsoft app id used.
+  tetra mail set-ms-client --id string   [side]
+      Use another Microsoft app id.
+      --id: The id.
+  tetra mail devices   [read]
+      Which devices fetch mail, and how.
+  tetra mail set-device --device string --changes json   [side]
+      How a device fetches mail.
+      --device: The device.
+      --changes: {mode: copy|move, limit, name, off, keepDays, auto}.
+  tetra mail clean-plan --id string   [read]
+      What a clean-up would do to an account.
+      --id: The account's id.
+  tetra mail clean-run --id string   [asks]
+      Clean an account up as the plan says.
+      --id: The account's id.
+  tetra mail garbage   [read]
+      Newsletters and junk worth sweeping.
+  tetra mail sweep   [asks]
+      Sweep them away.
+  tetra mail filters   [read]
+      The filters.
+  tetra mail set-filters --filters json   [side]
+      Set the filters (the whole list).
+      --filters: The list, as filters answers.
+  tetra mail run-filters --folder Inbox|Drafts|Sent|Archive|Spam|Trash [--account string]   [side]
+      Run the filters on a folder now.
+      --folder: The folder.
+      --account (optional): One account.
+  tetra mail junk   [read]
+      The junk filter: on, how trained.
+  tetra mail set-junk --on true|false   [side]
+      The junk filter on or off.
+      --on: On.
+  tetra mail privacy   [read]
+      Remote pictures: always or ask; trusted senders.
+  tetra mail set-privacy --privacy json   [side]
+      Set remote pictures and trusted senders.
+      --privacy: {images: always|ask, senders: [addresses]}.
+  tetra mail default-app   [read]
+      Whether Tetra is the mail app.
+  tetra mail make-default   [side]
+      Make Tetra the mail app.
+  tetra mail app-passwords   [side]
+      Open Google's app passwords page.
+
+MAPS — Places, lists, trips, routes and the offline maps. AI switch: maps.
+  tetra maps info   [read]
+      The offline maps installed.
+  tetra maps places   [read]
+      Saved places.
+  tetra maps lists   [read]
+      Lists of places.
+  tetra maps trips   [read]
+      Saved trips.
+  tetra maps save-place --place json   [side]
+      Save a place, or change one.
+      --place: {id?, name, lat, lng, note, list…}.
+  tetra maps delete-place --id string   [asks]
+      Delete a saved place.
+      --id: The place's id.
+  tetra maps save-list --list json   [side]
+      Save a list, or change one.
+      --list: {id?, name, …}.
+  tetra maps delete-list --id string   [asks]
+      Delete a list.
+      --id: The list's id.
+  tetra maps save-trip --trip json   [side]
+      Save a trip, or change one.
+      --trip: {id?, name, stops, …}.
+  tetra maps delete-trip --id string   [asks]
+      Delete a trip.
+      --id: The trip's id.
+  tetra maps search --query string   [read]
+      Find a place or address on the offline map.
+      --query: What to find.
+  tetra maps describe --lat number --lng number [--road true|false]   [read]
+      What is at a point: address, road.
+      --lat: Latitude.
+      --lng: Longitude.
+      --road (optional): The road too.
+  tetra maps near --lat number --lng number --name string   [read]
+      Places of a kind near a point.
+      --lat: Latitude.
+      --lng: Longitude.
+      --name: What (pharmacy, cafe…).
+  tetra maps route --points json [--mode car|bike|foot] [--main true|false]   [read]
+      A route through points.
+      --points: [[lat, lng], …].
+      --mode (optional): How.
+      --main (optional): Main roads only.
+  tetra maps phone-location [--fresh true|false]   [read]
+      Where the paired phone is.
+      --fresh (optional): Ask the phone now.
+  tetra maps google --query string   [side]
+      Look a place up on Google Maps in the browser.
+      --query: What.
+  tetra maps web --url string   [side]
+      Open a place's web page.
+      --url: The link.
+  tetra maps location-every   [read]
+      How often the phone's location is kept.
+  tetra maps set-location-every --every off|30m|1d|1w   [side]
+      How often the phone's location is kept.
+      --every: How often.
+  tetra maps regions   [read]
+      Regions an offline map can be made of.
+  tetra maps needs --id string   [read]
+      What making a region's map needs (space, time).
+      --id: The region.
+  tetra maps missing   [read]
+      System tools missing for making maps.
+  tetra maps install-system --packages strings   [asks]
+      Install the missing system tools (asks for the password).
+      --packages: The packages.
+  tetra maps build --id string   [side]
+      Make a region's offline map (long).
+      --id: The region.
+  tetra maps building   [read]
+      The map being made, if any.
+  tetra maps cancel-build   [side]
+      Stop making the map.
+  tetra maps discard-build --id string   [side]
+      Throw away a half-made map.
+      --id: The region.
+  tetra maps packs   [read]
+      The offline map packs.
+  tetra maps remove-pack --id string   [asks]
+      Remove a map pack (to the Trash).
+      --id: The pack.
+  tetra maps export-pack --id string   [side]
+      Save a map pack (Tetra asks where).
+      --id: The pack.
+  tetra maps import-pack   [side]
+      Import a map pack (a file dialog in Tetra).
+
+SCHEDULES — AI Assist's scheduled actions and the daily brief.
+  tetra schedules list   [read]
+      The scheduled actions and the daily brief, each with its next run.
+  tetra schedules add --prompt string [--title string] --time string --repeat once|daily|weekly|monthly|yearly [--days json] [--date string] [--until string] [--allow strings]   [side]
+      Schedule something for AI Assist to do by itself.
+      --prompt: What to do, in the user's words.
+      --title (optional): A short name.
+      --time: HH:MM.
+      --repeat: How often.
+      --days (optional): Weekly: weekdays, 0 = Sunday.
+      --date (optional): YYYY-MM-DD.
+      --until (optional): The last day, YYYY-MM-DD.
+      --allow (optional): What it may do after reading the web or mail: calendar, notes, timers, files.
+  tetra schedules change --id string [--prompt string] [--title string] [--time string] [--repeat once|daily|weekly|monthly|yearly] [--days json] [--date string] [--until string] [--paused true|false] [--allow strings]   [side]
+      Change, pause or resume a scheduled action; only what changes.
+      --id: Its id.
+      --prompt (optional): What to do.
+      --title (optional): Its name.
+      --time (optional): HH:MM.
+      --repeat (optional): How often.
+      --days (optional): Weekdays.
+      --date (optional): YYYY-MM-DD.
+      --until (optional): YYYY-MM-DD.
+      --paused (optional): Paused.
+      --allow (optional): What it may do by itself.
+  tetra schedules remove --id string   [asks]
+      Delete a scheduled action.
+      --id: Its id.
+  tetra schedules run --id string   [side]
+      Run a scheduled action now.
+      --id: Its id.
+  tetra schedules results   [read]
+      What the last runs did.
+  tetra schedules open --file string   [side]
+      Open a run's result.
+      --file: The result, as results names it.
+  tetra schedules set-brief [--sections json] [--place json]   [side]
+      The daily brief's sections and weather place.
+      --sections (optional): {calendar, mail, weather, notes}: true or false.
+      --place (optional): The weather's place, as schedules place answers.
+  tetra schedules place --name string   [read]
+      Find a place for the weather.
+      --name: The town.
+
+MEMORY — What AI Assist remembers about the user.
+  tetra memory list   [read]
+      What AI Assist remembers about the user.
+  tetra memory add --text string   [side]
+      Remember a fact.
+      --text: The fact.
+  tetra memory change --id string --text string   [side]
+      Change a fact; empty text forgets it.
+      --id: Its id.
+      --text: The new text.
+
+ASSISTANT — AI Assist: chats, background jobs, voices.
+  tetra assistant ask --text string   [side] (not for AI Assist)
+      Ask AI Assist, as in its chat; answers its reply.
+      --text: What to ask.
+  tetra assistant chats   [read]
+      The kept chats.
+  tetra assistant open-chat --id string   [side] (not for AI Assist)
+      Open a kept chat.
+      --id: Its id.
+  tetra assistant delete-chat --id string   [asks] (not for AI Assist)
+      Delete a kept chat.
+      --id: Its id.
+  tetra assistant clear   [side] (not for AI Assist)
+      A new chat.
+  tetra assistant hush   [side] (not for AI Assist)
+      Stop speaking.
+  tetra assistant jobs   [read]
+      The MP3s and radio shows being made.
+  tetra assistant audio-save --id string   [side]
+      Put a finished MP3 in Files.
+      --id: The job's id.
+  tetra assistant audio-export --id string   [side]
+      Save a finished MP3 (Tetra asks where).
+      --id: The job's id.
+  tetra assistant youtube --query string   [side]
+      Search YouTube in the browser.
+      --query: What.
+  tetra assistant hide   [side] (not for AI Assist)
+      Hide Tetra's window (and lock the hidden photos).
+  tetra assistant settings   [read] (not for AI Assist)
+      AI Assist's settings (never the key).
+  tetra assistant set --changes json   [side] (not for AI Assist)
+      Change AI Assist's settings.
+      --changes: As settings answers.
+  tetra assistant voices   [read]
+      The voices AI Assist can speak with.
+
+SETTINGS — Language, theme, the Trash's days, skills for Claude.
+  tetra settings languages   [read]
+      Tetra's language and the languages it has.
+  tetra settings set-language --choice string   [side]
+      Tetra's language.
+      --choice: A language code, or system.
+  tetra settings theme   [read]
+      Light, dark or as the system.
+  tetra settings set-theme --theme system|light|dark   [side]
+      Light, dark or as the system.
+      --theme: The theme.
+  tetra settings skill-install --name tetra-calendar|tetra-timer   [side]
+      Give Claude Code on this computer a Tetra skill.
+      --name: The skill.
+  tetra settings skill-save --name tetra-calendar|tetra-timer   [side]
+      Save a Tetra skill as a .zip for Claude (Tetra asks where).
+      --name: The skill.
+  tetra settings reset-info   [read]
+      What a reset would delete, and how much.
+  tetra settings reset-backup   [side]
+      Back up what a reset would delete.
+
+CLEANER — Space the computer can free. AI switch: files.
+  tetra cleaner items   [read]
+      What can be cleaned, and how much space each frees.
+  tetra cleaner clean --id string   [asks]
+      Clean one of them.
+      --id: Its id.
+
+IMPORT — Bring photos and files in from disks and folders. AI switch: files.
+  tetra import drives   [read]
+      Backup drives photos can be imported to.
+  tetra import pick [--folders true|false]   [side]
+      Choose files or folders to import (a dialog in Tetra); answers their paths.
+      --folders (optional): Folders, not files.
+  tetra import run --kind files|photos --sources strings [--drive string] [--move true|false]   [side]
+      Import files or photos.
+      --kind: What.
+      --sources: Paths on this computer.
+      --drive (optional): Onto a backup drive.
+      --move (optional): Move, not copy.
+  tetra import cancel   [side]
+      Stop the import.
+
+HISTORY — What was deleted, moved and emptied, and when.
+  tetra history list [--options json]   [read]
+      What was deleted, moved and emptied.
+      --options (optional): {kind, limit, …}.
+
+DEVICES — Sync: paired devices and backup drives. Not for AI Assist.
+  tetra devices status   [read]
+      This computer's sync: counts, port, errors, devices.
+  tetra devices pair   [side]
+      Show a code to pair a new device.
+  tetra devices forget --id string   [asks]
+      Forget a paired device.
+      --id: The device's id.
+  tetra devices files --what string [--options json]   [read]
+      Files by device: largest, newest….
+      --what: Which list (largest…).
+      --options (optional): {deviceId, limit}.
+  tetra devices set --id string --changes json   [side]
+      Change a device's settings.
+      --id: The device's id.
+      --changes: What changes.
+  tetra devices set-self --changes json   [side]
+      Change this computer's settings.
+      --changes: What changes.
+  tetra devices complete-setup --id string   [side]
+      Finish setting a device up.
+      --id: The device's id.
+  tetra devices drives   [read]
+      Backup drives.
+  tetra devices inspect-drive --uuid string   [read]
+      What is on a drive.
+      --uuid: The drive.
+  tetra devices add-drive --drive json   [side]
+      Make a disk a backup drive.
+      --drive: As drives answers.
+  tetra devices back-up --id string   [side]
+      Back up to a drive now.
+      --id: The drive's id.
+  tetra devices set-connection --id string --content string [--rules json]   [side]
+      What a drive keeps, and its rules.
+      --id: The drive's id.
+      --content: What it keeps.
+      --rules (optional): Its rules.
+  tetra devices set-drive-rules --id string --rules json   [side]
+      A drive's rules.
+      --id: The drive's id.
+      --rules: The rules.
+  tetra devices move-preview --id string [--options json]   [read]
+      What moving to a drive would move.
+      --id: The drive's id.
+      --options (optional): Options.
+  tetra devices full-suggestion --id string   [read]
+      What to move when the computer is full.
+      --id: The drive's id.
+  tetra devices offload-plan --id string   [read]
+      The plan to free space onto a drive.
+      --id: The drive's id.
+  tetra devices move-to-drive --id string [--options json]   [asks]
+      Move files off this computer onto a drive.
+      --id: The drive's id.
+      --options (optional): Options.
+
+ROLE — This computer's part: server, NAS or client. Not for AI Assist.
+  tetra role get   [read]
+      Server, NAS or client, and the server's state.
+  tetra role server [--nas true|false]   [side]
+      Make this computer the server.
+      --nas (optional): As a NAS.
+  tetra role set-nas --on true|false   [side]
+      The server as a NAS, on or off.
+      --on: On.
+  tetra role sync-now   [side]
+      A client: sync with the server now.
+  tetra role set-mirror --on true|false   [side]
+      A client: keep a mirror of the server, on or off.
+      --on: On.
+
+VAULT — Hidden photos (unlocking is done in Tetra). Not for AI Assist.
+  tetra vault status   [read]
+      Hidden photos: set up, locked.
+  tetra vault lock   [side]
+      Lock the hidden photos.
+  tetra vault list   [read]
+      The hidden photos (when unlocked).
+  tetra vault hide --ids json   [side]
+      Hide photos (when unlocked).
+      --ids: Their ids.
+  tetra vault restore --ids json   [side]
+      Bring hidden photos back (when unlocked).
+      --ids: Their ids.
+
+PASSWORDS — The password manager (only its lock from here). Not for AI Assist.
+  tetra passwords status   [read]
+      Set up, locked or open.
+  tetra passwords lock   [side]
+      Lock the passwords now.
+
+AI — The AI switch and which apps AI Assist may use. Not for AI Assist.
+  tetra ai get   [read]
+      The AI switch: on or off, and each app's.
+  tetra ai set --changes json   [side]
+      Switch AI on or off, or one app's.
+      --changes: {enabled, apps: {mail: false, …}}.
+
+USAGE — What AI Assist cost. Not for AI Assist.
+  tetra usage summary   [read]
+      What AI Assist cost, by feature and day.
+  tetra usage set-budget --eur number   [side]
+      The monthly budget in euros.
+      --eur: Euros.
+  tetra usage reset-meter   [side]
+      Start a new trip on the cost meter.

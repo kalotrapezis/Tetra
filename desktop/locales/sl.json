@@ -3002,5 +3002,9 @@
  "passwords.cvcCopied": "Koda kopirana; izbriše se čez 30 sekund",
  "passwords.cvcAsk": "Vaše geslo za prikaz kode",
  "passwords.cvcShow": "Pokaži",
- "passwords.cvcNone": "Za to kartico ni shranjene varnostne kode; Uredi jo doda."
+ "passwords.cvcNone": "Za to kartico ni shranjene varnostne kode; Uredi jo doda.",
+ "commands.title": "Ukazna vrstica",
+ "commands.intro": "Vsaka aplikacija in ukazi, ki jo upravljajo. V terminalu: tetra help, tetra <app> <command>. Uporablja jih tudi AI Assist.",
+ "commands.search": "Poišči ukaz",
+ "commands.open": "Odpri priročnik"
 }

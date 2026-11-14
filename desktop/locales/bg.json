@@ -2816,5 +2816,9 @@
  "passwords.cvcCopied": "Кодът е копиран; изчиства се след 30 секунди",
  "passwords.cvcAsk": "Вашата парола, за да се покаже кодът",
  "passwords.cvcShow": "Покажи",
- "passwords.cvcNone": "Няма запазен код за тази карта; Редактиране го добавя."
+ "passwords.cvcNone": "Няма запазен код за тази карта; Редактиране го добавя.",
+ "commands.title": "Команден ред",
+ "commands.intro": "Всяко приложение и командите, които го управляват. В терминал: tetra help, tetra <app> <command>. AI Assist също ги използва.",
+ "commands.search": "Намери команда",
+ "commands.open": "Отвори ръководството"
 }

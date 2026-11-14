@@ -2816,5 +2816,9 @@
  "passwords.cvcCopied": "Beveiligingscode gekopieerd; gewist na 30 seconden",
  "passwords.cvcAsk": "Je wachtwoord, om de code te tonen",
  "passwords.cvcShow": "Tonen",
- "passwords.cvcNone": "Geen beveiligingscode bewaard voor deze kaart; Bewerken voegt hem toe."
+ "passwords.cvcNone": "Geen beveiligingscode bewaard voor deze kaart; Bewerken voegt hem toe.",
+ "commands.title": "Opdrachtregel",
+ "commands.intro": "Elke app en de opdrachten die hem besturen. In een terminal: tetra help, tetra <app> <command>. AI Assist gebruikt ze ook.",
+ "commands.search": "Opdracht zoeken",
+ "commands.open": "Handleiding openen"
 }

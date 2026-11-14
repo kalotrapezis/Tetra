@@ -2816,5 +2816,9 @@
  "passwords.cvcCopied": "Security code copied; cleared in 30 seconds",
  "passwords.cvcAsk": "Your password, to show the code",
  "passwords.cvcShow": "Show",
- "passwords.cvcNone": "No security code kept for this card; Edit adds it."
+ "passwords.cvcNone": "No security code kept for this card; Edit adds it.",
+ "commands.title": "Command line",
+ "commands.intro": "Every app and the commands that control it. In a terminal: tetra help, tetra <app> <command>. AI Assist uses them too.",
+ "commands.search": "Find a command",
+ "commands.open": "Open the manual"
 }

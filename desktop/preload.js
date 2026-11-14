@@ -99,6 +99,9 @@ contextBridge.exposeInMainWorld('drive', {
   },
   onPillsChanged: cb => { const f = () => cb(); ipcRenderer.on('pills-changed', f); return () => ipcRenderer.removeListener('pills-changed', f) },
   onPillsChime: cb => { const f = () => cb(); ipcRenderer.on('pills-chime', f); return () => ipcRenderer.removeListener('pills-chime', f) },
+  // the command line (commands.js): its manual, and a page shown by `tetra app open`
+  commands: { manual: app => ipcRenderer.invoke('commands:manual', app), open: page => ipcRenderer.invoke('app:open', page) },
+  onOpenPage: cb => { const f = (_, page) => cb(page); ipcRenderer.on('open-page', f); return () => ipcRenderer.removeListener('open-page', f) },
   onOpenPills: cb => { const f = () => cb(); ipcRenderer.on('open-pills', f); return () => ipcRenderer.removeListener('open-pills', f) },
   mapsInfo: () => ipcRenderer.invoke('maps:info'),
   mapsRegions: () => ipcRenderer.invoke('maps:regions'),

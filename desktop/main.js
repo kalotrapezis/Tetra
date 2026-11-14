@@ -36,6 +36,10 @@ const { MapBuilder } = require('./mapbuild')
 const { Thumbs } = require('./thumbs')
 const importer = require('./importer')
 const assistant = require('./assistant')
+const commands = require('./commands')
+// Every button's handler, by its channel: the command line (commands.js) calls the very function the button calls
+const handlers = new Map()
+{ const handle = ipcMain.handle.bind(ipcMain); ipcMain.handle = (channel, fn) => { handlers.set(channel, fn); return handle(channel, fn) } }
 const schedule = require('./schedule')
 const brief = require('./brief')
 const { Mail, MICROSOFT, detect: detectMail, check: checkMail, parseMailto } = require('./mail')
@@ -1563,7 +1567,9 @@ app.whenReady().then(() => {
     // shortcut: which card is the user's is kept on this computer only (Contacts has no "me" mark yet); into the card once the devices need it
     me: () => setting('assistantMe') || null, setMe: uid => setSetting('assistantMe', uid), extract: readAttachment,
     // the MP3s being made (below), so «πώς πάει;» is answered and one can be stopped
-    jobs: { list: () => [...audioJobs.values()].filter(j => j.state === 'running' || Date.now() - j.started < 3600000), stop: id => audioJobs.get(id)?.stop.abort() } })
+    jobs: { list: () => [...audioJobs.values()].filter(j => j.state === 'running' || Date.now() - j.started < 3600000), stop: id => audioJobs.get(id)?.stop.abort() },
+    // tetra_command: the command line's commands, run as their buttons; an "asks" one comes here only after the user's yes (Chat)
+    command: (name, args) => commands.run(handlers, name, args, { yes: true }) })
   // Attachments (attach.js): read in place; one picked from outside Files is copied to .System, never into the user's Files
   const ATTACHMENTS = path.join(system.dir('Assistant', 'Data', files.system), 'Attachments')
   const attached = new Map() // path → its text, while the chat may ask again
@@ -2154,6 +2160,12 @@ app.whenReady().then(() => {
   })
   ipcMain.handle('usage:summary', () => ({ ...usage.summary(), prices: assistant.PRICES, meter: assistant.Meter.of(setting('assistantMeter')).total }))
   ipcMain.handle('usage:setBudget', (_, eur) => usage.setBudget(eur))
+  // The command line (commands.js, cli.js): the manual, a page shown, and the socket `tetra <app> <command>` talks to
+  ipcMain.handle('commands:manual', (_, app) => commands.help(app || null))
+  ipcMain.handle('app:open', (_, page) => showWindow().then(() => win?.webContents.send('open-page', String(page))))
+  // not from a hidden QA copy (it would take the running Tetra's socket away), unless given a socket of its own
+  if (!process.env.DRIVE_HIDDEN || process.env.TETRA_SOCKET) commands.serve(commands.socketPath(), (name, args, yes) => commands.run(handlers, name, args, { yes }))
+    .then(() => console.log('[commands] listening at', commands.socketPath()), e => console.warn('[commands] the command line is off:', e.message))
   ipcMain.handle('assistant:resetMeter', () => { const m = assistant.Meter.of(setting('assistantMeter')); m.reset(); setSetting('assistantMeter', m.json()); return meterNow() })
 
   if (!process.env.DRIVE_HIDDEN && HOME.root.endsWith('Tetra')) home.markFolder(HOME.root, path.join(__dirname, 'public', 'icon.png'), DATA_DIR)

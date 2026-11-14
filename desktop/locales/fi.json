@@ -2816,5 +2816,9 @@
  "passwords.cvcCopied": "Turvakoodi kopioitu; poistuu 30 sekunnin kuluttua",
  "passwords.cvcAsk": "Salasanasi koodin näyttämiseksi",
  "passwords.cvcShow": "Näytä",
- "passwords.cvcNone": "Kortille ei ole tallennettu turvakoodia; Muokkaa lisää sen."
+ "passwords.cvcNone": "Kortille ei ole tallennettu turvakoodia; Muokkaa lisää sen.",
+ "commands.title": "Komentorivi",
+ "commands.intro": "Jokainen sovellus ja sitä ohjaavat komennot. Päätteessä: tetra help, tetra <app> <command>. Myös AI Assist käyttää niitä.",
+ "commands.search": "Etsi komento",
+ "commands.open": "Avaa ohje"
 }

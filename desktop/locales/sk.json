@@ -3002,5 +3002,9 @@
  "passwords.cvcCopied": "Kód skopírovaný; vymaže sa o 30 sekúnd",
  "passwords.cvcAsk": "Vaše heslo na zobrazenie kódu",
  "passwords.cvcShow": "Zobraziť",
- "passwords.cvcNone": "Pre túto kartu nie je uložený bezpečnostný kód; Upraviť ho pridá."
+ "passwords.cvcNone": "Pre túto kartu nie je uložený bezpečnostný kód; Upraviť ho pridá.",
+ "commands.title": "Príkazový riadok",
+ "commands.intro": "Každá aplikácia a príkazy, ktoré ju ovládajú. V termináli: tetra help, tetra <app> <command>. Používa ich aj AI Assist.",
+ "commands.search": "Nájsť príkaz",
+ "commands.open": "Otvoriť príručku"
 }

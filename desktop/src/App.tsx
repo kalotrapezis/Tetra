@@ -39,9 +39,10 @@ const DataPage = later(() => import('./Data'), 'DataPage')
 const NotificationsPage = later(() => import('./Center'), 'NotificationsPage')
 const SettingsPage = later(() => import('./Settings'), 'SettingsPage')
 const AssistantPage = later(() => import('./Assistant'), 'AssistantPage')
+const CommandsPage = later(() => import('./Commands'), 'CommandsPage')
 
 type Page = { kind: 'home' } | { kind: 'photos' } | { kind: 'collections' } | { kind: 'collection'; id: string; name: string } | { kind: 'files'; mode: FilesMode; folder: string } | { kind: 'photoTrash' }
-  | { kind: 'people' } | { kind: 'person'; id: string; name: string } | { kind: 'review' } | { kind: 'map'; focus?: string } | { kind: 'hidden' } | { kind: 'sync' } | { kind: 'notes'; open?: string } | { kind: 'calendar' } | { kind: 'mail' } | { kind: 'timer' } | { kind: 'pills' } | { kind: 'maps'; query?: string; at?: number } | { kind: 'assistant' } | { kind: 'contacts' } | { kind: 'phone' } | { kind: 'passwords' } | { kind: 'messages' } | { kind: 'data' } | { kind: 'notifications' } | { kind: 'settings'; start?: string; at?: number }
+  | { kind: 'people' } | { kind: 'person'; id: string; name: string } | { kind: 'review' } | { kind: 'map'; focus?: string } | { kind: 'hidden' } | { kind: 'sync' } | { kind: 'notes'; open?: string } | { kind: 'calendar' } | { kind: 'mail' } | { kind: 'timer' } | { kind: 'pills' } | { kind: 'maps'; query?: string; at?: number } | { kind: 'assistant' } | { kind: 'contacts' } | { kind: 'phone' } | { kind: 'passwords' } | { kind: 'messages' } | { kind: 'data' } | { kind: 'notifications' } | { kind: 'commands' } | { kind: 'settings'; start?: string; at?: number }
 
 const SYSTEM: { id: string; key: string; icon: IconName; test: (m: Media) => boolean }[] = [
   { id: 'favorites', key: 'files.favorites', icon: 'heart', test: m => !!m.favorite },
@@ -147,6 +148,8 @@ export function App() {
   // "The map of Cyprus is over 3 months old": its click opens Settings › Maps
   useEffect(() => window.drive.onOpenDevices(() => setPage({ kind: 'sync' })), [])
   useEffect(() => window.drive.onOpenPills(() => setPage({ kind: 'pills' })), [])
+  // `tetra app open <page>` (commands.js): Files opens at its top, Settings at its start
+  useEffect(() => window.drive.onOpenPage(kind => setPage((kind === 'files' ? { kind, mode: 'browse', folder: '' } : kind === 'settings' ? { kind, at: Date.now() } : { kind }) as Page)), [])
   // a mailto: link (Tetra the default email app, or a link in a mail): Mail, writing a new mail with its fields
   const [compose, setCompose] = useState<(MailCompose & { at: number }) | null>(null)
   useEffect(() => window.drive.mail.onCompose(c => { setPage({ kind: 'mail' }); setCompose({ ...c, at: Date.now() }) }), [])
@@ -428,6 +431,7 @@ export function App() {
   else if (page.kind === 'data') content = <DataPage />
   else if (page.kind === 'passwords') content = <PasswordsPage setDialog={setDialog} say={say} />
   else if (page.kind === 'contacts') content = <ContactsPage setDialog={setDialog} say={say} openPerson={(id, name) => setPage({ kind: 'person', id, name })} />
+  else if (page.kind === 'commands') content = <CommandsPage />
   else if (page.kind === 'notifications') content = <NotificationsPage go={kind => setPage({ kind })} say={say} />
   else if (page.kind === 'settings') content = <SettingsPage key={page.at} start={page.start} onGuide={() => setGuide(true)} />
   else if (page.kind === 'photoTrash') content = <TrashPage onBack={() => setPage({ kind: 'collections' })} setDialog={setDialog} say={say} onChanged={reload} />

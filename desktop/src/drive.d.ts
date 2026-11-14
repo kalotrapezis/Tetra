@@ -355,6 +355,8 @@ declare global {
       onPillsChanged(cb: () => void): () => void
       onPillsChime(cb: () => void): () => void
       onOpenPills(cb: () => void): () => void
+      commands: { manual(app?: string): Promise<string>; open(page: string): Promise<void> }
+      onOpenPage(cb: (page: string) => void): () => void
       ai: {
         get(): Promise<AiSettings>
         set(changes: { enabled?: boolean; apps?: Record<string, boolean> }): Promise<AiSettings>

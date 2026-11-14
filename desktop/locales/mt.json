@@ -3003,5 +3003,9 @@
  "passwords.cvcCopied": "Il-kodiċi ġie kkupjat; jitħassar f’30 sekonda",
  "passwords.cvcAsk": "Il-password tiegħek, biex jidher il-kodiċi",
  "passwords.cvcShow": "Uri",
- "passwords.cvcNone": "M’hemmx kodiċi tas-sigurtà miżmum għal din il-karta; Editja jżidu."
+ "passwords.cvcNone": "M’hemmx kodiċi tas-sigurtà miżmum għal din il-karta; Editja jżidu.",
+ "commands.title": "Linja tal-kmand",
+ "commands.intro": "Kull app u l-kmandi li jikkontrollawha. F'terminal: tetra help, tetra <app> <command>. AI Assist jużahom ukoll.",
+ "commands.search": "Sib kmand",
+ "commands.open": "Iftaħ il-manwal"
 }

@@ -2816,5 +2816,9 @@
  "passwords.cvcCopied": "Sicherheitscode kopiert; wird in 30 Sekunden gelöscht",
  "passwords.cvcAsk": "Ihr Passwort, um den Code zu zeigen",
  "passwords.cvcShow": "Anzeigen",
- "passwords.cvcNone": "Für diese Karte ist kein Sicherheitscode gespeichert; Bearbeiten fügt ihn hinzu."
+ "passwords.cvcNone": "Für diese Karte ist kein Sicherheitscode gespeichert; Bearbeiten fügt ihn hinzu.",
+ "commands.title": "Befehlszeile",
+ "commands.intro": "Jede App und die Befehle, die sie steuern. Im Terminal: tetra help, tetra <app> <command>. AI Assist nutzt sie auch.",
+ "commands.search": "Befehl suchen",
+ "commands.open": "Handbuch öffnen"
 }

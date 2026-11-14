@@ -99,6 +99,8 @@
       "skills/**",
       "importer.js",
       "assistant.js",
+      "commands.js",
+      "cli.js",
       "attach.js",
       "audio.js",
       "usage.js",

@@ -2816,5 +2816,9 @@
  "passwords.cvcCopied": "Biztonsági kód másolva; 30 másodperc múlva törlődik",
  "passwords.cvcAsk": "Az Ön jelszava a kód megjelenítéséhez",
  "passwords.cvcShow": "Megjelenítés",
- "passwords.cvcNone": "Ehhez a kártyához nincs mentett biztonsági kód; a Szerkesztés hozzáadja."
+ "passwords.cvcNone": "Ehhez a kártyához nincs mentett biztonsági kód; a Szerkesztés hozzáadja.",
+ "commands.title": "Parancssor",
+ "commands.intro": "Minden alkalmazás és az azt vezérlő parancsok. Terminálban: tetra help, tetra <app> <command>. Az AI Assist is ezeket használja.",
+ "commands.search": "Parancs keresése",
+ "commands.open": "Kézikönyv megnyitása"
 }

@@ -2816,5 +2816,9 @@
  "passwords.cvcCopied": "Turvakood kopeeritud; kustub 30 sekundi pärast",
  "passwords.cvcAsk": "Sinu parool koodi näitamiseks",
  "passwords.cvcShow": "Näita",
- "passwords.cvcNone": "Selle kaardi turvakoodi pole salvestatud; Muuda lisab selle."
+ "passwords.cvcNone": "Selle kaardi turvakoodi pole salvestatud; Muuda lisab selle.",
+ "commands.title": "Käsurida",
+ "commands.intro": "Iga rakendus ja käsud, mis seda juhivad. Terminalis: tetra help, tetra <app> <command>. Ka AI Assist kasutab neid.",
+ "commands.search": "Leia käsk",
+ "commands.open": "Ava juhend"
 }

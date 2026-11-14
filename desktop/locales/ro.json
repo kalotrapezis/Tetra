@@ -2909,5 +2909,9 @@
  "passwords.cvcCopied": "Cod copiat; se șterge în 30 de secunde",
  "passwords.cvcAsk": "Parola dvs., pentru a afișa codul",
  "passwords.cvcShow": "Afișează",
- "passwords.cvcNone": "Niciun cod de securitate păstrat pentru card; Editare îl adaugă."
+ "passwords.cvcNone": "Niciun cod de securitate păstrat pentru card; Editare îl adaugă.",
+ "commands.title": "Linie de comandă",
+ "commands.intro": "Fiecare aplicație și comenzile care o controlează. Într-un terminal: tetra help, tetra <app> <command>. Le folosește și AI Assist.",
+ "commands.search": "Găsește o comandă",
+ "commands.open": "Deschide manualul"
 }

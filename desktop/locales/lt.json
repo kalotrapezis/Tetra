@@ -3002,5 +3002,9 @@
  "passwords.cvcCopied": "Kodas nukopijuotas; išsivalys po 30 sekundžių",
  "passwords.cvcAsk": "Jūsų slaptažodis kodui parodyti",
  "passwords.cvcShow": "Rodyti",
- "passwords.cvcNone": "Šiai kortelei saugos kodas neišsaugotas; Redaguoti jį prideda."
+ "passwords.cvcNone": "Šiai kortelei saugos kodas neišsaugotas; Redaguoti jį prideda.",
+ "commands.title": "Komandų eilutė",
+ "commands.intro": "Kiekviena programa ir ją valdančios komandos. Terminale: tetra help, tetra <app> <command>. Jas naudoja ir AI Assist.",
+ "commands.search": "Rasti komandą",
+ "commands.open": "Atverti vadovą"
 }
