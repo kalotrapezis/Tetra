@@ -961,7 +961,7 @@ class Chat {
         if (tainted && effect === 'side' && !this.allow.has(name)) {
           const h = this.hold(name, args ?? {})
           out.held.push({ id: h.id, what: h.what })
-          this.log.push({ kind: 'held', name, what: h.what })
+          this.log.push({ kind: 'held', name, what: h.what, args: args ?? {} })
           r = { forModel: `Not done: after text from others, this waits for the user's yes (a button on the screen, or a spoken yes): ${h.what}. Tell the user in one sentence what waits; never say it is done.` }
         } else {
           r = await this.tools.run(name, args ?? {})

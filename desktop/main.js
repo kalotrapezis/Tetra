@@ -1650,7 +1650,9 @@ app.whenReady().then(() => {
         const done = brief.report(c.log, e => `${GROUP_OF[e.name] ? t(`sched.allow.${GROUP_OF[e.name]}`) : e.name}: ${e.what.replace(/^[a-z_]+\((.*)\)$/s, '$1')}`)
         html = brief.answer(title, now, line, done ? [done] : [])
         // the run as a chat too (the user, 14 Nov: "an actual chat"), named as its page: the phone's page offers it, a click here opens it
-        writeChat(base, { title, bubbles: [{ mine: true, text: s.prompt }, { mine: false, text: [line, done?.text].filter(Boolean).join('\n\n') }], messages: c.messages })
+        // what waits for a yes goes with it: the chat shows its Do it / Cancel when it is opened here (14 Nov, the user: "it waits for me where?")
+        writeChat(base, { title, bubbles: [{ mine: true, text: s.prompt }, { mine: false, text: [line, done?.text].filter(Boolean).join('\n\n') }], messages: c.messages,
+          held: c.log.filter(e => e.kind === 'held').map(({ name, args, what }) => ({ name, args, what })) })
         open = () => assistantCommand(`chat:${base}`)
       }
       fs.mkdirSync(BRIEFS, { recursive: true })
@@ -1715,7 +1717,12 @@ app.whenReady().then(() => {
     if (!assistKey()) throw new Error(t('assistant.noKey'))
     return runSchedule(s, true)
   })
-  ipcMain.handle('schedules:open', (_, file) => { const f = path.resolve(BRIEFS, path.basename(String(file))); if (fs.existsSync(f)) shell.openPath(f) })
+  // a scheduled action's result: its chat when it has one (the user, 14 Nov: "it's still html"), else its page
+  ipcMain.handle('schedules:open', (_, file) => {
+    const f = path.resolve(BRIEFS, path.basename(String(file))), base = path.basename(f, '.html')
+    if (fs.existsSync(chatFile(base))) assistantCommand(`chat:${base}`)
+    else if (fs.existsSync(f)) shell.openPath(f)
+  })
   // the weather's place, by name, from Open-Meteo's free geocoding (no key)
   ipcMain.handle('schedules:place', async (_, name) => {
     const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?count=1&language=${encodeURIComponent(i18n.locale('en'))}&name=${encodeURIComponent(String(name).slice(0, 100))}`)
@@ -1792,9 +1799,14 @@ app.whenReady().then(() => {
       ...(Array.isArray(b?.files) ? { files: b.files.map(f => ({ name: String(f.name), path: String(f.path), pages: Number(f.pages) || 0 })) } : {}),
       ...(b?.job ? { job: String(b.job) } : {}) }))
     if (!said.some(b => b.mine)) return
-    let title = said.find(b => b.mine).text.replace(/\s+/g, ' ').slice(0, 80)
-    try { title = JSON.parse(fs.readFileSync(chatFile(id), 'utf8')).title || title } catch {} // a scheduled action's chat keeps its name
-    writeChat(id, { title, bubbles: said, messages: chat.messages })
+    let title = said.find(b => b.mine).text.replace(/\s+/g, ' ').slice(0, 80), held = []
+    try {
+      const was = JSON.parse(fs.readFileSync(chatFile(id), 'utf8'))
+      title = was.title || title // a scheduled action's chat keeps its name
+      const waiting = new Set([...chat.held.values()].map(h => h.what)) // what still waits: neither done nor cancelled yet
+      held = (was.held ?? []).filter(h => waiting.has(h.what))
+    } catch {}
+    writeChat(id, { title, bubbles: said, messages: chat.messages, ...(held.length ? { held } : {}) })
   })
   // each kept chat's title, read again only when its file changed: History read all 100 whole at every look (79 ms)
   const chatHeads = new Map()
@@ -1820,7 +1832,9 @@ app.whenReady().then(() => {
     // its file is read again only if the chat asks for it
     const f = (o.bubbles ?? []).flatMap(b => b.files ?? []).at(-1)
     if (f && fs.existsSync(f.path)) assistTools.doc = { name: f.name, path: f.path }
-    return o.bubbles ?? []
+    // a scheduled action's calls that wait for a yes, held again in this chat: its tools are this computer's
+    const held = o.device === HOST ? (o.held ?? []).map(h => chat.hold(String(h.name), h.args ?? {})).map(h => ({ id: h.id, what: h.what })) : []
+    return { bubbles: o.bubbles ?? [], held }
   })
   ipcMain.handle('assistant:deleteChat', (_, id) => fs.rmSync(chatFile(id), { force: true }))
   ipcMain.handle('assistant:transcribe', async (_, pcm) => ({ text: await api.as('dictation').transcribe(Int16Array.from(pcm), assistBias()), spent: chat.bill.usd }))

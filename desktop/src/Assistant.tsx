@@ -329,7 +329,11 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
   }, [])
   // each answered turn kept in History, this computer only
   useEffect(() => { if (phase === 'idle' && bubbles.some(b => b.mine)) window.drive.assistant.keep(chatId, bubbles.map(b => ({ mine: b.mine, text: b.text, error: b.error, files: b.files, job: b.job }))) }, [phase, bubbles.length]) // eslint-disable-line react-hooks/exhaustive-deps
-  const openChat = (id: string) => window.drive.assistant.openChat(id).then(b => { setBubbles(() => b.map(x => ({ mine: x.mine, text: x.text, error: x.error, files: x.files, job: x.job }))); setChatId(id); setPendingCall(null); setHeld([]); setOpen(false) })
+  const openChat = (id: string) => window.drive.assistant.openChat(id).then(({ bubbles: b, held: waits }) => {
+    const last = b.map(x => !x.mine).lastIndexOf(true) // what waits for a yes shows under the answer that asked it
+    setBubbles(() => b.map((x, i) => ({ mine: x.mine, text: x.text, error: x.error, files: x.files, job: x.job, ...(i === last && waits.length ? { held: waits } : {}) })))
+    setChatId(id); setPendingCall(null); setHeld(waits); setOpen(false)
+  })
   const saveKey = async () => {
     try { await window.drive.assistant.setKey(keyText); setKeyText(''); load() } catch (e) { say(errorText(e), true) }
   }

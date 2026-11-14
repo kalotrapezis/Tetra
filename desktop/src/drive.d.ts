@@ -450,7 +450,7 @@ declare global {
         hush(): Promise<void>
         keep(id: string, bubbles: { mine: boolean; text: string; error?: boolean; files?: AssistFile[]; job?: string }[]): Promise<void>
         chats(): Promise<{ id: string; at: number; title: string }[]>
-        openChat(id: string): Promise<{ mine: boolean; text: string; error?: boolean; files?: AssistFile[]; job?: string }[]>
+        openChat(id: string): Promise<{ bubbles: { mine: boolean; text: string; error?: boolean; files?: AssistFile[]; job?: string }[]; held: AssistHeld[] }>
         deleteChat(id: string): Promise<void>
         clear(): Promise<void>
         youtube(q: string): Promise<void>
