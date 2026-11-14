@@ -69,7 +69,7 @@ export interface AssistReply { text: string; choices: AssistChoice[]; call: Assi
 export interface AssistShortcuts { toggle: string; talk: string; live: string }
 export type Repeat = 'once' | 'daily' | 'weekly' | 'monthly' | 'yearly'
 export type Allow = 'calendar' | 'notes' | 'timers' | 'files'
-export interface Schedule { id: string; kind: 'prompt' | 'brief'; title: string; prompt: string; time: string; repeat: Repeat; days: number[]; date: string | null; paused: boolean; allow?: Allow[]; last?: number; next: number | null }
+export interface Schedule { id: string; kind: 'prompt' | 'brief'; title: string; prompt: string; time: string; repeat: Repeat; days: number[]; date: string | null; paused: boolean; allow?: Allow[]; until?: string | null; result?: 'ok' | 'held' | 'failed'; last?: number; next: number | null }
 export interface Place { name: string; lat: number; lon: number }
 export interface BriefSettings { sections: Record<string, boolean>; place: Place | null }
 export interface AssistSettings {

@@ -1663,12 +1663,14 @@ app.whenReady().then(() => {
       fs.mkdirSync(BRIEFS, { recursive: true })
       fs.writeFileSync(file, html)
       fs.writeFileSync(path.join(BRIEFS, 'latest.json'), JSON.stringify({ at: now, title, text: String(line).slice(0, 300), file: name }))
+      schedules.result(s.id, schedule.outcome(c.log))
       notify('assistant', title, String(line).slice(0, 200) || t('brief.tapToOpen'), open)
       sync?.nudge().catch(() => {})
       return file
     } catch (e) {
       // 13 Nov: the weekly one woke at 08:00 to "no internet" and waited a week; tried again every 10 minutes for an hour
       if (!byHand && tries < 6) { console.warn('[schedule] retry in 10 min', e.message); setTimeout(() => runSchedule(s, false, tries + 1).catch(() => {}), 10 * 60_000); return null }
+      schedules.result(s.id, 'failed')
       notify('assistant', title, t('brief.failed', { error: e.message })); throw e
     } finally { scheduleRunning.delete(s.id) }
   }
@@ -1726,12 +1728,12 @@ app.whenReady().then(() => {
     assistantCommand(`run:${s.id}`)
     return null
   })
-  let runNote = '' // sent with the next question only: the run's own turn
+  let runNote = '', runOf = null // sent with the next question only: the run's own turn; whose result it is
   ipcMain.handle('schedules:prepare', (_, id) => {
     const s = schedules.list().find(x => x.id === id)
     if (!s) return null
     hush(); chat.clear(); chat.allow = assistant.allowed(s.allow); assistTools.hidden = new Set(['report_save'])
-    runNote = scheduleNote()
+    runNote = scheduleNote(); runOf = s.id
     const base = `${brief.dayKey(new Date())}-${s.id.slice(0, 8)}`
     writeChat(base, { title: s.title, bubbles: [], messages: [] }) // its name, which the first keep takes
     return { prompt: s.prompt, chat: base }
@@ -1807,8 +1809,11 @@ app.whenReady().then(() => {
     const doc = file ? await readAttachment(String(file)) : null
     const voice = aloud ? await assistVoice().catch(() => 'system') : null
     const read = voice && reader(e.sender, voice), cut = new assistant.Sentences()
-    const said = String(text) + (runNote ? `\n\n${runNote}` : ''); runNote = ''
-    const r = await chat.ask(said, w => { if (!e.sender.isDestroyed()) e.sender.send('assistant-words', w); if (read) cut.push(w).forEach(read.say) }, doc)
+    const said = String(text) + (runNote ? `\n\n${runNote}` : ''), of = runOf; runNote = ''; runOf = null
+    let r
+    try { r = await chat.ask(said, w => { if (!e.sender.isDestroyed()) e.sender.send('assistant-words', w); if (read) cut.push(w).forEach(read.say) }, doc) }
+    catch (err) { if (of) schedules.result(of, 'failed'); throw err }
+    if (of) schedules.result(of, schedule.outcome(chat.log))
     if (read) { read.say(cut.rest()); await read.done() }
     // auto memory: from the user's own words of this turn only, in the background (it costs a small request)
     if (setting('assistantAutoMemory') !== '0' && aiSwitch.on()) assistant.learn(api.as('memory'), memory, String(text)).catch(e => console.warn('[assistant] learn', e.message))

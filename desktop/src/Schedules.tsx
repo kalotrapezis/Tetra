@@ -14,6 +14,9 @@ const BRIEF_SECTIONS: [string, string][] = [['calendar', 'app.calendar'], ['mail
 type Draft = Pick<Schedule, 'title' | 'prompt' | 'time' | 'repeat' | 'days' | 'date' | 'allow'> & { id?: string; kind?: Schedule['kind'] }
 /** What one may do on its own after mail or the web (schedule.js ALLOW_GROUPS). */
 const ALLOWS: Allow[] = ['calendar', 'notes', 'timers', 'files']
+/** Its last run (the user, 14 Nov): green done, yellow waiting for a yes, red failed. */
+const DOT = { ok: '#2e9d4f', held: '#e0a800', failed: '#d93636' } as const
+const DOT_SAYS = { ok: 'sched.done', held: 'sched.waiting', failed: 'sched.failed' } as const
 const fresh = (): Draft => ({ title: '', prompt: '', time: '08:00', repeat: 'daily', days: [1], date: null })
 
 export function ScheduleList({ dictate, past = false, offer }: { dictate?: () => Promise<string | null>; past?: boolean; offer?: (prompt: string) => void }) {
@@ -29,7 +32,7 @@ export function ScheduleList({ dictate, past = false, offer }: { dictate?: () =>
   if (!o) return null
   const weekday = (d: number) => new Intl.DateTimeFormat(locale(), { weekday: 'short' }).format(new Date(2026, 10, 1 + d)) // 1 Nov 2026 was a Sunday
   const when = (ms: number, time = true) => new Intl.DateTimeFormat(locale(), { weekday: 'short', day: 'numeric', month: 'short', ...(time ? { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' } : {}) }).format(ms)
-  const how = (s: Schedule) => [t(`sched.${s.repeat}`) + (s.repeat === 'weekly' ? ` (${s.days.map(weekday).join(', ')})` : s.repeat !== 'daily' && s.date ? ` (${s.date})` : ''), s.time].join(' · ')
+  const how = (s: Schedule) => [t(`sched.${s.repeat}`) + (s.repeat === 'weekly' ? ` (${s.days.map(weekday).join(', ')})` : s.repeat !== 'daily' && s.date ? ` (${s.date})` : ''), s.time + (s.until ? ` → ${s.until}` : '')].join(' · ')
   const fail = (id: string) => (e: unknown) => setSaid({ id, text: errorText(e) })
   const change = (id: string, x: Partial<Schedule>) => window.drive.schedules.change(id, x).then(load, fail(id))
   const save = () => {
@@ -94,7 +97,7 @@ export function ScheduleList({ dictate, past = false, offer }: { dictate?: () =>
     {editing && !editing.id && editor(editing)}
     {o.list.map(s => <div key={s.id}>
       <div className="schedule-row">
-        <span className="schedule-what"><strong>{s.kind === 'brief' ? t('brief.title') : s.title}</strong>
+        <span className="schedule-what"><strong>{s.result && <span className="schedule-dot" style={{ background: DOT[s.result] }} title={t(DOT_SAYS[s.result])} />}{s.kind === 'brief' ? t('brief.title') : s.title}</strong>
           <small>{how(s)} · {s.paused ? t('sched.paused') : s.next ? t('sched.next', { when: when(s.next) }) : t('common.done')}</small></span>
         <span className="reset-actions">
           <button className="text-button" disabled={!!busy || !o.ready} onClick={() => run(s.id)}>{busy === s.id ? t('sched.running') : t('sched.runNow')}</button>

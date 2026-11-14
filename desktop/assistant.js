@@ -27,6 +27,7 @@ const RATE = 16000
 const TOKENS = { [CHAT]: [0.1, 0.3], [BUILT_IN]: [0.4, 2.0], [SHOW_MODEL]: [0.5, 1.5] }
 const PER_MINUTE = { [TRANSCRIBE]: 0.004, [REALTIME]: 0.006 }
 const PER_CALL = { web_search: 0.03, image_generation: 0.10 }
+const RETRIES = 3, RETRY_MS = 2000
 const PER_CHAR = 0.016 / 1000 // voxtral-mini-tts-3: $0.016 a thousand characters
 const PER_PAGE = 0.001 // mistral-ocr: $1 a thousand pages
 
@@ -96,8 +97,16 @@ class Mistral {
     let r
     const go = () => this.fetch(API + path, { method: body == null ? 'GET' : 'POST', signal,
       headers: { Authorization: `Bearer ${k}`, ...(type && body != null ? { 'Content-Type': type } : {}) }, body })
-    // once more when the connection drops: Mistral closes a kept-alive one after a refusal, and the next request found it shut
-    try { r = await go().catch(e => { if (e.name === 'AbortError') throw e; return go() }) } catch (e) { if (e.name === 'AbortError') throw e; console.warn(`[assistant] ${path} did not go:`, e.message, e.cause?.message ?? ''); throw problem(null) }
+    // again when the connection drops (a kept-alive one Mistral closed, or the network a moment away): three more tries, two
+    // seconds apart (the user, 14 Nov: "a connection drop retry after a sec or 2 … 3 tries of 2 sec")
+    for (let tries = 0; ; tries++) {
+      try { r = await go(); break } catch (e) {
+        if (e.name === 'AbortError') throw e
+        if (tries >= RETRIES) { console.warn(`[assistant] ${path} did not go:`, e.message, e.cause?.message ?? ''); throw problem(null) }
+        await new Promise(f => setTimeout(f, RETRY_MS))
+        if (signal?.aborted) throw Object.assign(new Error('aborted'), { name: 'AbortError' })
+      }
+    }
     if (!r.ok) { console.warn(`[assistant] Mistral ${path} answered ${r.status}`, (await r.text().catch(() => '')).slice(0, 300)); throw problem(r.status) }
     return r
   }
@@ -235,7 +244,9 @@ const ONLY_ONE = new Set(['Spouse', 'Partner', 'Mother', 'Father', 'Assistant', 
 const SCHEDULE = { prompt: p('string', 'What to do then, as a request to AI Assist in the user\'s words ("πες μου τι έχω την εβδομάδα").'), title: p('string', 'A short name for it.'),
   time: p('string', 'Local time, HH:MM.'), repeat: { type: 'string', enum: ['once', 'daily', 'weekly', 'monthly', 'yearly'], description: 'How often.' },
   days: { type: 'array', items: { type: 'integer' }, description: 'For weekly: the weekdays, 0 = Sunday, 1 = Monday … 6 = Saturday.' },
-  date: p('string', 'YYYY-MM-DD: for once, the day; for monthly, a day of the month it runs on; for yearly, its day and month. Leave out for today.') }
+  date: p('string', 'YYYY-MM-DD: for once, the day; for monthly, a day of the month it runs on; for yearly, its day and month. Leave out for today.'),
+  until: p('string', 'YYYY-MM-DD: the last day it runs ("for the next 15 days"); leave out for no end.'),
+  allow: { type: 'array', items: { type: 'string', enum: ['calendar', 'notes', 'timers', 'files'] }, description: 'Only what the user said it may do on its own after reading the web or mail: add to the calendar, make notes, set timers, save files. Sending, calling and deleting always wait for the user.' } }
 const NO_ME = 'Tetra does not know which contact is the user. Ask the user for their own name as saved in Contacts, then call my_card, then try again.'
 
 /** What the model may call, in Mistral's function-calling form. */
@@ -805,13 +816,23 @@ class Tools {
   scheduleLine(s, i) {
     const { due } = require('./schedule'), next = due(s)
     const how = s.repeat === 'weekly' ? `weekly on ${s.days.map(d => WEEKDAY[d]).join(', ')}` : s.repeat === 'once' ? `once on ${s.date}` : ['monthly', 'yearly'].includes(s.repeat) && s.date ? `${s.repeat} (from ${s.date})` : s.repeat
-    return `${i + 1}. ${s.title} — ${how} at ${s.time}${s.paused ? ', paused' : next ? `, next ${shown(next)}` : ', done'}${s.kind === 'brief' ? ' (the daily brief)' : `: "${s.prompt}"`}`
+    return `${i + 1}. ${s.title} — ${how} at ${s.time}${s.until ? ` until ${s.until}` : ''}${s.paused ? ', paused' : next ? `, next ${shown(next)}` : ', done'}${s.kind === 'brief' ? ' (the daily brief)' : `: "${s.prompt}"; may do on its own: ${s.allow?.length ? s.allow.join(', ') : 'nothing'}`}`
+  }
+  /**
+   * A schedule just made or changed, read back from the file (the user, 14 Nov: "it doesn't tell me all OK, I set it; make it
+   * check, and ask for permissions it may need or say all is OK"): what the model tells the user.
+   */
+  checked(s, did) {
+    const now = this.schedules.list().find(x => x.id === s.id)
+    if (!now) return `Failed: it is not in the list after saving. Tell the user it was not set.`
+    return `${did} and checked, it is in the list: ${this.scheduleLine(now, 0).slice(3)}.
+Tell the user in one or two sentences that it is set: when it runs first${now.until ? ' and its last day' : ''}. Then, if the task will want to add to the calendar, make notes, set timers or save files after reading the web or mail and it may not do that on its own yet, ask whether it may (then schedule_change with allow); sending, calling and deleting always wait for them. Otherwise say all is OK.`
   }
   schedule_add(a) {
     if (!this.schedules) return { forModel: 'Scheduled actions run only on the computer.' }
-    const s = this.schedules.add(a)
+    const made = this.schedules.add(a)
     this.changed('schedules')
-    return { forModel: `Scheduled: ${this.scheduleLine(s, 0).slice(3)}.` }
+    return { forModel: this.checked(made, 'Scheduled') }
   }
   schedule_list() {
     if (!this.schedules) return { forModel: 'Scheduled actions run only on the computer.' }
@@ -826,7 +847,7 @@ class Tools {
       delete x.sections
       const c = this.schedules.change(s.id, x)
       this.changed('schedules')
-      return { forModel: `Changed: ${this.scheduleLine(c, 0).slice(3)}.` }
+      return { forModel: this.checked(c, 'Changed') }
     })
   }
   schedule_delete(a) {

@@ -8,7 +8,7 @@
  *   ~/Tetra/.System/Assistant/Shared/schedules.json   (synced as "AI Assist/schedules.json")
  *   { "list": [ { id, title, prompt, kind: "prompt" | "brief", time: "HH:MM", repeat: "once" | "daily" | "weekly" | "monthly" | "yearly",
  *                 days: [0-6] (weekly, 0 = Sunday), date: "YYYY-MM-DD" (once: the day; monthly: its day; yearly: its day and month),
- *                 paused, created, last, runNow, allow: ["calendar" | "notes" | "timers" | "files"] (done without a yes after mail or the web) } ],
+ *                 until: "YYYY-MM-DD" (its last day, or none), result: "ok" | "held" | "failed" (its last run), paused, created, last, runNow, allow: ["calendar" | "notes" | "timers" | "files"] (done without a yes after mail or the web) } ],
  *     "runner": the computer that runs them (its host name),
  *     "brief": { sections: { calendar: bool, … }, place: { name, lat, lon } } }
  */
@@ -53,8 +53,14 @@ function nextRun(s, after) {
   return null
 }
 
-/** When [s] is due next: after its last run, else after it was made; null when paused or done. */
-const due = s => s.paused ? null : nextRun(s, s.last ?? s.created ?? 0)
+/** When [s] is due next: after its last run, else after it was made; null when paused or done (past its "until" day too). */
+function due(s) {
+  if (s.paused) return null
+  const next = nextRun(s, s.last ?? s.created ?? 0)
+  if (next == null || !s.until) return next
+  const [y, m, d] = s.until.split('-').map(Number)
+  return next < new Date(y, m - 1, d + 1).getTime() ? next : null
+}
 
 const BRIEF = { id: 'brief', kind: 'brief', title: 'Η ενημέρωση της ημέρας', prompt: '', time: '07:30', repeat: 'daily', days: [], date: null, paused: false }
 
@@ -82,6 +88,7 @@ class Schedules {
     if (x.repeat != null) { if (!REPEATS.includes(x.repeat)) throw new Error(`Not a repetition: ${x.repeat}`); s.repeat = x.repeat }
     if (x.days != null) s.days = [...new Set((Array.isArray(x.days) ? x.days : [x.days]).map(Number).filter(n => Number.isInteger(n) && n >= 0 && n <= 6))].sort()
     if (x.date !== undefined) { if (x.date && !/^\d{4}-\d{2}-\d{2}$/.test(x.date)) throw new Error(`Not a date: ${x.date}`); s.date = x.date || null }
+    if (x.until !== undefined) { if (x.until && !/^\d{4}-\d{2}-\d{2}$/.test(x.until)) throw new Error(`Not a date: ${x.until}`); s.until = x.until || null }
     if (x.allow != null) s.allow = [...new Set((Array.isArray(x.allow) ? x.allow : []).map(String))].filter(g => ALLOW_GROUPS.includes(g))
     if (x.paused != null) s.paused = !!x.paused
     if (x.runNow != null) s.runNow = !!x.runNow
@@ -108,6 +115,8 @@ class Schedules {
   }
   /** Gone, and remembered as gone ("removed": id → when), so a merge with a device's older copy does not bring it back. */
   remove(id) { const o = this.read(); o.list = o.list.filter(s => s.id !== id); o.removed = { ...o.removed, [id]: this.now() }; this.write(o) }
+  /** How its last run went (the user, 14 Nov: a green, yellow or red dot): "ok", "held" (something waits for a yes) or "failed". */
+  result(id, r) { const o = this.read(), s = o.list.find(s => s.id === id); if (s) { s.result = r; s.resultAt = this.now(); this.write(o) } }
   ran(id, at) { const o = this.read(), s = o.list.find(s => s.id === id); if (s) { s.last = at; this.write(o) } }
   /** Whether [me] runs them: the runner named in the file, or the first computer to ask, which becomes it. */
   runs(me) { const o = this.read(); if (!o.runner) { o.runner = me; this.write(o) } return o.runner === me }
@@ -137,4 +146,7 @@ function mergeSchedules(older, newer) {
   return JSON.stringify({ ...a, ...b, list, ...(Object.keys(removed).length ? { removed } : {}) }, null, 2)
 }
 
-module.exports = { Schedules, nextRun, due, mergeSchedules, REPEATS, ALLOW_GROUPS, BRIEF }
+/** A run's chat log (assistant.js Chat.log) as its result. */
+const outcome = log => log.some(e => e.kind === 'failed') ? 'failed' : log.some(e => e.kind === 'held') ? 'held' : 'ok'
+
+module.exports = { outcome, Schedules, nextRun, due, mergeSchedules, REPEATS, ALLOW_GROUPS, BRIEF }

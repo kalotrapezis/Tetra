@@ -1308,6 +1308,7 @@ button.link.risk { color: #d8663f; font-weight: 600; }
 .schedule-row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 10px 0; border-bottom: 1px solid var(--hover); }
 .schedule-what { flex: 1 1 220px; min-width: 0; }
 .schedule-what small { display: block; color: var(--muted); font-size: 13px; }
+.schedule-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; }
 .schedule-row .text-button { padding: 8px 14px; }
 .schedule-row .text-button:disabled { opacity: .4; cursor: default; }
 .schedule-say { display: flex; gap: 8px; align-items: flex-start; }

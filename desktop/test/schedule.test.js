@@ -103,7 +103,7 @@ test('AI Assist\'s tool: "κάθε Δευτέρα στις 8 πες μου τι 
     const tools = new Tools({ schedules: new Schedules(path.join(dir, 'schedules.json'), () => now), now: () => now, changed: w => told.push(w) })
     assert.match((await tools.run('schedule_add', { prompt: 'πες μου τι έχω την εβδομάδα', time: '08:00', repeat: 'weekly', days: [1] })).forModel, /weekly on Mon at 08:00, next Mon 2026-11-02 08:00/)
     const list = (await tools.run('schedule_list')).forModel
-    assert.match(list, /^1\. Η ενημέρωση της ημέρας — daily at 07:30.*\(the daily brief\)\n2\. .*"πες μου τι έχω την εβδομάδα"$/)
+    assert.match(list, /^1\. Η ενημέρωση της ημέρας — daily at 07:30.*\(the daily brief\)\n2\. .*"πες μου τι έχω την εβδομάδα"; may do on its own: nothing$/)
     assert.match((await tools.run('schedule_change', { choice: 2, paused: true })).forModel, /paused/)
     assert.match((await tools.run('schedule_delete', { choice: 1 })).forModel, /cannot be deleted; pause it/)
     assert.match((await tools.run('schedule_delete', { choice: 2 })).forModel, /Deleted/)
@@ -139,4 +139,13 @@ test('allow keeps only the known groups', () => {
   const s = new Schedules(path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'sch-')), 'schedules.json'))
   const a = s.add({ prompt: 'x', time: '08:00', allow: ['calendar', 'mail_send', 'calendar', 'files'] })
   require('node:assert/strict').deepEqual(a.allow, ['calendar', 'files'])
+})
+
+test('until: its last day runs, the day after it is done', () => {
+  const assert = require('node:assert/strict')
+  const { due } = require('../schedule')
+  const s = { repeat: 'daily', time: '09:00', created: new Date(2026, 10, 14, 8).getTime(), until: '2026-11-15' }
+  assert.equal(due(s), new Date(2026, 10, 14, 9).getTime())
+  assert.equal(due({ ...s, last: new Date(2026, 10, 15, 9).getTime() }), null)
+  assert.equal(due({ ...s, last: new Date(2026, 10, 14, 9).getTime() }), new Date(2026, 10, 15, 9).getTime())
 })
