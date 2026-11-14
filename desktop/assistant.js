@@ -336,7 +336,7 @@ const TOOL_APP = {
 const EFFECTS = {
   calendar_list: 'read', calendar_free: 'read', timer_list: 'read', pills_list: 'read', notes_search: 'read', files_find: 'read',
   contacts_find: 'read', mail_status: 'read', schedule_list: 'read', memory_list: 'read',
-  mail_new: 'external', mail_important: 'external', mail_search: 'external', mail_read: 'external', mail_needs_answer: 'external',
+  mail_new: 'external', mail_important: 'external', mail_urgent: 'external', mail_search: 'external', mail_read: 'external', mail_needs_answer: 'external',
   mail_find_local: 'external', web_search: 'external', attachment_read: 'external',
   mail_send: 'asks', audio_make: 'asks',
 }

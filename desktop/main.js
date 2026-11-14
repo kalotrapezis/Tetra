@@ -1598,9 +1598,10 @@ app.whenReady().then(() => {
     const next = Math.min(...list.map(schedule.due).filter(x => x != null && x > now))
     scheduleTimer = setTimeout(planSchedules, Math.max(1000, Math.min(next - now, 6 * HOURS)))
   }
-  /** Runs [s] now; [byHand] (Run now) leaves its next time as it was. */
-  async function runSchedule(s, byHand = false) {
+  /** Runs [s] now; [byHand] (Run now) leaves its next time as it was; [tries]: failed runs before this one. */
+  async function runSchedule(s, byHand = false, tries = 0) {
     if (scheduleRunning.has(s.id)) return null
+    if (tries && (!(s = schedules.list().find(x => x.id === s.id)) || s.paused)) return null // as it is now: changed, paused or deleted before the retry
     // past the month's budget nothing runs by itself, and it says so
     if (usage.capped()) { if (!byHand) schedules.ran(s.id, Date.now()); notify('assistant', s.kind === 'brief' ? t('brief.title') : s.title, t('usage.capped')); return null }
     scheduleRunning.add(s.id)
@@ -1627,7 +1628,11 @@ app.whenReady().then(() => {
       notify('assistant', title, String(line).slice(0, 200) || t('brief.tapToOpen'), () => shell.openPath(file))
       sync?.nudge().catch(() => {})
       return file
-    } catch (e) { notify('assistant', title, t('brief.failed', { error: e.message })); throw e } finally { scheduleRunning.delete(s.id) }
+    } catch (e) {
+      // 13 Nov: the weekly one woke at 08:00 to "no internet" and waited a week; tried again every 10 minutes for an hour
+      if (!byHand && tries < 6) { console.warn('[schedule] retry in 10 min', e.message); setTimeout(() => runSchedule(s, false, tries + 1).catch(() => {}), 10 * 60_000); return null }
+      notify('assistant', title, t('brief.failed', { error: e.message })); throw e
+    } finally { scheduleRunning.delete(s.id) }
   }
   /**
    * The facts' weekly tidy (assistant.js tidy), built in like the daily brief: on the runner only, a week after the last; what

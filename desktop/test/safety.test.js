@@ -26,6 +26,7 @@ test('every tool has an effect, unknown ones count as side effects', () => {
   for (const s of SCHEMA) assert.ok(!EFFECTS[s.function.name] || ['read', 'external', 'side', 'asks'].includes(EFFECTS[s.function.name]))
   assert.equal(EFFECTS.memory_add, undefined) // side, by the default
   assert.equal(EFFECTS.mail_read, 'external')
+  assert.equal(EFFECTS.mail_urgent, 'external') // 14 Nov: unnamed, it was held after mail_new and the brief said it awaits a yes
 })
 
 test('a mail saying "add to memory X / call Y": neither runs; both wait for the user, who then says yes', async () => {
