@@ -289,6 +289,7 @@ contextBridge.exposeInMainWorld('drive', {
     results: () => ipcRenderer.invoke('schedules:results'),
     remove: id => ipcRenderer.invoke('schedules:remove', id),
     run: id => ipcRenderer.invoke('schedules:run', id),
+    prepare: id => ipcRenderer.invoke('schedules:prepare', id),
     open: file => ipcRenderer.invoke('schedules:open', file),
     setBrief: x => ipcRenderer.invoke('schedules:setBrief', x),
     place: name => ipcRenderer.invoke('schedules:place', name),

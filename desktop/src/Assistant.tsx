@@ -314,6 +314,12 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
     if (command.what === 'talk') fns.current.mic()
     if (command.what === 'live') fns.current.toggleLive()
     if (command.what.startsWith('chat:')) openChat(command.what.slice(5)).catch(() => {}) // a scheduled action's notification
+    // Run now: a chat of its own at once, the run its first turn, seen as it thinks and writes
+    if (command.what.startsWith('run:')) window.drive.schedules.prepare(command.what.slice(4)).then(r => {
+      if (!r) return
+      setBubbles(() => []); setPendingCall(null); setPendingAudio(null); setHeld([]); setFile(null); setSpent(0); setChatId(r.chat); setOpen(false)
+      fns.current.send(r.prompt)
+    }).catch(() => {})
   }, [command?.at, !!s]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const status = phase === 'listening' ? t(hearing ? 'assistant.hearing' : 'assistant.listening') : phase === 'thinking' ? t('assistant.thinking') : null

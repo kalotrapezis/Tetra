@@ -1543,7 +1543,8 @@ app.whenReady().then(() => {
       if (what === 'notes') { win?.webContents.send('notes-changed'); sync?.nudge().catch(() => {}) }
       if (what === 'schedules') { planSchedules(); win?.webContents.send('schedules-changed') }
     },
-    search: async q => { const r = await api.as('web').conversation(q, 'web_search', 'Search the web and answer briefly with the facts found.'); return r.text + (r.sources.length ? '\nSources: ' + r.sources.slice(0, 3).join('; ') : '') },
+    // the search is a request of its own: it gets today too (the user, 14 Nov: "it does not seem to know date and time"), so it does not tell October as coming in November
+    search: async q => { const r = await api.as('web').conversation(q, 'web_search', `Today is ${assistant.today()}. Search the web and answer briefly with the facts found, each with its date; say plainly what has already passed and what is still to come.`); return r.text + (r.sources.length ? '\nSources: ' + r.sources.slice(0, 3).join('; ') : '') },
     // pictures go to Files › Assistant, a folder like any other, so they reach the phone
     image: async prompt => {
       const id = (await api.as('image').conversation(prompt, 'image_generation', 'Draw the picture asked for.')).files[0]
@@ -1594,6 +1595,8 @@ app.whenReady().then(() => {
     const all = fs.readdirSync(CHATS).filter(n => n.endsWith('.json')).map(n => ({ n, at: fs.statSync(path.join(CHATS, n)).mtimeMs })).sort((x, y) => y.at - x.at)
     for (const { n } of all.slice(100)) fs.rmSync(path.join(CHATS, n), { force: true })
   }
+  /** What a scheduled action's prompt is sent with: today, and that its answer is the whole report. */
+  const scheduleNote = () => `(Now: ${assistant.today()}. This runs by itself on a schedule; your answer is kept as a chat the user reads later, so write the whole result here, as long as it needs, in short paragraphs, with dates, and say what has passed and what is still to come.)`
   /** A scheduled action's tool → its permission group (assistant.js ALLOW), for its report's words. */
   const GROUP_OF = Object.fromEntries(Object.entries(assistant.ALLOW).flatMap(([g, ns]) => ns.map(n => [n, g])))
 
@@ -1631,7 +1634,9 @@ app.whenReady().then(() => {
     if (!byHand) schedules.ran(s.id, Date.now()) // first, so a slow run is not started twice
     const title = s.kind === 'brief' ? t('brief.title') : s.title
     try {
-      const now = Date.now(), c = new assistant.Chat(api.as(s.kind === 'brief' ? 'brief' : 'schedule'), makeTools(), undefined, assistant.allowed(s.allow))
+      // no report_save: the answer is the report, kept as the chat (14 Nov: it saved an HTML page and the chat said only that it waited)
+      const tools = makeTools(); tools.hidden = new Set(['report_save'])
+      const now = Date.now(), c = new assistant.Chat(api.as(s.kind === 'brief' ? 'brief' : 'schedule'), tools, undefined, assistant.allowed(s.allow))
       const ask = async prompt => (await c.ask(prompt)).text
       let html, line
       if (s.kind === 'brief') {
@@ -1643,7 +1648,7 @@ app.whenReady().then(() => {
           if (Number.isFinite(fix?.lat) && Number.isFinite(fix?.lng)) place = { name: t('brief.placePhone', { device: fix.device }), lat: fix.lat, lon: fix.lng }
         }
         ;({ html, line } = await brief.make({ now, calendar, notes, ask, fetch: globalThis.fetch, place, switches: b.sections, allowed: app => aiSwitch.allows(app) }, title))
-      } else { line = await ask(`${s.prompt}\n\n(This runs by itself on a schedule and the answer is shown as a page: it may be longer than usual, in short paragraphs.)`) }
+      } else { line = await ask(`${s.prompt}\n\n${scheduleNote()}`) }
       const base = `${brief.dayKey(new Date(now))}${s.kind === 'brief' ? '' : '-' + s.id.slice(0, 8)}`, name = `${base}.html`, file = path.join(BRIEFS, name)
       let open = () => shell.openPath(file)
       if (s.kind !== 'brief') {
@@ -1710,12 +1715,26 @@ app.whenReady().then(() => {
   })
   ipcMain.handle('schedules:remove', (_, id) => { schedules.remove(String(id)); planSchedules() })
   ipcMain.handle('schedules:setBrief', (_, x) => schedules.setBrief({ ...(x?.sections ? { sections: x.sections } : {}), ...(x?.place !== undefined ? { place: x.place } : {}) }))
+  // Run now here (the user, 14 Nov: "can I see it as soon as I press execute, so I can see the thinking or the writing"): the
+  // window opens a chat at once and the run is its first turn, seen as it goes; [prepare] sets the chat up as the schedule's
   ipcMain.handle('schedules:run', async (_, id) => {
     const s = schedules.list().find(x => x.id === id)
     if (!s) return null
     if (!aiSwitch.on()) throw new Error(t('assistant.aiOff'))
     if (!assistKey()) throw new Error(t('assistant.noKey'))
-    return runSchedule(s, true)
+    if (s.kind === 'brief' || !win) return runSchedule(s, true) // the brief is a page; with no window, as by itself
+    assistantCommand(`run:${s.id}`)
+    return null
+  })
+  let runNote = '' // sent with the next question only: the run's own turn
+  ipcMain.handle('schedules:prepare', (_, id) => {
+    const s = schedules.list().find(x => x.id === id)
+    if (!s) return null
+    hush(); chat.clear(); chat.allow = assistant.allowed(s.allow); assistTools.hidden = new Set(['report_save'])
+    runNote = scheduleNote()
+    const base = `${brief.dayKey(new Date())}-${s.id.slice(0, 8)}`
+    writeChat(base, { title: s.title, bubbles: [], messages: [] }) // its name, which the first keep takes
+    return { prompt: s.prompt, chat: base }
   })
   // a scheduled action's result: its chat when it has one (the user, 14 Nov: "it's still html"), else its page
   ipcMain.handle('schedules:open', (_, file) => {
@@ -1788,7 +1807,8 @@ app.whenReady().then(() => {
     const doc = file ? await readAttachment(String(file)) : null
     const voice = aloud ? await assistVoice().catch(() => 'system') : null
     const read = voice && reader(e.sender, voice), cut = new assistant.Sentences()
-    const r = await chat.ask(String(text), w => { if (!e.sender.isDestroyed()) e.sender.send('assistant-words', w); if (read) cut.push(w).forEach(read.say) }, doc)
+    const said = String(text) + (runNote ? `\n\n${runNote}` : ''); runNote = ''
+    const r = await chat.ask(said, w => { if (!e.sender.isDestroyed()) e.sender.send('assistant-words', w); if (read) cut.push(w).forEach(read.say) }, doc)
     if (read) { read.say(cut.rest()); await read.done() }
     // auto memory: from the user's own words of this turn only, in the background (it costs a small request)
     if (setting('assistantAutoMemory') !== '0' && aiSwitch.on()) assistant.learn(api.as('memory'), memory, String(text)).catch(e => console.warn('[assistant] learn', e.message))
@@ -1828,7 +1848,7 @@ app.whenReady().then(() => {
   /** Takes a kept chat back, to go on with it: the model gets its turns again; the window, its bubbles. */
   ipcMain.handle('assistant:openChat', (_, id) => {
     const o = JSON.parse(fs.readFileSync(chatFile(id), 'utf8'))
-    hush(); chat.clear(); chat.messages = !Array.isArray(o.messages) ? [] : o.device && o.device !== HOST ? assistant.foreignTurns(o.messages) : o.messages
+    hush(); chat.clear(); assistTools.hidden = null; chat.messages = !Array.isArray(o.messages) ? [] : o.device && o.device !== HOST ? assistant.foreignTurns(o.messages) : o.messages
     // its file is read again only if the chat asks for it
     const f = (o.bubbles ?? []).flatMap(b => b.files ?? []).at(-1)
     if (f && fs.existsSync(f.path)) assistTools.doc = { name: f.name, path: f.path }
@@ -1842,7 +1862,7 @@ app.whenReady().then(() => {
   ipcMain.handle('assistant:confirm', async (_, id) => { const r = await chat.confirm(String(id)); return r && { text: r.forModel, call: r.call ?? null, send: r.send ?? null, open: r.open ?? null, go: r.go ?? null, choices: r.choices ?? [] } })
   ipcMain.handle('assistant:refuse', (_, id) => chat.refuse(String(id)))
   ipcMain.handle('assistant:hush', () => hush())
-  ipcMain.handle('assistant:clear', () => { hush(); chat.clear(); assistTools.lists = { contacts: [], files: [], notes: [], timers: [], mail: [], schedules: [], memory: [] } })
+  ipcMain.handle('assistant:clear', () => { hush(); chat.clear(); assistTools.hidden = null; assistTools.lists = { contacts: [], files: [], notes: [], timers: [], mail: [], schedules: [], memory: [] } })
   ipcMain.handle('assistant:youtube', (_, q) => shell.openExternal('https://www.youtube.com/results?search_query=' + encodeURIComponent(String(q).slice(0, 200))))
   ipcMain.handle('assistant:hide', () => { win?.hide(); vault?.lock() })
   // Live (the waveform button): the window's microphone to Voxtral realtime, its turns back to the window, which asks as above

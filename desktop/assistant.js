@@ -392,7 +392,7 @@ class Tools {
     } catch (e) { return { forModel: `Failed: ${e.message}` } }
   }
   /** The tools the model is offered: none of an app switched off. */
-  offered() { return SCHEMA.filter(s => !TOOL_APP[s.function.name] || this.allowed(TOOL_APP[s.function.name])) }
+  offered() { return SCHEMA.filter(s => (!TOOL_APP[s.function.name] || this.allowed(TOOL_APP[s.function.name])) && !this.hidden?.has(s.function.name)) }
   pick(list, args, use) { const n = Number(args.choice) || 0; return list[n - 1] ? use(list[n - 1]) : { forModel: `No choice ${n}: the last list had ${list.length}.` } }
 
   // ---- Calendar ----
@@ -895,8 +895,10 @@ class Tools {
   async make_image(a) { const f = await this.image(String(a.prompt || '')); return { forModel: `The picture is on the screen, saved as ${f.name} in Files › Assistant.`, image: f } }
 }
 
+/** The date and time as the model is told it: "Saturday, 14/11/2026, 08:20 (Europe/Athens)". */
+const today = (now = new Date()) => `${now.toLocaleString('en-GB', { weekday: 'long', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })} (${Intl.DateTimeFormat().resolvedOptions().timeZone})`
 const system = (now = new Date(), facts = []) => `You are Tetra's AI Assist, on the user's Linux computer, inside the app Tetra (calendar, timers, pills, notes, files, contacts, maps; the user's phone is paired with it).
-Now: ${now.toLocaleString('en-GB', { weekday: 'long', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })} (${Intl.DateTimeFormat().resolvedOptions().timeZone}).
+Now: ${today(now)}. Dates in what you read (mail, the web) are against this: say whether they have passed.
 Answer in the user's language (usually Greek), in one or two short plain sentences: answers are often read aloud. No markdown.
 Use the tools for anything about the user's own calendar, timers, medicines, notes, files or contacts; never invent what they hold.
 When a search finds several, say how many and ask which one (the screen shows the numbered list); "the first", "η δεύτερη" mean that list's numbers.
@@ -1008,7 +1010,7 @@ class Chat {
   }
   /** The user's no: nothing is done. */
   refuse(id) { const h = this.held.get(id); if (h) { this.held.delete(id); this.notes.push(`The user said no to: ${h.what}; it was not done.`) } }
-  clear() { this.messages = []; this.bill.reset(); this.tools.doc = null; this.held.clear(); this.notes = []; this.log = [] }
+  clear() { this.messages = []; this.bill.reset(); this.tools.doc = null; this.held.clear(); this.notes = []; this.log = []; this.allow = new Set() }
 }
 
 // ---- Auto memory and its weekly tidy (memory.js keeps the facts) ----
@@ -1175,4 +1177,4 @@ function foreignTurns(messages) {
   return out
 }
 
-module.exports = { ALLOW, allowed, foreignTurns, MAIL_REPORT, PRICES, TOOL_APP, EFFECTS, untrusted, learn, tidy, Bill, Meter, Mistral, Tools, Chat, Sentences, Live, SCHEMA, system, terms, wav, output, words, RATE, REALTIME, TTS, PER_MINUTE, PER_CHAR }
+module.exports = { ALLOW, allowed, foreignTurns, today, MAIL_REPORT, PRICES, TOOL_APP, EFFECTS, untrusted, learn, tidy, Bill, Meter, Mistral, Tools, Chat, Sentences, Live, SCHEMA, system, terms, wav, output, words, RATE, REALTIME, TTS, PER_MINUTE, PER_CHAR }

@@ -429,6 +429,7 @@ declare global {
         results(): Promise<{ file: string; title: string; at: number }[]>
         remove(id: string): Promise<void>
         run(id: string): Promise<string | null>
+        prepare(id: string): Promise<{ prompt: string; chat: string } | null>
         open(file: string): Promise<void>
         setBrief(x: Partial<BriefSettings>): Promise<BriefSettings>
         place(name: string): Promise<Place | null>
