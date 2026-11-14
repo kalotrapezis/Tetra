@@ -1561,7 +1561,9 @@ app.whenReady().then(() => {
       return { name, rel: path.join('Assistant', name) }
     },
     // shortcut: which card is the user's is kept on this computer only (Contacts has no "me" mark yet); into the card once the devices need it
-    me: () => setting('assistantMe') || null, setMe: uid => setSetting('assistantMe', uid), extract: readAttachment })
+    me: () => setting('assistantMe') || null, setMe: uid => setSetting('assistantMe', uid), extract: readAttachment,
+    // the MP3s being made (below), so «πώς πάει;» is answered and one can be stopped
+    jobs: { list: () => [...audioJobs.values()].filter(j => j.state === 'running' || Date.now() - j.started < 3600000), stop: id => audioJobs.get(id)?.stop.abort() } })
   // Attachments (attach.js): read in place; one picked from outside Files is copied to .System, never into the user's Files
   const ATTACHMENTS = path.join(system.dir('Assistant', 'Data', files.system), 'Attachments')
   const attached = new Map() // path → its text, while the chat may ask again
@@ -1896,11 +1898,11 @@ app.whenReady().then(() => {
     return [host, all.find(v => v.id !== host)?.id ?? host]
   }
   /** One MP3 job; its costs recorded as its file's, and one "mp3" line with what it made and cost in all. */
-  async function runAudio(spec, doc, dir, progress, job) {
+  async function runAudio(spec, doc, dir, progress, job, signal) {
     if (usage.capped()) throw new Error(t('usage.capped'))
     const jobApi = api.as('audio', { file: doc.name, job })
     const r = await require('./audio').make({ api: jobApi, doc, mode: spec.mode, minutes: spec.minutes, length: spec.length, focus: spec.focus, style: spec.style, perSection: !!spec.perSection,
-      voices: await showVoices(), dir, cache: path.join(AUDIO, 'cache'), progress })
+      voices: await showVoices(), dir, cache: path.join(AUDIO, 'cache'), progress, signal })
     usage.add({ f: 'mp3', file: doc.name, title: r.title, s: Math.round(r.seconds), job, cost: jobApi.bill.usd, mode: spec.mode })
     return r
   }
@@ -1908,12 +1910,13 @@ app.whenReady().then(() => {
     if (!aiSwitch.on()) throw new Error(t('assistant.aiOff'))
     if (usage.capped()) throw new Error(t('usage.capped'))
     const id = crypto.randomUUID(), doc = await readAttachment(String(spec.path))
-    const j = { id, title: `${doc.name} — ${t(spec.mode === 'show' ? 'attach.show' : 'attach.read')}`, state: 'running', stage: 'script', done: 0, total: 1 }
+    const j = { id, title: `${doc.name} — ${t(spec.mode === 'show' ? 'attach.show' : 'attach.read')}`, state: 'running', stage: 'script', done: 0, total: 1, started: Date.now(), stop: new AbortController() }
     audioJobs.set(id, j); jobSend(j)
-    runAudio(spec, doc, path.join(AUDIO, id), p => { Object.assign(j, p); jobSend(j) }, id).then(r => {
+    runAudio(spec, doc, path.join(AUDIO, id), p => { Object.assign(j, p); jobSend(j) }, id, j.stop.signal).then(r => {
       Object.assign(j, { state: 'done', result: r }); jobSend(j)
       notify('assistant', t('attach.readyTitle'), t('attach.readyBody', { name: r.title, min: Math.round(r.seconds / 60) }), () => assistantCommand('open'))
     }, e => {
+      if (j.stop.signal.aborted) { Object.assign(j, { state: 'failed', error: t('import.stopped') }); jobSend(j); return } // stopped by the user: no notification
       Object.assign(j, { state: 'failed', error: e.message }); jobSend(j)
       notify('assistant', t('attach.failedTitle'), e.message)
     })

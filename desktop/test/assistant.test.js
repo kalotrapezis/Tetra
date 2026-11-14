@@ -158,3 +158,19 @@ test('the money counter: a trip meter that resets, a total that never does, past
   assert.deepEqual(terms('Καλοτραπέζης, Tetra,, Tetra', ['Στέλλα']), ['Καλοτραπέζης', 'Tetra', 'Στέλλα'])
   assert.equal(Bill.text(0.01234), '€0.0123')
 })
+
+test('background jobs: «πώς πάει;» answered from them, one stopped by its number', async () => {
+  const started = at - 3 * 60000, stopped = []
+  const jobs = [{ id: 'a', title: 'Week 1.txt — Radio show', state: 'running', stage: 'script', done: 0, total: 1, started },
+    { id: 'b', title: 'Notes.txt — Reading', state: 'done', stage: 'mix', done: 1, total: 1, started }]
+  const tools = new Tools({ now: () => at, jobs: { list: () => jobs, stop: id => stopped.push(id) } })
+  const listed = (await tools.run('jobs_list')).forModel
+  assert.match(listed, /1\. Week 1\.txt — Radio show: writing the script, started 3 min ago/)
+  assert.match(listed, /2\. Notes\.txt — Reading: ready/)
+  assert.match((await tools.run('job_stop', { choice: 2 })).forModel, /not running/)
+  assert.match((await tools.run('job_stop', { choice: 1 })).forModel, /Stopped/)
+  assert.deepEqual(stopped, ['a'])
+  const { system } = require('../assistant')
+  assert.match(system(new Date(at), [], jobs), /background right now[\s\S]*Week 1\.txt — Radio show: writing the script/)
+  assert.doesNotMatch(system(new Date(at)), /background right now/)
+})

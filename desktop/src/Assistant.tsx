@@ -509,7 +509,9 @@ function JobCard({ job }: { job: AssistJob | null }) {
   if (job.state === 'failed') return <div className="assist-job error">{job.error}</div>
   if (job.state === 'running' || !r) {
     const share = job.stage === 'script' ? 0.1 * job.done / Math.max(1, job.total) : job.stage === 'voice' ? 0.1 + 0.85 * job.done / Math.max(1, job.total) : 0.97
-    return <div className="assist-job"><strong>{job.title}</strong><small>{t(`attach.stage.${job.stage}`)} · {Math.round(share * 100)}%</small><progress value={share} max={1} /></div>
+    // the script is one long request with nothing to count while it runs: a moving bar, not a 0 % that looks stuck (the user, 14 Nov)
+    const writing = job.stage === 'script' && job.done === 0
+    return <div className="assist-job"><strong>{job.title}</strong><small>{t(`attach.stage.${job.stage}`)}{writing ? '…' : ` · ${Math.round(share * 100)}%`}</small>{writing ? <progress /> : <progress value={share} max={1} />}</div>
   }
   const min = (x: number) => `${Math.floor(x / 60)}:${String(Math.floor(x % 60)).padStart(2, '0')}`
   return <div className="assist-job">
