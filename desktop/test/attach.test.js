@@ -125,6 +125,15 @@ test('audio_make answers an estimate and a card, nothing spent', async () => {
   assert.equal(show.minutes, 15)
   assert.ok(show.usd > 0.2 && show.usd < 0.35, `show costs ${show.usd}`) // ≈ $0.93 an hour of speech, and the script
   assert.equal(show.ready, 5)
+  // short, medium, long: each its own estimate on the card, the minutes said kept with the length said
+  const sh = await tools.run('audio_make', { mode: 'show', length: 'long' })
+  assert.equal(sh.audio.length, 'long')
+  const e = sh.audio.estimates
+  assert.ok(e.short.minutes < e.medium.minutes && e.medium.minutes < e.long.minutes, JSON.stringify(e))
+  assert.ok(e.short.usd < e.medium.usd && e.medium.usd < e.long.usd)
+  assert.deepEqual(sh.audio.estimate, e.long)
+  assert.equal((await tools.run('audio_make', { mode: 'show', minutes: 6 })).audio.estimates.medium.minutes, 6)
+  assert.equal(audio.estimate({ chars: 60000, mode: 'show', length: 'long' }).minutes, 40)
   assert.match((await new Tools({}).run('audio_make', { mode: 'show' })).forModel, /No file/)
 })
 

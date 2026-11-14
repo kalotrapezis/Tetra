@@ -50,7 +50,9 @@ export interface AssistSend { draft: MailDraft; to: string; subject: string; pre
 /** A file attached to a message (attach.js): read in place, its text in main only. */
 export interface AssistFile { name: string; path: string; pages: number; chars?: number; cut?: boolean; kind?: string }
 /** audio_make's ask: the estimate, waiting for the user's yes. */
-export interface AssistAudio { path: string; name: string; mode: 'narration' | 'show'; minutes: number; focus: string; style: string; perSection: boolean; estimate: { minutes: number; usd: number; ready: number } }
+export type AudioLength = 'short' | 'medium' | 'long'
+export interface AudioEstimate { minutes: number; usd: number; ready: number }
+export interface AssistAudio { path: string; name: string; mode: 'narration' | 'show'; length: AudioLength; minutes: number; focus: string; style: string; perSection: boolean; estimate: AudioEstimate; estimates: Record<AudioLength, AudioEstimate> }
 /** An MP3 being made in the background (audio.js), and what it made. */
 export interface AssistJob { id: string; title: string; state: 'running' | 'done' | 'failed'; stage: 'script' | 'voice' | 'mix'; done: number; total: number; error?: string
   result?: { file: string; files: string[]; title: string; seconds: number; chapters: { title: string; start: number }[]; dropped: number } }
