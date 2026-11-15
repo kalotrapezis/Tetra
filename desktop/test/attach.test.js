@@ -161,3 +161,18 @@ test('mix: even loudness, pauses, chapters; the MP3 starts with an ID3 tag whose
   // ~64 kbps: 4 s of sound is about 32 KB
   assert.ok(mp3.length - tag.length > 20_000 && mp3.length - tag.length < 45_000, `${mp3.length}`)
 })
+
+test('in a talk about a file, audio_make is offered only when an MP3 or a show is asked for', async () => {
+  const doc = await attach.extract(put('Εβδομάδα 05.txt', 'Η νοημοσύνη δεν είναι ένας αριθμός.'))
+  const offered = []
+  const api = { bill: { reset() {} }, async chat(messages, schema) { offered.push(schema.map(s => s.function.name)); return { role: 'assistant', content: 'Εντάξει.' } } }
+  const chat = new Chat(api, new Tools({ extract: async () => doc }))
+  await chat.ask('Πες μου τι λέει.', null, doc)
+  await chat.ask('Ας τα πάρουμε όλα με τη σειρά.')
+  await chat.ask('Δεν θα μου διαβάσεις τι λέει το έγγραφο;')
+  for (const o of offered) { assert.ok(!o.includes('audio_make'), o.join()); assert.ok(o.includes('attachment_read')) }
+  await chat.ask('Θέλω να το ακούσω σαν podcast.')
+  assert.ok(offered.at(-1).includes('audio_make'))
+  await chat.ask('Κάνε το ραδιοφωνική εκπομπή σε MP3.')
+  assert.deepEqual(offered.at(-1), ['audio_make']) // forced, as before
+})
