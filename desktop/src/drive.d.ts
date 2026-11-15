@@ -439,7 +439,8 @@ declare global {
       }
       usage: { summary(): Promise<UsageSummary>; setBudget(eur: number): Promise<UsageSummary['budget']> }
       assistant: {
-        ask(text: string, aloud: boolean, file?: string): Promise<AssistReply>
+        ask(text: string, aloud: boolean, file?: string, show?: boolean): Promise<AssistReply>
+        readFile(file: string): Promise<{ spent: number; stopped: boolean }>
         confirm(id: string): Promise<{ text: string; call: AssistCall | null; send: AssistSend | null; open: string | null; go: AssistGo | null; choices: AssistChoice[] } | null>
         refuse(id: string): Promise<void>
         attach(from: 'files' | 'device' | string): Promise<(AssistFile & { spent: number }) | null>

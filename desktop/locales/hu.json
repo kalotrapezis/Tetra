@@ -2464,6 +2464,7 @@
  "attach.pillShow": "🎙 Legyen belőle rádióműsor",
  "attach.pillLive": "💬 Élő beszélgetés a dokumentumról",
  "attach.pillRead": "🔊 Olvasd fel nekem",
+ "attach.readingAloud": "Felolvasom: «{name}»…",
  "attach.showPrompt": "Készíts a(z) «{name}» fájlból MP3 rádióműsort: egy műsorvezető és egy szakértő, minden részben példával és összefoglalóval.",
  "attach.readPrompt": "Olvasd fel nekem a(z) «{name}» fájlt egészben MP3-ként, egy hanggal.",
  "attach.livePrompt": "Beszélgessünk a(z) «{name}» dokumentumról. Két mondatban mondd el, mit tartalmaz, és kérdezd meg, honnan szeretnék kezdeni.",

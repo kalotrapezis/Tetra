@@ -2554,6 +2554,7 @@
  "attach.pillShow": "🎙 En faire une émission de radio",
  "attach.pillLive": "💬 Discussion en direct sur le document",
  "attach.pillRead": "🔊 Lis-le-moi",
+ "attach.readingAloud": "Lecture à voix haute de «{name}»…",
  "attach.showPrompt": "Fais de «{name}» une émission de radio en MP3 : un animateur et un expert, avec un exemple et un résumé pour chaque partie.",
  "attach.readPrompt": "Lis-moi «{name}» en entier en MP3, avec une seule voix.",
  "attach.livePrompt": "Parlons du document «{name}». Dis-moi en deux phrases ce qu'il dit et demande-moi par où je veux commencer.",

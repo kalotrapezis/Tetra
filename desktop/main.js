@@ -1781,9 +1781,9 @@ app.whenReady().then(() => {
   })
   const hush = () => { voiceStop?.abort(); voiceStop = null }
   /** [text] cut into sentences and read, each as soon as it ends, by [voice]; the next made while one plays (the window queues the sound). */
-  function reader(sender, voice) {
+  function reader(sender, voice, sent = null) {
     const stop = voiceStop = new AbortController()
-    const send = (ch, x) => { if (!sender.isDestroyed()) sender.send(ch, x) }
+    const send = (ch, x) => { if (!sender.isDestroyed()) sender.send(ch, x); if (ch === 'assistant-audio') sent?.(x.length) }
     let queue = Promise.resolve()
     const say = s => {
       if (!s || stop.signal.aborted) return
@@ -1793,6 +1793,27 @@ app.whenReady().then(() => {
     }
     return { say, done: () => queue }
   }
+  // «Read it to me» (the user, 15 Nov: "I just want it to read it to me"): the attached file read aloud now by AI Assist's voice,
+  // not an MP3; a sentence made only while the one before plays, so a stop (or anything said) stops the reading and its cost
+  ipcMain.handle('assistant:readFile', async (e, file) => {
+    hush()
+    const doc = await readAttachment(String(file))
+    const voice = await assistVoice().catch(() => 'system')
+    const t0 = Date.now()
+    let ahead = 0, waiting = 0 // seconds of voice sent to the window (24 kHz), sentences not yet made
+    const read = reader(e.sender, voice, n => { ahead += n / 24000 })
+    const stop = voiceStop, cut = new assistant.Sentences()
+    for (const para of doc.text.split(/\n+/)) {
+      for (const s of cut.push(para + '\n')) {
+        while (!stop.signal.aborted && (waiting > 1 || ahead - (Date.now() - t0) / 1000 > 20)) await new Promise(r => setTimeout(r, 200))
+        if (stop.signal.aborted) return { spent: chat.bill.usd, stopped: true }
+        waiting++; read.say(s); read.done().then(() => waiting--)
+      }
+    }
+    read.say(cut.rest())
+    await read.done()
+    return { spent: chat.bill.usd, stopped: stop.signal.aborted }
+  })
   /** [from]: 'files' (a dialog in ~/Tetra/Files), 'device' (anywhere), or a dropped file's path. */
   ipcMain.handle('assistant:attach', async (_, from) => {
     let full = from !== 'files' && from !== 'device' ? String(from) : null
@@ -1812,14 +1833,14 @@ app.whenReady().then(() => {
     const d = await readAttachment(full)
     return { name: d.name, path: d.path, pages: d.pages, chars: d.text.length, cut: d.cut, kind: d.kind, spent: chat.bill.usd }
   })
-  ipcMain.handle('assistant:ask', async (e, text, aloud, file) => {
+  ipcMain.handle('assistant:ask', async (e, text, aloud, file, show) => {
     hush()
     const doc = file ? await readAttachment(String(file)) : null
     const voice = aloud ? await assistVoice().catch(() => 'system') : null
     const read = voice && reader(e.sender, voice), cut = new assistant.Sentences()
     const said = String(text) + (runNote ? `\n\n${runNote}` : ''), of = runOf; runNote = ''; runOf = null
     let r
-    try { r = await chat.ask(said, w => { if (!e.sender.isDestroyed()) e.sender.send('assistant-words', w); if (read) cut.push(w).forEach(read.say) }, doc) }
+    try { r = await chat.ask(said, w => { if (!e.sender.isDestroyed()) e.sender.send('assistant-words', w); if (read) cut.push(w).forEach(read.say) }, doc, !!show) }
     catch (err) { if (of) schedules.result(of, 'failed'); throw err }
     if (of) schedules.result(of, schedule.outcome(chat.log))
     if (read) { read.say(cut.rest()); await read.done() }

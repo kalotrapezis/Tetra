@@ -2644,6 +2644,7 @@
  "attach.pillShow": "🎙 Agħmilha programm tar-radju",
  "attach.pillLive": "💬 Taħdita diretta dwar id-dokument",
  "attach.pillRead": "🔊 Aqrali għalija",
+ "attach.readingAloud": "Qed naqra «{name}» b’leħen għoli…",
  "attach.showPrompt": "Agħmel «{name}» programm tar-radju fl-MP3: presentatur u espert, b'eżempju u sommarju għal kull sezzjoni.",
  "attach.readPrompt": "Aqrali «{name}» kollu fl-MP3, b'vuċi waħda.",
  "attach.livePrompt": "Ejja nitkellmu dwar id-dokument «{name}». Għidli f'żewġ sentenzi x'jgħid, u staqsini minn fejn irrid nibdew.",

@@ -2464,6 +2464,7 @@
  "attach.pillShow": "🎙 Tee sellest raadiosaade",
  "attach.pillLive": "💬 Elav vestlus dokumendist",
  "attach.pillRead": "🔊 Loe mulle ette",
+ "attach.readingAloud": "Loen «{name}» ette…",
  "attach.showPrompt": "Tee «{name}» MP3-raadiosaateks: saatejuht ja ekspert, igas osas näide ja kokkuvõte.",
  "attach.readPrompt": "Loe mulle «{name}» tervikuna ette MP3-na, ühe häälega.",
  "attach.livePrompt": "Räägime dokumendist «{name}». Ütle mulle kahe lausega, mis selles on, ja küsi, kust ma tahan alustada.",

@@ -2644,6 +2644,7 @@
  "attach.pillShow": "🎙 Udělej z toho rozhlasovou relaci",
  "attach.pillLive": "💬 Živý rozhovor o dokumentu",
  "attach.pillRead": "🔊 Přečti mi to",
+ "attach.readingAloud": "Čtu nahlas «{name}»…",
  "attach.showPrompt": "Udělej z «{name}» rozhlasovou relaci v MP3: moderátor a odborník, s příkladem a shrnutím u každé části.",
  "attach.readPrompt": "Přečti mi «{name}» celé v MP3, jedním hlasem.",
  "attach.livePrompt": "Pojďme si popovídat o dokumentu «{name}». Ve dvou větách mi řekni, co říká, a zeptej se, kde chci začít.",

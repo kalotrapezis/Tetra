@@ -92,6 +92,8 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
   const setBubbles = (f: (b: Bubble[]) => Bubble[]) => setBubblesState(b => (kept = f(b)))
   const [draft, setDraft] = useState<string | null>(null) // the answer as it comes
   const [phase, setPhase] = useState<Phase>('idle')
+  const [reading, setReading] = useState<string | null>(null) // the file «Read it to me» is reading aloud
+  const showNext = useRef(false) // the next message comes from «Make it a radio show»: the only way to one
   const [hearing, setHearing] = useState(false)
   const [pending, setPending] = useState<AssistCall | null>(null)
   const [pendingMail, setPendingMail] = useState<AssistSend | null>(null) // a mail written, waiting for the user's Send
@@ -199,7 +201,8 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
     setDraft('')
     const offWords = window.drive.assistant.onWords(w => { setDraft(d => (d ?? '') + w); if (inLive) setLiveAi(a => a + w) })
     try {
-      const r = await window.drive.assistant.ask(text, s.aloud || inLive, f?.path)
+      const show = showNext.current && !!f; showNext.current = false
+      const r = await window.drive.assistant.ask(text, s.aloud || inLive, f?.path, show)
       setBubbles(b => [...b, { mine: false, text: r.text, choices: r.choices, call: r.call, send: r.send, images: r.images, audio: r.audio, held: r.held }])
       for (const h of held) window.drive.assistant.refuse(h.id) // a new question passes over what still waited
       setHeld(r.held ?? [])
@@ -237,6 +240,17 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
   }
   const mic = () => { if (phase === 'idle') hear(10_000); else if (phase === 'listening') stopNow.current = true }
 
+  /** «Read it to me»: the file read aloud now, no MP3; Stop, or anything sent, ends it. */
+  async function readAloud() {
+    const f = file
+    if (!f || phase !== 'idle' || reading) return
+    setFile(null); hush()
+    setBubbles(b => [...b, { mine: true, text: t('attach.pillRead'), files: [f] }])
+    setReading(f.name)
+    try { const r = await window.drive.assistant.readFile(f.path); setSpent(r.spent); if (!r.stopped) await heardOut() }
+    catch (e) { say(errorText(e), true) }
+    finally { setReading(null) }
+  }
   /** [opening]: said for the user as soon as it listens (a talk about the attached file starts with the AI). */
   async function startLive(opening?: string) {
     if (!s?.hasKey || live.current || phase !== 'idle') return
@@ -352,9 +366,9 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
   // what can be done with a file, as soon as it is attached and nothing is typed (the user: "so users know what they can do with the file")
   const quoted = file ? file.name.replace(/\.[^.]+$/, '').replace(/_+/g, ' ') : ''
   const filePills: [string, string, () => void][] = file ? [
-    ['attach.pillShow', APP.assistant, () => offer(t('attach.showPrompt', { name: quoted }))],
+    ['attach.pillShow', APP.assistant, () => { showNext.current = true; offer(t('attach.showPrompt', { name: quoted })) }],
     ['attach.pillLive', APP.maps, () => startLive(t('attach.livePrompt', { name: quoted }))],
-    ['attach.pillRead', APP.timer, () => offer(t('attach.readPrompt', { name: quoted }))],
+    ['attach.pillRead', APP.timer, readAloud],
   ] : []
   const drop = (e: { preventDefault(): void; dataTransfer: DataTransfer }) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f && s?.hasKey) attachFrom(window.drive.assistant.dropped(f)) }
 
@@ -388,6 +402,7 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
         {draft != null && <div className="assist-bubble">{draft || '…'}</div>}
       </div>
       {status && <p className="assist-status">{status}</p>}
+      {reading && !status && <p className="assist-status">{t('attach.readingAloud', { name: reading })} <button className="text-button" onClick={hush}>{t('common.stop')}</button></p>}
       {file && !typed.trim() && phase === 'idle' && <div className="assist-filepills">{filePills.map(([k, color, go]) =>
         <button key={k} className="chip app-chip" style={{ '--app': color } as CSSProperties} onClick={go}>{t(k)}</button>)}</div>}
       <div className="assist-island">
@@ -410,7 +425,7 @@ export function AssistantPage({ go, command }: { go: (g: AssistGo) => void; comm
           </div>}
         </div>
         <textarea ref={input} className="field assist-input" rows={1} placeholder={t('assistant.hint')} value={typed} disabled={!s?.hasKey}
-          onChange={e => setTyped(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (phase === 'idle') sendTyped() } }} />
+          onChange={e => { setTyped(e.target.value); if (!e.target.value.trim()) showNext.current = false }} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (phase === 'idle') sendTyped() } }} />
         {typed.trim() ? <button className="round assist-go" disabled={phase !== 'idle'} title={t('common.send')} onClick={sendTyped}><Icon name="arrowUp" /></button> : <>
           <button className={`round assist-mic ${phase === 'listening' ? (hearing ? 'hearing' : 'on') : ''}`} disabled={!s?.hasKey || phase === 'thinking'}
             title={phase === 'listening' ? t('common.stop') : t('assistant.tapToTalk')} onClick={mic}>

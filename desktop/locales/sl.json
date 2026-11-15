@@ -2644,6 +2644,7 @@
  "attach.pillShow": "🎙 Naredi iz tega radijsko oddajo",
  "attach.pillLive": "💬 Živ pogovor o dokumentu",
  "attach.pillRead": "🔊 Preberi mi",
+ "attach.readingAloud": "Berem na glas «{name}»…",
  "attach.showPrompt": "Naredi iz «{name}» radijsko oddajo v MP3: voditelj in strokovnjak, s primerom in povzetkom za vsak del.",
  "attach.readPrompt": "Preberi mi «{name}» v celoti v MP3, z enim glasom.",
  "attach.livePrompt": "Pogovorimo se o dokumentu «{name}». Povej mi v dveh stavkih, kaj piše, in me vprašaj, kje želim začeti.",

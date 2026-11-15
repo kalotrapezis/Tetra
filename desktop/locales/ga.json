@@ -2734,6 +2734,7 @@
  "attach.pillShow": "🎙 Déan clár raidió de",
  "attach.pillLive": "💬 Comhrá beo faoin doiciméad",
  "attach.pillRead": "🔊 Léigh dom é",
+ "attach.readingAloud": "Ag léamh «{name}» os ard…",
  "attach.showPrompt": "Déan clár raidió MP3 de «{name}»: láithreoir agus saineolaí, sampla agus achoimre do gach roinn.",
  "attach.readPrompt": "Léigh «{name}» dom go hiomlán mar MP3, le guth amháin.",
  "attach.livePrompt": "Labhróimid faoin doiciméad «{name}». Inis dom i ndá abairt cad atá ann agus fiafraigh díom cá bhfuil mé ag iarraidh tosú.",

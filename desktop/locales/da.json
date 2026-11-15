@@ -2464,6 +2464,7 @@
  "attach.pillShow": "🎙 Lav det til et radioprogram",
  "attach.pillLive": "💬 Live-samtale om dokumentet",
  "attach.pillRead": "🔊 Læs den op for mig",
+ "attach.readingAloud": "Læser «{name}» op…",
  "attach.showPrompt": "Lav «{name}» om til et radioprogram som MP3: en vært og en ekspert, med et eksempel og en opsummering for hvert afsnit.",
  "attach.readPrompt": "Læs «{name}» op for mig i sin helhed som MP3, med én stemme.",
  "attach.livePrompt": "Lad os tale om dokumentet «{name}». Fortæl mig i to sætninger, hvad det siger, og spørg mig, hvor jeg vil begynde.",

@@ -2554,6 +2554,7 @@
  "attach.pillShow": "🎙 Trasformalo in una trasmissione radio",
  "attach.pillLive": "💬 Conversazione dal vivo sul documento",
  "attach.pillRead": "🔊 Leggimelo",
+ "attach.readingAloud": "Leggo ad alta voce «{name}»…",
  "attach.showPrompt": "Trasforma «{name}» in una trasmissione radio in MP3: un conduttore e un esperto, con un esempio e un riepilogo per ogni sezione.",
  "attach.readPrompt": "Leggimi «{name}» per intero in MP3, con una sola voce.",
  "attach.livePrompt": "Parliamo del documento «{name}». Dimmi in due frasi che cosa dice e chiedimi da dove voglio cominciare.",

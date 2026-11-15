@@ -2553,6 +2553,7 @@
  "attach.pillShow": "🎙 Napravi od toga radijsku emisiju",
  "attach.pillLive": "💬 Uživo razgovor o dokumentu",
  "attach.pillRead": "🔊 Pročitaj mi to",
+ "attach.readingAloud": "Čitam naglas «{name}»…",
  "attach.showPrompt": "Napravi od «{name}» radijsku emisiju u MP3-u: voditelj i stručnjak, s primjerom i sažetkom za svaki dio.",
  "attach.readPrompt": "Pročitaj mi «{name}» cijelo u MP3-u, jednim glasom.",
  "attach.livePrompt": "Razgovarajmo o dokumentu «{name}». Reci mi u dvije rečenice što piše i pitaj me odakle želim početi.",

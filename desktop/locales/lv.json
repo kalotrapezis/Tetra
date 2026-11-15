@@ -2554,6 +2554,7 @@
  "attach.pillShow": "🎙 Padarīt par radio raidījumu",
  "attach.pillLive": "💬 Tiešraides saruna par dokumentu",
  "attach.pillRead": "🔊 Nolasi man",
+ "attach.readingAloud": "Lasu skaļi «{name}»…",
  "attach.showPrompt": "Padari «{name}» par radio raidījumu MP3 formātā: vadītājs un eksperts, katrā sadaļā piemērs un kopsavilkums.",
  "attach.readPrompt": "Nolasi man «{name}» pilnībā MP3 formātā, ar vienu balsi.",
  "attach.livePrompt": "Parunāsim par dokumentu «{name}». Pastāsti divos teikumos, ko tajā teikts, un pajautā, no kā es vēlos sākt.",

@@ -162,7 +162,7 @@ test('mix: even loudness, pauses, chapters; the MP3 starts with an ID3 tag whose
   assert.ok(mp3.length - tag.length > 20_000 && mp3.length - tag.length < 45_000, `${mp3.length}`)
 })
 
-test('in a talk about a file, audio_make is offered only when an MP3 or a show is asked for', async () => {
+test('a radio show only from its button: never offered in a talk about a file, even when asked for in words', async () => {
   const doc = await attach.extract(put('Εβδομάδα 05.txt', 'Η νοημοσύνη δεν είναι ένας αριθμός.'))
   const offered = []
   const api = { bill: { reset() {} }, async chat(messages, schema) { offered.push(schema.map(s => s.function.name)); return { role: 'assistant', content: 'Εντάξει.' } } }
@@ -170,9 +170,8 @@ test('in a talk about a file, audio_make is offered only when an MP3 or a show i
   await chat.ask('Πες μου τι λέει.', null, doc)
   await chat.ask('Ας τα πάρουμε όλα με τη σειρά.')
   await chat.ask('Δεν θα μου διαβάσεις τι λέει το έγγραφο;')
-  for (const o of offered) { assert.ok(!o.includes('audio_make'), o.join()); assert.ok(o.includes('attachment_read')) }
-  await chat.ask('Θέλω να το ακούσω σαν podcast.')
-  assert.ok(offered.at(-1).includes('audio_make'))
   await chat.ask('Κάνε το ραδιοφωνική εκπομπή σε MP3.')
-  assert.deepEqual(offered.at(-1), ['audio_make']) // forced, as before
+  for (const o of offered) { assert.ok(!o.includes('audio_make'), o.join()); assert.ok(o.includes('attachment_read')) }
+  await chat.ask('Κάνε το «Εβδομάδα 05» ραδιοφωνική εκπομπή σε MP3.', null, doc, true) // the button
+  assert.deepEqual(offered.at(-1), ['audio_make']) // forced: the estimate comes from the tool, never made up
 })

@@ -2464,6 +2464,7 @@
  "attach.pillShow": "🎙 Als Radiosendung hören",
  "attach.pillLive": "💬 Live-Gespräch über das Dokument",
  "attach.pillRead": "🔊 Lies es mir vor",
+ "attach.readingAloud": "Lese «{name}» vor…",
  "attach.showPrompt": "Mach aus «{name}» eine Radiosendung als MP3: ein Moderator und ein Experte, mit einem Beispiel und einer Zusammenfassung zu jedem Abschnitt.",
  "attach.readPrompt": "Lies mir «{name}» ganz vor, als MP3, mit einer Stimme.",
  "attach.livePrompt": "Lass uns über das Dokument «{name}» sprechen. Sag mir in zwei Sätzen, was es sagt, und frag mich, wo ich anfangen möchte.",

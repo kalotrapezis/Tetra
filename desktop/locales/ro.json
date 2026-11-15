@@ -2554,6 +2554,7 @@
  "attach.pillShow": "🎙 Fă-l emisiune radio",
  "attach.pillLive": "💬 Discuție live despre document",
  "attach.pillRead": "🔊 Citește-mi-l",
+ "attach.readingAloud": "Citesc cu voce tare «{name}»…",
  "attach.showPrompt": "Fă din «{name}» o emisiune radio în MP3: un prezentator și un expert, cu un exemplu și un rezumat pentru fiecare secțiune.",
  "attach.readPrompt": "Citește-mi «{name}» întreg, în MP3, cu o singură voce.",
  "attach.livePrompt": "Să vorbim despre documentul «{name}». Spune-mi în două propoziții ce spune și întreabă-mă de unde vreau să încep.",
